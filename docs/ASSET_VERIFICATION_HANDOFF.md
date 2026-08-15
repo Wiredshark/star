@@ -18,6 +18,7 @@ A passing receipt proves all of the following mechanically:
 6. At least one **fresh PNG created after the verification session began** exists in the new capture directory.
 7. The receipt records hashes for the candidate, optional game binary, every screenshot, command output, exact HEAD, scene ID, and a unique nonce/run ID.
 8. A later C4 verification detects screenshot tampering or use of a receipt from an older/newer commit.
+9. `verify --require-current-head` also requires a clean worktree, preventing C4 from validating a receipt while inspecting uncommitted source or asset changes.
 
 The verifier does **not** decide whether the art is visually good. C4 still performs visual/style/registration review of the recorded screenshots. It prevents stale or unbound evidence from being counted as proof.
 
@@ -119,4 +120,12 @@ Run the verifier regression tests with:
 python3 -m unittest tests/test_asset_verification.py -v
 ```
 
-The tests cover a passing exact-head capture, dirty-worktree refusal, uncommitted candidate refusal, stale-proof rejection after a new commit, and screenshot-tamper rejection.
+The current regression contract has **7 tests** covering:
+
+1. passing clean exact-head capture and re-verification;
+2. dirty-worktree refusal at capture;
+3. uncommitted candidate refusal;
+4. stale-proof rejection after a new commit;
+5. screenshot-tamper rejection;
+6. rejection of a successful logs-only capture that produced no PNG; and
+7. refusal to perform current-head C4 verification from a dirty checkout.
