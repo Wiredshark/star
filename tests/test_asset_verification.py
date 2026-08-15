@@ -111,6 +111,27 @@ class AssetVerificationTests(unittest.TestCase):
         self.assertEqual(verify.returncode, 2)
         self.assertIn("screenshot hash mismatch", verify.stderr)
 
+    def test_logs_only_capture_is_refused(self):
+        (self.repo / "fake_capture.py").write_text("print('game ran but no screenshot')\n", encoding="utf-8")
+        git(self.repo, "add", "fake_capture.py")
+        git(self.repo, "commit", "-m", "logs only fixture")
+        result = self.capture()
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("produced no fresh PNG", result.stderr)
+
+    def test_current_head_verification_requires_clean_tree(self):
+        result = self.capture()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        run_id = (self.evidence / "LATEST").read_text().strip()
+        receipt = self.evidence / run_id / "receipt.json"
+        (self.repo / "dirty.txt").write_text("dirty")
+        verify = subprocess.run(
+            ["python3", str(SCRIPT), "verify", "--repo", str(self.repo), "--receipt", str(receipt), "--require-current-head"],
+            text=True, capture_output=True,
+        )
+        self.assertEqual(verify.returncode, 2)
+        self.assertIn("working tree is not clean", verify.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
