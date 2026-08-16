@@ -1,5 +1,15 @@
 # Builder Handoff Queue
 
+## Queue diversity rule
+
+All builder-facing story packets must comply with `NARRATIVE_DIVERSITY_POLICY.md` and the diversity gate in `AGENT_CONTRACT.md`.
+
+`ES-STORY-0001` below is the established **ECONOMY / LOGISTICS** proof case. It demonstrates simulation-to-story coupling, but it is not the default template for subsequent content.
+
+**Next-packet requirement:** the next two newly authored implementation-ready packets after `ES-STORY-0001` must use primary domains outside freight/logistics/market disruption. Preferred pressures include politics, relationships, crime/investigation, exploration/discovery, war/diplomacy, law/ownership, culture/ideology, environmental crisis, migration, espionage, or governance.
+
+A2/A3 should reject a new handoff that simply replaces Algorel, the commodity, or the NPC names while retaining the same shortage -> freight loss -> convoy/security -> market stabilization structure.
+
 ## CONTENT ID
 
 `ES-STORY-0001`
@@ -7,6 +17,10 @@
 ## TYPE
 
 RPG background + scripted economic story proof + future dynamic template.
+
+## NARRATIVE DOMAIN
+
+**ECONOMY / LOGISTICS** — intentional first systemic proof. Future packets must diversify rather than treating this domain as the narrative center of the game.
 
 ## LOCATION
 
@@ -198,6 +212,15 @@ Neither character should disappear simply because the first mission resolves.
 - durable event-history queries;
 - relationship/contact memory richer than global government reputation.
 
+## DIVERSITY_CHECK
+
+- **Primary domain:** economy/logistics.
+- **Recent domains considered:** this is the foundational systemic proof, so it establishes the economic/logistics case rather than following two prior packets.
+- **Non-economic inputs:** piracy pressure, government posture, player reputation, NPC relationships/trajectories, criminal contacts.
+- **Structural distinction:** this packet is explicitly retained as the one freight-focused proof case. It must not be cloned as the structure for subsequent dynamic stories.
+- **Persistent consequence types:** NPC relationships and careers, criminal leverage, government intervention, historical memory, as well as economic state.
+- **Queue implication:** at least the next two new implementation-ready packets must choose non-freight primary domains.
+
 ## PRIORITY
 
-**HIGH** — implement the static Algorel proof before generalizing a dynamic-story engine. It exercises the desired coupling among RPG identity, economy, persistent NPCs, news, failure states, and world memory while remaining implementable with current mission data.
+**HIGH** — implement the static Algorel proof as the economic/logistics systemic example, then deliberately generalize the narrative architecture through non-economic stories. Do not interpret this priority as permission to make additional freight crises the default content pattern.
