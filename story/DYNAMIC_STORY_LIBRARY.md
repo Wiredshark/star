@@ -1,8 +1,63 @@
 # Dynamic Story Library
 
+## Library balance contract
+
+This library must represent multiple kinds of simulated life. `DST-DIRT-001 — Freight Shock` is the first economic/logistics proof, not the generic dynamic-story skeleton.
+
+Before adding another template, apply `NARRATIVE_DIVERSITY_POLICY.md`:
+
+- inspect the two most recent story/template domains;
+- do not repeat freight, cargo loss, shortage, convoy, route-security, or market-disruption premises when either recent packet already uses that domain;
+- keep any one primary domain at or below one third of the active implementation-ready library unless a documented regional arc requires otherwise;
+- require at least two meaningful world-state inputs per substantial template;
+- use at least one non-economic input unless the story is intentionally economic;
+- diversify consequences beyond credits, commodity state, freight capacity, and security-fleet intensity.
+
+Target domain coverage includes politics/governance, persistent relationships, law/ownership, crime/investigation, exploration/discovery, war/diplomacy, ideology/culture, espionage, migration, environment/disaster, corporations/labor, and economy/logistics.
+
+### Priority non-freight template seeds
+
+These are deliberately different structural starting points for future B1/B2/A2 work. They are not required to use these exact plots; they establish the expected breadth.
+
+#### `DST-POL-001 — Contested Office`
+
+**Primary domain:** politics / governance.
+
+A local official, institutional board, or faction office becomes contested because of succession, scandal, emergency powers, or competing constituencies. Inputs can include faction reputation, prior player actions, war state, local stability, NPC relationships, legal rules, and public/institutional memory. Player choices may alter leadership, access, policy, faction alignment, or future contacts rather than commodity supply.
+
+#### `DST-REL-001 — Broken Compact`
+
+**Primary domain:** persistent relationships / law / ownership.
+
+Two or more established characters dispute an inheritance, partnership, debt, ship ownership, family obligation, or prior promise. Inputs can include relationship history, ownership state, evidence, player testimony, prior mission outcomes, and character location/survival. Outcomes can change loyalties, ownership, access, legal status, future companionship, or family/faction relationships.
+
+#### `DST-EXP-001 — Silent Survey`
+
+**Primary domain:** exploration / scientific discovery / mystery.
+
+A survey site, derelict, anomalous signal, or scientific expedition produces conflicting evidence. Inputs can include exploration history, discovered locations, faction scientific interest, NPC expertise, environmental hazards, prior discoveries, and player reputation. Outcomes can reveal or suppress knowledge, open/close locations, create rival expeditions, alter scientific relationships, or create future mysteries.
+
+#### `DST-CRIME-001 — Missing Witness`
+
+**Primary domain:** crime / investigation / law.
+
+A witness, investigator, suspect, or informant disappears and different institutions offer incompatible explanations. Inputs can include crime pressure, enforcement posture, character schedules/locations, evidence flags, reputation, faction control, and prior criminal contacts. Outcomes can expose corruption, frame an innocent party, strengthen a criminal network, change legal status, save/lose a character, or produce durable distrust.
+
+#### `DST-DIP-001 — Fractured Truce`
+
+**Primary domain:** war / diplomacy.
+
+A ceasefire, border agreement, prisoner exchange, or local accommodation begins to fail for reasons that are not reducible to shipping. Inputs can include war state, faction control, recent casualties, reputation, named officers/diplomats, historical grievances, and player choices. Outcomes can preserve or break a truce, change command relationships, alter access, move territorial/faction state, or create future retaliation.
+
+The next implementation-ready dynamic templates after the Algorel economic proof should preferentially come from these or other non-freight domains.
+
 ## DST-DIRT-001 — Freight Shock
 
 Status: **STORY_CANON / FUTURE_SIMULATION_DEPENDENCY**
+
+Primary narrative domain: **ECONOMY / LOGISTICS**.
+
+This is the designated freight-focused systemic proof. Do not clone its structure as the default for subsequent templates.
 
 ### Purpose
 
@@ -196,3 +251,10 @@ A static proof-of-concept chain can be authored immediately using ordinary missi
 ### Engine support needed
 
 No new engine support is required for a scripted proof. Generalized dynamic instantiation requires builder support for querying and mutating simulation variables.
+
+### Diversity check
+
+- Primary domain: economy/logistics.
+- Non-economic inputs: government, piracy/crime, player reputation, persistent NPC state, war and migration where available.
+- Structural status: foundational freight proof only; not a reusable generic plot skeleton.
+- Required follow-up: prioritize non-freight templates before authoring another logistics crisis.
