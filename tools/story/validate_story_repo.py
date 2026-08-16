@@ -12,6 +12,7 @@ STORY = ROOT / "story"
 
 REQUIRED_FILES = (
     "AGENT_CONTRACT.md",
+    "NARRATIVE_DIVERSITY_POLICY.md",
     "WORLD_BIBLE.md",
     "RPG_CONTENT.md",
     "DYNAMIC_STORY_LIBRARY.md",
@@ -23,6 +24,7 @@ REQUIRED_FILES = (
 HANDOFF_HEADINGS = (
     "CONTENT ID",
     "TYPE",
+    "NARRATIVE DOMAIN",
     "LOCATION",
     "CHARACTERS",
     "PREREQUISITES",
@@ -35,6 +37,7 @@ HANDOFF_HEADINGS = (
     "CHARACTER CONSEQUENCES",
     "FUTURE HOOKS",
     "IMPLEMENTATION DEPENDENCIES",
+    "DIVERSITY_CHECK",
     "PRIORITY",
 )
 
@@ -115,6 +118,16 @@ def main() -> int:
         missing = [phrase for phrase in required_phrases if phrase not in text]
         if missing:
             errors.append(f"story/{name} missing implementation-readiness fields: {', '.join(missing)}")
+
+    policy = (STORY / "NARRATIVE_DIVERSITY_POLICY.md").read_text(encoding="utf-8").lower()
+    for phrase in (
+        "anti-repetition rule",
+        "systemic-input requirement",
+        "consequence diversity",
+        "diversity_check",
+    ):
+        if phrase not in policy:
+            errors.append(f"story/NARRATIVE_DIVERSITY_POLICY.md missing policy marker: {phrase}")
 
     handoff = (STORY / "BUILDER_HANDOFF.md").read_text(encoding="utf-8")
     ids = sorted(set(re.findall(r"`(ES-STORY-\d{4,})`", handoff)))
