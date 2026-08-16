@@ -104,10 +104,30 @@ Full systemic form depends on future builder work for:
 
 ### NEXT STORY PRESSURES
 
-Preferred next-round pressures, subject to RNG and continuity:
+Historical Round 1 suggestions were originally freight-heavy because the first systemic proof was economic. They are superseded by the diversification directive below.
 
-1. Persistent NPC — deepen Velez/Rhyne relationship networks rather than adding unrelated characters.
-2. Economic conflict — define repair-credit and freight-insurance institutions across several Dirt Belt systems.
-3. Rumor/news — create conflicting reporting outputs for `DST-DIRT-001`.
-4. World-generation content — define generated derelict/convoy-loss packets that can feed freight-shock causes.
-5. Political conflict — model Republic responses to local logistics crises without making the Republic monolithic.
+1. Persistent NPC — deepen Velez/Rhyne relationship networks without making their next story another shipping crisis.
+2. Political/governance conflict — develop an implementation-ready dispute whose primary state is authority, law, legitimacy, or faction alignment.
+3. Crime/investigation or law/ownership — create a story driven by evidence, character state, legal status, or contested ownership.
+4. Exploration/discovery — create a story whose persistent consequence is knowledge, access, location state, or scientific/faction interest.
+5. War/diplomacy, culture/ideology, migration, environmental crisis, or espionage — choose according to continuity and RNG pressure.
+
+## Narrative Diversity Directive — 2026-08-15
+
+### Reason
+
+The first systemic story work successfully proved that freight/economic state can drive persistent narrative, but subsequent development began clustering too heavily around freight loss, shortages, route security, convoy response, and market stabilization. That concentration is a tooling/history artifact, not the intended subject of the game.
+
+### Superseding direction
+
+- Treat `ES-STORY-0001` / `DST-DIRT-001` as the designated economy/logistics proof case.
+- Do not use freight/logistics as the default dynamic-story premise.
+- The next two newly authored implementation-ready packets must use non-freight primary domains.
+- Apply `story/NARRATIVE_DIVERSITY_POLICY.md` and the diversity gate in `story/AGENT_CONTRACT.md`.
+- Every substantial new packet and builder handoff must include `DIVERSITY_CHECK`.
+- Prefer systemic inputs and consequences from politics, relationships, law, ownership, crime, investigation, war, diplomacy, exploration, discoveries, culture, ideology, migration, environment, governance, espionage, character state, and player history.
+- Do not disguise repeated logistics plots by changing planet names, commodities, factions, or NPC names.
+
+### Current target mix
+
+The story lane should evolve toward a library where no single narrative domain dominates the implementation-ready backlog. Logistics remains valid when genuinely appropriate, but it should sit beside other pressures rather than organize the majority of stories.
