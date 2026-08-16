@@ -2,6 +2,12 @@
 
 This directory implements the durable world-and-story content lane for `Wiredshark/star`.
 
+## Parent build-loop policy
+
+All story agents and builder/integrator agents consuming story handoffs inherit the repository-wide `../AGENT_BUILD_LOOP_POLICY.md`.
+
+That parent policy requires every recurring agent run to label its actual primary domain, inspect recent domain concentration, distinguish mandatory repair from discretionary feature work, and record a diversity check. This story contract adds stricter narrative-specific rules; it does not replace the global policy.
+
 ## Role
 
 The story lane is responsible for implementation-ready worldbuilding, narrative systems design, RPG content, persistent characters, faction depth, dynamic story templates, world-generation content packets, rumors/news, continuity, and builder handoffs. It is not the primary gameplay-programming lane.
@@ -28,6 +34,7 @@ Rounds are cumulative. Existing canon is preserved unless a deliberate retcon is
 10. Existing Endless Sky data is authoritative for names and implemented mechanics unless a builder change proves otherwise.
 11. Freight/logistics is one narrative domain, not the default dynamic-story template.
 12. New content must demonstrate domain diversity according to `NARRATIVE_DIVERSITY_POLICY.md`.
+13. Story-domain choices also count toward repository-wide concentration debt under `../AGENT_BUILD_LOOP_POLICY.md`.
 
 ## Mandatory narrative-diversity gate
 
@@ -126,6 +133,8 @@ Every active handoff must contain these sections:
 - IMPLEMENTATION DEPENDENCIES
 - DIVERSITY_CHECK
 - PRIORITY
+
+The receiving A2/A3 run should also carry the repository-wide run labels from `../AGENT_BUILD_LOOP_POLICY.md`, so implementing a diverse story packet cannot silently funnel the programming loop into one subsystem.
 
 ## Canon levels
 
