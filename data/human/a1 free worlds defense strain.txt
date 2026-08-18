@@ -1,0 +1,67 @@
+# A1 world simulation: Free Worlds defense strain and patrol mobilization.
+#
+# Assisting damaged Free Worlds ships raises a bounded persistent defense-strain
+# signal. Elevated strain can be converted into a temporary patrol surge when
+# the player next enters Free Worlds space. Both signals recover on timers, so
+# later A2/A3 systems can consume durable world state without owning it.
+
+event "ES A1: Free Worlds Defense Strain Recovery"
+	"world: free worlds defense strain" -= 1
+	"world: free worlds defense strain" >?= 0
+
+event "ES A1: Free Worlds Patrol Surge Ends"
+	clear "world: free worlds patrol surge"
+	clear "world: free worlds patrol surge notice seen"
+
+mission "ES A1: Free Worlds Defense Strain"
+	assisting
+	invisible
+	repeat
+	minor
+	to offer
+		"world: free worlds defense strain" < 5
+	source
+		government "Free Worlds"
+		not category "Fighter" "Drone"
+		not attributes "automaton"
+	on offer
+		"world: free worlds defense strain" += 1
+		"world: free worlds defense strain" <?= 5
+		event "ES A1: Free Worlds Defense Strain Recovery" 6 6
+		decline
+	destination "Earth"
+
+mission "ES A1: Free Worlds Patrol Mobilization"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	to offer
+		"world: free worlds defense strain" >= 3
+		not "world: free worlds patrol surge"
+	on offer
+		set "world: free worlds patrol surge"
+		"world: free worlds defense strain" -= 2
+		"world: free worlds defense strain" >?= 0
+		event "ES A1: Free Worlds Patrol Surge Ends" 5 5
+		fail
+	destination "Earth"
+
+mission "ES A1: Free Worlds Patrol Surge Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	to offer
+		has "world: free worlds patrol surge"
+		not "world: free worlds patrol surge notice seen"
+	on offer
+		message
+			text "Free Worlds defense channels report a temporary patrol mobilization. Additional ships are being routed toward recently strained sectors while local defense networks recover."
+		set "world: free worlds patrol surge notice seen"
+		fail
+	destination "Earth"
