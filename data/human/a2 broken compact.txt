@@ -1,0 +1,176 @@
+# A2 production candidate for B2 ES-STORY-0002 "Broken Compact".
+#
+# Uses stock persistent condition syntax only. The B2 character packet is the
+# narrative authority for Nadia Kelm, Elias Dorne, and Mara Senn. This A2 slice
+# provides the player-facing persistent RPG loop and later readers.
+
+mission "A2 Broken Compact: First Hearing"
+	minor
+	name `Broken Compact: First Hearing`
+	description `Hear the first arguments in the Morrow Line ownership dispute.`
+	source "New Washington"
+	to offer
+		not "A2 Broken Compact: First Hearing: done"
+		not "A2 Broken Compact: First Hearing: active"
+		not "A2 Broken Compact: declined"
+	on offer
+		conversation
+			`A port clerk directs you to a quiet conference room where two people are waiting on opposite sides of a scarred table. Nadia Kelm, an independent refit engineer, has a maintenance slate open in front of her. Elias Dorne, executor for the late owner of the Morrow Line, has a registry packet and a stack of estate notices.`
+			`Dorne speaks first. "The registry says the vessel belongs to the estate. The estate has creditors and heirs. Kelm says years of reduced compensation created an ownership claim that was never recorded."`
+			`Kelm does not look at him. "Because the owner kept telling us that the unpaid share was the record. We kept the ship moving because we were building equity, not volunteering."`
+			choice
+				`	Separate the ownership claim from the evidence. Ask both of them to preserve records before arguing the outcome.`
+					goto evidence
+				`	[Republic standing: preserve the claim before sale] Tell Dorne that an unresolved claim should be recorded before the estate disposes of the ship.`
+					to display
+						"reputation: Republic" > 0
+					goto procedure
+				`	The registry is the only clean authority here. Back the estate sale.`
+					goto estate
+				`	Decline to become part of an ownership dispute.`
+					goto refuse
+			label evidence
+			`You tell both sides that title, obligation, and credibility are different questions. Kelm reluctantly agrees to produce the overhaul records. Dorne agrees to preserve the estate notices and any messages from the late owner until you have seen what actually exists.`
+			action
+				"A2 Broken Compact: approach evidence" = 1
+				"A2 Broken Compact: active investigation" = 1
+			accept
+			label procedure
+			`You point out that preserving a disputed claim is not the same as accepting it. Dorne studies you for a moment, then adds a hold notice to the packet. Kelm looks relieved, but you make it clear that the hold buys scrutiny, not victory.`
+			action
+				"A2 Broken Compact: approach procedure" = 1
+				"A2 Broken Compact: active investigation" = 1
+			accept
+			label estate
+			`You tell Kelm that the registry is the only ownership instrument anyone can presently prove. Dorne nods, but Kelm closes her slate. "Then you are deciding before you have seen why the records look the way they do."`
+			action
+				"A2 Broken Compact: settlement estate sale" = 1
+				"A2 Broken Compact: kelm resents player" = 1
+				"A2 Broken Compact: dorne trusts player" = 1
+			accept
+			label refuse
+			`You tell them both that your presence would only turn a private dispute into an endorsement. Dorne accepts the answer. Kelm looks frustrated, but not surprised.`
+			action
+				"A2 Broken Compact: declined" = 1
+				"A2 Broken Compact: unresolved at departure" = 1
+			decline
+
+	on complete
+		conversation
+			branch estate
+				has "A2 Broken Compact: settlement estate sale"
+			`A clerk records that the first hearing ended without a settlement. Both parties have preserved their records, and the port has left the ownership claim open pending evidence.`
+			action
+				"A2 Broken Compact: evidence hearing pending" = 1
+			goto end
+			label estate
+			`Dorne files the sale notice. Kelm leaves before the clerk finishes stamping it. The dispute is legally cleaner and personally much worse.`
+			label end
+			`The port record now contains your position. Whatever happens next will remember that you were present.`
+
+
+mission "A2 Broken Compact: Evidence Hearing"
+	minor
+	name `Broken Compact: Evidence Hearing`
+	description `Review the surviving evidence in the Morrow Line dispute.`
+	source "New Washington"
+	to offer
+		has "A2 Broken Compact: evidence hearing pending"
+		not "A2 Broken Compact: Evidence Hearing: done"
+	on offer
+		conversation
+			`When you return, Mara Senn is in the conference room with Kelm and Dorne. Senn was a relief captain on the Morrow Line. She has brought an old maintenance log; Dorne has produced a private message from the late owner.`
+			`The log refers to Kelm's deferred refit work as "crew stake work." The private message says Kelm and the operating crew are owed "a share of whatever the ship becomes," but it never defines a percentage or legal instrument.`
+			action
+				"A2 Broken Compact: found private message" = 1
+				"A2 Broken Compact: found senn annotation" = 1
+				"A2 Broken Compact: senn disclosed evidence" = 1
+			choice
+				`	The evidence proves an obligation but not clean title. Push both sides toward arbitration.`
+					goto arbitration
+				`	The operating partnership carried the real cost. Back Kelm and the crew.`
+					goto partnership
+				`	The promise is too vague to defeat registered title. Back Dorne's sale.`
+					goto sale
+			label arbitration
+			`You tell them the written record is strong enough that the estate cannot honestly call the claim imaginary, but too vague to transfer the ship by itself. Dorne agrees to arbitration. Kelm dislikes the delay, then agrees when Senn points out that the evidence will be preserved as part of the claim.`
+			action
+				"A2 Broken Compact: settlement arbitration" = 1
+				"A2 Broken Compact: kelm trusts player" = 1
+				"A2 Broken Compact: dorne trusts player" = 1
+				"A2 Broken Compact: later reader pending" = 1
+			accept
+			label partnership
+			`You argue that years of documented sacrifice and the owner's message are enough to treat the operating partnership as the equitable owner. Dorne refuses to call that legally complete, but agrees to suspend an outside sale while Kelm assembles a transfer proposal.`
+			action
+				"A2 Broken Compact: settlement operating partnership" = 1
+				"A2 Broken Compact: kelm trusts player" = 1
+				"A2 Broken Compact: dorne resents player" = 1
+				"A2 Broken Compact: later reader pending" = 1
+			accept
+			label sale
+			`You say the evidence proves that the late owner owed something, not that the ship changed owners. Dorne resumes the sale process with a compensation claim attached. Kelm is furious that the promise survived only as a line item.`
+			action
+				"A2 Broken Compact: settlement estate sale" = 1
+				"A2 Broken Compact: kelm resents player" = 1
+				"A2 Broken Compact: dorne trusts player" = 1
+				"A2 Broken Compact: later reader pending" = 1
+			accept
+
+	on complete
+		"A2 Broken Compact: evidence hearing pending" = 0
+		"A2 Broken Compact: active investigation" = 0
+		"A2 Broken Compact: player testimony public" = 1
+
+
+mission "A2 Broken Compact: Later Reader"
+	minor
+	name `Broken Compact: What They Remember`
+	description `See how the people in the Morrow Line dispute remember your choice.`
+	source "New Washington"
+	to offer
+		has "A2 Broken Compact: later reader pending"
+		not "A2 Broken Compact: Later Reader: done"
+	on offer
+		conversation
+			branch arbitration
+				has "A2 Broken Compact: settlement arbitration"
+			branch partnership
+				has "A2 Broken Compact: settlement operating partnership"
+			`Dorne meets you near the port authority desk. "The sale is proceeding with the crew claim formally attached. You treated the registry as an authority, not as an excuse to pretend the promise never happened. I can work with that."`
+			action
+				"A2 Broken Compact: dorne future contact" = 1
+			goto finish
+			label arbitration
+			`Kelm and Dorne are leaving the same arbitration office when they see you. Neither looks happy. Dorne gives you a tired nod. Kelm says, "The important part is that nobody can erase the evidence while they argue about what it means."`
+			action
+				"A2 Broken Compact: kelm future contact" = 1
+				"A2 Broken Compact: dorne future contact" = 1
+			goto finish
+			label partnership
+			`Kelm finds you in the concourse. "The transfer proposal is still being fought over, but the ship is not being auctioned out from under the crew. I remember who made Dorne treat the work as evidence."`
+			action
+				"A2 Broken Compact: kelm future contact" = 1
+			label finish
+			action
+				"A2 Broken Compact: later reader pending" = 0
+			accept
+
+
+mission "A2 Broken Compact: Refusal Reader"
+	minor
+	name `Broken Compact: Refusal Remembered`
+	description `Learn what happened after you refused the Morrow Line dispute.`
+	source "New Washington"
+	to offer
+		has "A2 Broken Compact: declined"
+		not "A2 Broken Compact: Refusal Reader: done"
+	on offer
+		conversation
+			`A port clerk recognizes you from the original hearing record. "The Morrow Line case moved without you. Dorne filed the sale notice, Kelm petitioned to preserve the crew claim, and Senn left on a contract before anyone took her formal testimony. Your refusal stayed in the record as a refusal; neither side was allowed to call it support."`
+			choice
+				`	That is what I intended.`
+				`	I should have looked at the evidence before walking away.`
+			action
+				"A2 Broken Compact: refusal remembered" = 1
+			accept
