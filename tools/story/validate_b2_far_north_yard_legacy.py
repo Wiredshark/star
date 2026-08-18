@@ -20,6 +20,10 @@ ROUTES = (
     "B2 Far North Yard Legacy: route vale",
     "B2 Far North Yard Legacy: route pike",
 )
+EXPLICIT_REVIEW_BRANCHES = (
+    "B2 Far North Yard Legacy: route vale",
+    "B2 Far North Yard Legacy: route pike",
+)
 SETTLEMENTS = (
     "B2 Far North Yard Legacy: settlement protected training",
     "B2 Far North Yard Legacy: settlement supervised production",
@@ -45,10 +49,19 @@ def main() -> int:
         require(text, character, failures, f"missing named character: {character}")
     for route in ROUTES:
         require(text, f'"{route}" = 1', failures, f"route never written: {route}")
-        require(text, f'has "{route}"', failures, f"route never read: {route}")
+    for route in EXPLICIT_REVIEW_BRANCHES:
+        require(text, f'has "{route}"', failures, f"review branch never reads route: {route}")
     for settlement in SETTLEMENTS:
         require(text, f'"{settlement}" = 1', failures, f"settlement never written: {settlement}")
         require(text, f'has "{settlement}"', failures, f"settlement never read: {settlement}")
+
+    # The balanced route is deliberately the Review conversation's fallthrough
+    # case. Vale and Pike have explicit branches; if neither is set, the balanced
+    # route is the only remaining accepted introduced state.
+    require(text, 'has "B2 Far North Yard Legacy: introduced"', failures,
+            "review mission does not require the initial interaction")
+    require(text, 'not "B2 Far North Yard Legacy: reviewed"', failures,
+            "review mission is not one-shot gated")
 
     require(text, '"B2 Far North Yard Legacy: declined" = 1', failures,
             "decline route is not persisted")
@@ -79,6 +92,7 @@ def main() -> int:
     print(f"PASS: missions={len(MISSIONS)}")
     print(f"PASS: named_characters={len(CHARACTERS)}")
     print(f"PASS: initial_routes={len(ROUTES)}")
+    print("PASS: review_routing=balanced fallthrough + explicit Vale/Pike branches")
     print(f"PASS: terminal_settlements={len(SETTLEMENTS)}")
     print("PASS: later_reader=Vale Remembers")
     print("PASS: persistence_model=stock mission/global conditions")
