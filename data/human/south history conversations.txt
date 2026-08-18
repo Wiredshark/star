@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "South Militia Compact Archive"
+	minor
+	source
+		attributes "south"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A display in the spaceport concourse reproduces pages from old local-defense agreements. The earliest entries are little more than lists of ship owners who promised to answer distress calls, escort damaged freighters, or gather when a settlement expected a pirate raid.`
+			`\tLater documents are more formal. Ports standardized signal codes, maintenance obligations, ammunition stores, and rules for deciding who could command a mixed defense force. The exhibit notes that these arrangements never eliminated piracy; instead, they made local survival less dependent on whether a single well-armed captain happened to be nearby.`
+			`\tOutside the archive, a militia pilot in a patched flight suit walks past a row of privately owned freighters. The display makes the modern defense network look less like a standing institution than a centuries-old habit of turning civilian ships into public infrastructure when the frontier demands it.`
+				decline
+
+
+mission "South Warehouse Ledger Archive"
+	minor
+	source
+		attributes "south"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Beside the cargo terminal, a local historical society has mounted an exhibition of warehouse ledgers. Some of the oldest surviving records identify every crate, ship, broker, and owner in careful detail. Others use vague descriptions, initials, or marks that the curators admit were probably intended to conceal who was moving what.`
+			`\tThe accompanying text explains that southern ports grew where legal trade, salvage, private contracting, and smuggling often used the same docks and repair yards. Authorities repeatedly tried to impose clearer manifests and customs rules, while merchants argued that excessive inspection would simply drive traffic to the next less-regulated port.`
+			`\tModern cargo handling is far more standardized, yet the exhibition ends with a wall of anonymous shipping labels collected in recent decades. The curators dryly observe that the frontier has always found uses for paperwork that says exactly enough and no more.`
+				decline
+
+
+mission "South Convoy Memorial"
+	minor
+	source
+		attributes "south"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Near the landing pads stands a memorial made from mismatched hull plates. Each plate bears the name of a civilian ship lost while traveling with an early southern convoy. A nearby plaque says the first organized convoys were not military formations at all, but temporary agreements among merchants who decided that traveling together was cheaper than repeatedly replacing ships and cargoes.`
+			`\tOver time, those agreements produced scheduled departures, shared route information, emergency repair funds, and informal rules for abandoning cargo in order to save crews. Insurance firms and local governments eventually adopted many of the same practices, turning improvised cooperation into ordinary commercial procedure.`
+			`\tThe memorial does not claim that convoying made the routes safe. Instead, it describes safety as something merchants learned to manufacture collectively, one schedule, signal, and rescue obligation at a time.`
+				decline
+
+
+mission "South Port Neutrality Archive"
+	minor
+	source
+		attributes "south"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A small municipal archive is displaying copies of old port regulations under the title "Neutral Ground." The earliest rules forbid armed disputes inside certain market streets and repair yards, not out of idealism but because merchants, mechanics, and dockworkers could not make a living if every private feud followed its participants onto the landing pads.`
+			`\tSuccessive regulations expanded the protected areas, established procedures for impounding weapons or ships, and created local arbitration boards for debts, salvage claims, and damaged cargo. The archive emphasizes that enforcement was always uneven and that powerful captains often tested the limits, but the principle endured because even rivals benefited from places where business could continue.`
+			`\tWatching ships from several different governments unload side by side, you can see why the arrangement survived. On a dangerous frontier, the ability to postpone a conflict until after repairs and resupply can be an institution in its own right.`
+				decline
