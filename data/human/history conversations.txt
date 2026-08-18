@@ -1,0 +1,83 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+
+mission "Republic Archive Day"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A temporary exhibition has taken over one wall of the spaceport concourse. Behind glass are copies of colony charters, ration books, shipping manifests, election notices, and battered photographs of settlements that look much smaller than the cities surrounding their modern ports.`
+			`	A placard explains that the display is part of a traveling public archive. Rather than presenting the Republic as something founded in a single ceremony, it describes it as an accumulation of agreements between worlds that had learned, often painfully, that trade routes, courts, rescue services, and common rules were difficult to maintain in isolation.`
+			`	Two visitors begin arguing over the display. One points to the old emergency ration cards as proof that central government has always been necessary. The other points to a colonial petition demanding local control and says the same documents prove exactly the opposite. The archivist supervising the exhibit does not intervene. She only smiles when both of them start reading more closely.`
+				decline
+
+
+
+mission "Dirt Belt Founders Wall"
+	minor
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Near the edge of the spaceport is a long wall faced with mismatched stone and metal. At first you take the rows of names for a war memorial, but the heading identifies it instead as a record of settlement crews, surveyors, mechanics, medics, farmers, and transport pilots who kept the first permanent communities here alive.`
+			`	The oldest names are grouped by ship rather than family. Later sections list cooperatives, irrigation crews, machine shops, and finally whole towns. Small repairs in the wall are dated too, leaving a second history layered over the first.`
+			`	A local school group is being shown the memorial. Their teacher points out that many early settlements survived only because neighboring worlds exchanged seed stock, spare parts, and labor during bad seasons. One child asks why the worlds are poor now if everybody helped each other so much. The teacher pauses before answering that surviving together and prospering together turned out to be different problems.`
+				decline
+
+
+
+mission "Deep Reconstruction Memorial"
+	minor
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A quiet plaza outside the spaceport is arranged around pieces of infrastructure rather than statues: a scorched pressure door, part of an old communications mast, a cracked water manifold, and the nose of a cargo tug that looks as if it was rebuilt more times than it was manufactured.`
+			`	An inscription calls the collection a reconstruction memorial. It honors the generations who restored transport, communications, utilities, and trade after periods when the Deep's connections to the rest of human space were unreliable or violently interrupted.`
+			`	What catches your attention is the final line: "A route is not a line on a chart. It is a promise repeatedly kept." Nearby, freight crews are loading containers while a maintenance team argues over a replacement pump. The memorial makes their ordinary work look briefly like part of the same history.`
+				decline
+
+
+
+mission "Syndicate Charter Gallery"
+	minor
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`The terminal's commercial gallery includes a row of framed corporate charters. Some are modern reproductions printed on smart glass; others are photographed paper documents filled with obsolete legal language, merger stamps, creditor signatures, and handwritten amendments.`
+			`	A guide explains that several institutions now treated as permanent parts of local government began as practical arrangements between transport firms, lenders, factories, and colonial administrations. Warehouses became customs houses, company arbitration became civil procedure, and private security agreements gradually acquired public obligations that their authors had never anticipated.`
+			`	A visitor asks whether that means the corporations created the government or the government domesticated the corporations. The guide laughs. "If you find a charter that settles that argument, the legal department would like to borrow it."`
+			`	On the way out, you notice that the gallery's largest sponsor is one of the companies whose oldest charter is on display.`
+				decline
