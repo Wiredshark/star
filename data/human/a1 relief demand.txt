@@ -1,0 +1,54 @@
+# A1 world simulation: Free Worlds relief-demand pressure.
+#
+# Repeated arrivals from Pirate-controlled space create a persistent humanitarian
+# relief-demand signal in Free Worlds territory. Each qualifying arrival adds one
+# unresolved relief case, capped at 5, and schedules its own four-day recovery.
+# Later A2 dialogue/news/missions can consume the numeric condition without
+# owning or mutating the underlying simulation truth.
+
+
+event "ES A1: Free Worlds Relief Demand Recovery"
+	"world: free worlds relief demand" -= 1
+	"world: free worlds relief demand" >?= 0
+	clear "world: free worlds relief notice seen"
+
+
+mission "ES A1: Free Worlds Relief Demand"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "previous system government: Pirate"
+		"world: free worlds relief demand" < 5
+	on offer
+		"world: free worlds relief demand" += 1
+		"world: free worlds relief demand" <?= 5
+		event "ES A1: Free Worlds Relief Demand Recovery" 4 4
+		fail
+
+
+# Player-visible reader. It acknowledges the current high-demand episode but
+# does not alter the numeric simulation state. Recovery clears the acknowledgement
+# so a later independently elevated episode can become visible again.
+mission "ES A1: Free Worlds Relief Demand Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds relief demand" >= 3
+		not "world: free worlds relief notice seen"
+	on offer
+		message
+			text "Free Worlds relief coordinators report a surge in emergency arrivals from pirate-held space. Local shelters and resupply crews are absorbing the backlog while aid networks redistribute capacity."
+		set "world: free worlds relief notice seen"
+		fail
