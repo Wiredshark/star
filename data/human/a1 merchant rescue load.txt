@@ -1,0 +1,36 @@
+event "ES A1: Merchant Rescue Load Recovery"
+	"world: merchant rescue load" -= 1
+	"world: merchant rescue load" >?= 0
+	clear "world: merchant rescue load notice seen"
+
+mission "ES A1: Merchant Rescue Load"
+	assisting
+	invisible
+	repeat
+	minor
+	to offer
+		"world: merchant rescue load" < 5
+	source
+		government "Merchant"
+		not attributes "automaton"
+	on offer
+		"world: merchant rescue load" += 1
+		"world: merchant rescue load" <?= 5
+		event "ES A1: Merchant Rescue Load Recovery" 5 5
+		decline
+	destination "Earth"
+
+mission "ES A1: Merchant Rescue Load Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	to offer
+		"world: merchant rescue load" >= 3
+		not "world: merchant rescue load notice seen"
+	on offer
+		message
+			text "Merchant distress channels are reporting an unusually heavy rescue workload. Response crews are stretched thin while recently damaged vessels are cleared from the network."
+		set "world: merchant rescue load notice seen"
+		fail
+	destination "Earth"
