@@ -1,0 +1,74 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Core Registry Archive"
+	minor
+	source
+		government "Republic"
+		attributes core
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A public archive near the port authority displays copies of old ship registries. The earliest records differ wildly from world to world: some list only an owner and a hull name, while others include cargo limits, crew obligations, liens, inspection notes, and handwritten amendments accumulated over decades.`
+			`	A curator explains that the dense paperwork of modern Core ports emerged gradually as local registries learned to recognize one another. Shared formats made it easier to insure ships, transfer ownership, collect taxes, enforce debts, and decide which authority was responsible when a vessel crossed several jurisdictions before something went wrong.`
+				decline
+
+
+mission "Core Ship Standard Hall"
+	minor
+	source
+		government "Republic"
+		attributes core factory
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A small industrial museum has arranged generations of couplings, pressure fittings, power connectors, cargo locks, and access panels along one wall. The oldest examples are almost all incompatible with each other. The newer the display becomes, the more the parts begin to share familiar dimensions.`
+			`	The exhibit notes that Core shipbuilding did not become dominant through a single breakthrough. Manufacturers, insurers, ports, and repair yards spent generations arguing over standards that let components, tools, and trained labor move between competing shipyards. The resulting compromises were rarely elegant, but they made repairs and large-scale production far more predictable.`
+				decline
+
+
+mission "Core Civil Service Ledger"
+	minor
+	source
+		government "Republic"
+		attributes core
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A civic-history display contains appointment ledgers, examination notices, procurement forms, and battered manuals from several generations of local government. The documents become steadily more standardized, but marginal notes show that officials continued adapting the rules to local conditions long after the forms themselves became uniform.`
+			`	An accompanying essay argues that much of the Republic's practical authority grew this way: not from dramatic declarations, but from ports, courts, tax offices, inspectors, and supply departments learning to exchange records and recognize one another's decisions. The same bureaucracy that frustrated merchants also allowed obligations made on one Core world to remain meaningful on another.`
+				decline
+
+
+mission "Core Utility Compact Archive"
+	minor
+	source
+		government "Republic"
+		attributes core factory
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A technical exhibit describes an old dispute among power companies, factories, municipal authorities, and orbital facilities over who should pay for reserve capacity. Early grids had been built around individual industrial districts, leaving neighboring systems of generation and storage unable to support one another during shortages or accidents.`
+			`	The compact on display established shared reserve requirements, emergency transfers, maintenance reporting, and compensation rules. Later agreements expanded the model. The exhibit credits these unglamorous arrangements with making the Core's dense industrial economy less dependent on every factory, dock, and city maintaining a completely separate margin of safety.`
+				decline
