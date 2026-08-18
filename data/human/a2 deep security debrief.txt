@@ -1,0 +1,95 @@
+# A2 production dialogue slice: Deep Security Debrief.
+
+mission "A2 Deep Debrief: First Meeting"
+	minor
+	name `Deep Security: Debrief`
+	description `Speak with Deep Security liaison Mara Venn about a disputed escort report.`
+	source
+		attributes "deep"
+	to offer
+		not "A2 Deep Debrief: First Meeting: done"
+		not "A2 Deep Debrief: First Meeting: active"
+	on offer
+		conversation
+			`A Deep Security liaison in a slate-gray uniform intercepts you near the concourse traffic desk. "Captain <last>? Mara Venn. I review escort losses and route advisories. One of our recent convoy reports has turned into an argument about whether the captain made a reasonable call or abandoned the job at the first sign of pressure."`
+			`Venn turns the report around so you can see the route map. "I want an outside read before this becomes another argument between operations and security."`
+			choice
+				`\t[Convoy record: Deep Syndicate escort] I have already brought one of your Syndicate convoys through a live threat corridor. Start with what the escort captain actually knew.`
+					to display
+						has "Deep: Syndicate Convoy: done"
+					goto convoy
+				`\t[Combat record: veteran escort] The threat picture matters more than a clean arrival time. Show me the hostile contacts and fuel margin.`
+					to activate
+						"combat rating" >= 80
+					goto veteran
+				`\tSeparate the captain's decision from the office politics. Walk me through the timeline first.`
+					goto procedure
+				`\tI am not interested in becoming part of an internal Deep Security review.`
+					goto refuse
+			label convoy
+			`Venn pauses on your service record, then nods. "That is why I asked you instead of another desk officer. You know what it looks like when a convoy contract and an actual threat stop agreeing with each other." She gives you the raw route timings rather than the command summary.`
+			action
+				"A2 Deep Debrief: approach convoy precedent" = 1
+				"A2 Deep Debrief: venn trusts field history" = 1
+				"A2 Deep Debrief: later reader pending" = 1
+			accept
+			label veteran
+			`You point out two moments where staying on schedule would have turned the convoy into a predictable intercept. Venn marks both. "That is the distinction operations keeps flattening. Delay can be a failure, or it can be the price of not losing ships."`
+			action
+				"A2 Deep Debrief: approach threat judgment" = 1
+				"A2 Deep Debrief: venn trusts combat judgment" = 1
+				"A2 Deep Debrief: later reader pending" = 1
+			accept
+			label procedure
+			`You refuse to start with blame. Venn walks through the timestamps, contact reports, and fuel state in order. By the end, the disputed decision looks less dramatic and more like a chain of small choices that narrowed the captain's options.`
+			action
+				"A2 Deep Debrief: approach procedure" = 1
+				"A2 Deep Debrief: venn trusts process" = 1
+				"A2 Deep Debrief: later reader pending" = 1
+			accept
+			label refuse
+			`Venn closes the report. "Fair. An outside opinion is only useful if it is actually independent." She records that you declined rather than allowing either side to cite your silence as support.`
+			action
+				"A2 Deep Debrief: refused" = 1
+				"A2 Deep Debrief: later reader pending" = 1
+			decline
+
+mission "A2 Deep Debrief: Later Reader"
+	minor
+	name `Deep Security: What Venn Filed`
+	description `Learn how Mara Venn recorded your part in the disputed escort review.`
+	source
+		attributes "deep"
+	to offer
+		has "A2 Deep Debrief: later reader pending"
+		not "A2 Deep Debrief: Later Reader: done"
+	on offer
+		conversation
+			branch convoy
+				has "A2 Deep Debrief: approach convoy precedent"
+			branch veteran
+				has "A2 Deep Debrief: approach threat judgment"
+			branch procedure
+				has "A2 Deep Debrief: approach procedure"
+			`Venn catches you near the same traffic desk. "For what it is worth, I filed your refusal exactly as a refusal. Nobody gets to turn it into agreement after the fact." The review moved forward without your testimony, but your boundary survived in the record.`
+			action
+				"A2 Deep Debrief: refusal respected" = 1
+			goto finish
+			label convoy
+			`Venn hands you a short copy of the final finding. "The prior convoy record mattered. Command accepted that a captain who has actually preserved ships under threat can identify when schedule discipline becomes a liability." Your earlier Deep service has now become part of how Venn judges later escort disputes.`
+			action
+				"A2 Deep Debrief: venn future field contact" = 1
+			goto finish
+			label veteran
+			`Venn taps two highlighted threat contacts in the final report. "Your reconstruction survived review. We changed the guidance so captains can document a threat-driven delay before operations treats it as simple noncompliance."`
+			action
+				"A2 Deep Debrief: venn future security contact" = 1
+			goto finish
+			label procedure
+			`Venn shows you the revised review template. "Timeline first, blame second. It should have been obvious, but now it is written down." Your insistence on process has become part of the standing review practice.`
+			action
+				"A2 Deep Debrief: venn future review contact" = 1
+			label finish
+			action
+				"A2 Deep Debrief: later reader pending" = 0
+			accept
