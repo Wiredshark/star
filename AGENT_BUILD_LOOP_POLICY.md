@@ -10,6 +10,16 @@ The project therefore requires **portfolio diversity** across simulation, RPG/st
 
 Correctness, regressions, save compatibility, blockers, broken builds, and acceptance failures always take priority over diversity. Required repair work must be labeled as such rather than disguised as a new feature round.
 
+## Explicit A-loop user priority: modern dialogue
+
+The project has an explicit user-priority requirement to evolve Endless Sky's existing branching conversations into a deeper persistent RPG dialogue system. The authoritative implementation target is `A_LOOP_DIALOGUE_SYSTEM.md`.
+
+Until A3 records `DIALOGUE_SYSTEM_STATUS: INTEGRATED_PRODUCTION_SLICE`, A2/A3 must treat this as an open explicit-user-priority item when selecting discretionary work. A blocker, regression, incompatible current-head evidence, or a more urgent integration dependency may delay it, but agents must carry the priority forward rather than silently dropping it.
+
+The first accepted slice must extend/reuse the existing conversation system, connect to real persistent game state, ship with a production conversation, survive save/load, and prove a later consequence/reader. A parser-only framework or a prettier dialogue box without systemic consequences does not satisfy the priority.
+
+After the first coherent production slice is integrated, dialogue returns to normal portfolio rotation rather than monopolizing successive A rounds.
+
 ## Mandatory run labels
 
 Every A/B/C/D stage prompt, run report, and implementation handoff should carry these fields:
@@ -80,6 +90,8 @@ Rotate among areas such as:
 
 A1 should not treat economy/freight as the universal source of simulated change.
 
+For the dialogue priority, A1's role is limited to exposing or reusing authoritative world-state inputs needed by dialogue. It must not create a second narrative copy of simulation truth merely to make a conversation branch possible.
+
 ### A2 — RPG and dynamic narrative
 
 Rotate among:
@@ -93,9 +105,12 @@ Rotate among:
 - ownership/inheritance/claims;
 - disaster/migration/community pressure;
 - careers/backgrounds/skills;
+- dialogue/conversation systems and player-facing social choice;
 - economy/logistics when genuinely appropriate.
 
 A2 additionally inherits `story/NARRATIVE_DIVERSITY_POLICY.md`.
+
+While the modern-dialogue user priority is open, A2 is the primary specialist responsible for implementing the reusable dialogue capability and at least one production conversation described in `A_LOOP_DIALOGUE_SYSTEM.md`. A2 must not close the priority with only design prose, a parser-only abstraction, or a conversation that has no persistent later consequence.
 
 ### A3 — integration/evolution
 
@@ -110,6 +125,8 @@ A3 should:
 - favor cross-system connections between previously separate domains;
 - leave a `PORTFOLIO_BALANCE` note in the integration handoff.
 
+For the modern-dialogue priority, A3 must inspect `A_LOOP_DIALOGUE_SYSTEM.md`, verify the exact A2 implementation against current authority, and record `DIALOGUE_SYSTEM_STATUS`. The priority is not satisfied before a tested, save-safe production conversation demonstrates state-dependent branching and a later persistent consequence/reader.
+
 ### B1 — world history and regional identity
 
 Rotate among regions, institutions, historical periods, factions, cultures, political structures, conflicts, migrations, discoveries, religions/ideologies, industries, and local civic identity. Do not make every regional history an explanation for current trade disruption.
@@ -118,9 +135,13 @@ Rotate among regions, institutions, historical periods, factions, cultures, poli
 
 Rotate character roles and pressures: family, authority, crime, science, military service, religion/ideology, labor, exploration, medicine, law, ownership, personal relationships, political ambition, survival, and commerce. Persistent characters should not all be merchants, captains, dispatchers, or logistics intermediaries.
 
+When useful, B2 should author conflicts with at least three credible dialogue approaches and persistent character consequences so the A2 dialogue system receives real production consumers rather than synthetic fixtures.
+
 ### B3 — continuity and handoff
 
 B3 should audit the **content portfolio**, not only contradictions. Flag domain concentration, duplicate character roles, repeated plot structures, and regions receiving disproportionate attention. Continuity review should preserve deliberate arcs while resisting accidental monoculture.
+
+For dialogue content, B3 should also flag branches that contradict established character authority, expose knowledge the player/NPC should not have, duplicate persistent state, or reduce multiple supposedly distinct responses to the same consequence.
 
 ### C lanes — visual/remaster work
 
@@ -142,6 +163,8 @@ Visual proof and actual-game screenshot requirements remain mandatory. A failed 
 
 Rotate architecture review across simulation boundaries, persistence, data ownership, event flow, UI/game-state boundaries, story/simulation coupling, rendering boundaries, performance architecture, duplication, and dead/disconnected systems. Record **concentration debt** when the project keeps expanding one subsystem while adjacent systems remain disconnected.
 
+D1 should review the dialogue feature for state ownership and ensure the conversation layer reads authoritative mission, relationship, legal, survey, reputation, and simulation facts instead of creating a second truth store.
+
 ### D2 — QA/long-run
 
 QA breadth must not mirror feature concentration. Maintain coverage across:
@@ -160,9 +183,13 @@ QA breadth must not mirror feature concentration. Maintain coverage across:
 
 New-system tests are additive; they do not replace broad regression coverage.
 
+For dialogue-system work, include graph/branch reachability, condition correctness, later-reader persistence, old-save compatibility, stock conversation compatibility, and UI proof when presentation changes.
+
 ### D3 — tooling
 
 Do not repeatedly build tools for the same subsystem merely because its fixtures already exist. Prefer reusable infrastructure and rotate among build/test automation, save inspection, simulation diagnostics, story validation, asset proof, profiling, data validation, integration/handoff verification, and observability according to project friction.
+
+Dialogue graph validation/inspection is appropriate when real authoring friction demonstrates a need, especially for unreachable nodes, contradictory gates, orphaned effects, or missing later readers.
 
 ### D4 — closure/verification
 
@@ -174,6 +201,8 @@ D4 must distinguish:
 - unresolved concentration debt.
 
 Concentration debt is normally a planning/coherence issue, not a reason to pretend a correct build failed. It must still be carried into the next Agent A planning/integration handoff.
+
+While the dialogue priority remains open, D4 should carry `DIALOGUE_SYSTEM_STATUS` and any unmet acceptance-gate items into the next A cycle.
 
 ## Cross-lane diversity check
 
@@ -196,7 +225,7 @@ DIVERSITY_CHECK
 Use this order when selecting work:
 
 1. **Reproducible blocker or regression?** Fix it and label the repeat.
-2. **Explicit user priority?** Do it and record why it overrides normal rotation.
+2. **Explicit user priority?** Do it and record why it overrides normal rotation. The open modern-dialogue requirement in `A_LOOP_DIALOGUE_SYSTEM.md` is such a priority until A3 integrates the first production slice.
 3. **Integration dependency preventing other work?** Resolve it.
 4. Otherwise audit recent domains and choose an underrepresented high-value area.
 5. Prefer work that connects two existing systems over work that deepens one already-dominant silo.
@@ -225,4 +254,11 @@ A3's authoritative integration/evolution report should include a compact `PORTFO
 - underrepresented domains recommended for the next A/B/C/D rounds;
 - justified repeats that should stop once their blocker closes.
 
-This makes anti-funneling part of the build path itself rather than relying on agents to remember an informal preference.
+While the dialogue priority is open, the A3 report must also include:
+
+```text
+DIALOGUE_SYSTEM_STATUS: NOT_STARTED | SPECIALIST_READY | INTEGRATED_FOUNDATION | INTEGRATED_PRODUCTION_SLICE | BLOCKED_WITH_EVIDENCE
+DIALOGUE_SYSTEM_NEXT_GAP: <highest-value unmet acceptance item or N/A>
+```
+
+This makes anti-funneling and the explicit dialogue priority part of the build path itself rather than relying on agents to remember informal preferences.
