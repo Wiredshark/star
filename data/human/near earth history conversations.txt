@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Near Earth Departure Wall"
+	minor
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A long wall near the spaceport concourse is covered by a map of human settlement routes. The oldest paths cluster tightly around Sol before spreading outward in layers, each generation of routes drawn in a slightly different color. Small plaques beside the map describe migrations not as a single outward march, but as repeated cycles of departure, return, consolidation, and departure again.`
+			`	A teacher nearby reminds a group of students that many Near Earth ports became important not because they were final destinations, but because people learned to treat them as stepping stones: places to repair ships, gather information, find work, and decide whether the next jump was worth the risk.`
+				decline
+
+
+mission "Near Earth Traffic Archive"
+	minor
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`An exhibit in the terminal displays copies of old docking schedules. The earliest pages look almost informal, with handwritten corrections and whole columns squeezed into margins. Later records become increasingly standardized, until the schedules resemble the dense traffic-control boards used by modern ports.`
+			`	The accompanying text says that many rules now treated as ordinary port procedure grew out of practical compromises between captains, dockworkers, local governments, and insurers. Congestion, damaged cargo, missed connections, and a few well-remembered accidents gradually turned custom into regulation.`
+				decline
+
+
+mission "Near Earth Maintenance Ledger"
+	minor
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Behind glass in a public lobby sits a stack of reproduced maintenance ledgers from an early orbital service cooperative. Most entries are mundane: replacement seals, patched radiators, borrowed tools, fuel transferred between ships, and labor traded against future work.`
+			`	A note beside the display argues that Near Earth infrastructure was built as much through these repetitive obligations as through famous expeditions. Reliable travel depended on crews knowing that a damaged ship could find compatible parts, trained mechanics, and someone willing to keep a promise made several ports earlier.`
+				decline
+
+
+mission "Near Earth Earth Day Archive"
+	minor
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Preparations for an Earth Day display have filled part of the terminal with old photographs, travel notices, family records, and school projects. Some celebrate Earth itself; others focus on communities whose ancestors left it generations ago but continued to mark the date.`
+			`	One curator explains that the celebration changed as humanity spread. For some people it became a pilgrimage, for others a civic holiday, and for still others simply an excuse to tell children why so many calendars, institutions, and family stories still refer back to one crowded system near the center of human space.`
+				decline
