@@ -1,0 +1,142 @@
+# A2 modern dialogue vertical slice.
+# This file intentionally uses stock conversation conditions/actions so old content
+# and old saves remain compatible. Player-visible requirement labels are authoring
+# metadata embedded in the response text; the authoritative check is always the
+# sibling `to display` condition.
+
+mission "A2 Dialogue: Rook Mediation"
+	minor
+	name `Rook Mediation`
+	description `Help port mediator Imani Rook resolve a disputed convoy-loss claim.`
+	source "New Boston"
+	to offer
+		not "A2 Dialogue: Rook Mediation: done"
+		not "A2 Dialogue: Rook Mediation: active"
+		not "A2 Dialogue: rook refused"
+	on offer
+		conversation
+			`Imani Rook, a port mediator with a slate full of damage reports, stops you near the concourse. "Captain <last>, I need an outside view. A freight captain and a yard crew are blaming each other for a convoy loss, and both sides have enough evidence to make this ugly."`
+			`Rook turns the slate so you can see three conflicting timelines. "I am not asking you to decide who deserves to win. I am asking what kind of evidence should control what happens next."`
+			choice
+				`	Hear both accounts before you recommend anything.`
+					goto balanced
+				`	[Combat experience: convoy command] Reconstruct the loss from formation discipline and escort decisions.`
+					to display
+						"combat rating" >= 5
+					goto command
+				`	[Prior service: Deep convoy] Compare the manifests, rendezvous timing, and escort obligations first.`
+					to display
+						has "Deep: Syndicate Convoy: done"
+					goto logistics
+				`	Tell Rook you will not put your name behind either side.`
+					goto refuse
+			label balanced
+			`You ask Rook to separate testimony from records and to preserve both parties' claims until the timelines can be reconciled. She nods. "That buys us time without pretending uncertainty is proof."`
+			action
+				"A2 Dialogue: rook route balanced" = 1
+				"A2 Dialogue: rook accepted" = 1
+			accept
+			label command
+			`You point out that the convoy's spacing and reaction times can distinguish a yard failure from a command failure without guessing at motive. Rook marks the route on her slate. "Useful. The record can answer that before anyone starts bargaining over blame."`
+			action
+				"A2 Dialogue: rook route command" = 1
+				"A2 Dialogue: rook accepted" = 1
+			accept
+			label logistics
+			`You recognize the same sort of handoff ambiguity that can sink a convoy contract before the first jump. You tell Rook to compare manifests, departure acknowledgements, and escort assumptions before hearing closing arguments. "Good," she says. "A prior service record is not authority by itself, but it tells us which documents matter."`
+			action
+				"A2 Dialogue: rook route logistics" = 1
+				"A2 Dialogue: rook accepted" = 1
+			accept
+			label refuse
+			`You tell Rook that a neutral signature would only disguise uncertainty as judgment. She looks disappointed but not angry. "Fair. Refusal is better than false certainty. I will record that you declined rather than pretending you never saw the case."`
+			action
+				"A2 Dialogue: rook refused" = 1
+			decline
+
+	on complete
+		conversation
+			branch command
+				has "A2 Dialogue: rook route command"
+			branch logistics
+				has "A2 Dialogue: rook route logistics"
+			`Rook meets you at the port office. "The two sides accepted a preserved-record settlement. Neither got everything they wanted, but your insistence on hearing both accounts kept the case from becoming a loyalty test."`
+			action
+				"A2 Dialogue: rook outcome balanced" = 1
+				"A2 Dialogue: rook followup pending" = 1
+			goto end
+			label command
+			`Rook meets you with a revised incident map. "Your convoy reconstruction held up. It showed the escort decisions mattered more than the yard's disputed maintenance note. We settled without treating combat experience as a magic answer; it told us which evidence to test."`
+			action
+				"A2 Dialogue: rook outcome command" = 1
+				"A2 Dialogue: rook followup pending" = 1
+			goto end
+			label logistics
+			`Rook meets you with the final manifest packet. "The handoff records exposed the real failure: both parties were working from different escort obligations. Your prior convoy experience pointed us to the documents, not the verdict."`
+			action
+				"A2 Dialogue: rook outcome logistics" = 1
+				"A2 Dialogue: rook followup pending" = 1
+			label end
+			`She closes the file. "If another case crosses my desk where your history matters, I will remember how you used it."`
+
+
+mission "A2 Dialogue: Rook Remembers"
+	minor
+	name `Rook Remembers`
+	description `Imani Rook remembers how you handled the convoy-loss mediation.`
+	source "New Boston"
+	to offer
+		has "A2 Dialogue: rook followup pending"
+		not "A2 Dialogue: Rook Remembers: done"
+	on offer
+		conversation
+			branch command
+				has "A2 Dialogue: rook outcome command"
+			branch logistics
+				has "A2 Dialogue: rook outcome logistics"
+			`Imani Rook catches your eye across the concourse. "Captain. I have another disputed record on my desk. I asked for you because last time you protected the uncertainty instead of selling confidence."`
+			goto choice
+			label command
+			`Imani Rook taps a convoy diagram as you approach. "Captain. I remembered how you used command experience last time: as a way to test evidence, not override it. I have another incident where that distinction matters."`
+			goto choice
+			label logistics
+			`Imani Rook is already holding two manifests when she sees you. "Captain. I remembered that you looked for the broken handoff before choosing a side. I have another contract dispute that may need the same discipline."`
+			label choice
+			choice
+				`	Ask Rook to send the file when the record is complete.`
+				`	Tell Rook you are not available for another case.`
+					goto decline
+			action
+				"A2 Dialogue: rook remembered positively" = 1
+				"A2 Dialogue: rook followup pending" = 0
+			accept
+			label decline
+			`Rook accepts the answer without argument. "Understood. I asked because of what you did before, not because you owe me."`
+			action
+				"A2 Dialogue: rook remembered unavailable" = 1
+				"A2 Dialogue: rook followup pending" = 0
+			decline
+
+
+mission "A2 Dialogue: Rook Refusal Reader"
+	minor
+	name `Rook Refusal Reader`
+	description `Imani Rook remembers that you declined to judge the convoy-loss case.`
+	source "New Boston"
+	to offer
+		has "A2 Dialogue: rook refused"
+		not "A2 Dialogue: Rook Refusal Reader: done"
+	on offer
+		conversation
+			`Imani Rook gives you a brief nod as you pass. "Captain. I kept your refusal in the case record. It mattered. The parties could not later claim you had endorsed either version of events."`
+			choice
+				`	Tell her that was the point.`
+				`	Ask her not to involve you in future disputes.`
+					goto nofuture
+			action
+				"A2 Dialogue: rook refusal respected" = 1
+			accept
+			label nofuture
+			action
+				"A2 Dialogue: rook no future mediation" = 1
+			accept
