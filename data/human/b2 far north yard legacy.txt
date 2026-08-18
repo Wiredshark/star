@@ -1,0 +1,127 @@
+# B2 Far North Yard Legacy production slice.
+#
+# This content builds directly on the Far North shipwright/apprenticeship history
+# slice by turning the institution into named-character consequences at Prime.
+# It uses stock mission/conversation/global-condition mechanisms only.
+
+mission "B2 Far North Yard Legacy: Offer"
+	minor
+	name `A Place at the Bench`
+	description `Master shipwright Tessa Vale and apprentice Rowan Pike disagree about whether the yard should keep training workers during a production crunch.`
+	source "Prime"
+	to offer
+		not "B2 Far North Yard Legacy: introduced"
+		not "B2 Far North Yard Legacy: declined"
+	on offer
+		conversation
+			`A woman in a scorched work coat is arguing with a younger mechanic beside a parts trolley. She notices you listening. "Tessa Vale," she says. "I run one of the refit benches. Rowan Pike here thinks I should pull the apprentices off teaching rotations until our backlog clears."`
+			`Pike shakes his head. "I think customers waiting on pressure seals care more about getting ships back in the air than preserving a tradition for its own sake."`
+			`Vale points through the hangar glass at a row of half-open engine housings. "The tradition exists because the Far North learned what happens when every yard keeps its knowledge to itself. We can clear this month and still make next year worse."`
+			choice
+				`\tAsk them to separate emergency repair work from training work before changing the apprenticeship schedule.`
+					goto balanced
+				`\tBack Vale: keep apprentices on teaching rotations even if the backlog takes longer.`
+					goto vale
+				`\tBack Pike: suspend teaching rotations until the backlog is under control.`
+					goto pike
+				`\tTell them the yard should settle its own staffing dispute.`
+					goto decline
+			label balanced
+			`You suggest triaging safety-critical repairs first while preserving a smaller protected teaching block. Vale studies the queue. Pike says, "That at least gives us a number to argue about instead of a principle."`
+			action
+				"B2 Far North Yard Legacy: introduced" = 1
+				"B2 Far North Yard Legacy: route balanced" = 1
+			accept
+			label vale
+			`You tell them that a remote yard that stops training replacements is borrowing capacity from its own future. Vale nods. Pike replies, "Then we should be honest with captains about the delay."`
+			action
+				"B2 Far North Yard Legacy: introduced" = 1
+				"B2 Far North Yard Legacy: route vale" = 1
+				"B2 Far North Yard Legacy: vale trusts player" = 1
+			accept
+			label pike
+			`You tell them the immediate queue has to come first. Pike looks relieved. Vale says, "Short pauses have a way of becoming policy when the numbers stay ugly."`
+			action
+				"B2 Far North Yard Legacy: introduced" = 1
+				"B2 Far North Yard Legacy: route pike" = 1
+				"B2 Far North Yard Legacy: vale doubts player" = 1
+			accept
+			label decline
+			`You tell them the yard has enough experience to own the consequences of its schedule. Vale accepts that without argument. Pike wheels the trolley back toward the benches.`
+			action
+				"B2 Far North Yard Legacy: declined" = 1
+			decline
+
+
+mission "B2 Far North Yard Legacy: Review"
+	minor
+	name `The Next Rotation`
+	description `Return to Prime after the yard has tried the staffing policy you helped shape.`
+	source "Prime"
+	to offer
+		has "B2 Far North Yard Legacy: introduced"
+		not "B2 Far North Yard Legacy: reviewed"
+	on offer
+		conversation
+			branch vale
+				has "B2 Far North Yard Legacy: route vale"
+			branch pike
+				has "B2 Far North Yard Legacy: route pike"
+			`Vale has split the repair board into red and blue columns. "Emergency work stays red. Apprenticeship blocks stay blue. We lost some throughput, but not as much as either of us expected." Pike points to a completed overhaul. "And one of the apprentices caught a fault I missed. I am revising my argument."`
+			choice
+				`\tKeep the protected training blocks and review the queue again later.`
+					goto preserve
+				`\tUse the improvement as a reason to expand apprentice responsibility.`
+					goto expand
+			label vale
+			`The backlog is still visible, but several apprentices are now working beside senior mechanics instead of watching from the rail. Vale says, "We kept the rotations. Captains complained. Two weeks later one of the apprentices solved a cooling fault before it became a tow job." Pike adds, "I still think the queue matters. I no longer think training is separate from it."`
+			choice
+				`\tKeep the full teaching rotation.`
+					goto preserve
+				`\tShift some apprentices onto supervised production work.`
+					goto expand
+			label pike
+			`The repair board is nearly clear. Vale does not look pleased. "We got the ships out. We also lost two training weeks, and one apprentice took a contract elsewhere rather than wait." Pike says, "I asked for a pause, not an exit from the apprenticeship system. We need a restart date."`
+			choice
+				`\tRestart protected teaching rotations now.`
+					goto preserve
+				`\tRestart them as supervised production work until the queue stabilizes.`
+					goto expand
+			label preserve
+			`Vale marks a fixed block on the schedule. Pike adds a review date beside it. Neither looks entirely satisfied, which seems healthier than either pretending the tradeoff disappeared.`
+			action
+				"B2 Far North Yard Legacy: reviewed" = 1
+				"B2 Far North Yard Legacy: settlement protected training" = 1
+				"B2 Far North Yard Legacy: vale trusts player" = 1
+			accept
+			label expand
+			`You suggest making the training itself part of supervised production rather than treating it as time away from real work. Pike immediately begins listing jobs that can tolerate slower hands. Vale says, "That is how apprenticeship became a system in the first place: responsibility before independence."`
+			action
+				"B2 Far North Yard Legacy: reviewed" = 1
+				"B2 Far North Yard Legacy: settlement supervised production" = 1
+				"B2 Far North Yard Legacy: pike trusts player" = 1
+			accept
+
+
+mission "B2 Far North Yard Legacy: Vale Remembers"
+	minor
+	name `Vale Remembers`
+	description `Tessa Vale remembers how you handled the yard's apprenticeship dispute.`
+	source "Prime"
+	to offer
+		not "B2 Far North Yard Legacy: aftermath seen"
+		or
+			has "B2 Far North Yard Legacy: settlement protected training"
+			has "B2 Far North Yard Legacy: settlement supervised production"
+	on offer
+		conversation
+			branch supervised
+				has "B2 Far North Yard Legacy: settlement supervised production"
+			`Vale catches you near the service lifts. "The protected blocks survived the next rush. More important, the apprentices did too. One of them is leading a diagnostic team now. I remember that you treated training capacity as part of the yard, not charity beside it."`
+			goto record
+			label supervised
+			`Vale gestures toward a mixed crew around an open drive section. "We kept your supervised-production model. It is slower than assigning only senior hands, but the apprentices are solving real problems and the queue is still moving. Pike has become annoyingly proud of the schedule."`
+			label record
+			action
+				"B2 Far North Yard Legacy: aftermath seen" = 1
+			accept
