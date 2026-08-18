@@ -44,9 +44,11 @@ No C++ save schema, parser syntax, origin state, combat-rating state, or paralle
 
 ## Validation actually performed
 
-Before publication, the focused validator was executed against the exact candidate source text:
+A fresh private-host clone of the exact branch was created successfully. The clone resolved to branch head `078cc34cd549cbc65d4fb00b657c30f9ac573a98` at validation time and `git status --short` was clean.
 
-`python3 tools/story/validate_a2_career_review.py data/human/a2\ career\ review.txt`
+Focused validator executed in that clone:
+
+`python3 tools/story/validate_a2_career_review.py "data/human/a2 career review.txt"`
 
 Observed result:
 
@@ -61,11 +63,21 @@ Observed result:
 
 The validator checks that the slice reads but does not overwrite stock origin/combat state.
 
+The repository content-style checker was also attempted against the exact branch:
+
+`python3 utils/check_content_style.py "data/human/a2 career review.txt"`
+
+It could not start because the host Python environment lacks package `regex`:
+
+`ModuleNotFoundError: No module named 'regex'`
+
+This is recorded as an environment dependency limitation, not as a style pass or content failure.
+
 ## Validation not claimed
 
-The exposed private execution connector is the Fallout renderer host, not an authoritative `Wiredshark/star` Endless Sky worktree. Unless a later host run explicitly succeeds, this handoff does **not** claim:
-- normal Endless Sky content-style validation;
-- content parser/build regression pass;
+This run does **not** claim:
+- successful repository content-style validation;
+- full content parser/build regression pass;
 - actual in-game offer/branch behavior;
 - visible-disabled response presentation;
 - save/load roundtrip;
@@ -74,14 +86,15 @@ The exposed private execution connector is the Fallout renderer host, not an aut
 ## A3 acceptance gates
 
 Before integration:
-1. run the focused validator from the exact branch;
-2. run normal Endless Sky content-style/parser/build tests;
-3. exercise all four first-meeting routes in game;
-4. verify no offer below combat rating 25;
-5. verify veteran response disabled below 80 and selectable at/above 80;
-6. exercise default, Deep, Paradise, and Syndicate origin framing;
-7. save/reload after every route and verify the later reader;
-8. verify stock conversation compatibility and no unrelated mission-state collision.
+1. rerun the focused validator from the final branch head;
+2. provide the `regex` dependency and run normal Endless Sky content-style validation;
+3. run the normal content parser/build test set;
+4. exercise all four first-meeting routes in game;
+5. verify no offer below combat rating 25;
+6. verify veteran response disabled below 80 and selectable at/above 80;
+7. exercise default, Deep, Paradise, and Syndicate origin framing;
+8. save/reload after every route and verify the later reader;
+9. verify stock conversation compatibility and no unrelated mission-state collision.
 
 ## Integration summary
 
