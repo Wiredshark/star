@@ -1,0 +1,136 @@
+# B2 South Convoy Compact production slice.
+#
+# This content consumes the South Convoy Memorial history by turning the
+# frontier's old mutual-aid convoy habits into a named-character dispute about
+# how much rescue obligation modern independent captains should accept.
+# Stock mission/conversation/global-condition mechanisms only.
+
+mission "B2 South Convoy Compact: Offer"
+	minor
+	name `Who Answers the Signal`
+	description `Convoy dispatcher Mira Dane and independent captain Tomas Reeve disagree over whether southern rescue obligations should be binding or voluntary.`
+	source
+		attributes "south"
+		not attributes "station"
+	to offer
+		not "B2 South Convoy Compact: introduced"
+		not "B2 South Convoy Compact: declined"
+	on offer
+		conversation
+			`A convoy board near the departure concourse is covered in handwritten corrections. Mira Dane, a local dispatcher, is arguing with Tomas Reeve, an independent freighter captain whose jacket carries more repair patches than insignia. Dane points to a cluster of delayed departures. "Three captains answered the last distress call. Nine others kept their schedules."`
+			`Reeve folds his arms. "Those nine had crews, contracts, and fuel margins of their own. A rescue tradition stops being mutual aid when a dispatcher can turn every independent ship into reserve capacity without asking what it costs."`
+			`Dane taps an old convoy plaque beside the board. "This frontier only became survivable because captains accepted that sometimes the ship in trouble would be theirs. We have standardized signals and schedules now, but the obligation is getting easier to ignore exactly because the routes look more ordinary."`
+			choice
+				`\tBack Dane: scheduled convoy participants should accept a binding rescue obligation.`
+					goto dane
+				`\tBack Reeve: rescue should remain voluntary for independent captains.`
+					goto reeve
+				`\tPropose a tiered pledge: captains choose obligations before departure instead of during an emergency.`
+					goto pledge
+				`\tTell them southern captains can settle their own rescue customs.`
+					goto decline
+			label dane
+			`You tell Reeve that joining a coordinated departure should mean accepting some responsibility for the ships traveling beside you. Dane nods. Reeve replies, "Then put the obligation in the departure terms before someone is already venting atmosphere."`
+			action
+				"B2 South Convoy Compact: introduced" = 1
+				"B2 South Convoy Compact: route dane" = 1
+				"B2 South Convoy Compact: dane trusts player" = 1
+			accept
+			label reeve
+			`You tell Dane that mutual aid loses legitimacy when captains discover the obligation only after a distress signal appears. Reeve gives you a short nod. Dane says, "Then voluntary cannot mean invisible. I want every captain to state what they will answer before they clear the port."`
+			action
+				"B2 South Convoy Compact: introduced" = 1
+				"B2 South Convoy Compact: route reeve" = 1
+				"B2 South Convoy Compact: reeve trusts player" = 1
+			accept
+			label pledge
+			`You suggest publishing rescue commitments with the departure schedule: full convoy support, limited emergency response, or independent passage. Dane starts sketching symbols for the board. Reeve says, "If everyone can see the promise before launch, at least nobody gets to rewrite it when the alarms start."`
+			action
+				"B2 South Convoy Compact: introduced" = 1
+				"B2 South Convoy Compact: route pledge" = 1
+				"B2 South Convoy Compact: dane trusts player" = 1
+				"B2 South Convoy Compact: reeve trusts player" = 1
+			accept
+			label decline
+			`You tell them that a frontier full of experienced captains should be able to define its own rescue customs without an outsider's vote. Reeve shrugs. Dane says, "That is what we have been trying to do for two hundred years."`
+			action
+				"B2 South Convoy Compact: declined" = 1
+			decline
+
+
+mission "B2 South Convoy Compact: Review"
+	minor
+	name `The Next Distress Call`
+	description `Return after southern captains have tested the rescue arrangement you helped shape.`
+	source
+		attributes "south"
+		not attributes "station"
+	to offer
+		has "B2 South Convoy Compact: introduced"
+		not "B2 South Convoy Compact: reviewed"
+	on offer
+		conversation
+			branch dane
+				has "B2 South Convoy Compact: route dane"
+			branch reeve
+				has "B2 South Convoy Compact: route reeve"
+			`The convoy board now shows a rescue symbol beside every coordinated departure. Captains can see who has promised full assistance, who will answer only immediate life-support emergencies, and who is traveling independently. Dane says, "The arguments moved from the distress channel to the departure desk. That is progress." Reeve adds, "At least now the promises are made while everyone still has time to say no."`
+			choice
+				`\tFormalize the published pledges as a standing rescue compact.`
+					goto compact
+				`\tKeep participation voluntary, but require every departure to publish a rescue status.`
+					goto registry
+			label dane
+			`A recent breakdown tested the stricter schedule. Two ships diverted immediately and a third stayed with the damaged freighter until repairs were complete. Dane says, "Binding obligations worked." Reeve points to three captains who stopped using the scheduled departure entirely. "And some people voted with their engines."`
+			choice
+				`\tKeep the binding obligation but make the terms explicit in a standing rescue compact.`
+					goto compact
+				`\tLet captains opt out while making their rescue status public before departure.`
+					goto registry
+			label reeve
+			`The voluntary system survived its first emergency, but only because the board showed who had actually pledged to answer. Dane says, "Visibility did more work than goodwill." Reeve replies, "Good. Keep the visibility and stop pretending every hull in port belongs to the convoy."`
+			choice
+				`\tCreate a standing rescue compact for captains who join coordinated departures.`
+					goto compact
+				`\tPreserve voluntary participation through a mandatory public rescue-status registry.`
+					goto registry
+			label compact
+			`You recommend a standing compact: captains who join a coordinated departure accept a clearly published rescue obligation, while truly independent departures remain outside it. Dane insists on simple terms that crews can understand before launch. Reeve agrees once the opt-out is as explicit as the obligation.`
+			action
+				"B2 South Convoy Compact: reviewed" = 1
+				"B2 South Convoy Compact: settlement standing rescue compact" = 1
+				"B2 South Convoy Compact: dane trusts player" = 1
+			accept
+			label registry
+			`You recommend keeping rescue participation voluntary but making every captain publish a rescue status before departure. The board becomes a contract with no signatures: everyone can see who will answer, under what conditions, and who should not be counted on. Reeve calls it honest. Dane calls honesty enforceable when it is public.`
+			action
+				"B2 South Convoy Compact: reviewed" = 1
+				"B2 South Convoy Compact: settlement public rescue registry" = 1
+				"B2 South Convoy Compact: reeve trusts player" = 1
+			accept
+
+
+mission "B2 South Convoy Compact: Reeve Remembers"
+	minor
+	name `Reeve Remembers`
+	description `Tomas Reeve remembers how the convoy dispute changed southern rescue expectations.`
+	source
+		attributes "south"
+		not attributes "station"
+	to offer
+		not "B2 South Convoy Compact: aftermath seen"
+		or
+			has "B2 South Convoy Compact: settlement standing rescue compact"
+			has "B2 South Convoy Compact: settlement public rescue registry"
+	on offer
+		conversation
+			branch registry
+				has "B2 South Convoy Compact: settlement public rescue registry"
+			`Reeve finds you near the departure board. "The compact is still there. If I join a coordinated run, I know exactly what rescue obligation I am taking on. If I travel alone, Dane knows not to count my hull in somebody else's emergency plan. Funny thing is, I join the convoy more often now that the promise is written down."`
+			goto record
+			label registry
+			`Reeve points to the rescue-status column beside the departure schedule. "Voluntary works better when nobody gets to hide behind the word. Captains publish what they will answer before launch. Dane still thinks half of us should pledge more. Half of us probably do."`
+			label record
+			action
+				"B2 South Convoy Compact: aftermath seen" = 1
+			accept
