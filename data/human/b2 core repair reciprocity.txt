@@ -1,0 +1,137 @@
+# B2 Core Repair Reciprocity production slice.
+#
+# This content consumes the Core Ship Standard Hall and Core Civil Service Ledger
+# history by turning generations of technical and administrative standardization
+# into a present-day named-character dispute about whether repair credentials
+# should travel between Core ports or remain subject to local judgment.
+# Stock mission/conversation/global-condition mechanisms only.
+
+mission "B2 Core Repair Reciprocity: Offer"
+	minor
+	name `Whose Stamp Counts`
+	description `Port inspector Asha Renn and independent repair foreman Jalen Cross disagree over whether repair credentials should be recognized across Core ports.`
+	source
+		government "Republic"
+		attributes core factory
+	to offer
+		not "B2 Core Repair Reciprocity: introduced"
+		not "B2 Core Repair Reciprocity: declined"
+	on offer
+		conversation
+			`A repair concourse beside the shipyard inspection office is crowded with mechanics carrying tool cases and tablets full of work histories. Asha Renn, a Republic port inspector, is arguing with Jalen Cross, an independent repair foreman whose crew has just been denied access to a pressure-system overhaul. Renn holds up the disputed credential. "Valid on four Core worlds, unrecognized on this one."`
+			`Cross points through the glass toward a row of standardized couplings and access panels. "The ships are built to the same dimensions, the manuals use the same tolerances, and half my crew trained in yards that service this exact hull family. But the moment we cross a jurisdiction line, somebody decides the stamp on the certificate matters more than the work behind it."`
+			`Renn replies, "Portable credentials solve real problems until a port starts inheriting somebody else's weak inspections. Local offices are responsible when a repair fails here. If we recognize every certificate automatically, we also recognize every mistake in the system that issued it."`
+			choice
+				`\tBack Renn: require reciprocal credentials to meet a common Republic inspection standard before they travel.`
+					goto renn
+				`\tBack Cross: let local yards endorse experienced crews without forcing them through another full certification cycle.`
+					goto cross
+				`\tPropose a provisional credential: portable baseline certification with supervised local sign-off for unfamiliar work.`
+					goto provisional
+				`\tTell them repair licensing is a problem for inspectors and shipyards, not visiting captains.`
+					goto decline
+			label renn
+			`You tell Cross that a credential should travel only if every participating port can trust how it was issued. Renn nods. Cross answers, "Then make the standard common enough that a mechanic can know what they have to prove before they arrive."`
+			action
+				"B2 Core Repair Reciprocity: introduced" = 1
+				"B2 Core Repair Reciprocity: route renn" = 1
+				"B2 Core Repair Reciprocity: renn trusts player" = 1
+			accept
+			label cross
+			`You tell Renn that repeating a full certification process at every port wastes skilled labor and rewards paperwork over demonstrated competence. Cross gives a short nod. Renn says, "Then local endorsement needs an accountable inspector and a record that follows the mechanic afterward."`
+			action
+				"B2 Core Repair Reciprocity: introduced" = 1
+				"B2 Core Repair Reciprocity: route cross" = 1
+				"B2 Core Repair Reciprocity: cross trusts player" = 1
+			accept
+			label provisional
+			`You suggest separating the portable part of a credential from the local part: common technical work can transfer automatically, while unusual systems require supervised sign-off before a mechanic works unsupervised. Renn starts listing which repair classes could be portable. Cross says, "That is still bureaucracy. At least it is bureaucracy that remembers what you already proved."`
+			action
+				"B2 Core Repair Reciprocity: introduced" = 1
+				"B2 Core Repair Reciprocity: route provisional" = 1
+				"B2 Core Repair Reciprocity: renn trusts player" = 1
+				"B2 Core Repair Reciprocity: cross trusts player" = 1
+			accept
+			label decline
+			`You tell them that captains come to the yard for repairs, not to referee licensing policy. Cross shrugs. Renn says, "Fair. But every captain eventually discovers the licensing policy when a ship is waiting for a mechanic who is not allowed to touch it."`
+			action
+				"B2 Core Repair Reciprocity: declined" = 1
+			decline
+
+
+mission "B2 Core Repair Reciprocity: Review"
+	minor
+	name `The Work That Follows You`
+	description `Return after Core inspectors and repair yards have tested the credential arrangement you helped shape.`
+	source
+		government "Republic"
+		attributes core factory
+	to offer
+		has "B2 Core Repair Reciprocity: introduced"
+		not "B2 Core Repair Reciprocity: reviewed"
+	on offer
+		conversation
+			branch renn
+				has "B2 Core Repair Reciprocity: route renn"
+			branch cross
+				has "B2 Core Repair Reciprocity: route cross"
+			`The inspection office now posts a matrix of repair classes beside the yard schedule. Routine systems can be covered by a portable credential; unfamiliar or high-risk work requires supervised local sign-off. Cross says, "My mechanics spend less time proving the same thing twice." Renn adds, "And when somebody signs off locally, the next port can see who took responsibility."`
+			choice
+				`\tFormalize the matrix as a reciprocal Core repair credential with common audit rules.`
+					goto reciprocity
+				`\tKeep final authority local, but require supervised endorsements to become portable work-history records.`
+					goto endorsement
+			label renn
+			`Renn shows you the first audit results. Ports using the common standard are accepting one another's credentials, but two offices had to tighten how they document practical examinations. "Reciprocity works only if every office can be inspected too," she says. Cross replies, "Good. Audit the office instead of making every mechanic start over."`
+			choice
+				`\tCreate a reciprocal Core repair credential backed by common audits.`
+					goto reciprocity
+				`\tPreserve local licensing authority while making supervised endorsements portable.`
+					goto endorsement
+			label cross
+			`Cross's crew has been working under local endorsements. The yard cleared its backlog faster, but Renn found that different inspectors recorded endorsements in incompatible ways. "Local judgment is fine," she says, "until the next port cannot tell what judgment was exercised." Cross gestures toward a revised work-history form. "Then standardize the record, not the mechanic."`
+			choice
+				`\tMove to a reciprocal credential so every participating port applies the same baseline.`
+					goto reciprocity
+				`\tKeep local endorsements but require a shared portable work-history record.`
+					goto endorsement
+			label reciprocity
+			`You recommend a reciprocal Core repair credential: participating ports recognize the same baseline qualification, publish common repair classes, audit one another's examination practices, and record disciplinary findings in a shared format. Renn calls it mutual recognition with consequences. Cross calls it one argument instead of twenty.`
+			action
+				"B2 Core Repair Reciprocity: reviewed" = 1
+				"B2 Core Repair Reciprocity: settlement reciprocal credential" = 1
+				"B2 Core Repair Reciprocity: renn trusts player" = 1
+			accept
+			label endorsement
+			`You recommend preserving local licensing authority while making supervised endorsements portable. A mechanic can arrive with a common work history, demonstrate unfamiliar tasks under an accountable local inspector, and carry that verified experience forward. Cross likes that experience accumulates instead of resetting at every port. Renn likes that somebody local still signs the risky work.`
+			action
+				"B2 Core Repair Reciprocity: reviewed" = 1
+				"B2 Core Repair Reciprocity: settlement portable endorsement" = 1
+				"B2 Core Repair Reciprocity: cross trusts player" = 1
+			accept
+
+
+mission "B2 Core Repair Reciprocity: Renn Remembers"
+	minor
+	name `Renn Remembers`
+	description `Asha Renn remembers how the repair-credential dispute changed Core inspection practice.`
+	source
+		government "Republic"
+		attributes core factory
+	to offer
+		not "B2 Core Repair Reciprocity: aftermath seen"
+		or
+			has "B2 Core Repair Reciprocity: settlement reciprocal credential"
+			has "B2 Core Repair Reciprocity: settlement portable endorsement"
+	on offer
+		conversation
+			branch endorsement
+				has "B2 Core Repair Reciprocity: settlement portable endorsement"
+			`Renn recognizes you outside the inspection office. "The reciprocal credential is ordinary now. That may be the best thing anyone can say about an administrative reform. A mechanic who passes the common standard can work across participating ports, and the offices audit one another often enough that the stamp means roughly the same thing everywhere." She glances toward the yard. "Cross still complains about the forms. He also stopped carrying a folder of twelve different certificates."`
+			goto record
+			label endorsement
+			`Renn shows you a mechanic's portable work-history record. "We kept the local sign-off. I expected Cross to hate that. Instead he made sure every supervisor recorded exactly which systems a mechanic had demonstrated." She taps a list of endorsements from three different worlds. "The authority stays local. The evidence does not disappear at the next jump."`
+			label record
+			action
+				"B2 Core Repair Reciprocity: aftermath seen" = 1
+			accept
