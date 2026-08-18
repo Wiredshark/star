@@ -1,0 +1,133 @@
+# B2 Syndicate Charter Obligations production slice.
+#
+# This content builds on the B1 "Syndicate Charter Gallery" history conversation by
+# turning an old public-obligation clause into a named-character dispute with persistent
+# consequences. It uses stock mission/conversation/global-condition mechanisms only.
+
+mission "B2 Syndicate Charter Obligations: Offer"
+	minor
+	name `The Clause Nobody Reads`
+	description `Charter curator Rhea Solis and freight coordinator Ilan Merrow disagree over whether an old emergency-service obligation still binds a modern Syndicate port.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		not "B2 Syndicate Charter Obligations: introduced"
+		not "B2 Syndicate Charter Obligations: declined"
+	on offer
+		conversation
+			`A woman carrying a stack of transparent charter copies intercepts a freight coordinator beside the terminal gallery. "Rhea Solis," she says when she notices you. "I curate the old charter collection. Ilan Merrow here manages berth allocations for a shipping consortium that would very much like one paragraph to remain historical decoration."`
+			`Merrow taps one of the copies. "The paragraph says member firms will maintain an emergency berth and fuel reserve for distressed traffic. It was written when this port was barely more than a company dock. Today we have public rescue services, commercial insurers, and three times the traffic."`
+			`Solis replies, "And yet the berth is still the only one the charter guarantees can be used before somebody proves they can pay. The institution changed. The obligation survived every amendment."`
+			choice
+				`\tBack Solis: if the obligation survived the amendments, the consortium should keep a dedicated emergency berth.`
+					goto solis
+				`\tAsk them to preserve the service through a shared reserve and rotating emergency berth instead of one permanently idle dock.`
+					goto compromise
+				`\tBack Merrow: modern rescue services make the old clause redundant.`
+					goto merrow
+				`\tTell them a charter dispute belongs with their own lawyers and port authority.`
+					goto decline
+			label solis
+			`You point out that repeatedly amending a charter without removing the clause is itself evidence that somebody kept choosing to preserve it. Solis nods. Merrow grimaces. "Then the question becomes what preserving it costs, and who notices that cost."`
+			action
+				"B2 Syndicate Charter Obligations: introduced" = 1
+				"B2 Syndicate Charter Obligations: route solis" = 1
+				"B2 Syndicate Charter Obligations: solis trusts player" = 1
+			accept
+			label compromise
+			`You suggest separating the public obligation from the historical implementation: guarantee emergency capacity, but fund it across participating firms and rotate which berth carries the reserve duty. Merrow starts calculating before Solis has finished objecting. "I dislike it," Solis says, "which may mean it is an actual compromise."`
+			action
+				"B2 Syndicate Charter Obligations: introduced" = 1
+				"B2 Syndicate Charter Obligations: route compromise" = 1
+			accept
+			label merrow
+			`You tell them that preserving every obsolete implementation would turn history into a veto on current operations. Merrow looks relieved. Solis does not. "Then write down who accepts responsibility when the replacement systems fail," she says. "Obsolescence is easy to declare when nobody owns the fallback."`
+			action
+				"B2 Syndicate Charter Obligations: introduced" = 1
+				"B2 Syndicate Charter Obligations: route merrow" = 1
+				"B2 Syndicate Charter Obligations: solis doubts player" = 1
+			accept
+			label decline
+			`You decline to referee a dispute that already has lawyers, administrators, and a century of amendments attached to it. Solis gathers her charter copies. Merrow says, "That may be the healthiest decision anybody has made about this paragraph."`
+			action
+				"B2 Syndicate Charter Obligations: declined" = 1
+			decline
+
+
+mission "B2 Syndicate Charter Obligations: Review"
+	minor
+	name `What the Charter Owes`
+	description `Return after the port has tried to turn an old emergency-service obligation into a modern operating rule.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		has "B2 Syndicate Charter Obligations: introduced"
+		not "B2 Syndicate Charter Obligations: reviewed"
+	on offer
+		conversation
+			branch solis
+				has "B2 Syndicate Charter Obligations: route solis"
+			branch merrow
+				has "B2 Syndicate Charter Obligations: route merrow"
+			`Solis and Merrow have replaced their argument with a ledger. Several firms now contribute to a common emergency reserve, while a different berth carries priority-service status each shift. Merrow says, "Nobody loves paying for capacity they hope not to use." Solis replies, "That is almost a definition of emergency infrastructure."`
+			choice
+				`\tFormalize the shared reserve and rotating-berth model as the modern reading of the charter obligation.`
+					goto consortium
+				`\tRequire a permanently protected public-service berth so emergency capacity cannot be traded away during busy periods.`
+					goto covenant
+			label solis
+			`A berth near the outer approach now carries a bright emergency-service marker. Solis says the consortium preserved the clause exactly enough to satisfy her and expensively enough to annoy Merrow. Merrow counters, "The first distressed freighter used it three days later. I reserve the right to be annoyed and convinced at the same time."`
+			choice
+				`\tKeep the protected berth and record the obligation as a standing public-service covenant.`
+					goto covenant
+				`\tMove to a funded rotating-berth model now that the obligation has proved its value.`
+					goto consortium
+			label merrow
+			`The consortium released the dedicated berth, but the first serious traffic surge exposed a gap between the public rescue service and commercial docking rules. Merrow has called Solis back to the gallery. "The old clause was crude," he says, "but it assigned responsibility before the emergency happened."`
+			choice
+				`\tRestore a protected emergency berth as a standing public-service covenant.`
+					goto covenant
+				`\tCreate a consortium-funded reserve with rotating emergency capacity.`
+					goto consortium
+			label covenant
+			`Solis drafts a short modern covenant that preserves a protected berth, a minimum fuel reserve, and no-payment-first access for distressed ships. Merrow adds a review interval and cost-sharing formula. The result is shorter than the historical clause and harder to pretend nobody owns.`
+			action
+				"B2 Syndicate Charter Obligations: reviewed" = 1
+				"B2 Syndicate Charter Obligations: settlement public covenant" = 1
+				"B2 Syndicate Charter Obligations: solis trusts player" = 1
+			accept
+			label consortium
+			`The consortium signs a reserve agreement: every member contributes to emergency fuel and towing costs, and berth-priority duty rotates on a published schedule. Solis files the agreement beside the old charter. Merrow says, "Apparently the modern version of institutional memory is a budget line nobody can delete by accident."`
+			action
+				"B2 Syndicate Charter Obligations: reviewed" = 1
+				"B2 Syndicate Charter Obligations: settlement consortium reserve" = 1
+				"B2 Syndicate Charter Obligations: merrow trusts player" = 1
+			accept
+
+
+mission "B2 Syndicate Charter Obligations: Solis Remembers"
+	minor
+	name `Solis Remembers`
+	description `Rhea Solis remembers how an old charter dispute became a modern emergency-service rule.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		not "B2 Syndicate Charter Obligations: aftermath seen"
+		or
+			has "B2 Syndicate Charter Obligations: settlement public covenant"
+			has "B2 Syndicate Charter Obligations: settlement consortium reserve"
+	on offer
+		conversation
+			branch consortium
+				has "B2 Syndicate Charter Obligations: settlement consortium reserve"
+			`Solis spots you beside the charter gallery. "The public-service covenant survived its first budget review. Merrow still complains about the berth allocation, which means he is still maintaining it. I wanted the old clause respected. What I learned was that respect matters only if somebody accepts a current obligation."`
+			goto record
+			label consortium
+			`Solis points to a new display beside the antique charter: the consortium reserve agreement and its rotating emergency schedule. "Merrow made me put the budget appendix in the exhibit," she says. "He claims future historians should know exactly what principles cost."`
+			label record
+			action
+				"B2 Syndicate Charter Obligations: aftermath seen" = 1
+			accept
