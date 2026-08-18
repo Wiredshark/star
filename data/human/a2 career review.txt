@@ -1,0 +1,120 @@
+mission "A2 Career Review: First Meeting"
+	minor
+	name `Pilot Guild: Career Review`
+	description `An independent pilot assessor asks how your background shaped your command style.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		"combat rating" >= 25
+		not "A2 Career Review: seen"
+	on offer
+		conversation
+			`A woman with a Pilot Guild credential clipped to her jacket waves you over from a quiet table near the departure board. "Captain <last>? I am Nia Calder. I interview independent captains once they have enough flight history to have formed actual habits rather than plans."`
+			`She taps a blank assessment form. "Nothing here goes to a government or employer. I am interested in how captains describe the choices they keep making after the novelty wears off."`
+			branch deep
+				has "start: deep"
+			branch paradise
+				has "start: paradise"
+			branch syndicate
+				has "start: syndicate"
+			`Calder glances at the basic registration record. "You began as an ordinary independent captain. That can be useful: there is no institution to blame when your decisions go wrong, and none to claim the credit when they work."`
+				goto review
+			label deep
+			`Calder glances at your registration record. "You came out of the Deep. Captains from there often tell me they learned to trust technical preparation and local expertise before they learned to trust bravado."`
+				goto review
+			label paradise
+			`Calder glances at your registration record. "A Paradise-world start gives people a strange reference point. Some captains spend years trying to preserve that sense of security. Others define themselves by leaving it behind."`
+				goto review
+			label syndicate
+			`Calder glances at your registration record. "You started under Syndicate institutions. Even captains who go independent tend to carry some awareness of contracts, leverage, and who actually owns the risk."`
+			label review
+			`She folds her hands. "After the fights, deliveries, mistakes, lucky breaks, and repairs, what principle do you think actually governs your decisions now?"`
+			choice
+				`\tProtect the margin. A captain who spends every reserve on one good outcome eventually loses the ship.`
+					goto margin
+				`\t[Combat record: veteran captain] Force is justified when it prevents a worse loss, not because winning is satisfying.`
+					to activate
+						"combat rating" >= 80
+					goto force
+				`\tKeep options open. The best decision is often the one that leaves room to change course later.`
+					goto options
+				`\tI do not need a guild assessor turning my career into a personality profile.`
+					goto refuse
+			label margin
+			`Calder writes for several seconds. "Reserve as a command principle, not just an accounting habit. That usually produces captains who survive bad information better than they exploit good information."`
+			action
+				"A2 Career Review: seen" = 1
+				"A2 Career Review: principle margin" = 1
+				"A2 Career Review: later reader pending" = 1
+				decline
+			label force
+			`Calder studies your combat record before writing. "Conditional force. That distinction matters. Experienced captains who still describe combat as a means rather than an identity tend to make very different choices when retreat is available."`
+			action
+				"A2 Career Review: seen" = 1
+				"A2 Career Review: principle force" = 1
+				"A2 Career Review: later reader pending" = 1
+				decline
+			label options
+			`Calder nods. "Optionality. It sounds cautious until you watch how often captains are destroyed by decisions that only work if the next assumption is correct."`
+			action
+				"A2 Career Review: seen" = 1
+				"A2 Career Review: principle options" = 1
+				"A2 Career Review: later reader pending" = 1
+				decline
+			label refuse
+			`Calder closes the form without complaint. "That is a valid answer too. Independence includes the right not to turn every experience into data for somebody else's system."`
+			action
+				"A2 Career Review: seen" = 1
+				"A2 Career Review: refused" = 1
+				"A2 Career Review: later reader pending" = 1
+				decline
+
+
+mission "A2 Career Review: Later Reader"
+	minor
+	name `Pilot Guild: What Calder Remembered`
+	description `Nia Calder follows up on the command principle you described earlier.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "A2 Career Review: later reader pending"
+		not "A2 Career Review: later reader seen"
+	on offer
+		conversation
+			branch margin
+				has "A2 Career Review: principle margin"
+			branch force
+				has "A2 Career Review: principle force"
+			branch options
+				has "A2 Career Review: principle options"
+			`Calder recognizes you first and raises an empty hand before you can object. "No form this time. I remembered that you declined the first one." She smiles. "For what it is worth, the refusal stayed a refusal. I did not convert it into a category after you left."`
+			action
+				"A2 Career Review: later reader seen" = 1
+				"A2 Career Review: refusal respected" = 1
+				"A2 Career Review: later reader pending" = 0
+				decline
+			label margin
+			`Calder recognizes you near the departure board. "I have used your phrasing twice since we spoke: protect the margin. It gives new captains a better way to think about reserves than simply telling them to be cautious."`
+			action
+				"A2 Career Review: later reader seen" = 1
+				"A2 Career Review: Calder remembers margin" = 1
+				"A2 Career Review: later reader pending" = 0
+				decline
+			label force
+			`Calder recognizes you and points at the combat section of a new assessment form. "I changed one question because of our conversation. We used to ask whether captains were willing to fight. Now we ask what loss they believe fighting is meant to prevent."`
+			action
+				"A2 Career Review: later reader seen" = 1
+				"A2 Career Review: Calder remembers force" = 1
+				"A2 Career Review: later reader pending" = 0
+				decline
+			label options
+			`Calder recognizes you immediately. "Keep options open. I wrote that at the top of the assessor notes after we spoke."`
+			action
+				"A2 Career Review: later reader seen" = 1
+				"A2 Career Review: Calder remembers options" = 1
+				"A2 Career Review: later reader pending" = 0
+				decline
