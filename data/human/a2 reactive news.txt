@@ -1,0 +1,52 @@
+# A2 reactive-news production slice.
+#
+# This file uses the stock News `to show` condition mechanism so ambient port
+# dialogue can acknowledge authoritative persistent player history without
+# creating a dialogue-only or news-only copy of that state.
+
+
+news "A2 Deep convoy veteran"
+	location
+		government "Republic"
+		attributes "deep"
+	to show
+		has "Deep: Syndicate Convoy: done"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"I heard one of the captains who helped a Syndicate convoy through the Deep is still flying these routes. Whoever it was, the dock crews remember the difference between arriving late and not arriving at all."`
+			`"The convoy offices have been rewriting their handoff checklists since that Syndicate run went bad. Funny how one real incident can change procedures faster than a decade of committee meetings."`
+			`"People keep arguing about who saved that Syndicate convoy, but the useful part is that everyone now agrees the old escort assumptions were too vague. Half the ports up here are tightening their contracts."`
+
+
+news "A2 Deep convoy command veteran"
+	location
+		government "Republic"
+		attributes "deep"
+	to show
+		has "Deep: Syndicate Convoy: done"
+		"combat rating" >= 5
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"You can tell which captains have actually commanded under fire. They ask about spacing, rendezvous windows, and who owns the decision when the formation breaks instead of just boasting about gun batteries."`
+			`"The convoy boards have started inviting experienced combat captains into loss reviews. Not because combat experience makes them judges, but because they know which parts of a timeline matter when everything goes wrong at once."`
+
+
+news "A2 experienced Republic captain"
+	location
+		government "Republic"
+		not attributes "station"
+	to show
+		"combat rating" >= 5
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Ports talk. Once a captain has survived enough real fights, people stop treating their arrival like just another transponder code. That can be useful, but it also means every bad decision travels ahead of them."`
+			`"A veteran captain gets listened to differently in a dispute. Sometimes that is earned. Sometimes everybody mistakes surviving a battle for being right about everything else."`
