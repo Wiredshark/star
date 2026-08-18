@@ -1,0 +1,54 @@
+# A1 world simulation: Republic border-security pressure.
+#
+# This is intentionally data-driven. It turns repeated crossings from Pirate
+# space into a persistent numeric world-state signal that later A2 dialogue,
+# news, missions, or other simulation readers can consume. Each qualifying
+# crossing contributes +2 pressure, capped at 6, and schedules its own five-day
+# decay event. At most three unresolved pressure contributions can exist at once.
+
+
+event "ES A1: Republic Border Pressure Decay"
+	"world: republic border pressure" -= 2
+	"world: republic border pressure" >?= 0
+	clear "world: republic border alert seen"
+
+
+mission "ES A1: Republic Border Pressure Escalation"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "previous system government: Pirate"
+		"world: republic border pressure" < 6
+	on offer
+		"world: republic border pressure" += 2
+		"world: republic border pressure" <?= 6
+		event "ES A1: Republic Border Pressure Decay" 5 5
+		fail
+
+
+# Player-visible reader. This does not own simulation truth; it only reads the
+# numeric pressure condition. The warning is suppressed until the next decay
+# event clears the acknowledgement flag.
+mission "ES A1: Republic Border Pressure Alert"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: republic border pressure" >= 4
+		not "world: republic border alert seen"
+	on offer
+		message
+			text "Republic border-control channels report a heightened security posture after repeated traffic from pirate-held systems. Patrols are concentrating on inbound routes while the alert remains elevated."
+		set "world: republic border alert seen"
+		fail
