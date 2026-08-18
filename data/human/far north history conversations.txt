@@ -1,0 +1,80 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+
+mission "Far North Route Ledger"
+	minor
+	source
+		attributes "far north"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A battered brass plaque near the concourse entrance marks the site of what used to be the local route office. The office itself is long gone, but a display case preserves copies of old convoy ledgers: handwritten departure times, fuel estimates, cargo weights, repair notes, and columns recording which captains agreed to wait for slower ships before making the next jump.`
+			`\tA note beside the ledger explains that early northern traffic was too sparse for many settlements to rely on regular scheduled service. Merchant captains instead shared route information and sometimes traveled together, especially when mechanical trouble or piracy could leave a lone freighter stranded far from help.`
+			`\tMost of the entries are mundane, but the repetition gives them weight. Ship after ship records extra hours waiting for another vessel, spare parts transferred without payment, or a detour made to check on a missing transport. The modern departures board above the case is much busier, but the old ledger makes it clear how much of the region's connection to the rest of human space was once maintained by individual pilots choosing not to leave one another behind.`
+				decline
+
+
+
+mission "Far North Beacon Fund"
+	minor
+	source
+		attributes "far north"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Near a row of vending machines you notice a sealed collection box built into the wall. It looks ceremonial now, but a small display explains that similar boxes once funded navigation beacons, emergency transmitters, and rescue caches along lightly traveled northern routes.`
+			`\tThe accompanying history says the first systems were not maintained by a single government office. Port authorities, shipping firms, miners, local councils, and pilots all contributed because everyone depended on the same sparse infrastructure. Arguments over who should pay were apparently constant, but so were the collections.`
+			`\tA faded photograph shows dockworkers unloading replacement batteries while a group of captains pose beside a newly installed beacon package. Someone has written beneath it, "Nobody owns the dark between systems." A modern maintenance invoice is displayed next to the photograph, suggesting that the argument over who pays never completely ended.`
+				decline
+
+
+
+mission "Far North Shipwright Apprentices"
+	minor
+	source
+		attributes "far north"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A corridor overlooking the service yards contains a long series of framed photographs of shipwright crews. The oldest images show cramped workshops and hull sections resting on improvised supports. Later photographs grow steadily more organized: larger gantries, dedicated machine shops, standardized safety gear, and apprentices standing beside instructors with increasingly elaborate tools.`
+			`\tA caption explains that northern shipbuilding grew partly because remote settlements could not afford to send every damaged vessel back toward the Core. Repair shops learned to fabricate what they could not easily import, and over time some of those shops became manufacturers in their own right.`
+			`\tThe display gives equal space to apprentices and owners. Several captions note that skills were deliberately passed between yards when shortages or accidents threatened to close a facility. Looking down at the busy service area below, you can still see older mechanics pointing into open engine compartments while younger workers listen.`
+				decline
+
+
+
+mission "Far North Winter Stores"
+	minor
+	source
+		attributes "far north"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`The local historical society has reconstructed an early settlement storehouse in one corner of the terminal. Behind a rope are stacked ration tins, machine belts, pressure seals, medical kits, seed packets, and rows of labeled containers whose contents look thoroughly unappetizing.`
+			`\tThe display explains that "winter stores" became a generic northern term even on worlds without a severe winter. It meant keeping enough food, fuel, medicine, and repair stock on hand to survive a shipping interruption. Piracy, mechanical failures, bad harvests, and simple distance could all isolate a settlement long enough to make ordinary shortages dangerous.`
+			`\tOne panel describes the gradual shift from each settlement protecting only its own reserves to regional agreements that allowed emergency stock to move where it was needed most. The agreements were never perfectly reliable, but the curator's note argues that they helped turn scattered outposts into a region that expected its neighbors to still be there next season.`
+				decline
