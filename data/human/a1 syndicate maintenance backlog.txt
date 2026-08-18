@@ -1,0 +1,61 @@
+# A1 world simulation: Syndicate industrial maintenance backlog.
+event "ES A1: Syndicate Maintenance Backlog Recovery"
+	"world: syndicate maintenance backlog" -= 1
+	"world: syndicate maintenance backlog" >?= 0
+
+event "ES A1: Syndicate Maintenance Surge Ends"
+	clear "world: syndicate maintenance surge"
+	clear "world: syndicate maintenance surge notice seen"
+
+mission "ES A1: Syndicate Maintenance Backlog"
+	assisting
+	invisible
+	repeat
+	minor
+	to offer
+		"world: syndicate maintenance backlog" < 6
+	source
+		government "Syndicate"
+		not category "Fighter" "Drone"
+		not attributes "automaton"
+	on offer
+		"world: syndicate maintenance backlog" += 1
+		"world: syndicate maintenance backlog" <?= 6
+		event "ES A1: Syndicate Maintenance Backlog Recovery" 7 7
+		decline
+	destination "Earth"
+
+mission "ES A1: Syndicate Maintenance Mobilization"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Syndicate"
+	to offer
+		"world: syndicate maintenance backlog" >= 4
+		not "world: syndicate maintenance surge"
+	on offer
+		set "world: syndicate maintenance surge"
+		"world: syndicate maintenance backlog" -= 3
+		"world: syndicate maintenance backlog" >?= 0
+		event "ES A1: Syndicate Maintenance Surge Ends" 6 6
+		fail
+	destination "Earth"
+
+mission "ES A1: Syndicate Maintenance Surge Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Syndicate"
+	to offer
+		has "world: syndicate maintenance surge"
+		not "world: syndicate maintenance surge notice seen"
+	on offer
+		message
+			text "Syndicate logistics channels report an emergency industrial maintenance mobilization. Repair crews and replacement components are being redirected toward recently strained shipping corridors."
+		set "world: syndicate maintenance surge notice seen"
+		fail
+	destination "Earth"
