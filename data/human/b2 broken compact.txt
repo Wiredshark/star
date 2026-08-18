@@ -2,7 +2,7 @@
 #
 # Uses stock mission/conversation/global-condition mechanisms only. The story packet
 # remains authoritative for character intent; this file proves persistent production
-# content without adding a parallel relationship database or engine schema.
+# content without adding a parallel character-state store or engine schema.
 
 mission "B2 Broken Compact: Notice"
 	minor
@@ -11,10 +11,10 @@ mission "B2 Broken Compact: Notice"
 	source "New Washington"
 	to offer
 		not "ES-STORY-0002: introduced"
-	not "ES-STORY-0002: settlement operating partnership"
-	not "ES-STORY-0002: settlement estate sale"
-	not "ES-STORY-0002: settlement arbitration"
-	not "ES-STORY-0002: settlement player acquisition"
+		not "ES-STORY-0002: settlement operating partnership"
+		not "ES-STORY-0002: settlement estate sale"
+		not "ES-STORY-0002: settlement arbitration"
+		not "ES-STORY-0002: settlement player acquisition"
 	on offer
 		conversation
 			`A formal notice on a port terminal lists the Morrow Line for estate sale. Before you finish reading, a ship systems engineer steps up beside you. "Nadia Kelm," she says. "That notice tells only the part that fit on a registry form."`
