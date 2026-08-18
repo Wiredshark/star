@@ -1,0 +1,80 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Paradise Estate Covenant Archive"
+	minor
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A shaded walkway from the spaceport passes a stone wall inset with reproductions of old property covenants. A small plaque explains that many of the districts now treated as the natural shape of the city began as private estates whose roads, gardens, security posts, and service quarters were gradually joined together as the surrounding settlements grew.`
+			`\tThe display is careful not to describe that process as either generosity or theft. It notes instead that public authorities inherited systems built for particular owners and then spent generations arguing over which gates should remain private, which roads had become public necessities, and who was responsible for maintaining the infrastructure between them.`
+			`\tLooking beyond the wall at the immaculate streets and high hedges, you realize that some of the Paradise worlds' sharp boundaries between public space, private wealth, and invisible service work may be older than the institutions now administering them.`
+				decline
+
+
+mission "Paradise Scholarship Trust Archive"
+	minor
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`An exhibition in the terminal concourse is devoted to the history of local scholarship trusts. The earliest programs described are small family endowments meant to educate relatives, clients, and promising employees; later entries show universities combining hundreds of such funds into larger institutions with formal admissions boards and public charitable status.`
+			`\tOne caption points out that the expansion of scholarships never erased the influence of their founders. Donors continued to endow particular fields, reserve places for favored schools, or attach conditions to grants, while reformers repeatedly pushed universities to make access less dependent on family connections.`
+			`\tThe modern photographs show students from dozens of worlds standing beneath donor names carved into buildings. The display presents this as one of the enduring contradictions of Paradise education: institutions that can widen opportunity while remaining visibly shaped by concentrated private wealth.`
+				decline
+
+
+mission "Paradise Service District Museum"
+	minor
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Near a transit stop you find a small municipal museum built around an old maintenance depot. Its exhibits trace how household staff, gardeners, cleaners, mechanics, drivers, cooks, and security workers once moved through a patchwork of private service roads and employer-owned housing before growing cities required shared transit, utilities, schools, and emergency services.`
+			`\tThe curators emphasize that these changes were rarely planned all at once. Employers wanted reliable access to labor, workers wanted neighborhoods not wholly controlled by their jobs, and local governments wanted taxes and infrastructure that could function across estate boundaries. The resulting service districts became ordinary municipalities even while many residents continued to work in the wealthy enclaves around them.`
+			`\tOutside, a stream of uniformed workers boards a public shuttle toward the hills. The old depot makes the route look less like a convenience than the latest version of a social arrangement that has been renegotiated for generations.`
+				decline
+
+
+mission "Paradise Charity Circuit Archive"
+	minor
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A gallery adjoining the spaceport is advertising a retrospective on the Paradise worlds' long tradition of charitable expeditions. Old posters show medical drives, clothing collections, food shipments, school funds, and disaster appeals organized by clubs, churches, universities, corporations, and prominent families.`
+			`\tThe accompanying history notes that these campaigns did real work, but also became part of elite social life. Successful organizers gained prestige, donors competed to sponsor visible projects, and entire institutions grew around deciding which distant communities were worthy of assistance. Critics periodically objected that the people receiving aid had little influence over what was collected or how they were portrayed.`
+			`\tThe final panel describes modern charities as more professional and more closely audited, yet still dependent on the same mixture of compassion, status, tax policy, and public reputation. You think of the polished donation appeals that are still common in Paradise spaceports and wonder how much has changed besides the presentation.`
+				decline
