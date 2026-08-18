@@ -1,0 +1,232 @@
+# B2 Broken Compact production slice.
+#
+# Uses stock mission/conversation/global-condition mechanisms only. The story packet
+# remains authoritative for character intent; this file proves persistent production
+# content without adding a parallel relationship database or engine schema.
+
+mission "B2 Broken Compact: Notice"
+	minor
+	name `Broken Compact`
+	description `A disputed ship estate on New Washington has put an old operating partnership at risk.`
+	source "New Washington"
+	to offer
+		not "ES-STORY-0002: introduced"
+	not "ES-STORY-0002: settlement operating partnership"
+	not "ES-STORY-0002: settlement estate sale"
+	not "ES-STORY-0002: settlement arbitration"
+	not "ES-STORY-0002: settlement player acquisition"
+	on offer
+		conversation
+			`A formal notice on a port terminal lists the Morrow Line for estate sale. Before you finish reading, a ship systems engineer steps up beside you. "Nadia Kelm," she says. "That notice tells only the part that fit on a registry form."`
+			`A tired man in executor gray closes a data folder nearby. "Elias Dorne. I administer the estate. Nadia kept the ship alive, but I cannot distribute an asset on the basis of a promise nobody wrote down."`
+			`Kelm folds her arms. "We took years of reduced pay because the owner said the sacrifice was building a stake in the ship. If that disappears at death, then the agreement meant nothing."`
+			choice
+				`	Hear the evidence before choosing a side.`
+					goto investigate
+				`	Tell Dorne the registered estate should control unless better evidence appears.`
+					goto estate
+				`	Tell Kelm years of uncompensated refit labor deserves real weight.`
+					goto partnership
+				`	Decline to become part of the dispute.`
+					goto decline
+			label investigate
+			`You ask both of them to preserve the sale notice, maintenance records, private messages, and witness statements until they can be compared. Dorne gives a reluctant nod. Kelm says, "Good. Evidence first."`
+			action
+				"ES-STORY-0002: introduced" = 1
+				"ES-STORY-0002: evidence broker" = 1
+			accept
+			label estate
+			`You tell Dorne that registry and creditor claims must remain controlling unless the operating crew can show more than memory. Kelm's expression hardens. "Then at least look at what we actually kept running before you call it memory."`
+			action
+				"ES-STORY-0002: introduced" = 1
+				"ES-STORY-0002: early estate position" = 1
+				"ES-STORY-0002: kelm resents player" = 1
+			accept
+			label partnership
+			`You tell Kelm that years of deferred compensation can create a real obligation even when the legal form is weak. Dorne answers, "An obligation, perhaps. Title is a different question."`
+			action
+				"ES-STORY-0002: introduced" = 1
+				"ES-STORY-0002: early partnership position" = 1
+				"ES-STORY-0002: dorne resents player" = 1
+			accept
+			label decline
+			`You tell them that a neutral signature would only disguise uncertainty as judgment. Dorne returns to his file. Kelm says, "Then the sale clock keeps moving."`
+			action
+				"ES-STORY-0002: introduced" = 1
+				"ES-STORY-0002: unresolved at departure" = 1
+			decline
+
+
+mission "B2 Broken Compact: Senn Evidence"
+	minor
+	name `Mara Senn's Log`
+	description `Ask former relief captain Mara Senn what the Morrow Line's operating partnership actually looked like.`
+	source "New Washington"
+	to offer
+		has "ES-STORY-0002: introduced"
+		not "ES-STORY-0002: found senn annotation"
+		not "ES-STORY-0002: unresolved at departure"
+	on offer
+		conversation
+			`Mara Senn is packing a flight case beside the port lockers. "I heard Nadia and Elias pulled you into it," she says. "I was relief captain on the Morrow Line. I heard promises. I also heard people say things in a crisis that never became paperwork."`
+			choice
+				`	Ask her to walk through the maintenance log without choosing a side.`
+					goto careful
+				`	Tell her the sale may happen before anyone hears what she knows.`
+					goto pressure
+				`	Leave her out of the dispute.`
+					goto leave
+			label careful
+			`Senn opens an old maintenance log. One annotation records a deferred overhaul and says the crew accepted reduced compensation "against the owner's continuing share promise." She stares at the line. "I wrote that the same day. I had forgotten how specific it was."`
+			action
+				"ES-STORY-0002: found senn annotation" = 1
+				"ES-STORY-0002: senn disclosed evidence" = 1
+				"ES-STORY-0002: senn trusts player" = 1
+			accept
+			label pressure
+			`You tell Senn that silence may become a choice for the sale. She reluctantly opens the log and finds the same annotation, but her tone changes. "Use it if you must. Do not tell people I volunteered to become the case."`
+			action
+				"ES-STORY-0002: found senn annotation" = 1
+				"ES-STORY-0002: senn disclosed evidence" = 1
+				"ES-STORY-0002: senn pressured" = 1
+			accept
+			label leave
+			`You tell Senn you will not drag her into the argument. She shoulders the flight case. "Thank you. I leave Republic space tomorrow."`
+			action
+				"ES-STORY-0002: senn left region" = 1
+			decline
+
+
+mission "B2 Broken Compact: Dorne Evidence"
+	minor
+	name `Dorne's Private Message`
+	description `Ask Elias Dorne whether the late owner left any record of the operating crew's claimed stake.`
+	source "New Washington"
+	to offer
+		has "ES-STORY-0002: introduced"
+		not "ES-STORY-0002: found private message"
+		not "ES-STORY-0002: unresolved at departure"
+	on offer
+		conversation
+			`Dorne meets you in a quiet records alcove. "There is one message I did not put in the public packet," he says. "It acknowledges that Nadia and the operating crew were owed 'a share of whatever the ship becomes.' It does not define a percentage, title, or instrument."`
+			choice
+				`	Preserve the message as evidence without pretending it settles ownership.`
+					goto preserve
+				`	Tell Dorne the message should be disclosed publicly before the sale.`
+					goto public
+				`	Tell him the message is too vague to matter.`
+					goto dismiss
+			label preserve
+			`Dorne exhales. "That is the distinction I needed someone else to say out loud. It proves an obligation existed. It does not tell us exactly how to satisfy it."`
+			action
+				"ES-STORY-0002: found private message" = 1
+				"ES-STORY-0002: dorne trusts player" = 1
+			accept
+			label public
+			`You tell Dorne that withholding the message while selling the ship would make every later compromise suspect. He agrees to disclose it, but warns that the heirs will read the disclosure as a concession.`
+			action
+				"ES-STORY-0002: found private message" = 1
+				"ES-STORY-0002: player testimony public" = 1
+			accept
+			label dismiss
+			`You tell Dorne the language is too vague to outweigh the registry. He closes the file. "That may be legally convenient. I am no longer sure it is factually complete."`
+			action
+				"ES-STORY-0002: found private message" = 1
+				"ES-STORY-0002: dorne resents player" = 1
+			accept
+
+
+mission "B2 Broken Compact: Settlement"
+	minor
+	name `Settle the Broken Compact`
+	description `Use the surviving evidence to decide what should happen to the Morrow Line.`
+	source "New Washington"
+	to offer
+		has "ES-STORY-0002: introduced"
+		has "ES-STORY-0002: found senn annotation"
+		has "ES-STORY-0002: found private message"
+		not "ES-STORY-0002: settlement operating partnership"
+		not "ES-STORY-0002: settlement estate sale"
+		not "ES-STORY-0002: settlement arbitration"
+		not "ES-STORY-0002: settlement player acquisition"
+		not "ES-STORY-0002: unresolved at departure"
+	on offer
+		conversation
+			`Kelm, Dorne, and Senn meet in a port conference room. The maintenance annotation and private message sit beside the registry packet. Nobody disputes the facts now; they dispute what the facts should mean.`
+			choice
+				`	Treat the accumulated labor promise as controlling and preserve the operating partnership.`
+					goto partnership
+				`	Back the registered estate sale, but require the crew claim to be recorded against the proceeds.`
+					goto estate
+				`	[Evidence: private message + Senn annotation] Preserve both claims and move the dispute into structured arbitration.`
+					to display
+						has "ES-STORY-0002: found private message"
+						has "ES-STORY-0002: found senn annotation"
+					goto arbitration
+				`	Exploit the ambiguity: offer to acquire the ship subject to the unresolved crew claim.`
+					goto acquisition
+			label partnership
+			`You argue that the owner's repeated share promise, contemporaneous log, and years of reduced compensation form a coherent operating agreement even if the registry never caught up. Dorne dislikes the legal risk but accepts a structured transfer that records the heirs' remaining claim.`
+			action
+				"ES-STORY-0002: settlement operating partnership" = 1
+				"ES-STORY-0002: kelm trusts player" = 1
+				"ES-STORY-0002: dorne resents player" = 1
+			accept
+			label estate
+			`You separate obligation from title: the estate retains the ship for sale, but the crew's documented claim must be recognized in the distribution. Kelm calls it an erasure of the partnership. Dorne calls it the cleanest result the records can support.`
+			action
+				"ES-STORY-0002: settlement estate sale" = 1
+				"ES-STORY-0002: kelm resents player" = 1
+				"ES-STORY-0002: dorne trusts player" = 1
+			accept
+			label arbitration
+			`You refuse to convert evidence of obligation into an invented ownership percentage. The sale is paused while an arbitrator prices the crew claim and tests whether the operating partnership can buy out the estate interest. Nobody gets an immediate victory, but nobody loses a claim by delay.`
+			action
+				"ES-STORY-0002: settlement arbitration" = 1
+				"ES-STORY-0002: kelm trusts player" = 1
+				"ES-STORY-0002: dorne trusts player" = 1
+			accept
+			label acquisition
+			`You offer to buy the Morrow Line cheaply with the crew claim still attached. Senn goes silent. Kelm says, "So that was the value of hearing us out." Dorne warns that any purchase will inherit the dispute rather than erase it.`
+			action
+				"ES-STORY-0002: settlement player acquisition" = 1
+				"ES-STORY-0002: kelm resents player" = 1
+				"ES-STORY-0002: dorne resents player" = 1
+				"ES-STORY-0002: player exploited ambiguity" = 1
+			accept
+
+
+mission "B2 Broken Compact: Kelm Aftermath"
+	minor
+	name `Kelm Remembers`
+	description `Nadia Kelm remembers how you handled the Morrow Line dispute.`
+	source "New Washington"
+	to offer
+		not "ES-STORY-0002: kelm aftermath seen"
+		or
+			has "ES-STORY-0002: settlement operating partnership"
+			has "ES-STORY-0002: settlement estate sale"
+			has "ES-STORY-0002: settlement arbitration"
+			has "ES-STORY-0002: settlement player acquisition"
+	on offer
+		conversation
+			branch partnership
+				has "ES-STORY-0002: settlement operating partnership"
+			branch estate
+				has "ES-STORY-0002: settlement estate sale"
+			branch arbitration
+				has "ES-STORY-0002: settlement arbitration"
+			`Kelm sees you near the refit bays and gives you a flat look. "The Morrow Line is still carrying the claim you bought with it. If you want my engineering work, resolve what you inherited before you ask me for favors."`
+			goto record
+			label partnership
+			`Kelm is supervising a refit when she notices you. "The Morrow Line is still working, and the crew's stake is finally written down. I remember who treated our work history as evidence instead of sentiment."`
+			goto record
+			label estate
+			`Kelm does not stop working when you approach. "The ship is gone to sale. The crew claim survived in the proceeds, but the partnership did not. I remember the distinction, even if I do not like it."`
+			goto record
+			label arbitration
+			`Kelm closes a diagnostic panel. "Arbitration is slow. But the sale stayed paused and both claims survived. I can work with a process that does not erase the record just to make the argument end."`
+			label record
+			action
+				"ES-STORY-0002: kelm aftermath seen" = 1
+			accept
