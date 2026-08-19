@@ -1,0 +1,89 @@
+name: Fork save-load integration smoke
+
+on:
+  pull_request:
+    paths:
+      - "data/**"
+      - "source/**"
+      - "tests/integration/**"
+      - "CMakeLists.txt"
+      - "cmake/**"
+      - ".github/workflows/fork-save-load-smoke.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "data/**"
+      - "source/**"
+      - "tests/integration/**"
+      - "CMakeLists.txt"
+      - "cmake/**"
+      - ".github/workflows/fork-save-load-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fork-save-load-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  save-load-smoke:
+    name: Stock save-load integration smoke
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+
+    env:
+      LIBGL_ALWAYS_SOFTWARE: "1"
+      ALSOFT_DRIVERS: "null"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install build and headless runtime dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            g++ cmake ninja-build pkgconf \
+            libsdl2-dev libpng-dev libjpeg-dev libavif-dev \
+            libgl1-mesa-dev libgl1-mesa-dri libglew-dev libminizip-dev \
+            libopenal-dev libmad0-dev libflac++-dev uuid-dev \
+            xvfb xauth
+
+      - name: Configure production executable
+        run: |
+          cmake -S . -B build/fork-save-load -G Ninja \
+            -DES_USE_VCPKG=OFF \
+            -DBUILD_TESTING=OFF \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build production executable
+        run: cmake --build build/fork-save-load --config Release --target EndlessSky --parallel 2
+
+      - name: Run stock save-load smoke cases
+        shell: bash
+        run: |
+          set -euo pipefail
+          GAME="$(find build/fork-save-load -maxdepth 3 -type f -name 'endless-sky' -perm -111 -print -quit)"
+          if [[ -z "$GAME" ]]; then
+            echo "FAIL: built Endless Sky executable was not found"
+            exit 1
+          fi
+
+          run_case() {
+            local test_name="$1"
+            local config_dir
+            config_dir="$(mktemp -d)"
+            cp -a tests/integration/config/. "$config_dir/"
+            echo "Running stock integration test: $test_name"
+            xvfb-run -a "$GAME" \
+              --resources "$GITHUB_WORKSPACE" \
+              --config "$config_dir" \
+              --test "$test_name"
+          }
+
+          run_case "Saving during conversation"
+          run_case "Loading and Reloading"
+          run_case "Loading and Saving"
