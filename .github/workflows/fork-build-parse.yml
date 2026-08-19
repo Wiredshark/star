@@ -1,0 +1,70 @@
+name: Fork production build and data parse
+
+on:
+  pull_request:
+    paths:
+      - "data/**"
+      - "source/**"
+      - "CMakeLists.txt"
+      - "CMakePresets.json"
+      - "cmake/**"
+      - ".github/workflows/fork-build-parse.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "data/**"
+      - "source/**"
+      - "CMakeLists.txt"
+      - "CMakePresets.json"
+      - "cmake/**"
+      - ".github/workflows/fork-build-parse.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fork-build-parse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-parse:
+    name: Build Endless Sky and parse production data
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install system build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            g++ cmake ninja-build pkgconf \
+            libsdl2-dev libpng-dev libjpeg-dev libavif-dev \
+            libgl1-mesa-dev libglew-dev libminizip-dev libopenal-dev \
+            libmad0-dev libflac++-dev uuid-dev
+
+      - name: Configure production executable
+        run: |
+          cmake -S . -B build/fork-parse -G Ninja \
+            -DES_USE_VCPKG=OFF \
+            -DBUILD_TESTING=OFF \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build production executable
+        run: cmake --build build/fork-parse --config Release --target EndlessSky --parallel 2
+
+      - name: Parse all production data and references
+        shell: bash
+        run: |
+          GAME="$(find build/fork-parse -maxdepth 3 -type f -name 'endless-sky' -perm -111 -print -quit)"
+          if [[ -z "$GAME" ]]; then
+            echo "FAIL: built Endless Sky executable was not found"
+            find build/fork-parse -maxdepth 3 -type f -print
+            exit 1
+          fi
+          echo "Using executable: $GAME"
+          "$GAME" --parse-save
