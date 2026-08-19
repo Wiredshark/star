@@ -1,0 +1,144 @@
+# A2 dynamic-narrative consumer for A1 Southern Rim traffic pressure.
+# A1 remains sole owner of the two `world:` signals read here.
+
+mission "A2 Southern Rim Traffic Coordination: Briefing"
+	minor
+	name `Southern Rim Traffic: Coordination Briefing`
+	description `Free Worlds traffic coordinator Rhea Solano asks how border routing should adapt while the Southern Rim is congested.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		"world: southern rim transit congestion" >= 4
+		not "A2 Southern Rim Traffic Coordination: briefing seen"
+	on offer
+		conversation
+			`A traffic coordinator in a Free Worlds operations jacket intercepts you beside a bank of arrival displays. "Captain <last>? Rhea Solano. The Southern Rim lanes are backing up faster than local control can normalize them."`
+			branch combined
+				"world: southern rim transit congestion" >= 6
+				"world: merchant rescue load" >= 3
+			branch gridlock
+				"world: southern rim transit congestion" >= 6
+			branch rescue
+				"world: merchant rescue load" >= 3
+			`She points to a routing map crowded with amber holds. "The queue is heavy, but the network still has room to choose what kind of delay it wants. That choice is why I am asking captains instead of only controllers."`
+				goto policy
+			label combined
+			`Every major inbound lane on Solano's display is red. A second panel lists merchant distress calls waiting for escort or tow coverage. "We have gridlock and a rescue workload at the same time. A routing rule that looks efficient on paper can strand damaged ships in practice."`
+				goto policy
+			label gridlock
+			`Solano expands the arrival board. "The lanes are at their practical ceiling. We can still move ships, but every exception now displaces somebody else. I need a policy that controllers can actually defend when the queue gets angry."`
+				goto policy
+			label rescue
+			`A distress-channel summary is pinned beside the arrival board. "Traffic is bad enough on its own, and merchant rescue crews are already stretched. If we route without accounting for damaged ships, ordinary congestion becomes a safety problem."`
+			label policy
+			`Solano folds her arms. "If you had one vote on the temporary routing rule, what should the Southern Rim protect first?"`
+			choice
+				`\tProtect emergency and rescue corridors even if ordinary arrivals wait longer.`
+					goto emergency
+				`\tUse strict staggered clearances so the queue drains predictably instead of rewarding whoever shouts loudest.`
+					goto staggered
+				`\tDistribute inbound traffic across more ports and approach lanes, accepting extra travel and coordination cost.`
+					goto distributed
+				`\tI am not taking responsibility for a Free Worlds traffic-control policy.`
+					goto refuse
+			label emergency
+			`Solano marks two approach lanes as protected. "Emergency capacity first. It will make the normal queue uglier, but a damaged ship should not become a casualty because every berth is being used efficiently."`
+			action
+				"A2 Southern Rim Traffic Coordination: briefing seen" = 1
+				"A2 Southern Rim Traffic Coordination: policy emergency corridors" = 1
+				"A2 Southern Rim Traffic Coordination: followup pending" = 1
+				decline
+			label staggered
+			`Solano converts the arrival board into timed blocks. "Predictability over improvisation. Captains will hate being told to wait their turn, but controllers can stop making a new exception every thirty seconds."`
+			action
+				"A2 Southern Rim Traffic Coordination: briefing seen" = 1
+				"A2 Southern Rim Traffic Coordination: policy staggered clearance" = 1
+				"A2 Southern Rim Traffic Coordination: followup pending" = 1
+				decline
+			label distributed
+			`Solano highlights secondary ports and longer approach arcs. "Spread the pressure instead of pretending one hub can absorb the whole Rim. More fuel, more coordination, fewer single points of gridlock."`
+			action
+				"A2 Southern Rim Traffic Coordination: briefing seen" = 1
+				"A2 Southern Rim Traffic Coordination: policy distributed routing" = 1
+				"A2 Southern Rim Traffic Coordination: followup pending" = 1
+				decline
+			label refuse
+			`Solano closes the policy pane. "Fair. Advice is not neutral if somebody can cite your name as authorization afterward." She records that you declined rather than leaving the field ambiguous.`
+			action
+				"A2 Southern Rim Traffic Coordination: briefing seen" = 1
+				"A2 Southern Rim Traffic Coordination: refused" = 1
+				"A2 Southern Rim Traffic Coordination: followup pending" = 1
+				decline
+
+mission "A2 Southern Rim Traffic Coordination: After Action"
+	minor
+	name `Southern Rim Traffic: After the Queue`
+	description `Rhea Solano reports how the temporary routing policy held up after Southern Rim congestion eased.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Southern Rim Traffic Coordination: followup pending"
+		"world: southern rim transit congestion" < 4
+		not "A2 Southern Rim Traffic Coordination: followup seen"
+	on offer
+		conversation
+			branch emergency_rescue_high
+				has "A2 Southern Rim Traffic Coordination: policy emergency corridors"
+				"world: merchant rescue load" >= 3
+			branch emergency_rescue_low
+				has "A2 Southern Rim Traffic Coordination: policy emergency corridors"
+				"world: merchant rescue load" < 3
+			branch staggered_rescue_high
+				has "A2 Southern Rim Traffic Coordination: policy staggered clearance"
+				"world: merchant rescue load" >= 3
+			branch staggered_rescue_low
+				has "A2 Southern Rim Traffic Coordination: policy staggered clearance"
+				"world: merchant rescue load" < 3
+			branch distributed_rescue_high
+				has "A2 Southern Rim Traffic Coordination: policy distributed routing"
+				"world: merchant rescue load" >= 3
+			branch distributed_rescue_low
+				has "A2 Southern Rim Traffic Coordination: policy distributed routing"
+				"world: merchant rescue load" < 3
+			`Solano recognizes you before you can pass the traffic desk. "No policy question. I remember that you declined." She taps the archived briefing. "Your refusal stayed a refusal; nobody used your name to justify the routing order."`
+			action
+				"A2 Southern Rim Traffic Coordination: refusal respected" = 1
+				goto finish
+			label emergency_rescue_high
+			`Solano shows you a thinner arrival queue and a distress panel that is still busy. "Traffic pressure is down, but rescue crews are still stretched. Protecting emergency corridors kept damaged ships moving even after ordinary congestion stopped being the main problem. We are keeping that carve-out."`
+			action
+				"A2 Southern Rim Traffic Coordination: Solano remembers emergency high rescue" = 1
+				goto finish
+			label emergency_rescue_low
+			`Solano points to a quiet distress panel. "The queue eased and the rescue workload came down with it. The protected corridor cost ordinary ships time, but it gave controllers a rule that still made sense when somebody arrived damaged."`
+			action
+				"A2 Southern Rim Traffic Coordination: Solano remembers emergency low rescue" = 1
+				goto finish
+			label staggered_rescue_high
+			`Solano scrolls through a clean sequence of timed clearances, then gestures at the still-busy distress list. "Staggering fixed the queue, not the rescue burden. That distinction matters. We stopped confusing traffic discipline with spare emergency capacity."`
+			action
+				"A2 Southern Rim Traffic Coordination: Solano remembers staggered high rescue" = 1
+				goto finish
+			label staggered_rescue_low
+			`Solano's board is almost boring now. "Timed clearances gave controllers something captains could predict, and both ordinary congestion and the rescue backlog are back under control. We are keeping the schedule template for the next surge."`
+			action
+				"A2 Southern Rim Traffic Coordination: Solano remembers staggered low rescue" = 1
+				goto finish
+			label distributed_rescue_high
+			`Solano highlights several secondary approaches that are still active. "Spreading arrivals broke the gridlock, but the rescue network is still carrying a heavy load. At least damaged merchant ships are no longer competing with every ordinary arrival for the same few approaches."`
+			action
+				"A2 Southern Rim Traffic Coordination: Solano remembers distributed high rescue" = 1
+				goto finish
+			label distributed_rescue_low
+			`Solano highlights a web of secondary routes with most alerts cleared. "The queue is down and rescue load is manageable. The distributed plan cost fuel, but it left us with more usable approaches than we had before the surge."`
+			action
+				"A2 Southern Rim Traffic Coordination: Solano remembers distributed low rescue" = 1
+			label finish
+			action
+				"A2 Southern Rim Traffic Coordination: followup pending" = 0
+				"A2 Southern Rim Traffic Coordination: followup seen" = 1
+				decline
