@@ -66,5 +66,9 @@ jobs:
             find build/fork-parse -maxdepth 3 -type f -print
             exit 1
           fi
+          CONFIG_DIR="$RUNNER_TEMP/endless-sky-config"
+          mkdir -p "$CONFIG_DIR"
           echo "Using executable: $GAME"
-          "$GAME" --parse-save
+          echo "Using resources: $GITHUB_WORKSPACE"
+          echo "Using config: $CONFIG_DIR"
+          "$GAME" --resources "$GITHUB_WORKSPACE" --config "$CONFIG_DIR" --parse-save
