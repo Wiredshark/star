@@ -1,0 +1,53 @@
+# Copyright (c) 2026 by Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Republic customs scrutiny -> Southern Rim transit spillover.
+#
+# Elevated Republic customs scrutiny now propagates beyond Republic ports. When a
+# captain under elevated scrutiny crosses directly from Republic space into Free
+# Worlds territory, diversion and secondary-clearance traffic consumes one unit of
+# the existing Southern Rim routing capacity. The bridge deliberately reuses the
+# authoritative congestion variable and its three-day decay event rather than
+# creating a parallel traffic-pressure model. A two-day latch prevents the same
+# scrutiny episode from amplifying every rapid border crossing. The resulting loop
+# is deterministic and bounded:
+# customs scrutiny -> cross-border diversion -> transit congestion -> timed recovery.
+# Old saves default both the numeric input and latch condition safely to zero/false.
+
+
+event "ES A1: Republic Customs Diversion Load Ends"
+	clear "world: republic customs diversion load"
+
+
+mission "ES A1: Republic Customs Transit Spillover"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+		neighbor government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "previous system government: Republic"
+		"world: republic customs scrutiny" >= 3
+		not "world: republic customs diversion load"
+		"world: southern rim transit congestion" < 6
+	on offer
+		set "world: republic customs diversion load"
+		"world: southern rim transit congestion" += 1
+		"world: southern rim transit congestion" <?= 6
+		event "ES A1: Southern Rim Transit Congestion Decay" 3 3
+		event "ES A1: Republic Customs Diversion Load Ends" 2 2
+		fail
