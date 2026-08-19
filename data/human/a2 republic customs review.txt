@@ -106,7 +106,7 @@ mission "A2 Republic Customs Review: Disposition"
 			action
 				"A2 Republic Customs Review: outcome contextualized routing" = 1
 			label finish
-			`Noll closes her copy of the file. "The important part is that the administrative state changed without the dialogue pretending to own it. The record now says what happened while the review was elevated, and what did not happen."`
+			`Noll closes her copy of the file. "The review posture changed on its own timetable. Our job was to make sure the record still says what happened while it was elevated, what was only inferred, and what never happened at all."`
 			action
 				"A2 Republic Customs Review: disposition pending" = 0
 				"A2 Republic Customs Review: disposition seen" = 1
