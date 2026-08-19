@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Avgi History: Allocation Ledger"
+	minor
+	invisible
+	source
+		government "Avgi (Consonance)"
+	to offer
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`A public display in the spaceport cycles through old photographs of fuel depots, power conduits, and crowded distribution halls. A translated caption explains that the Consonance's present allocation offices grew out of emergency ledgers used when dee supplies or transport links failed. What began as temporary accounting gradually became a permanent system for deciding which settlements, industries, and defense forces would receive scarce energy first.`
+			`	The display notes that the system prevented local shortages from becoming complete collapses, but also created a bureaucracy whose decisions now reach into nearly every Avgi household and workshop.`
+				decline
+
+
+mission "Avgi History: Mineral Tenure Archive"
+	minor
+	invisible
+	source
+		government "Avgi (Consonance)"
+	to offer
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`A small archive exhibit displays fragments of mining contracts beside maps layered with colored claim boundaries. According to the translated notes, early extraction rights were tied to local obligations: a holder received access to valuable deposits in exchange for maintaining equipment, meeting quotas, and supporting nearby settlements. Over generations those arrangements hardened into inherited concessions, tax privileges, and administrative offices.`
+			`	A newer placard, apparently added after repeated public criticism, dryly observes that many Avgi now describe the result as "mineral feudalism," even though the legal system still treats the old concessions as part of the Consonance's economic foundation.`
+				decline
+
+
+mission "Avgi History: Twilight Guard Muster"
+	minor
+	invisible
+	source
+		government "Avgi (Twilight Guard)"
+	to offer
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`Near the spaceport's emergency shelters, a wall is covered with faded diagrams showing evacuation routes, radiation warnings, interceptor launch orders, and lists of civilian supply caches. A translated plaque explains that the Twilight Guard's modern procedures were assembled piecemeal during repeated attacks, when settlements could not rely on intact orbital infrastructure or timely reinforcement.`
+			`	The oldest instructions are almost improvisational; later versions standardize shelter signals, reserve crews, medical staging points, and the handoff of local authority when communications fail. The exhibit presents this accumulated routine, rather than any single battle, as the reason some Avgi communities endured long enough to rebuild.`
+				decline
+
+
+mission "Avgi History: Shroud Route Register"
+	minor
+	invisible
+	source
+		government "Avgi (Twilight Guard)"
+	to offer
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`An illuminated route table hangs beside a bank of navigational terminals. Its oldest entries are hand-drawn chains of systems, corrected repeatedly where lanes shifted or instruments became unreliable. The accompanying text says that pilots crossing the tangled shroud once passed safe-route knowledge directly from crew to crew, until the Twilight Guard began collecting reports into a shared register.`
+			`	The register never made the region predictable, but it turned isolated experience into institutional memory: uncertain routes could be compared, warnings propagated, and escort crews briefed from something more durable than rumor. Modern charts still mark many entries as provisional.`
+				decline
