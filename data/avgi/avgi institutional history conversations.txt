@@ -18,11 +18,12 @@ mission "Avgi History: Allocation Ledger"
 	source
 		government "Avgi (Consonance)"
 	to offer
+		has "language: Avgi (Written)"
 		not "avgi: lost in twilight"
 		random < 4
 	on offer
 		conversation
-			`A public display in the spaceport cycles through old photographs of fuel depots, power conduits, and crowded distribution halls. A translated caption explains that the Consonance's present allocation offices grew out of emergency ledgers used when dee supplies or transport links failed. What began as temporary accounting gradually became a permanent system for deciding which settlements, industries, and defense forces would receive scarce energy first.`
+			`A public display in the spaceport cycles through old photographs of fuel depots, power conduits, and crowded distribution halls. A caption explains that the Consonance's present allocation offices grew out of emergency ledgers used when dee supplies or transport links failed. What began as temporary accounting gradually became a permanent system for deciding which settlements, industries, and defense forces would receive scarce energy first.`
 			`	The display notes that the system prevented local shortages from becoming complete collapses, but also created a bureaucracy whose decisions now reach into nearly every Avgi household and workshop.`
 				decline
 
@@ -33,11 +34,12 @@ mission "Avgi History: Mineral Tenure Archive"
 	source
 		government "Avgi (Consonance)"
 	to offer
+		has "language: Avgi (Written)"
 		not "avgi: lost in twilight"
 		random < 4
 	on offer
 		conversation
-			`A small archive exhibit displays fragments of mining contracts beside maps layered with colored claim boundaries. According to the translated notes, early extraction rights were tied to local obligations: a holder received access to valuable deposits in exchange for maintaining equipment, meeting quotas, and supporting nearby settlements. Over generations those arrangements hardened into inherited concessions, tax privileges, and administrative offices.`
+			`A small archive exhibit displays fragments of mining contracts beside maps layered with colored claim boundaries. According to the notes, early extraction rights were tied to local obligations: a holder received access to valuable deposits in exchange for maintaining equipment, meeting quotas, and supporting nearby settlements. Over generations those arrangements hardened into inherited concessions, tax privileges, and administrative offices.`
 			`	A newer placard, apparently added after repeated public criticism, dryly observes that many Avgi now describe the result as "mineral feudalism," even though the legal system still treats the old concessions as part of the Consonance's economic foundation.`
 				decline
 
@@ -48,11 +50,12 @@ mission "Avgi History: Twilight Guard Muster"
 	source
 		government "Avgi (Twilight Guard)"
 	to offer
+		has "language: Avgi (Written)"
 		not "avgi: lost in twilight"
 		random < 4
 	on offer
 		conversation
-			`Near the spaceport's emergency shelters, a wall is covered with faded diagrams showing evacuation routes, radiation warnings, interceptor launch orders, and lists of civilian supply caches. A translated plaque explains that the Twilight Guard's modern procedures were assembled piecemeal during repeated attacks, when settlements could not rely on intact orbital infrastructure or timely reinforcement.`
+			`Near the spaceport's emergency shelters, a wall is covered with faded diagrams showing evacuation routes, radiation warnings, interceptor launch orders, and lists of civilian supply caches. A plaque explains that the Twilight Guard's modern procedures were assembled piecemeal during repeated attacks, when settlements could not rely on intact orbital infrastructure or timely reinforcement.`
 			`	The oldest instructions are almost improvisational; later versions standardize shelter signals, reserve crews, medical staging points, and the handoff of local authority when communications fail. The exhibit presents this accumulated routine, rather than any single battle, as the reason some Avgi communities endured long enough to rebuild.`
 				decline
 
@@ -63,6 +66,7 @@ mission "Avgi History: Shroud Route Register"
 	source
 		government "Avgi (Twilight Guard)"
 	to offer
+		has "language: Avgi (Written)"
 		not "avgi: lost in twilight"
 		random < 4
 	on offer
