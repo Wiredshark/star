@@ -1,0 +1,146 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Drak Memorial Custody Compact production slice.
+# Consumes B1 Drak extinction-watch, memorial-custody, intervention-threshold,
+# and peacekeeping precedent without claiming a formal Drak bureaucracy.
+# The recurring presence is "the Custodian" only in the player's private mental
+# shorthand; the content never asserts that the Drak uses or accepts this title.
+
+mission "B2 Drak Memorial Custody Compact: Offer"
+	entering
+	minor
+	invisible
+	source
+		system "Sayaiban"
+	to offer
+		not "B2 Drak Memorial Custody Compact: introduced"
+		not "B2 Drak Memorial Custody Compact: declined"
+	on offer
+		conversation
+			`The jump into <origin> ends, but the stars do not settle. A pale-gold geometry overlays the cockpit, and the same immense presence you have felt in other Drak visions presses close enough that you recognize an individual cadence within it. You privately think of the presence as the Custodian, although no name or title is offered.`
+			`\tA memory unfolds of an extinct species' machine held inside a dark enclosure. Its makers are gone. The machine is not. It can still reproduce fragments of their language and habitat, but one of its autonomous routines repeatedly tries to re-create an old defensive perimeter. In the memory, that perimeter once killed intruders who did not understand its warning signals.`
+			`\tThe Custodian does not give you a rule. Instead, three impulses are set beside one another: preserve what cannot be replaced; prevent an old danger from becoming a new catastrophe; and avoid rewriting the vanished species into something safer merely because no one remains to object.`
+			choice
+				`\tPreserve the machine intact under strict quarantine. Memory loses meaning if every dangerous part is removed.`
+					goto intact
+				`\tDisable the dangerous routine permanently, but preserve every record needed to explain what was changed and why.`
+					goto sever
+				`\tSeparate custody from operation: isolate the active core while preserving a complete, reversible record of the original system.`
+					goto paired
+				`\tRefuse to offer a judgment on a species and artifact you barely understand.`
+					goto decline
+			label intact
+			`You hold to the first impulse. A memorial that preserves only what later observers consider harmless risks becoming a portrait of the custodians rather than the people who made it. The vision responds with the image of layered boundaries: distance, silence, warning, interception. The Custodian's attention lingers on the cost of maintaining those boundaries for ages.`
+			action
+				"B2 Drak Memorial Custody Compact: introduced" = 1
+				"B2 Drak Memorial Custody Compact: route intact" = 1
+				"B2 Drak Memorial Custody Compact: custodian trusts player" = 1
+			accept
+			label sever
+			`You argue that preserving memory does not require preserving the ability to repeat every old harm. The dangerous routine can be disabled while its code, context, and the exact intervention remain documented. The Custodian answers with a memory of an ancient containment where a "temporary" alteration became permanent because later keepers forgot which parts had been changed.`
+			action
+				"B2 Drak Memorial Custody Compact: introduced" = 1
+				"B2 Drak Memorial Custody Compact: route sever" = 1
+				"B2 Drak Memorial Custody Compact: custodian questions player" = 1
+			accept
+			label paired
+			`You reject the assumption that preservation and safe operation must share one state. Keep the original system intact but unable to act; expose a separately controlled reconstruction for study; record every boundary between the two. The Custodian replies not with approval but with a sequence of duplicated objects, each drifting apart in tiny ways until only a chain of custody makes clear which one still bears the original history.`
+			action
+				"B2 Drak Memorial Custody Compact: introduced" = 1
+				"B2 Drak Memorial Custody Compact: route paired" = 1
+				"B2 Drak Memorial Custody Compact: custodian trusts player" = 1
+			accept
+			label decline
+			`You resist the pressure to turn one brief vision into a universal rule. The Custodian's presence recedes without hostility. The final image is simply a sealed boundary and a record left unfinished, as if declining to decide has itself become part of the evidence.`
+			action
+				"B2 Drak Memorial Custody Compact: declined" = 1
+			decline
+
+mission "B2 Drak Memorial Custody Compact: Review"
+	entering
+	minor
+	invisible
+	source
+		system "Peresedersi"
+	to offer
+		has "B2 Drak Memorial Custody Compact: introduced"
+		not "B2 Drak Memorial Custody Compact: reviewed"
+	on offer
+		conversation
+			branch intact
+				has "B2 Drak Memorial Custody Compact: route intact"
+			branch sever
+				has "B2 Drak Memorial Custody Compact: route sever"
+			`The Custodian returns as soon as <ship> enters <origin>. You recognize the same measured sequence of impressions. This time the vanished species' machine is shown after generations of custody. Its active core remains isolated. Scholars have reconstructed parts of its world from copied records, while the original defensive routine has never been allowed to act.`
+			`\tYet a new problem has appeared. The copies are easier to study than the original, and over time their simplifications have begun to replace the dangerous, contradictory source in younger observers' understanding. Safety has been preserved. Accuracy is starting to erode.`
+			choice
+				`\tCreate a bounded memorial: preserve the original intact and inaccessible, but require every safe reconstruction to disclose exactly what it omits or changes.`
+					goto bounded
+				`\tCreate a severed-function archive: permanently remove operational danger from public copies while keeping the original code, provenance, and intervention record inseparable from them.`
+					goto archive
+			label intact
+			`The original was preserved exactly as you urged, but the quarantine became so complete that almost nobody could learn from it without relying on simplified copies. The Custodian shows you a student describing the extinct culture confidently and incorrectly because the dangerous artifact has become too remote to challenge the safe reconstruction.`
+			choice
+				`\tKeep the original bounded, but force every reconstruction to carry explicit omissions, substitutions, and provenance.`
+					goto bounded
+				`\tLet public copies remain functionally safe, but bind them permanently to the original code and alteration record.`
+					goto archive
+			label sever
+			`The dangerous routine was disabled as you advised. Centuries later, a copied archive describes the intervention as if the extinct makers themselves designed the machine that way. The Custodian's discomfort is unmistakable. The harm was prevented, but the custody record failed to preserve the difference between inheritance and correction.`
+			choice
+				`\tUse a bounded memorial that makes every later alteration explicit.`
+					goto bounded
+				`\tUse a severed-function archive where safe copies carry the original function and intervention history beside the disabled implementation.`
+					goto archive
+			label bounded
+			`You recommend a bounded memorial. The original remains physically and operationally contained, but no derivative may present itself as a neutral substitute. Every reconstruction carries a durable account of what was removed, translated, simulated, or suppressed, and scholars may trace each claim back toward the source without gaining the ability to reactivate it.`
+			`\tThe Custodian answers with a boundary seen from both sides: danger kept in, memory allowed out. The distinction feels less like approval than a precedent being filed beside older ones.`
+			action
+				"B2 Drak Memorial Custody Compact: reviewed" = 1
+				"B2 Drak Memorial Custody Compact: settlement bounded memorial" = 1
+				"B2 Drak Memorial Custody Compact: custodian trusts player" = 1
+			accept
+			label archive
+			`You recommend a severed-function archive. Any public or research copy must remain unable to execute the dangerous behavior, but the disabled routine's original code, purpose, historical consequences, and exact intervention are stored beside the safe implementation. A later observer can know what the artifact was without being allowed to make it act that way again.`
+			`\tThe Custodian answers with two identical patterns, then marks one with a single bright interruption. The mark never disappears, even as the altered pattern is copied forward through time.`
+			action
+				"B2 Drak Memorial Custody Compact: reviewed" = 1
+				"B2 Drak Memorial Custody Compact: settlement severed function archive" = 1
+				"B2 Drak Memorial Custody Compact: custodian trusts player" = 1
+			accept
+
+mission "B2 Drak Memorial Custody Compact: Custodian Remembers"
+	entering
+	minor
+	invisible
+	source
+		system "Fasitopfar"
+	to offer
+		not "B2 Drak Memorial Custody Compact: aftermath seen"
+		or
+			has "B2 Drak Memorial Custody Compact: settlement bounded memorial"
+			has "B2 Drak Memorial Custody Compact: settlement severed function archive"
+	on offer
+		conversation
+			branch archive
+				has "B2 Drak Memorial Custody Compact: settlement severed function archive"
+			`The Custodian touches your thoughts only briefly. You see a younger species studying a reconstruction of the vanished machine. Every missing behavior, translated concept, and containment boundary is visible in the record. The students cannot activate the old defense, but neither can they mistake the reconstruction for an untouched inheritance. The Custodian leaves you with a quiet impression: preservation is not the absence of intervention, but the refusal to hide it.`
+			goto record
+			label archive
+			`The Custodian touches your thoughts only briefly. A safe copy of the vanished machine is running inside a controlled habitat, its dangerous routine absent. Beside it, an immutable provenance record preserves the original routine, the harm it once caused, and the exact act that severed it from later operation. Nothing in the archive pretends that safety was part of the original design.`
+			label record
+			action
+				"B2 Drak Memorial Custody Compact: aftermath seen" = 1
+			accept
