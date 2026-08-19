@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**PARTIAL pending repository-native validation.**
+**READY for A3 review/integration.**
 
 ## Authority and isolation
 
@@ -13,8 +13,9 @@
 - Exact B1 parent SHA: `44c6bfd07b6b2c678782bd680b55c3fd51d85329`
 - B2 branch: `agent/b2-bunrodea-freight-petition-20260819-0527`
 - Production commit: `2c174eb8055e17d801e64e59b3f067554a0003e0`
-- Focused-validator head: `454b2e2827ba6d4341871ebdaefeddd4169c6fe7`
-- Integration authority: A3 only. B2 must remain unmerged until acceptance gates are satisfied.
+- Focused-validator commit: `454b2e2827ba6d4341871ebdaefeddd4169c6fe7`
+- Exact production/data/validator/handoff head validated by CI: `296d26d888cb42c997d57be88b467a0c48593eea`
+- Integration authority: A3 only. B2 remains unmerged.
 
 ## Implemented character / dynamic-content slice
 
@@ -59,29 +60,38 @@ The Review remembers the initial route and resolves the dispute into one of two 
 - `tools/story/validate_b2_bunrodea_freight_petition_compact.py`
 - `story/B2_BUNRODEA_FREIGHT_PETITION_COMPACT_HANDOFF_20260819.md`
 
-## Validation required before READY
+## Validation evidence
 
-Run from a real `Wiredshark/star` checkout at the exact B2 head:
+Validation was executed against exact head `296d26d888cb42c997d57be88b467a0c48593eea` through the repository-native pull-request workflows.
 
-```text
-python3 tools/story/validate_b2_bunrodea_freight_petition_compact.py "data/bunrodea/b2 bunrodea freight petition compact.txt"
-python3 tools/story/validate_story_repo.py
-python3 tools/story/test_b2_character_packets.py
-python3 utils/check_content_style.py
-```
+### Fork simulation and story validation — SUCCESS
 
-Then run the repository-native simulation/story workflow and the production build/save-load smoke workflow if available. Runtime acceptance should exercise:
+GitHub Actions run `32237963159` completed successfully. That workflow includes:
 
-1. Offer gating on Bunrodea ports;
-2. each of the three initial routes plus refusal;
-3. Review persistence after save/load;
-4. mutual exclusivity of the two settlement writes;
-5. the one-shot `Sedi Remembers` reader;
-6. absence of material/reputation/world-state mutation;
-7. normal content parser/build behavior.
+- Python compilation of focused story/A1 validation code;
+- automatic discovery and execution of all `tools/story/validate_*.py` validators, including `validate_b2_bunrodea_freight_petition_compact.py`;
+- `tools/story/test_b2_character_packets.py`;
+- A1 simulation contract tests;
+- changed-content style validation with the repository `regex` dependency installed.
+
+This means the focused Bunrodea validator, repository focused-validator suite, changed-content style checks, and A1 simulation contracts all passed on the exact head.
+
+### Fork save-load integration smoke — SUCCESS
+
+GitHub Actions run `32237963021` completed successfully against the same exact head. The workflow:
+
+- configured the production Endless Sky executable with CMake/Ninja;
+- built the production `EndlessSky` target;
+- ran stock integration cases under a headless runtime:
+  - `Saving during conversation`;
+  - `Loading and Reloading`;
+  - `Loading and Saving`.
+
+All completed successfully.
 
 ## A3 integration notes
 
 - Dependency order: integrate/retain B1 Bunrodea institutional history first, then B2.
-- Review this slice specifically for Bunrodea social-rank/canon fit and mission syntax.
-- Do not promote to READY solely because the branch is mergeable; require actual validation evidence.
+- Review this slice specifically for Bunrodea social-rank/canon fit and mission syntax even though automated gates are green.
+- Preserve the central continuity invariant: common freight facts may survive transfer and appeal without silently deciding estate ownership/liability.
+- The final commit after validated head `296d26d888cb42c997d57be88b467a0c48593eea` changes this handoff document only; production content and validator code are unchanged.
