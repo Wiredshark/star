@@ -1,0 +1,39 @@
+# A1 world simulation: Free Worlds patrol transit load.
+#
+# Cross-system feedback between the accepted defense-strain/patrol system and
+# Southern Rim transit congestion. While a Free Worlds patrol surge is active,
+# the first qualifying inbound border crossing also consumes routing capacity,
+# adding one bounded congestion contribution. A short routing-load latch prevents
+# rapid retriggers, and the contribution uses the existing congestion decay event
+# so there remains only one authoritative transit-pressure variable.
+
+
+event "ES A1: Free Worlds Military Routing Load Ends"
+	clear "world: free worlds military routing load"
+
+
+mission "ES A1: Free Worlds Patrol Transit Load"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+		neighbor government "Republic" "Neutral" "Independent"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "world: free worlds patrol surge"
+		not "world: free worlds military routing load"
+		or
+			has "previous system government: Republic"
+			has "previous system government: Neutral"
+			has "previous system government: Independent"
+		"world: southern rim transit congestion" < 6
+	on offer
+		set "world: free worlds military routing load"
+		"world: southern rim transit congestion" += 1
+		"world: southern rim transit congestion" <?= 6
+		event "ES A1: Southern Rim Transit Congestion Decay" 3 3
+		event "ES A1: Free Worlds Military Routing Load Ends" 2 2
+		fail
