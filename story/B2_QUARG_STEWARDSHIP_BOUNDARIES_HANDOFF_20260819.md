@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**PARTIAL pending stock save-load workflow completion.** The exact production/data/validator head is simulation/story/style green. Do not integrate if the associated save-load workflow later fails.
+**READY for A3 review/integration.** Exact branch validation is green for simulation/story/style and stock save-load. B2 remains isolated and unmerged.
 
 ## Repository and branch
 
@@ -12,6 +12,7 @@
 - Isolated B2 branch: `agent/b2-quarg-stewardship-boundaries-20260819-0428`
 - Production commit: `6e4a2add580e54331daf68a9f7d5dad17b46ba12`
 - Exact production/data/validator head: `0587544d7b06c1e8c6613600873325c31367d79a`
+- First handoff head validated by final workflows: `6cf794842927bb63edcce01d66168ea5a290c2de`
 - Draft PR: `#69`
 
 ## Slice
@@ -49,7 +50,9 @@ A delayed Review exposes failure modes in the initial approach and resolves into
 
 ## Validation evidence
 
-Exact production/data/validator head: `0587544d7b06c1e8c6613600873325c31367d79a`.
+### Exact production/data/validator head
+
+`0587544d7b06c1e8c6613600873325c31367d79a`
 
 GitHub Actions `Fork simulation and story validation` run `32233029125`: **SUCCESS**.
 
@@ -75,7 +78,15 @@ The focused Quarg validator checks:
 
 Exact base-to-validator-head compare: **2 commits ahead, 0 behind**, two added files, 277 additions, zero deletions, and no unrelated file changes.
 
-GitHub Actions `Fork save-load integration smoke` run `32233029192` was still **IN PROGRESS** when this handoff was written. No save-load PASS is claimed yet.
+### Handoff head validation
+
+The first handoff-only head `6cf794842927bb63edcce01d66168ea5a290c2de` was also validated after the handoff file was added:
+
+- GitHub Actions `Fork simulation and story validation` run `32233169474`: **SUCCESS**.
+- GitHub Actions `Fork save-load integration smoke` run `32233169405`: **SUCCESS**.
+- Stock save-load job completed configuration, production build, and all stock save-load smoke cases successfully.
+
+The earlier save-load run `32233029192` was cancelled only because the handoff commit synchronized the PR and superseded that run; the replacement final-head run above completed successfully.
 
 The private execution host was inspected before using it: its repository workspace points to `Wiredshark/fallout-test`, not `Wiredshark/star`, and it was already dirty. It was left untouched and is not claimed as Endless Sky runtime evidence.
 
@@ -86,11 +97,11 @@ Integration order is strict:
 1. B1 Quarg stewardship institutional history at `58083c55af8242ca8001f3ad5b84b7f524712503`.
 2. This B2 Quarg Stewardship Boundaries branch.
 
-Before integration, A3 should confirm:
+A3 should preserve these boundaries:
 
-- exact production/data/validator head `0587544d7b06c1e8c6613600873325c31367d79a` remains simulation/story/style green;
-- save-load run `32233029192` completed successfully;
-- the B1 `Quarg History: Protected Community Ledger: offered` condition is present after B1 integration;
-- no later Quarg branch has claimed conflicting stewardship/protectorate semantics.
+- `Quarg History: Protected Community Ledger: offered` is a read-only B1 dependency for B2.
+- All B2 persistent writes remain under `B2 Quarg Stewardship Boundaries:`.
+- Quarg protection obligations do not imply ownership, annexation, or blanket sovereignty over protected communities.
+- Do not use this arc to reveal or broaden Drak/Quarg exceptional-travel technology.
 
-If the save-load workflow fails, keep this candidate PARTIAL and repair on the isolated B2 branch before integration.
+The current commit after this READY wording changes only this handoff document; production data and validator content remain exactly the already-green versions described above.
