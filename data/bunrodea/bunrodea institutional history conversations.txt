@@ -1,0 +1,68 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Bunrodea History: Petition Archive"
+	minor
+	invisible
+	source
+		government "Bunrodea"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A public gallery near the spaceport displays copies of old petitions, court notices, and ceremonial decrees beneath portraits of Bunrodea rulers. A translation kiosk explains that disputes involving Erabu estates, merchants, local officials, and ordinary districts have long been carried upward through layers of petition and review. The oldest records emphasize personal appeals to the crown; later ones increasingly use standardized forms, clerks, and written precedents.`
+			`\tThe exhibit presents the change less as a replacement of royal authority than as an attempt to make that authority function across a vast, crowded realm. The Queen remains the symbolic final guarantor of justice, while much of the routine work is now performed by institutions built around the throne.`
+				decline
+
+
+mission "Bunrodea History: Megasa Freight Register"
+	minor
+	invisible
+	source
+		government "Bunrodea"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A freight-office museum preserves battered cargo seals beside generations of shipping ledgers. The accompanying text describes how Megasa crews came to handle much of the realm's repetitive hauling: food, industrial feedstock, replacement machinery, and other cargo whose importance is easiest to notice when it stops moving. Early ledgers are local and inconsistent; later records use common manifests, liability marks, and destination codes.`
+			`\tOne panel is unusually frank about status. Megasa remain the lowest social rank recognized in the old hierarchy, yet the archive notes that their freight networks became too important for aristocratic households and city administrations to treat as purely private servants. Standard contracts and cargo records grew in part because the rest of the realm depended on their work.`
+				decline
+
+
+mission "Bunrodea History: Guard Threat Ledger"
+	minor
+	invisible
+	source
+		government "Bunrodea"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`Beside a Royal Guard post, an exhibit shows old identification sketches, challenge signals, patrol maps, and damaged pieces of defensive equipment. A translated caption says that the Guard's earliest surviving records often describe unfamiliar ships simply as threats or intruders. Later manuals distinguish trespass, uncertain contact, armed approach, active attack, and diplomatic arrival, with different responses attached to each category.`
+			`\tThe final display remarks that the categories did not make the Royal Guard less zealous. They made its zeal more procedural: commanders could compare incidents, justify escalation, and punish guards who ignored an established challenge or warning step. Several revisions are annotated after particularly embarrassing misunderstandings.`
+				decline
+
+
+mission "Bunrodea History: Common Measures Archive"
+	minor
+	invisible
+	source
+		government "Bunrodea"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A technical archive displays old fuel couplings, cargo gauges, docking fittings, and repair tags arranged from oldest to newest. The translation notes that Bunrodea ports once used a patchwork of local interfaces and workshop conventions. As freight and court administration tied more cities together, port authorities gradually published common dimensions, pressure markings, inspection symbols, and maintenance records.`
+			`\tThe exhibit treats compatibility as an institutional achievement rather than a single invention. Workshops could still build differently, but shared measures allowed a vessel serviced in one city to refuel, unload, or obtain basic repairs in another without every transaction becoming a negotiation. A row of modern fittings at the end of the display is deliberately mundane.`
+				decline
