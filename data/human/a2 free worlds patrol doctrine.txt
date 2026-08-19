@@ -1,0 +1,132 @@
+# A2 dynamic narrative: Free Worlds patrol doctrine after defense strain.
+#
+# Reads A1-owned world state without modifying it. A2 persists only the player's
+# doctrine choice and later reflects that choice against the simulation's current
+# recovery state.
+
+mission "A2 Free Worlds Patrol Doctrine: Briefing"
+	minor
+	name `Free Worlds Defense: Patrol Doctrine`
+	description `Speak with Free Worlds patrol planner Anika Ro about how the current mobilization should be used.`
+	source
+		government "Free Worlds"
+	to offer
+		has "world: free worlds patrol surge"
+		not "A2 Free Worlds Patrol Doctrine: Briefing: done"
+		not "A2 Free Worlds Patrol Doctrine: Briefing: active"
+	on offer
+		conversation
+			branch severe
+				"world: free worlds defense strain" >= 3
+			`A patrol planner in a faded Free Worlds uniform waves you over to a tactical display. "Captain <last>? Anika Ro. The mobilization bought us some breathing room, but not much. Every patrol we reinforce leaves another route thin. I need a field captain's answer before command freezes this into doctrine."`
+			goto choices
+			label severe
+			`Anika Ro does not bother hiding the strain figures. "We're still carrying too much damage across too many sectors. The surge is active, but the underlying defense load has not really cleared. If we spend these ships badly, we will be back here in a week."`
+			label choices
+			choice
+				`Concentrate patrols around civilian traffic and evacuation routes. Protect the ships that cannot absorb another bad encounter.`
+					goto civilians
+				`Use the surge aggressively. Hunt raiders near the stressed sectors before they can choose the next target.`
+					goto interdiction
+				`Keep patrol groups distributed and mobile. Do not let a temporary surge become a brittle fixed line.`
+					goto mobility
+				`This should stay a Free Worlds command decision. Do not turn my field experience into standing doctrine.`
+					goto refuse
+			label civilians
+			`Ro highlights the passenger and relief corridors. "Then the patrol surge becomes a shield first and a weapon second. We will accept some unanswered contacts if it keeps damaged civilian traffic from taking the risk for us."`
+			action
+				"A2 Free Worlds Patrol Doctrine: civilians" = 1
+				"A2 Free Worlds Patrol Doctrine: later reader pending" = 1
+			accept
+			label interdiction
+			`Ro shifts the patrol groups toward the approaches that generated the most assistance calls. "Hit the pressure source instead of endlessly absorbing it. If the intelligence picture is good enough, that may shorten the whole recovery."`
+			action
+				"A2 Free Worlds Patrol Doctrine: interdiction" = 1
+				"A2 Free Worlds Patrol Doctrine: later reader pending" = 1
+			accept
+			label mobility
+			`Ro breaks the largest patrol clusters into smaller rotating groups. "No single route gets everything, but no raider gets to learn where the wall ends either. That gives local commanders room to react instead of waiting for another central order."`
+			action
+				"A2 Free Worlds Patrol Doctrine: mobility" = 1
+				"A2 Free Worlds Patrol Doctrine: later reader pending" = 1
+			accept
+			label refuse
+			`Ro closes the doctrine draft. "Understood. I will record that you declined to endorse any deployment model rather than letting somebody cite your presence as approval."`
+			action
+				"A2 Free Worlds Patrol Doctrine: refused" = 1
+				"A2 Free Worlds Patrol Doctrine: later reader pending" = 1
+			decline
+
+
+mission "A2 Free Worlds Patrol Doctrine: After Action"
+	minor
+	name `Free Worlds Defense: After Action`
+	description `Hear how Anika Ro evaluates the patrol doctrine after the mobilization ends.`
+	source
+		government "Free Worlds"
+	to offer
+		has "A2 Free Worlds Patrol Doctrine: later reader pending"
+		not "world: free worlds patrol surge"
+		not "A2 Free Worlds Patrol Doctrine: After Action: done"
+	on offer
+		conversation
+			branch refused
+				has "A2 Free Worlds Patrol Doctrine: refused"
+			branch civilians_strained
+				has "A2 Free Worlds Patrol Doctrine: civilians"
+				"world: free worlds defense strain" >= 2
+			branch civilians_recovered
+				has "A2 Free Worlds Patrol Doctrine: civilians"
+				"world: free worlds defense strain" < 2
+			branch interdiction_strained
+				has "A2 Free Worlds Patrol Doctrine: interdiction"
+				"world: free worlds defense strain" >= 2
+			branch interdiction_recovered
+				has "A2 Free Worlds Patrol Doctrine: interdiction"
+				"world: free worlds defense strain" < 2
+			branch mobility_strained
+				has "A2 Free Worlds Patrol Doctrine: mobility"
+				"world: free worlds defense strain" >= 2
+			branch mobility_recovered
+				has "A2 Free Worlds Patrol Doctrine: mobility"
+				"world: free worlds defense strain" < 2
+			`Ro has no doctrine entry associated with your name. Whatever happened after the surge, it was not attributed to your advice.`
+			goto finish
+			label refused
+			`Ro meets you without a report in hand. "For the record, command respected your refusal. The deployment decisions are ours, and nobody used your name to make them look inevitable."`
+			action
+				"A2 Free Worlds Patrol Doctrine: refusal respected" = 1
+			goto finish
+			label civilians_strained
+			`Ro looks tired. "The civilian corridors stayed covered, but the defense network is still taking too many assistance calls. Your doctrine prevented the recovery from being paid for by freighters and passenger ships, even if it did not end the strain quickly."`
+			action
+				"A2 Free Worlds Patrol Doctrine: civilians future contact" = 1
+			goto finish
+			label civilians_recovered
+			`Ro brings up a quiet traffic board. "The strain finally fell away, and we did it without stripping protection from the civilian corridors. Command is keeping that priority in the next patrol plan."`
+			action
+				"A2 Free Worlds Patrol Doctrine: civilians future contact" = 1
+			goto finish
+			label interdiction_strained
+			`Ro taps a cluster of unresolved assistance calls. "We disrupted several raider groups, but the defense network is still carrying damage. Aggression helped, just not enough to make the underlying strain disappear on command."`
+			action
+				"A2 Free Worlds Patrol Doctrine: interdiction future contact" = 1
+			goto finish
+			label interdiction_recovered
+			`Ro smiles when the strain graph bottoms out. "The interdiction groups kept pressure on the routes that were generating the most losses. I cannot prove they caused the recovery alone, but command is willing to keep the doctrine in the toolbox."`
+			action
+				"A2 Free Worlds Patrol Doctrine: interdiction future contact" = 1
+			goto finish
+			label mobility_strained
+			`Ro points to a map full of smaller patrol tracks. "We are still strained, but no sector collapsed when the surge ended. Distributed groups gave local commanders enough flexibility to absorb the handoff."`
+			action
+				"A2 Free Worlds Patrol Doctrine: mobility future contact" = 1
+			goto finish
+			label mobility_recovered
+			`Ro shows you the post-surge map. "The network recovered without a sharp weak point appearing anywhere. The distributed doctrine is going into the standing contingency plan."`
+			action
+				"A2 Free Worlds Patrol Doctrine: mobility future contact" = 1
+			label finish
+			action
+				"A2 Free Worlds Patrol Doctrine: later reader pending" = 0
+			accept
