@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Kimek History: Mutual Aid Register"
+	minor
+	invisible
+	source
+		attributes "kimek"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A public terminal near the cargo elevators lists donations, shipping capacity, medicine stocks, and receiving requests from Kimek worlds scattered across the Coalition. The entries are old enough that some destinations have changed names, but the format remains recognizable.`
+			`\tA Kimek worker explains that prosperous worlds have sent supplies to poorer settlements for generations. What began as local charity gradually became a web of shared manifests, trusted carriers, receiving depots, and public records so that aid could continue even when the people organizing one shipment had never met the people arranging the next.`
+			`\tThe register makes the modern relief traffic around Kimek space look less like isolated generosity and more like inherited infrastructure: a habit of moving excess capacity toward places where distance, poverty, climate, or bad luck created shortages.`
+				decline
+
+
+mission "Kimek History: Winter Adaptation Ledger"
+	minor
+	invisible
+	source
+		attributes "kimek"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`Several Kimek are studying a display covered in weather graphs, medical advisories, housing diagrams, and lists of specialized clothing. Many of the oldest entries concern worlds whose climates appear far colder than the conditions favored by most Kimek.`
+			`\tOne of the viewers explains that settlement expanded faster than practical knowledge did. Communities on colder worlds repeatedly discovered that imported building designs, work schedules, clothing, and medical assumptions were poorly suited to local winters. Illness and job disruption made those mistakes difficult to ignore.`
+			`\tOver time, emergency responses became standards: insulated public spaces, seasonal medicine reserves, shared clothing specifications, heating priorities, and transport plans for doctors and vulnerable residents. The archive records adaptation not as a single invention, but as lessons paid for by settlements that refused to abandon difficult homes.`
+				decline
+
+
+mission "Kimek History: Amenities Cooperative Archive"
+	minor
+	invisible
+	source
+		attributes "kimek"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A small museum display contains old communicators, personal computers, household tools, and other devices that now look ordinary across much of Coalition space. The labels beside them describe donation drives, shared purchasing pools, and interplanetary delivery programs.`
+			`\tA curator says that Kimek prosperity arrived unevenly. Some worlds accumulated modern infrastructure and consumer technology quickly, while poorer settlements remained unable to afford equipment that richer citizens had begun to treat as basic amenities.`
+			`\tThe gap produced cooperatives that pooled donations, negotiated bulk purchases, and organized transport to places that could not sustain profitable private supply on their own. Many of today's relief organizations inherited their routes and bookkeeping practices from those efforts, even as the line between charity, civic service, and political organizing sometimes became difficult to draw.`
+				decline
+
+
+mission "Kimek History: Inter-Species Relief Compact"
+	minor
+	invisible
+	source
+		attributes "kimek"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`At a freight office, a Kimek dispatcher is reviewing cargo categories marked with symbols for Kimek, Saryd, and Arach dietary and medical requirements. Several crates nearby carry more than one set of markings.`
+			`\tThe dispatcher explains that relief networks originally built to connect wealthy and poor Kimek worlds eventually learned to serve mixed settlements as well. A shipment that was useful to a Kimek household might be useless to an Arach or Saryd family unless organizers recorded dietary needs, environmental requirements, and compatible medical supplies.`
+			`\tThose practical problems encouraged shared request forms, translated cargo labels, and receiving procedures that could cross species boundaries. The resulting compact is modest compared with the Coalition's grand political institutions, but it gives ordinary ports a routine way to turn surplus on one world into useful aid on another.`
+				decline
