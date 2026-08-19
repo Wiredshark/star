@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Sheragi History: Evidence Provenance Register"
+	minor
+	invisible
+	source "Vinci"
+	to offer
+		has "Sheragi Archaeology: Epilogue: done"
+		random < 4
+	on offer
+		conversation
+			`A university archive near the spaceport displays photographs of weathered samples, excavation notes, scans of alien components, and chains of custody that follow each object from discovery to laboratory shelf. The most prominent labels are not dates or conclusions, but warnings about where the evidence came from and what is still uncertain.`
+			`\tAn archivist explains that the Sheragi investigation forced researchers to become unusually strict about provenance. Early clues had been gathered from hidden sites, borrowed artifacts, second-hand stories, and material that crossed several hands before reaching a laboratory. A spectacular result could become almost useless if no one could reconstruct that path later.`
+			`\tThe register now preserves original observations separately from later interpretation, including failed tests and disputed identifications. The point is not to make every conclusion permanent, but to make it possible for another researcher to understand exactly what was known when the conclusion was made.`
+				decline
+
+
+mission "Sheragi History: Museum Translation Ledger"
+	minor
+	invisible
+	source "Mirrorlake"
+	to offer
+		has "Sheragi Archaeology: Epilogue: done"
+		random < 4
+	on offer
+		conversation
+			`Inside the Museum of Galactic History, a side gallery contains rows of Sheragi inscriptions beside several generations of Hai and human translations. Some passages have three or four competing readings, each accompanied by notes rather than a single corrected replacement.`
+			`\tA curator says that translating a dead civilization became less a matter of finding the right word and more a matter of preserving the history of interpretation. A new comparison could overturn an old reading, while an apparently obvious symbol might later prove to have changed meaning across centuries.`
+			`\tThe museum therefore keeps images of the original markings, literal transcriptions, proposed translations, and the evidence behind each revision as separate records. Visitors see uncertainty where an older museum might have displayed certainty, but future scholars inherit the evidence instead of only the last editor's confidence.`
+				decline
+
+
+mission "Sheragi History: Site Context Registry"
+	minor
+	invisible
+	source "Midgard"
+	to offer
+		has "Sheragi Archaeology: Epilogue: done"
+		random < 4
+	on offer
+		conversation
+			`A modest historical office keeps maps of old structures, soil layers, repaired walls, buried utilities, and places where samples were once removed. Most of the entries would look trivial beside a recovered alien device, yet each one is recorded with unusual care.`
+			`\tA local historian says that the Sheragi discoveries taught archaeologists how easily an artifact can lose meaning when separated from its surroundings. A fragment's location, neighboring material, later repairs, and even the absence of expected debris can matter as much as the fragment itself.`
+			`\tThe resulting registry treats excavation context as evidence in its own right. Researchers may still disagree about what happened here long ago, but removing an object without recording the place around it is now regarded as destroying part of the historical record rather than merely moving it.`
+				decline
+
+
+mission "Sheragi History: Artifact Custody Protocol"
+	minor
+	invisible
+	source "Hai-home"
+	to offer
+		has "Sheragi Archaeology: Epilogue: done"
+		random < 4
+	on offer
+		conversation
+			`A Ministry archive lists ancient devices whose physical originals, laboratory scans, translated data, and safety restrictions are stored under separate entries. Several records concern artifacts that changed hands repeatedly before scholars understood their importance.`
+			`\tA Hai official explains that Sheragi research exposed a recurring problem: copying information can protect knowledge while also making it easier to forget what was copied, altered, or lost. A scan may preserve a machine's data but not its materials; a translation may preserve meaning while hiding ambiguity in the original symbols.`
+			`\tModern custody records therefore distinguish the artifact itself from every derivative made from it. Access can be restricted without erasing the existence of the source, and researchers can tell whether a claim came from an original object, a copy, a translation, or someone else's reconstruction.`
+				decline
