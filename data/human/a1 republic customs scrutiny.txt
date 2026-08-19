@@ -1,0 +1,85 @@
+# A1 world simulation: Republic customs scrutiny.
+#
+# This crime/law state connects two existing authorities instead of copying them:
+# completed pirate work (`pirate jobs`) and the A1 Republic border-pressure signal.
+# A captain with repeated underworld history who crosses directly from Pirate space
+# into Republic territory can build temporary customs scrutiny. Routine crossings
+# contribute +1; crossings during an already-heightened border posture contribute
+# +2. Each contribution schedules an equal seven-day decay, and the signal is
+# bounded to 0..6.
+
+
+event "ES A1: Republic Customs Scrutiny Decay 1"
+	"world: republic customs scrutiny" -= 1
+	"world: republic customs scrutiny" >?= 0
+	clear "world: republic customs scrutiny notice seen"
+
+
+event "ES A1: Republic Customs Scrutiny Decay 2"
+	"world: republic customs scrutiny" -= 2
+	"world: republic customs scrutiny" >?= 0
+	clear "world: republic customs scrutiny notice seen"
+
+
+mission "ES A1: Republic Customs Scrutiny Routine Crossing"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "previous system government: Pirate"
+		"pirate jobs" >= 3
+		"world: republic border pressure" < 4
+		"world: republic customs scrutiny" < 6
+	on offer
+		"world: republic customs scrutiny" += 1
+		"world: republic customs scrutiny" <?= 6
+		event "ES A1: Republic Customs Scrutiny Decay 1" 7 7
+		fail
+
+
+mission "ES A1: Republic Customs Scrutiny Elevated Crossing"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "previous system government: Pirate"
+		"pirate jobs" >= 3
+		"world: republic border pressure" >= 4
+		"world: republic customs scrutiny" <= 4
+	on offer
+		"world: republic customs scrutiny" += 2
+		"world: republic customs scrutiny" <?= 6
+		event "ES A1: Republic Customs Scrutiny Decay 2" 7 7
+		fail
+
+
+# Player-visible acknowledgement of elevated scrutiny. This mission does not
+# decide guilt and does not mutate either input authority; it only reads the new
+# A1-owned signal and rate-limits the warning until a decay event clears it.
+mission "ES A1: Republic Customs Scrutiny Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: republic customs scrutiny" >= 3
+		not "world: republic customs scrutiny notice seen"
+	on offer
+		message
+			text "Republic customs channels are coordinating secondary inspections for traffic patterns repeatedly associated with pirate-corridor work. The bulletin describes an elevated review posture, not a finding of guilt."
+		set "world: republic customs scrutiny notice seen"
+		fail
