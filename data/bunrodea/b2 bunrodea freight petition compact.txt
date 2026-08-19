@@ -1,0 +1,140 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Bunrodea Freight Petition Compact production slice.
+# Consumes B1 Petition Archive and Megasa Freight Register institutional history.
+
+mission "B2 Bunrodea Freight Petition Compact: Offer"
+	minor
+	name `The Missing Seal`
+	description `Megasa freight coordinator Sedi Var and Erabu estate factor Iral Kes disagree over how a disputed cargo record should travel through Bunrodea petition review.`
+	source
+		government "Bunrodea"
+	to offer
+		not "B2 Bunrodea Freight Petition Compact: introduced"
+		not "B2 Bunrodea Freight Petition Compact: declined"
+	on offer
+		conversation
+			`A freight office near the spaceport keeps copies of old cargo seals beside modern manifests. Two Bunrodea stand over a shipment record whose final page bears a bright red rejection mark. Sedi Var, a Megasa freight coordinator, explains through a translation terminal that their convoy delivered the machinery exactly as the common manifest required. Iral Kes, an Erabu estate factor, answers that the receiving estate refuses liability because one aristocratic countersignature is missing.`
+			`Sedi taps the standardized destination code. "The port knew what arrived, when it arrived, and which crew carried it. The missing seal changes a petition, not the cargo." Iral folds his forearms. "And a petition without the recognized chain of authority becomes a rumor with numbers attached. A clerk cannot decide that an estate's signature has ceased to matter."`
+			choice
+				`\tBack Sedi: operational facts should keep cargo moving while the ownership petition is reviewed separately.`
+					goto sedi
+				`\tBack Iral: a disputed shipment needs a complete petition chain before liability transfers.`
+					goto iral
+				`\tPropose a paired docket that separates verified freight facts from the unresolved estate claim.`
+					goto paired
+				`\tDecline to referee Bunrodea freight procedure.`
+					goto decline
+			label sedi
+			`You argue that the common freight register exists precisely so a vessel, dock, or workshop does not have to renegotiate every basic fact. Delivery time, seal condition, route, quantity, and destination can be accepted as operational facts while an estate's liability petition continues through review. Sedi's antennae lift. Iral replies, "Then the record must state exactly which facts the port accepted, or temporary practice will quietly become judgment."`
+			action
+				"B2 Bunrodea Freight Petition Compact: introduced" = 1
+				"B2 Bunrodea Freight Petition Compact: route sedi" = 1
+				"B2 Bunrodea Freight Petition Compact: sedi trusts player" = 1
+			accept
+			label iral
+			`You tell Sedi that a standardized manifest cannot by itself decide who has assumed an estate obligation. If liability transfers before the petition chain is complete, later clerks may inherit a decision that nobody actually made. Iral inclines his head. Sedi answers, "Then the petition chain needs a clock. A missing seal cannot freeze a dock forever."`
+			action
+				"B2 Bunrodea Freight Petition Compact: introduced" = 1
+				"B2 Bunrodea Freight Petition Compact: route iral" = 1
+				"B2 Bunrodea Freight Petition Compact: iral trusts player" = 1
+			accept
+			label paired
+			`You suggest that the dispute exists because one document is being asked to do two jobs. The port can certify transport facts in a common freight record while a linked petition docket carries ownership, liability, missing signatures, and later rulings. Neither record silently answers the other's question. Sedi immediately begins marking the manifest fields that could be locked at delivery. Iral starts drafting the cross-reference that would bind those facts to the unresolved petition.`
+			action
+				"B2 Bunrodea Freight Petition Compact: introduced" = 1
+				"B2 Bunrodea Freight Petition Compact: route paired" = 1
+				"B2 Bunrodea Freight Petition Compact: sedi trusts player" = 1
+				"B2 Bunrodea Freight Petition Compact: iral trusts player" = 1
+			accept
+			label decline
+			`You tell them that a visiting captain is a poor substitute for a Bunrodea petition clerk. Sedi says that at least one person in the room understands jurisdiction. Iral replies that knowing when not to sign a record is itself a useful administrative skill.`
+			action
+				"B2 Bunrodea Freight Petition Compact: declined" = 1
+			decline
+
+mission "B2 Bunrodea Freight Petition Compact: Review"
+	minor
+	name `Facts That Survive Appeal`
+	description `Return after Sedi Var and Iral Kes have tested the freight-and-petition procedure you helped shape.`
+	source
+		government "Bunrodea"
+	to offer
+		has "B2 Bunrodea Freight Petition Compact: introduced"
+		not "B2 Bunrodea Freight Petition Compact: reviewed"
+	on offer
+		conversation
+			branch sedi
+				has "B2 Bunrodea Freight Petition Compact: route sedi"
+			branch iral
+				has "B2 Bunrodea Freight Petition Compact: route iral"
+			`Sedi and Iral have turned one corner of the freight office into a wall of paired records. Each shipment has a compact transport sheet linked to a petition docket. Sedi points to a case that crossed three ports without repeating a measurement or cargo inspection. Iral points to the same case and notes that the receiving estate's liability remained explicitly unresolved until a clerk accepted the missing signature explanation.`
+			choice
+				`\tFormalize a portable petition docket: verified freight facts become fixed entries, while liability and ownership rulings remain separately appealable.`
+					goto portable
+				`\tKeep a dual ledger: one operational freight record and one authority record, linked by permanent cross-references and deadlines.`
+					goto dual
+			label sedi
+			`Sedi shows you a shipment that was unloaded on time because the port accepted the common manifest, even though an Erabu estate later disputed who should pay for damage discovered in storage. The operational record kept moving; the petition did not disappear. Iral admits that the separation worked, but only because every accepted freight fact was copied into the petition docket before the cargo left the port.`
+			choice
+				`\tMake those locked freight facts the foundation of a portable petition docket.`
+					goto portable
+				`\tKeep two linked ledgers so operational acceptance never looks like a liability ruling.`
+					goto dual
+			label iral
+			`Iral shows you a petition that remained open until the final estate countersignature arrived. The cargo was not reassigned in the meantime, but Sedi's crew had to keep answering the same questions at every transfer point because the petition did not expose which freight facts were already settled. Sedi says, "Authority was preserved. Memory was not." Iral does not disagree.`
+			choice
+				`\tCarry settled freight facts forward inside a portable petition docket.`
+					goto portable
+				`\tUse two linked ledgers with explicit deadlines so neither side has to infer what the other already accepted.`
+					goto dual
+			label portable
+			`You recommend a portable petition docket. Freight facts certified at the port of transfer become fixed entries: quantity, destination, seal condition, time, route, and custodian. Ownership and liability remain appealable fields with their own signatures and rulings. Sedi calls it a record that lets a Megasa crew finish one job before an Erabu household finishes arguing about another. Iral calls it an appeal that can no longer rewrite the evidence it began from.`
+			action
+				"B2 Bunrodea Freight Petition Compact: reviewed" = 1
+				"B2 Bunrodea Freight Petition Compact: settlement portable docket" = 1
+				"B2 Bunrodea Freight Petition Compact: sedi trusts player" = 1
+			accept
+			label dual
+			`You recommend preserving two records. The freight ledger contains operational facts and transfer status; the petition ledger contains authority, liability, missing approvals, deadlines, and rulings. Permanent cross-references bind them together, and a petition that misses its review deadline must say why. Iral accepts that no estate signature has been demoted into a cargo field. Sedi accepts that no missing signature can make completed freight work vanish from the record.`
+			action
+				"B2 Bunrodea Freight Petition Compact: reviewed" = 1
+				"B2 Bunrodea Freight Petition Compact: settlement dual ledger" = 1
+				"B2 Bunrodea Freight Petition Compact: iral trusts player" = 1
+			accept
+
+mission "B2 Bunrodea Freight Petition Compact: Sedi Remembers"
+	minor
+	name `Sedi Remembers`
+	description `Sedi Var remembers how the freight petition dispute changed what survives a Bunrodea appeal.`
+	source
+		government "Bunrodea"
+	to offer
+		not "B2 Bunrodea Freight Petition Compact: aftermath seen"
+		or
+			has "B2 Bunrodea Freight Petition Compact: settlement portable docket"
+			has "B2 Bunrodea Freight Petition Compact: settlement dual ledger"
+	on offer
+		conversation
+			branch dual
+				has "B2 Bunrodea Freight Petition Compact: settlement dual ledger"
+			`Sedi recognizes you beside a port manifest terminal. A completed delivery record is open on the display, with a linked petition still marked as under review. "That estate has changed its argument twice," Sedi says through the translator. "The quantity has not changed. The seal has not changed. The arrival time has not changed. For a Megasa crew, that is a surprisingly large improvement."`
+			goto record
+			label dual
+			`Sedi recognizes you beside two adjacent terminals. One shows completed freight transfers; the other shows open petitions and their deadlines. "Iral still says this is two bureaucracies where one should have been enough," Sedi says. "I tell him it is two memories because the realm keeps asking two different questions. At least now both memories point to each other."`
+			label record
+			action
+				"B2 Bunrodea Freight Petition Compact: aftermath seen" = 1
+			accept
