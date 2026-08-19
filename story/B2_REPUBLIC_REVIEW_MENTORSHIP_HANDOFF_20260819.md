@@ -6,7 +6,7 @@
 - `PRIMARY_DOMAIN`: character / dynamic content
 - `SECONDARY_DOMAINS`: Republic legal process, mentorship, persistent narrative memory
 - `RUN_TYPE`: FEATURE / CONTENT
-- `VERDICT`: PARTIAL pending repository CI/runtime gates
+- `VERDICT`: READY for A3 review/integration
 
 ## Authoritative base
 
@@ -14,6 +14,7 @@
 - Base branch: `main`
 - Base SHA: `d485dea4c511964c1209d86dae15f5bcbf17a03b`
 - Isolated branch: `agent/b2-republic-review-mentorship-20260819-0129`
+- CI-validated code/data/validator head: `1e7ea74d2fb711ef2aa903da27cda2fcb5c22623`
 
 ## Concurrency check
 
@@ -95,16 +96,43 @@ Checks:
 - no material/reputation mutation;
 - persistent trust and later-reader state.
 
-## Validation status
+## Executed validation evidence
 
-At handoff creation, repository-side CI had not yet run for this branch. A draft PR should remain PARTIAL until the new repository-native fork validation, changed-file style gate, stock save-load smoke, and any focused validator execution are observed.
+GitHub Actions executed against code/data/validator head `1e7ea74d2fb711ef2aa903da27cda2fcb5c22623`.
 
-The private Fallout execution host was inspected only for process/workspace availability. Its repository workspace was already dirty and is not treated as authoritative `Wiredshark/star` evidence for this B2 slice.
+### Fork simulation and story validation — PASS
+
+Workflow run #16 completed successfully.
+
+- Python validation code compiled successfully.
+- `tools/story/run_focused_validators.py` completed successfully after the B2 validator prefix repair.
+- Changed fork content style completed successfully with the canonical Endless Sky GPL/copyright header.
+- The repository-wide fork content contract also verifies mission/event uniqueness, local mission graph targets, and A1 `world:*` ownership boundaries.
+- A1 simulation contract tests completed as part of the successful workflow.
+
+An earlier run correctly caught a bug in the new focused validator (`PREFIX` lacked the post-colon space); the validator was repaired rather than weakening the production contract.
+
+### Stock save-load integration smoke — PASS
+
+Workflow run #5 completed successfully.
+
+- production executable configuration: PASS;
+- production Endless Sky build: PASS;
+- stock `Saving during conversation`: PASS;
+- stock `Loading and Reloading`: PASS;
+- stock `Loading and Saving`: PASS.
+
+These gates provide repository-native parser/build and persistence smoke evidence for the changed content surface. No unsupported claim of exhaustive hand-playthrough coverage is made.
+
+## Private-host note
+
+The private Fallout execution host was inspected only for process/workspace availability. Its repository workspace was already dirty and was not treated as authoritative `Wiredshark/star` evidence for this B2 slice. No unrelated process or dirty workspace was disturbed.
 
 ## A3 / B3 integration notes
 
-- Integrate only after repository CI and content validation are green.
+- The isolated B2 slice is READY for A3 review/integration; do not self-integrate from B2.
 - Preserve A2 ownership of the customs-review and precedent/privacy state.
 - Preserve A1 ownership of customs scrutiny and border pressure.
 - B3 should check that Sera Noll's characterization remains consistent with A2: she treats review flags as administrative signals rather than findings, separates evidence from inference, and respects the player's privacy/precedent boundary.
 - The new Keene material is deliberately a character mentorship consequence, not a second customs investigation.
+- The handoff-only READY update follows the CI-validated code/data/validator head and does not alter production behavior.
