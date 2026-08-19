@@ -1,0 +1,152 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Rulei Exposure Accountability production slice.
+# Consumes B1 Rulei exposure/testimony institutions without asserting a cause for
+# Rulei-associated symptoms or inventing Rulei motives. Dr. Sena Orlov is a human
+# physician maintaining exposure records; Eli Verran is a veteran human navigator
+# whose own testimony appears in the archive.
+
+
+event "B2 Rulei Exposure Accountability: Review Ready"
+	"B2 Rulei Exposure Accountability: review ready" = 1
+
+
+mission "B2 Rulei Exposure Accountability: Offer"
+	minor
+	name `The Record and the Person`
+	description `A physician and a veteran navigator disagree over how Rulei-contact exposure records should follow crews after the immediate symptoms fade.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		has "First Contact: Rulei: offered"
+		has "Rulei History: Exposure Register: offered"
+		has "Rulei History: Testimony Protocol: offered"
+		not "B2 Rulei Exposure Accountability: introduced"
+		not "B2 Rulei Exposure Accountability: declined"
+	on offer
+		conversation
+			`Dr. Sena Orlov catches you outside the medical archive that maintains the Rulei exposure register. Beside her is Eli Verran, a veteran navigator whose testimony appears in several of the anonymized records. Orlov has spent months comparing contact duration, headaches, auditory sensations, sleep disruption, and recovery. Verran has spent just as long watching crews discover that an unusual encounter can become the first thing a later employer or insurer wants to know about them.`
+			`\tTheir immediate case is a survey pilot who returned from Kanguwa with severe headaches and recurring whispers that faded after two days. A follow-up examination shows no continuing impairment. Orlov wants a portable exposure flag so another clinic will recognize the pattern if it happens again. Verran argues that a flag without context will become a permanent suspicion about fitness, especially when nobody can prove what caused the symptoms in the first place.`
+			choice
+				`\tUse a clinical threshold: repeat or severe exposure symptoms should trigger a portable medical flag and mandatory follow-up before hazardous duty.`
+					goto clinical
+				`\tProtect witness control: share current fitness and directly observed symptoms, but keep the person's testimony and interpretations out of routine employment records.`
+					goto witness
+				`\tUse paired records: a portable operational health summary plus a separately consented testimony record whose interpretations can never masquerade as diagnosis.`
+					goto paired
+				`\tDecline to decide how future institutions should use a stranger's Rulei-contact history.`
+					goto decline
+			label clinical
+			`You tell Orlov that recurrent exposure patterns are useful only if the next physician can see them before assigning another hazardous route. Verran accepts the safety argument but insists that the flag state what was actually observed: duration, symptoms, recovery, and required follow-up, not a claim that the Rulei caused lasting damage. Orlov adds an expiry review so an old event cannot remain an automatic restriction forever.`
+			action
+				"B2 Rulei Exposure Accountability: introduced" = 1
+				"B2 Rulei Exposure Accountability: route clinical" = 1
+				"B2 Rulei Exposure Accountability: orlov trusts player" = 1
+				event "B2 Rulei Exposure Accountability: Review Ready" 7 11
+				accept
+			label witness
+			`You argue that a crew member should not have to surrender an uncertain experience every time someone asks whether they can fly. Orlov reduces the portable record to current fitness, directly observed symptoms, dates, and follow-up needs. Verran keeps the full testimony in the research archive under separate access rules. A future clinic can ask for more with the witness's consent instead of inheriting a frightening story as an employment fact.`
+			action
+				"B2 Rulei Exposure Accountability: introduced" = 1
+				"B2 Rulei Exposure Accountability: route witness" = 1
+				"B2 Rulei Exposure Accountability: verran trusts player" = 1
+				event "B2 Rulei Exposure Accountability: Review Ready" 7 11
+				accept
+			label paired
+			`You suggest that the disagreement exists because medical continuity and testimony continuity have been forced into one document. Orlov creates a compact operational summary containing observed symptoms, recovery, examinations, and any current restrictions. Verran keeps the witness account beside it but under explicit consent, with interpretation labeled separately from perception. The two records reference each other without granting the same audience access to both.`
+			action
+				"B2 Rulei Exposure Accountability: introduced" = 1
+				"B2 Rulei Exposure Accountability: route paired" = 1
+				"B2 Rulei Exposure Accountability: orlov trusts player" = 1
+				"B2 Rulei Exposure Accountability: verran trusts player" = 1
+				event "B2 Rulei Exposure Accountability: Review Ready" 7 11
+				accept
+			label decline
+			`You tell them that the uncertainty is exactly why you should not decide how another person's medical history travels. Orlov leaves the pilot's current clearance unchanged. Verran asks the archive to keep the full testimony under its existing rules. Their policy argument continues without your name attached to it.`
+			action
+				"B2 Rulei Exposure Accountability: declined" = 1
+				decline
+
+
+mission "B2 Rulei Exposure Accountability: Review"
+	minor
+	name `A Summary Without Its Limits`
+	description `Orlov and Verran return after discovering that a copied exposure summary can outlive the context that made it fair.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		has "B2 Rulei Exposure Accountability: introduced"
+		has "B2 Rulei Exposure Accountability: review ready"
+		not "B2 Rulei Exposure Accountability: reviewed"
+	on offer
+		conversation
+			branch clinical
+				has "B2 Rulei Exposure Accountability: route clinical"
+			branch witness
+				has "B2 Rulei Exposure Accountability: route witness"
+			`Orlov and Verran show you three versions of a recent crew record. The paired medical summary and testimony remained distinct in the archive, but a contractor exported only the sentence that mentioned a Rulei-contact exposure. A later scheduling system turned that sentence into an unexplained risk marker. The underlying examination still says the navigator is fit for duty.`
+				goto settle
+			label clinical
+			`Orlov admits that the portable clinical flag prevented one badly timed reassignment, but the copied version lost its expiry review. Weeks later the crew member was still being routed around sensitive work even though the follow-up examination had cleared them. A safety control became a durable identity because downstream systems kept the warning and dropped the condition for removing it.`
+				goto settle
+			label witness
+			`Verran says the witness-controlled testimony remained private, but the stripped-down fitness summary created its own problem. A scheduler saw repeated medical follow-ups without the permitted context and inferred chronic impairment. The inference was never in Orlov's record, yet it began circulating as though a clinician had written it.`
+			label settle
+			choice
+				`\tIssue a bounded exposure certificate: current operational fitness, observed exposure history, required follow-up, and an explicit expiry or review date travel together; raw testimony stays sealed.`
+					goto certificate
+				`\tUse consent escrow: every secondary use of an exposure record names its purpose, audience, and expiry, while interpretive claims require renewed consent or a fresh clinical finding.`
+					goto escrow
+			label certificate
+			`You suggest making the limit as portable as the warning. The certificate states what was observed, what the latest examination found, what follow-up remains, and exactly when the status must be reviewed or expires. It carries no claim that Rulei contact caused a lasting condition, and it does not include the witness's account. Orlov says another clinic can still recognize a pattern. Verran notes that a scheduler now has to delete the clearance date to turn the record into a permanent stigma.`
+			action
+				"B2 Rulei Exposure Accountability: reviewed" = 1
+				"B2 Rulei Exposure Accountability: settlement bounded certificate" = 1
+				"B2 Rulei Exposure Accountability: orlov trusts player" = 1
+				"B2 Rulei Exposure Accountability: verran trusts player" = 1
+				accept
+			label escrow
+			`You recommend treating downstream use as a new decision instead of a free copy. The archive records who may use the exposure summary, for what purpose, and until when. A clinic may retain direct observations needed for treatment, but an employer cannot convert testimony or an analyst's interpretation into a permanent fitness claim without renewed consent or a new examination. Verran calls it a boundary around the person. Orlov calls it a chain of custody for permission.`
+			action
+				"B2 Rulei Exposure Accountability: reviewed" = 1
+				"B2 Rulei Exposure Accountability: settlement consent escrow" = 1
+				"B2 Rulei Exposure Accountability: orlov trusts player" = 1
+				"B2 Rulei Exposure Accountability: verran trusts player" = 1
+				accept
+
+
+mission "B2 Rulei Exposure Accountability: Orlov Remembers"
+	minor
+	name `Orlov Remembers`
+	description `Dr. Sena Orlov remembers the boundary your advice placed between Rulei-contact evidence and assumptions about a person's future.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		not "B2 Rulei Exposure Accountability: aftermath seen"
+		or
+			has "B2 Rulei Exposure Accountability: settlement bounded certificate"
+			has "B2 Rulei Exposure Accountability: settlement consent escrow"
+	on offer
+		conversation
+			branch escrow
+				has "B2 Rulei Exposure Accountability: settlement consent escrow"
+			`Orlov recognizes you beside a clinic terminal. A navigator's Rulei-contact history is visible as a bounded certificate: observed symptoms, recovery, current fitness, follow-up instructions, and a review date. The testimony itself is not there. Verran, visiting the archive next door, says the same person later expanded the testimony for researchers without changing the operational clearance. The evidence can follow the patient without becoming the patient.`
+				goto finish
+			label escrow
+			`Orlov recognizes you while approving a research request. The exposure summary lists the requesting project, permitted fields, and an expiry date. Verran has separately approved access to portions of the witness testimony, but the system labels those passages as perception and interpretation rather than diagnosis. Orlov says the extra permission step is slower. Verran says that is the point: copying a record is no longer the same thing as inheriting authority over the person described by it.`
+			label finish
+			action
+				"B2 Rulei Exposure Accountability: aftermath seen" = 1
+				accept
