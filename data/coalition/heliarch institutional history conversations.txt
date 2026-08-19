@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Heliarch Council Record Archive"
+	minor
+	source
+		government "Coalition"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "license: Coalition"
+	on offer
+		conversation
+			`A small public exhibit outside an administrative concourse displays replicas of old Heliarch council records. The earliest surviving examples are dense with parallel annotations in Arach, Kimek, and Saryd writing, each note preserving not only a decision but how representatives from the different member peoples understood the question being decided.`
+			`\tThe accompanying history explains that the Heliarch council did not emerge from an assumption that one species' procedures could simply be imposed on the others. Repeated disputes over patrol responsibilities, emergency resources, jurisdiction, and interpretation pushed the council toward written agendas, recorded objections, translated minutes, and explicit statements of who was responsible for carrying a decision out.`
+			`\tLater records are much more standardized, but the exhibit treats those early annotations as important evidence of how Heliarch authority became durable: not by eliminating disagreement, but by developing procedures that allowed disagreement to become an official decision everyone could later inspect.`
+				decline
+
+
+mission "Heliarch Watch Standard Archive"
+	minor
+	source
+		government "Coalition"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "license: Coalition"
+	on offer
+		conversation
+			`A security-history display shows obsolete patrol rosters, warning codes, and readiness tables once used by Heliarch detachments. Many of the oldest documents are surprisingly local, with different stations using their own terminology for suspicious traffic, missing patrols, restricted approaches, and emergency reinforcement.`
+			`\tAs Heliarch responsibilities spread across Coalition space, those differences became a liability. A warning passed from one region to another could lose urgency or meaning, and a relief detachment arriving from elsewhere might not know which local procedures were merely customary and which were essential to security. Successive reviews produced common alert categories, reserve assignments, handoff procedures, and minimum reporting standards.`
+			`\tThe exhibit notes that modern Heliarch patrols still adapt to local conditions. What became standardized was the information that had to survive the handoff: what was observed, what level of threat was believed to exist, who had authority to escalate, and what forces were expected to respond.`
+				decline
+
+
+mission "Heliarch Evidence Custody Archive"
+	minor
+	source
+		government "Coalition"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "license: Coalition"
+	on offer
+		conversation
+			`Near a restricted Heliarch passageway, a public display describes the history of equipment and evidence custody. Early entries are simple issue logs for uniforms, weapons, access seals, and investigation material. Later examples track damaged equipment, recovered contraband, transferred evidence, and which officials handled each item before it reached an archive or tribunal.`
+			`\tThe archive explains that the procedures expanded after recurring cases in which stolen equipment, disputed seizures, or poorly documented transfers made it difficult to determine what had actually happened. Serial records, sealed containers, witness signatures, and transfer logs gradually became routine, especially when an investigation crossed several Coalition jurisdictions.`
+			`\tThe final panel stresses that the system is not merely about protecting Heliarch property. A record of custody also limits Heliarch authority by making it harder for evidence to appear, disappear, or change hands without leaving an administrative trail.`
+				decline
+
+
+mission "Heliarch Investigative Review Archive"
+	minor
+	source
+		government "Coalition"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "license: Coalition"
+	on offer
+		conversation
+			`An archive terminal summarizes old Heliarch investigative reviews. Some are records of successful operations, but many preserve failed searches, compromised disguises, predictable patrol patterns, misunderstood civilian reports, and cases where suspects learned to exploit methods that had once worked reliably.`
+			`\tAccording to the notes, formal review became more important as the Heliarchs confronted organizations that deliberately studied their habits. Investigators began separating observation from conclusion, recording alternative explanations, comparing reports from civilians and local authorities, and documenting why an operation failed instead of quietly discarding it.`
+			`\tOne entry remarks that institutional memory is useful only when it does not become institutional habit. The archive presents repeated revision of investigative methods as part of Heliarch discipline: procedures are preserved so they can be examined, criticized, and changed when opponents learn to predict them.`
+				decline
