@@ -115,14 +115,18 @@ def main() -> None:
         if phrase not in lower:
             fail(f"missing Rulei contact-uncertainty/accountability concept: {phrase}")
 
-    for forbidden_certainty in (
-        "the rulei caused lasting damage",
-        "rulei psionics permanently damaged",
-        "the rulei intended to harm",
-        "the rulei wanted to harm",
-    ):
-        if forbidden_certainty in lower:
-            fail(f"asserts unsupported Rulei causation or motive: {forbidden_certainty}")
+    # Reject affirmative unsupported causal/motive claims, while allowing the
+    # production text to explicitly negate those claims (e.g. "not a claim that
+    # the Rulei caused lasting damage").
+    forbidden_certainty_patterns = (
+        r"(?<!not a claim that )the rulei caused lasting damage",
+        r"rulei psionics permanently damaged",
+        r"the rulei intended to harm",
+        r"the rulei wanted to harm",
+    )
+    for pattern in forbidden_certainty_patterns:
+        if re.search(pattern, lower):
+            fail(f"asserts unsupported Rulei causation or motive: {pattern}")
 
     for phrase in (
         "bounded exposure certificate",
