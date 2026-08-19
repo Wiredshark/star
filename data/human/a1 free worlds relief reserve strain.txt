@@ -1,0 +1,54 @@
+# A1 world simulation: Free Worlds relief-reserve strain.
+#
+# Sustained high humanitarian demand now feeds a second persistent world-state
+# loop instead of remaining an isolated counter. When relief demand is already
+# severe (>= 4), a qualifying Free Worlds arrival consumes reserve capacity and
+# raises a bounded relief-reserve strain signal. Each accepted contribution is
+# paired with an exact six-day recovery contribution, preserving deterministic
+# one-for-one decay and avoiding permanent saturation.
+
+
+event "ES A1: Free Worlds Relief Reserve Recovery"
+	"world: free worlds relief reserve strain" -= 1
+	"world: free worlds relief reserve strain" >?= 0
+	clear "world: free worlds relief reserve notice seen"
+
+
+mission "ES A1: Free Worlds Relief Reserve Strain"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds relief demand" >= 4
+		"world: free worlds relief reserve strain" < 4
+	on offer
+		"world: free worlds relief reserve strain" += 1
+		"world: free worlds relief reserve strain" <?= 4
+		event "ES A1: Free Worlds Relief Reserve Recovery" 6 6
+		fail
+
+
+# Read-only acknowledgement of sustained capacity loss. A2 may consume the
+# numeric state for dialogue/news, but A1 alone owns mutation and recovery.
+mission "ES A1: Free Worlds Relief Reserve Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds relief reserve strain" >= 3
+		not "world: free worlds relief reserve notice seen"
+	on offer
+		message
+			text "Free Worlds relief coordinators report that reserve shelter, fuel, and transport capacity is running thin after sustained emergency demand. Regional crews are rotating stock and staff to rebuild contingency margins."
+		set "world: free worlds relief reserve notice seen"
+		fail
