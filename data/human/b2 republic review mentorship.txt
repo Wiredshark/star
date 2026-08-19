@@ -26,15 +26,13 @@ mission "B2 Republic Review Mentorship: Offer"
 		conversation
 			branch private
 				has "A2 Republic Customs Review: precedent kept private"
-			`Sera Noll is seated beside a junior port-rights observer who is deleting names from a training worksheet. "Captain <last>, this is Mara Keene. I promised your old review would not become a story about you, but the procedural problem it exposed keeps recurring."`
-			`Keene turns the worksheet so you can see four empty headings: evidence, inference, scope, and consent. "I can teach the structure without teaching the person. What I do not know is how much of the original sequence has to remain for the lesson to make sense."`
-				goto choices
-			label public
 			`Noll is speaking with a junior port-rights observer over a stack of training files. "Captain <last>, this is Mara Keene. You allowed the procedure from your old review to be cited, but not as a blanket endorsement. Mara is trying to turn that boundary into something a new observer can actually use."`
 			`Keene says, "If I strip away too much context, the lesson becomes 'fill in the right boxes.' If I keep too much, it starts teaching people to imitate one case instead of reason about the next one."`
+				goto choices
+			label private
+			`Sera Noll is seated beside a junior port-rights observer who is deleting names from a training worksheet. "Captain <last>, this is Mara Keene. I promised your old review would not become a story about you, but the procedural problem it exposed keeps recurring."`
+			`Keene turns the worksheet so you can see four empty headings: evidence, inference, scope, and consent. "I can teach the structure without teaching the person. What I do not know is how much of the original sequence has to remain for the lesson to make sense."`
 			label choices
-			branch public
-				has "A2 Republic Customs Review: precedent use bounded"
 			choice
 				`\tBuild an anonymized casebook: preserve the sequence of decisions, but remove identifying details and route-specific biography.`
 					goto casebook
