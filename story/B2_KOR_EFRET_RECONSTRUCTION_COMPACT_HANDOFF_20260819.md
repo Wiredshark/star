@@ -2,7 +2,7 @@
 
 ## Status
 
-PARTIAL pending repository-native validation.
+READY for A3 review/integration.
 
 ## Branch and ancestry
 
@@ -13,6 +13,8 @@ PARTIAL pending repository-native validation.
 - B2 branch: `agent/b2-kor-efret-reconstruction-compact-20260819-0723`
 - Production commit: `6b9a8455e2b29342fc07ab7a740a5376d36c32ed`
 - Focused validator commit: `7defe38c71bfa97d5ae7f0ea1b20add92f494634`
+- Exact production/data/validator/handoff head validated by CI: `ee04ecd9fc79ceacd8042c470ba3a319cd154a82`
+- Draft PR: `#80`
 
 ## Implemented slice
 
@@ -52,17 +54,55 @@ All persistent writes are namespaced under:
 
 No direct writes to `world:*`, credits, reputation, cargo, outfits, ships, fleets, or combat state are allowed by the focused validator.
 
-## Required validation
+## Validation evidence
 
-Focused validator:
+Exact validated head: `ee04ecd9fc79ceacd8042c470ba3a319cd154a82`.
 
-```bash
-python3 tools/story/validate_b2_kor_efret_reconstruction_compact.py "data/korath/b2 kor efret reconstruction compact.txt"
+### Fork simulation and story validation — SUCCESS
+
+GitHub Actions run `32247663347` completed successfully.
+
+Executed gates included:
+
+- Python compile of focused validation code;
+- automatic focused story-validator discovery;
+- `tools/story/validate_b2_kor_efret_reconstruction_compact.py` — PASS;
+- all focused story validators — 32/32 PASS;
+- repository fork content contracts — PASS;
+- `tools/story/validate_story_repo.py` — PASS;
+- existing B2 character-packet contract — PASS;
+- A1 simulation contracts — 25/25 PASS;
+- changed fork A/B content style — PASS.
+
+Focused validator result for this slice:
+
+```text
+PASS: B2 Kor Efret Reconstruction Compact structure validated
+PASS: missions=3
+PASS: recurring_characters=Recorder + Repairer shorthands
+PASS: initial_routes=3 + refusal
+PASS: terminal_settlements=2
+PASS: later_reader=Recorder Remembers
+PASS: mutation_surface=B2 conditions only
+PASS: b1_inputs=provenance + sealed habitat + obligations + recovery
 ```
 
-Repository story validation and changed-content style should also pass, followed by the normal Endless Sky production build/save-load smoke used by recent READY B2 slices.
+### Production build + stock save/load integration smoke — SUCCESS
 
-At the time this handoff was first written, those repository-native gates had not yet returned a terminal result, so the verdict remains PARTIAL until exact-head evidence is available.
+GitHub Actions run `32247663291` completed successfully on the same exact head.
+
+The workflow successfully:
+
+- installed the production build/headless runtime dependencies;
+- configured the production Endless Sky executable;
+- built the `EndlessSky` target;
+- passed `Saving during conversation`;
+- passed `Loading and Reloading`;
+- passed `Loading and Saving`.
+
+## Environment note
+
+The exposed private Fallout execution host was inspected rather than assumed suitable. Its `repository-workspace` remote points to `Wiredshark/fallout-test`, not `Wiredshark/star`, and was already dirty. It was left untouched. Repository-native GitHub Actions provide the authoritative validation evidence for this B2 slice.
 
 ## A3 / B3 integration notes
 
@@ -72,7 +112,8 @@ At the time this handoff was first written, those repository-native gates had no
 - Preserve B2-only state ownership.
 - The two terminal settlements should remain mutually exclusive.
 - Do not collapse component provenance into site-restoration status; they are intentionally separate records linked by the compact.
+- No self-integration has been performed; PR #80 remains draft for A3 authority.
 
 ## Verdict
 
-**PARTIAL** pending focused validator, repository story/style validation, production build, and save/load smoke evidence.
+**READY** for A3 review/integration. Exact validated head: `ee04ecd9fc79ceacd8042c470ba3a319cd154a82`.
