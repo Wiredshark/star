@@ -1,0 +1,51 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# A1 world simulation: Bunrodea freight-review backlog.
+#
+# Cross-border arrivals into Bunrodea jurisdiction create persistent petition-review
+# load. Each qualifying arrival contributes +1 backlog, capped at 6, and schedules
+# its own four-day recovery event. The state is simulation-owned and may be read by
+# later A2/B2 content, but this file does not write narrative-owned conditions.
+
+
+event "ES A1: Bunrodea Freight Review Backlog Decay"
+	"world: bunrodea freight review backlog" -= 1
+	"world: bunrodea freight review backlog" >?= 0
+	clear "world: bunrodea freight review notice seen"
+
+
+mission "ES A1: Bunrodea Freight Review Intake"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Bunrodea"
+	to offer
+		not "entered system by: takeoff"
+		not "previous system government: Bunrodea"
+		"world: bunrodea freight review backlog" < 6
+	on offer
+		"world: bunrodea freight review backlog" += 1
+		"world: bunrodea freight review backlog" <?= 6
+		event "ES A1: Bunrodea Freight Review Backlog Decay" 4 4
+		fail
+
+
+# Read-only observability hook. It acknowledges an elevated backlog until the next
+# decay contribution clears the notice flag; it does not own the numeric state.
+mission "ES A1: Bunrodea Freight Review Backlog Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Bunrodea"
+	to offer
+		"world: bunrodea freight review backlog" >= 4
+		not "world: bunrodea freight review notice seen"
+	on offer
+		message
+			text "Bunrodea freight channels report a growing petition-review backlog. Cross-border manifests are being held longer while clerks reconcile transport facts with estate authority records."
+		set "world: bunrodea freight review notice seen"
+		fail
