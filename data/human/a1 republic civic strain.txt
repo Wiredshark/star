@@ -1,0 +1,82 @@
+# A1 world simulation: Republic civic administration strain.
+#
+# Connects two existing A1 authorities without copying or mutating them. Acute
+# civilian displacement combined with elevated customs scrutiny creates a bounded
+# administrative strain signal representing overloaded hearings, housing desks,
+# documentation offices, and local public-service capacity. A contribution ages
+# down on its own, while a separate stabilization path accelerates recovery only
+# after both source pressures have materially receded. This hysteresis prevents a
+# nominal recovery while the underlying displacement/enforcement pressures remain.
+
+event "ES A1: Republic Civic Strain Recovery"
+	"world: republic civic strain" -= 1
+	"world: republic civic strain" >?= 0
+	clear "world: republic civic strain notice seen"
+
+event "ES A1: Republic Civic Assessment Ends"
+	clear "world: republic civic assessment active"
+
+event "ES A1: Republic Civic Stabilization Ends"
+	clear "world: republic civic stabilization"
+
+mission "ES A1: Republic Civic Administration Strain"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: republic displacement pressure" >= 4
+		"world: republic customs scrutiny" >= 3
+		not "world: republic civic assessment active"
+		"world: republic civic strain" < 6
+	on offer
+		set "world: republic civic assessment active"
+		"world: republic civic strain" += 2
+		"world: republic civic strain" <?= 6
+		event "ES A1: Republic Civic Strain Recovery" 10 10
+		event "ES A1: Republic Civic Assessment Ends" 4 4
+		fail
+
+# Negative feedback is deliberately gated behind both source signals falling
+# well below their escalation thresholds. This creates a stable recovery regime
+# rather than allowing administrative capacity to erase an ongoing source crisis.
+mission "ES A1: Republic Civic Stabilization"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		"world: republic civic strain" >= 2
+		"world: republic displacement pressure" <= 2
+		"world: republic customs scrutiny" <= 1
+		not "world: republic civic stabilization"
+	on offer
+		set "world: republic civic stabilization"
+		"world: republic civic strain" -= 2
+		"world: republic civic strain" >?= 0
+		event "ES A1: Republic Civic Stabilization Ends" 6 6
+		fail
+
+mission "ES A1: Republic Civic Strain Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		"world: republic civic strain" >= 2
+		not "world: republic civic strain notice seen"
+	on offer
+		message
+			text "Republic civic offices report longer queues for temporary housing, travel documentation, and administrative review as displacement and border-screening workloads overlap. Regional agencies are shifting staff between districts while the combined public-service strain remains elevated."
+		set "world: republic civic strain notice seen"
+		fail
