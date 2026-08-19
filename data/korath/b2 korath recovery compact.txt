@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Korath Recovery Compact production slice.
+# Consumes the B1 Korath Exile Raid Ledger and Recovery and Containment Ledger.
+# The player privately uses Medic and Analyst as shorthand for two recurring
+# Remnant specialists. Neither word is a canonical name, title, office, or claim
+# that the Remnant has a single centralized policy for all Korath encounters.
+
+mission "B2 Korath Recovery Compact: Offer"
+	landing
+	minor
+	invisible
+	source
+		government "Remnant"
+	to offer
+		has "Remnant: Cognizance 2: done"
+		has "Remnant History: Korath Exile Raid Ledger: offered"
+		has "Remnant History: Korath Recovery and Containment Ledger: offered"
+		not "B2 Korath Recovery Compact: introduced"
+		not "B2 Korath Recovery Compact: declined"
+		random < 18
+	on offer
+		conversation
+			`A Remnant recovery bay has been divided by temporary screens. On one side are sealed crates recovered from a disabled Korath exile ship: medicine, preserved food, reactor parts, and a few civilian containers whose original shipping marks are still visible beneath later repairs. On the other side, a wounded Korath survivor lies under guard while Remnant medics work through a treatment plan assembled from incomplete physiological records.`
+			`\tTwo specialists you have seen around earlier recovery operations are arguing over the same inventory. One is usually beside the treatment tables, so in your own head you have begun calling that one the Medic. The other spends most of the time comparing seals, damage, cargo marks, and recovery notes, so you privately think of that one as the Analyst. Neither word is a name or title either has given you.`
+			`\tThe Medic wants to release several recovered medical supplies immediately if they can help stabilize the survivor. The Analyst agrees that rescue comes first, but warns that some of the same containers may be evidence of earlier raids or stolen civilian property. If the seals are broken without recording what was used and why, later restitution and investigation become guesswork.`
+			choice
+				`\tPrioritize immediate treatment. Record what you can, but do not delay lifesaving use while ownership and provenance are reconstructed.`
+					goto rescue
+				`\tPreserve provenance first. Emergency use is allowed, but every opened container and consumed item must be recorded before the chain of evidence changes.`
+					goto provenance
+				`\tSeparate the obligations: create a humanitarian-use record linked to the original recovery ledger, so treatment can proceed without erasing origin, quantity, or later restitution claims.`
+					goto paired
+				`\tDecline to set a rule for a recovery operation whose medical and legal details you only partly understand.`
+					goto decline
+			label rescue
+			`You point first to the treatment bay. The Medic begins releasing supplies while an assistant notes container numbers and approximate quantities after the fact. The survivor's condition improves, but the Analyst later shows you three partially emptied crates whose original contents can no longer be reconstructed with confidence. The emergency was real; so is the information that vanished while solving it.`
+			action
+				"B2 Korath Recovery Compact: introduced" = 1
+				"B2 Korath Recovery Compact: route rescue" = 1
+				"B2 Korath Recovery Compact: medic trusts player" = 1
+			accept
+			label provenance
+			`You ask the Analyst to establish a quick provenance entry before each seal is broken: recovery location, container mark, condition, intended use, and amount removed. The process slows the first few minutes of treatment, but the Medic soon has a clerk recording entries while supplies move. The chain survives, though the Medic makes it clear that a recordkeeping rule becomes dangerous if it ever turns into permission to delay care.`
+			action
+				"B2 Korath Recovery Compact: introduced" = 1
+				"B2 Korath Recovery Compact: route provenance" = 1
+				"B2 Korath Recovery Compact: analyst trusts player" = 1
+			accept
+			label paired
+			`You suggest two linked records. The recovery ledger remains untouched as the statement of what was found and where. A second humanitarian-use record records what treatment consumed, why it was needed, who authorized the release, and what remains. The Medic gets immediate access; the Analyst keeps the original evidence chain intact without pretending the cargo was never used.`
+			action
+				"B2 Korath Recovery Compact: introduced" = 1
+				"B2 Korath Recovery Compact: route paired" = 1
+				"B2 Korath Recovery Compact: medic trusts player" = 1
+				"B2 Korath Recovery Compact: analyst trusts player" = 1
+			accept
+			label decline
+			`You step away from the argument. The Medic and Analyst continue working from the existing recovery rules, improvising a compromise crate by crate. When you leave, the survivor is still receiving care and the recovered cargo is still being catalogued, but no new shared procedure has been adopted on your advice.`
+			action
+				"B2 Korath Recovery Compact: declined" = 1
+			decline
+
+
+mission "B2 Korath Recovery Compact: Review"
+	landing
+	minor
+	invisible
+	source
+		government "Remnant"
+	to offer
+		has "B2 Korath Recovery Compact: introduced"
+		not "B2 Korath Recovery Compact: reviewed"
+		random < 24
+	on offer
+		conversation
+			branch rescue
+				has "B2 Korath Recovery Compact: route rescue"
+			branch provenance
+				has "B2 Korath Recovery Compact: route provenance"
+			`The Medic and Analyst find you beside a new stack of recovered-cargo reports. Your paired-record approach has spread to several recovery teams. That solved the immediate problem, but the Analyst points out a new one: copies of the humanitarian-use record are reaching relief depots without the original recovery context, while copies of the evidence ledger reach investigators without a clear statement of what was consumed for treatment.`
+			`\tThe records are both accurate, yet each is incomplete when separated from the other. A later reader can mistake a reduced inventory for theft, or treat a humanitarian release as proof that the recovered cargo belonged to the patient rather than to an earlier victim. The question is how much context must travel whenever either record is copied.`
+			choice
+				`\tCreate a linked recovery packet: every downstream copy carries recovery origin, humanitarian releases, remaining quantity, unresolved ownership claims, and a reference to the untouched source ledger.`
+					goto packet
+				`\tKeep medical and evidentiary records separate, but require a reconciliation checkpoint before any restitution, prosecution, or technical transfer closes the case.`
+					goto checkpoint
+			label rescue
+			`The Medic shows you several successful emergency releases made under your treatment-first approach. The patients survived, but later teams had to reconstruct quantities from handwritten notes and memory. The Analyst argues that compassion was not the mistake; the mistake was allowing emergency use to become detached from the recovered inventory once the crisis passed.`
+			choice
+				`\tCreate a linked recovery packet that reconstructs origin, emergency use, remaining quantity, unresolved claims, and the source ledger wherever the case travels.`
+					goto packet
+				`\tKeep treatment records separate from evidence, but require a formal reconciliation checkpoint before restitution, prosecution, or technical transfer can close.`
+					goto checkpoint
+			label provenance
+			`The Analyst shows you meticulous entries from your provenance-first rule. They preserve every opened seal, but the Medic points to a different gap: several downstream investigators copied the cargo history without the treatment notes that explain why quantities changed. A perfect evidence trail can still mislead if it omits the humanitarian event that legitimately altered the evidence.`
+			choice
+				`\tCreate a linked recovery packet so provenance and humanitarian use remain cross-referenced whenever the case is copied.`
+					goto packet
+				`\tKeep the records institutionally separate, but require a reconciliation checkpoint before any final ownership, criminal, or technical decision is made.`
+					goto checkpoint
+			label packet
+			`You recommend a linked recovery packet. The original ledger remains the source of truth for what was recovered, but any operational copy must also carry humanitarian releases, remaining quantity, unresolved ownership claims, and the identifier of the untouched source record. A later reader can tell what changed without confusing treatment, theft, restitution, and evidence handling.`
+			action
+				"B2 Korath Recovery Compact: reviewed" = 1
+				"B2 Korath Recovery Compact: settlement linked recovery packet" = 1
+				"B2 Korath Recovery Compact: medic trusts player" = 1
+				"B2 Korath Recovery Compact: analyst trusts player" = 1
+			accept
+			label checkpoint
+			`You recommend a reconciliation checkpoint. Medical records remain under the people responsible for care, and evidence records remain under the people responsible for provenance. But before anyone closes restitution, prosecution, or technical-transfer decisions, both records must be compared and disagreements left visible rather than silently resolved by whichever file arrived first.`
+			action
+				"B2 Korath Recovery Compact: reviewed" = 1
+				"B2 Korath Recovery Compact: settlement reconciliation checkpoint" = 1
+				"B2 Korath Recovery Compact: medic trusts player" = 1
+				"B2 Korath Recovery Compact: analyst trusts player" = 1
+			accept
+
+
+mission "B2 Korath Recovery Compact: Medic Remembers"
+	landing
+	minor
+	invisible
+	source
+		government "Remnant"
+	to offer
+		not "B2 Korath Recovery Compact: aftermath seen"
+		or
+			has "B2 Korath Recovery Compact: settlement linked recovery packet"
+			has "B2 Korath Recovery Compact: settlement reconciliation checkpoint"
+		random < 28
+	on offer
+		conversation
+			branch checkpoint
+				has "B2 Korath Recovery Compact: settlement reconciliation checkpoint"
+			`The Medic notices you near a recovery bay and hands you a copied case packet. It lists where a crate was recovered, what treatment consumed, what remains, which civilian ownership claims are unresolved, and where the untouched source ledger can be checked. The Analyst arrives with the same packet attached to an investigation file. Neither record pretends the humanitarian release settled ownership; neither pretends the cargo was unchanged.`
+			goto done
+			label checkpoint
+			`The Medic notices you near a recovery bay as the Analyst arrives carrying a restitution file. Before either signs the case closed, they compare the treatment record against the recovered-cargo ledger. One quantity mismatch remains, so the case stays open with the disagreement explicitly recorded. The delay is inconvenient, but no one is forced to treat a medical release, an ownership claim, and an evidentiary conclusion as the same thing.`
+			label done
+			action
+				"B2 Korath Recovery Compact: aftermath seen" = 1
+			accept
