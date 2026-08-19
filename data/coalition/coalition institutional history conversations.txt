@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Coalition Shared Measures Archive"
+	minor
+	source
+		government "Coalition"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A public trade archive is displaying old cargo contracts written in several Coalition scripts. The earliest agreements devote surprising amounts of space to definitions: how a crate was measured, which temperature a mass reading assumed, what counted as damaged freight, and exactly when responsibility for a shipment passed from one carrier to another.`
+			`\tThe exhibit explains that traders from the Coalition's different species already had sophisticated commercial customs of their own. Trouble arose when a perfectly ordinary practice in one region was interpreted differently in another. Port authorities and merchant associations gradually adopted shared conversion tables, inspection procedures, cargo seals, and contract terms so that a shipment could cross several local jurisdictions without being redefined at every stop.`
+			`\tA final panel notes that the standards never made local commerce identical. Their purpose was narrower and more practical: to create enough common language that different systems could disagree about price, risk, or responsibility without first disagreeing about what had physically been delivered.`
+				decline
+
+
+mission "Coalition Interpretation Register"
+	minor
+	source
+		government "Coalition"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Near the spaceport administration offices is a small exhibit dedicated to generations of interpreters, clerks, and technical translators. Early entries include parallel legal notices, docking instructions, emergency warnings, and engineering diagrams annotated for readers from different Coalition species.`
+			`\tThe archive emphasizes that translation became an institution rather than a simple substitution of words. Officials had to agree on how to express legal obligations, measurements, safety categories, and forms of address when the underlying assumptions did not always match. Repeated disputes produced glossaries, review procedures, and specialist interpreters for fields where a mistranslation could strand a ship or invalidate a contract.`
+			`\tModern automated systems handle much of the routine work, but the exhibit treats the old registers as civic infrastructure: records of the long effort required before a regulation written in one part of Coalition space could be trusted to mean the same thing when read somewhere else.`
+				decline
+
+
+mission "Coalition Port Arbitration Ledger"
+	minor
+	source
+		government "Coalition"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A concourse wall has been turned into a timeline of old port disputes. Most are mundane: damaged cargo, missed berths, disputed repair bills, salvage claims, passenger injuries, or two captains insisting that the other had violated a local docking rule.`
+			`\tAccording to the accompanying notes, mixed traffic made purely local rulings increasingly awkward. Ports began keeping common forms for evidence, recognizing one another's inspection records, and maintaining panels of arbiters familiar with several regional legal traditions. Appeals and enforcement remained matters for the relevant authorities, but the shared procedures reduced the number of disputes that had to become political arguments.`
+			`\tThe oldest surviving ledgers are celebrated not because every judgment was wise, but because predictable procedure made ordinary movement possible. Merchants and travelers could enter an unfamiliar system knowing that a disagreement would at least be recorded, translated, and heard through rules that other Coalition ports also recognized.`
+				decline
+
+
+mission "Coalition Rescue Compact Archive"
+	minor
+	source
+		government "Coalition"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`An emergency-services display lists obsolete distress codes beside the modern equivalents. The oldest examples vary widely in wording and format, reflecting local fleets that once expected most rescues to be coordinated close to home.`
+			`\tAs civilian traffic between Coalition regions increased, rescue organizations faced a practical problem: a damaged ship could be carrying unfamiliar crew, broadcasting an unfamiliar warning, or requesting equipment under terms a responding port did not immediately recognize. Repeated emergencies led to shared distress categories, medical summaries, towing conventions, and rules for transferring survivors between local authorities.`
+			`\tThe exhibit describes the resulting compact as deliberately procedural rather than heroic. It does not promise that every ship can be saved. It establishes who should answer, what information must be exchanged, how assistance is recorded, and how a rescue can continue across administrative boundaries without forcing a crew in distress to negotiate those boundaries themselves.`
+				decline
