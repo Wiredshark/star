@@ -6,7 +6,7 @@
 - `PRIMARY_DOMAIN`: characters / dynamic content
 - `SECONDARY_DOMAINS`: Gegno mining records, practical cross-faction institutions, persistent character memory
 - `RUN_TYPE`: FEATURE / CONTENT
-- `VERDICT`: PARTIAL pending repository save-load/build smoke completion
+- `VERDICT`: READY for A3 review/integration
 
 ## Repository authority
 
@@ -16,7 +16,8 @@
 - B1 parent/candidate SHA: `15de22312f5be5c3b20588806c540d75ccdb0143`
 - Isolated B2 branch: `agent/b2-gegno-claim-records-20260819-0223`
 - Production commit: `bf58189520813c4af86caf1fe02a80966f984bf6`
-- Code/data/validator head: `3a1cc2c6556d4352e193721cabd49eae3ccc7ea3`
+- Validator commit: `3a1cc2c6556d4352e193721cabd49eae3ccc7ea3`
+- CI-validated production/data/validator branch head: `af2895c446193ce9de399ea93e314bc24e259c58`
 - Draft PR: `#62`, targeting the B1 Gegno parent branch
 
 ## Concurrency / non-overlap
@@ -43,7 +44,7 @@ Named characters:
 Three missions plus one delayed state event:
 
 1. `B2 Gegno Claim Records: Offer`
-   - gated by `Gegno Asteroid Mining Prologue: done`
+   - gated by `Gegno Asteroid Mining Prologue: done`;
    - three accepted approaches plus refusal:
      - custody chain;
      - current assay plus preserved warnings;
@@ -80,17 +81,29 @@ Checks:
 
 ## Validation evidence
 
-Exact code/data/validator head `3a1cc2c6556d4352e193721cabd49eae3ccc7ea3`:
+Exact CI-validated head `af2895c446193ce9de399ea93e314bc24e259c58`:
 
-- GitHub Actions `Fork simulation and story validation` run `32223390312`: **SUCCESS**.
+### Fork simulation and story validation
+
+- GitHub Actions run `32223729035`: **SUCCESS**.
 - `Changed fork content style`: **SUCCESS**.
 - `Focused simulation and story contracts`: **SUCCESS**.
-  - Python focused validation code compiled.
-  - all focused story validators passed, including `validate_b2_gegno_claim_records.py`.
+  - focused Python validation code compiled;
+  - all focused story validators passed, including `validate_b2_gegno_claim_records.py`;
   - A1 simulation contract tests passed.
-- Base-to-head compare against B1 parent: exactly 2 commits ahead, 0 behind; only the production file and focused validator changed; 282 additions and no deletions.
 
-Repository-wide `Fork save-load integration smoke` run `32223390297` was still in progress when this handoff file was first written. Do not promote this handoff to READY until that run reaches a successful terminal conclusion, or equivalent authoritative build/save-load evidence is obtained.
+### Production build / save-load smoke
+
+- GitHub Actions `Fork save-load integration smoke` run `32223728941`: **SUCCESS**.
+- build and headless runtime dependencies installed successfully;
+- production executable configured successfully;
+- production Endless Sky executable built successfully;
+- stock integration smoke cases all passed:
+  - `Saving during conversation`;
+  - `Loading and Reloading`;
+  - `Loading and Saving`.
+
+The only change between the CI-validated head and the final handoff head is this durable handoff update; production content and validator code are unchanged after the green CI head.
 
 ## Private execution host
 
@@ -98,17 +111,15 @@ The exposed private execution host was inspected rather than assumed suitable. I
 
 ## Persistence / compatibility assumptions
 
-The slice uses stock mission/global conditions and the same delayed-event / persistent-choice pattern already validated by integrated B2 content. No serialization code changes are introduced. The terminal outcomes are mutually exclusive in the conversation graph and the aftermath reader is one-shot via `B2 Gegno Claim Records: aftermath seen`.
+The slice uses stock mission/global conditions and the same delayed-event / persistent-choice pattern already exercised by the repository's production save-load smoke. No serialization code changes are introduced. The terminal outcomes are mutually exclusive in the conversation graph and the aftermath reader is one-shot via `B2 Gegno Claim Records: aftermath seen`.
 
 ## A3 / B3 integration notes
 
 - Do not integrate this B2 branch before its B1 parent, because the character arc deliberately consumes the B1 claim-marker / ore-measure institutional context.
 - Preserve B1's key continuity rule: common practical records beneath rivalry are not proof of pre-`gegno: unified defense` political unity.
-- A3 should integrate only after repository-native save-load/build smoke is green for the code/data/validator head.
+- A3 may review/integrate this exact branch according to the normal integration protocol; B2 did not self-integrate.
 - B3 should watch for later Gegno content accidentally treating the transferable record or two-signature handoff as a treaty, universal law, or faction reconciliation.
 
-## Remaining acceptance gate
+## READY verdict
 
-1. Wait for GitHub Actions `Fork save-load integration smoke` run `32223390297` on `3a1cc2c6556d4352e193721cabd49eae3ccc7ea3`.
-2. If it succeeds, this handoff can be promoted to READY without changing production code.
-3. If it fails, inspect the failing job and repair only if the failure is attributable to this B2 slice.
+The production content, focused validator, changed-content style gate, focused story/A1 validation, production build, and stock save-load smoke all passed on the exact validated head. No known failing required gate remains for this B2 slice. The branch is READY for A3 review/integration, subject to normal dependency ordering behind its B1 parent.
