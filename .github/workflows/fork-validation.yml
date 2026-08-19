@@ -55,15 +55,16 @@ jobs:
       - name: Run A1 simulation contract tests
         run: python -m pytest -q tests/a1
 
-  content-style-advisory:
-    name: Fork content style advisory
+  changed-content-style:
+    name: Changed fork content style
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    continue-on-error: true
 
     steps:
-      - name: Check out repository
+      - name: Check out repository history
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -73,12 +74,8 @@ jobs:
       - name: Install style dependency
         run: python -m pip install --upgrade pip regex
 
-      - name: Check fork-authored A/B content style
-        shell: bash
-        run: |
-          python utils/check_content_style.py --no-correct --files \
-            data/human/a1*.txt \
-            data/human/a2*.txt \
-            data/human/b2*.txt \
-            data/hai/b2*.txt \
-            data/remnant/b2*.txt
+      - name: Check changed fork A/B content style
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python tools/story/check_changed_content_style.py --base "$BASE_SHA" --head "$HEAD_SHA"
