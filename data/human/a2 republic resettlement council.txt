@@ -1,0 +1,138 @@
+# A2 dynamic-narrative consumer for the A1 Republic displacement-pressure loop.
+#
+# A1 remains sole owner of `world: republic displacement pressure`,
+# `world: republic border pressure`, and `world: republic resettlement surge`.
+# This slice reads those states, records only A2-owned player policy memory,
+# and later reflects the choice after displacement pressure subsides.
+
+mission "A2 Republic Resettlement Council: Emergency Session"
+	minor
+	name `Republic Resettlement: Emergency Session`
+	description `Civil resettlement coordinator Lena Orr asks how Republic authorities should handle a wave of displaced families and temporary workers.`
+	source "Earth"
+	"offer precedence" 9
+	to offer
+		"world: republic displacement pressure" >= 2
+		not "A2 Republic Resettlement Council: briefing seen"
+	on offer
+		conversation
+			`A Republic civil-services coordinator intercepts you beside a bank of temporary housing assignments. "Captain <last>? Lena Orr. Border alerts have pushed families and contract workers inward faster than the housing network can settle them."`
+			branch surge
+				has "world: republic resettlement surge"
+			branch severe
+				"world: republic displacement pressure" >= 4
+			`Orr gestures toward a crowded allocation board. "The displacement flow is elevated, but we still have enough room to choose deliberately. I need an outside captain's view before the next placement session."`
+				goto policy
+			label severe
+			`The allocation board is almost entirely amber and red. Orr lowers her voice. "We are well past routine intake. Every choice now shifts pressure somewhere else: housing, schools, labor contracts, or transport."`
+				goto policy
+			label surge
+			`Orr points to a newly opened resettlement surge queue. "The Republic has started moving people out of temporary intake faster, but speed creates its own failures if placements do not hold."`
+			label policy
+			`She turns the board toward you. "If you had one rule for the next allocation cycle, what would it protect first?"`
+			choice
+				`\tKeep households together, even when that means slower placements and longer temporary stays.`
+					goto family
+				`\tProtect employment continuity so displaced workers keep contracts, income, and useful local ties.`
+					goto work
+				`\tDistribute placements across more Republic worlds instead of concentrating arrivals around Earth.`
+					goto distribute
+				`\tI am not taking responsibility for a Republic civilian-placement policy.`
+					goto refuse
+			label family
+			`Orr marks several split-household cases for review. "Family continuity first. It costs bed-days now, but it may prevent a temporary displacement from turning into a permanent fracture."`
+			action
+				"A2 Republic Resettlement Council: briefing seen" = 1
+				"A2 Republic Resettlement Council: priority family unity" = 1
+				"A2 Republic Resettlement Council: followup pending" = 1
+				decline
+			label work
+			`Orr highlights labor and contract records. "Employment continuity first. If people arrive with income and a role waiting for them, emergency housing has a better chance of staying temporary."`
+			action
+				"A2 Republic Resettlement Council: briefing seen" = 1
+				"A2 Republic Resettlement Council: priority work continuity" = 1
+				"A2 Republic Resettlement Council: followup pending" = 1
+				decline
+			label distribute
+			`Orr expands the map beyond Earth. "Distribute the load instead of pretending Earth has infinite capacity. More transport coordination, but fewer districts absorbing the full shock at once."`
+			action
+				"A2 Republic Resettlement Council: briefing seen" = 1
+				"A2 Republic Resettlement Council: priority distributed placement" = 1
+				"A2 Republic Resettlement Council: followup pending" = 1
+				decline
+			label refuse
+			`Orr closes the policy pane. "Fair. Advice is not neutral if somebody can cite it later as authorization." She records that you declined instead of leaving the field open to interpretation.`
+			action
+				"A2 Republic Resettlement Council: briefing seen" = 1
+				"A2 Republic Resettlement Council: refused" = 1
+				"A2 Republic Resettlement Council: followup pending" = 1
+				decline
+
+mission "A2 Republic Resettlement Council: After Action"
+	minor
+	name `Republic Resettlement: After the Pressure`
+	description `Lena Orr follows up after civilian displacement pressure returns to a low level.`
+	source "Earth"
+	"offer precedence" 9
+	to offer
+		has "A2 Republic Resettlement Council: followup pending"
+		"world: republic displacement pressure" < 2
+		not "A2 Republic Resettlement Council: followup seen"
+	on offer
+		conversation
+			branch family_border_high
+				has "A2 Republic Resettlement Council: priority family unity"
+				"world: republic border pressure" >= 4
+			branch family_border_low
+				has "A2 Republic Resettlement Council: priority family unity"
+				"world: republic border pressure" < 4
+			branch work_border_high
+				has "A2 Republic Resettlement Council: priority work continuity"
+				"world: republic border pressure" >= 4
+			branch work_border_low
+				has "A2 Republic Resettlement Council: priority work continuity"
+				"world: republic border pressure" < 4
+			branch distributed_border_high
+				has "A2 Republic Resettlement Council: priority distributed placement"
+				"world: republic border pressure" >= 4
+			branch distributed_border_low
+				has "A2 Republic Resettlement Council: priority distributed placement"
+				"world: republic border pressure" < 4
+			`Orr recognizes you beside a much shorter intake queue. "No policy question this time. I remember that you declined." She taps the archived session record. "Nobody converted your refusal into support after you left."`
+			action
+				"A2 Republic Resettlement Council: refusal respected" = 1
+				goto finish
+			label family_border_high
+			`Orr shows you a report on reunified households. "The displacement queue is down, but frontier pressure is still high. Keeping families together cost us speed, yet it also means fewer people are facing the next alert alone. We are keeping a family-integrity review in the emergency protocol."`
+			action
+				"A2 Republic Resettlement Council: Orr remembers family under pressure" = 1
+				goto finish
+			label family_border_low
+			`Orr looks less tired than before. "The displacement queue is down and border pressure has eased with it. Family-first placement was slower, but most of the households we kept intact have moved from temporary housing into stable arrangements."`
+			action
+				"A2 Republic Resettlement Council: Orr remembers family stabilized" = 1
+				goto finish
+			label work_border_high
+			`Orr brings up a labor-retention report. "The displacement queue is down even though border pressure remains high. Keeping workers tied to contracts gave many households income before the security picture improved. It also exposed which employers were relying on emergency housing to absorb their risk."`
+			action
+				"A2 Republic Resettlement Council: Orr remembers work under pressure" = 1
+				goto finish
+			label work_border_low
+			`Orr shows you a list of closed temporary placements. "With both displacement and border pressure lower, the employment-continuity cases settled fastest. People who kept a contract had something concrete to rebuild around."`
+			action
+				"A2 Republic Resettlement Council: Orr remembers work stabilized" = 1
+				goto finish
+			label distributed_border_high
+			`Orr expands a map of secondary Republic ports. "Frontier pressure is still high, but the displacement queue around Earth is not. Distributing placements kept one region from becoming the permanent shock absorber. The transport cost was real, and so was the resilience."`
+			action
+				"A2 Republic Resettlement Council: Orr remembers distribution under pressure" = 1
+				goto finish
+			label distributed_border_low
+			`Orr points to several new interworld placement links that remain active even after the emergency. "Both pressures are down. The distributed network cost more to coordinate, but now those secondary worlds can absorb a future surge without improvising from zero."`
+			action
+				"A2 Republic Resettlement Council: Orr remembers distribution stabilized" = 1
+			label finish
+			action
+				"A2 Republic Resettlement Council: followup pending" = 0
+				"A2 Republic Resettlement Council: followup seen" = 1
+				decline
