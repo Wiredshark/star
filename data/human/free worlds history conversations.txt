@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Free Worlds Council Charter Archive"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A public terminal near the concourse is displaying reproductions of early Free Worlds council records. The oldest entries are less like a constitution than minutes from long arguments: worlds with different industries, security problems, and local laws trying to decide which decisions required common rules and which should remain local.`
+			`\tThe exhibit emphasizes that the council's authority accumulated unevenly. Standard procedures for delegates, shared funding, emergency votes, and inter-world obligations appeared because the participating worlds repeatedly discovered that independence did not eliminate the need to coordinate.`
+			`\tA note at the end describes disagreement itself as part of the institution. The Free Worlds were not built by making every member alike, but by creating procedures that let worlds keep arguing without having to abandon cooperation each time they disagreed.`
+				decline
+
+
+mission "Free Worlds Mutual Defense Registry"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A wall display lists old civilian vessels that once registered for local defense duty. Many were freighters, tugs, couriers, or privately maintained patrol craft rather than purpose-built warships. The accompanying history explains that isolated worlds often relied on captains who knew local routes and could answer a distress call faster than any distant fleet.`
+			`\tOver time, ports standardized warning channels, rendezvous points, fuel reserves, repair priorities, and procedures for placing civilian ships under temporary militia coordination. The rules remained deliberately limited: a captain might accept a defensive obligation without surrendering permanent control of the ship or joining a centralized navy.`
+			`\tThe registry ends with a modern note observing that patrol mobilizations still depend on the same old compromise. Collective defense works only if enough independent crews accept that, for a few dangerous hours, somebody else's emergency is also theirs.`
+				decline
+
+
+mission "Free Worlds Relief Cooperative Archive"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Beside the commodity market is an exhibit of emergency shipping manifests from earlier settlement crises. The cargoes are ordinary: food, medicine, reactor parts, construction equipment, replacement pumps. What makes the records notable is how often the supplying world had no legal obligation to send them.`
+			`\tLocal relief committees gradually developed shared stock lists, trusted freight contacts, standardized requests, and agreements about who would pay carriers when a damaged settlement could not. Some arrangements lasted only until the immediate crisis passed; others became permanent cooperatives linking ports that otherwise shared little politics.`
+			`\tThe curators describe this as a second kind of infrastructure alongside jump routes and landing pads: a habit of moving scarce goods toward whichever member world is temporarily least able to obtain them on its own.`
+				decline
+
+
+mission "Free Worlds Reconstruction Ledger"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A local archive has assembled a ledger of reconstruction projects financed jointly by several Free Worlds communities. The entries range from rebuilt docks and power systems to navigation beacons, clinics, warehouses, and replacement machinery. Most were funded through awkward combinations of local taxes, private subscriptions, donated cargo space, and loans guaranteed by neighboring worlds.`
+			`\tThe explanatory text notes that these projects repeatedly forced the same political question: how much should one world spend rebuilding infrastructure whose benefits would eventually spread across several systems? The answers changed from project to project, but the accounting practices became more formal as each emergency supplied precedents for the next.`
+			`\tLooking through the ledger, the Free Worlds' independence appears less like isolation than a constant negotiation over which burdens can remain local and which become cheaper, safer, or simply possible when several worlds agree to carry them together.`
+				decline
