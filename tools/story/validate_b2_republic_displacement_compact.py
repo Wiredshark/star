@@ -46,7 +46,8 @@ def test_persistent_routes_and_refusal():
     require(f'"{B2_PREFIX} declined" = 1')
     offer = mission_blocks()[MISSIONS[0]]
     assert offer.count("\n\t\t\tchoice\n") == 1
-    assert offer.count("\n\t\t\t\t`\\t") == 4
+    for target in ("protection", "ledger", "compact", "decline"):
+        assert offer.count(f"goto {target}") == 1, f"Offer route {target} is missing or duplicated"
 
 
 def test_review_and_terminal_settlements():
@@ -60,6 +61,8 @@ def test_review_and_terminal_settlements():
     for settlement in settlements:
         require(settlement)
     assert sum(TEXT.count(x) for x in settlements) == 2
+    assert review.count("goto compactsettlement") == 3
+    assert review.count("goto reviewsettlement") == 3
 
 
 def test_later_reader_consumes_both_outcomes():
