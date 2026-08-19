@@ -1,0 +1,58 @@
+# A1 world simulation: Southern Rim transit congestion.
+#
+# This models border-traffic pressure as a persistent condition that reacts to
+# qualifying entries into Free Worlds space, remembers recent crossings, and
+# recovers over time. Later A2/A3 systems can consume the numeric condition
+# without owning its simulation truth.
+
+
+event "ES A1: Southern Rim Transit Congestion Decay"
+	"world: southern rim transit congestion" -= 1
+	"world: southern rim transit congestion" >?= 0
+	clear "world: southern rim congestion notice seen"
+
+
+mission "ES A1: Southern Rim Transit Congestion"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+		neighbor government "Republic" "Neutral" "Independent"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		or
+			has "previous system government: Republic"
+			has "previous system government: Neutral"
+			has "previous system government: Independent"
+		"world: southern rim transit congestion" < 6
+	on offer
+		"world: southern rim transit congestion" += 1
+		"world: southern rim transit congestion" <?= 6
+		event "ES A1: Southern Rim Transit Congestion Decay" 3 3
+		fail
+
+
+# Observability reader only. It never mutates congestion except for the
+# acknowledgement flag, so the numeric condition remains the sole simulation
+# truth for later systems.
+mission "ES A1: Southern Rim Transit Congestion Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+		neighbor government "Republic" "Neutral" "Independent"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: southern rim transit congestion" >= 4
+		not "world: southern rim congestion notice seen"
+	on offer
+		message
+			text "Free Worlds traffic-control channels report heavy inbound congestion along the Southern Rim. Civilian routing delays are expected until recent border traffic clears."
+		set "world: southern rim congestion notice seen"
+		fail
