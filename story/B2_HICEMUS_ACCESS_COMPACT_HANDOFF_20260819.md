@@ -3,11 +3,13 @@
 ## Stage / verdict
 
 - Stage: B2 STORY CHARACTERS + DYNAMIC CONTENT
-- Verdict: PARTIAL pending exact-head repository-native validation
+- Verdict: PARTIAL — simulation/story/style validation is green on the exact repaired production/validator head; save-load integration smoke is still in progress
 - Required dependency: B1 Hicemus contact institutions at `3295dbf520b011510ac9fd0ce7db4261efde8629`
 - Isolated branch: `agent/b2-hicemus-access-compact-20260819-1627`
 - Production commit: `211cf8e15e9a50b2663191d2c7159b5466b7db4f`
 - Focused-validator commit: `e4a9ae3a61bbf148fdb06f6bc8e8a9bb493da3cd`
+- Privacy-continuity repair commit: `9bd89b7a9c9ebccc14a474357443fd60bb7fab35`
+- Exact production/data/validator head validated by simulation/story workflow: `9bd89b7a9c9ebccc14a474357443fd60bb7fab35`
 
 ## Scope
 
@@ -15,7 +17,7 @@ Adds a three-mission persistent Hicemus character arc consuming B1's `Hicemus Hi
 
 The player privately calls two recurring Incipias the **Dispatcher** and **Maintainer**. These are explicitly player-facing shorthands, not canonical names, titles, offices, or evidence about the political meaning of the Hicemus/Conlatio division.
 
-The initial dispute concerns a damaged transfer lock that forces freight, residential movement, maintenance, and emergency access to compete for station corridors. The player may choose:
+The initial dispute concerns a damaged transfer lock that forces freight, residential movement/privacy, maintenance, and emergency access to compete for station corridors. The player may choose:
 
 1. emergency-route priority;
 2. capacity-limited freight with hard emergency preemption;
@@ -57,15 +59,27 @@ Preserve these boundaries:
 - `tools/story/validate_b2_hicemus_access_compact.py`
 - this handoff file
 
-## Validation implemented
+## Validation evidence
 
-Focused validator:
+Focused validator command implemented:
 
 ```text
 python3 tools/story/validate_b2_hicemus_access_compact.py "data/incipias/b2 hicemus access compact.txt"
 ```
 
-It checks:
+The first exact-head `Fork simulation and story validation` attempt on `4fb2012d53cc4f7c41b0faa6b1707171a8121ed0` failed only because the focused validator required the B1 station-access continuity concept `privacy` while the production scene expressed the residential constraint without that literal term. The production text was repaired to explicitly preserve residential privacy in commit `9bd89b7a9c9ebccc14a474357443fd60bb7fab35`.
+
+On exact repaired head `9bd89b7a9c9ebccc14a474357443fd60bb7fab35`:
+
+- `Fork simulation and story validation` run `32298999592` / run #124: **SUCCESS**.
+- `Changed fork content style`: **SUCCESS**.
+- `Focused simulation and story contracts`: **SUCCESS**.
+- all focused story validators, including `validate_b2_hicemus_access_compact.py`: **SUCCESS**.
+- A1 simulation/state-ownership contract tests: **SUCCESS**.
+
+Exact repaired-head `Fork save-load integration smoke` run `32298999544` / run #113 is still **in progress**. No production build/save-load PASS is claimed until that run reaches terminal green.
+
+The focused validator checks:
 
 - exact three-mission graph;
 - recurring Dispatcher/Maintainer private-shorthand continuity;
@@ -76,20 +90,15 @@ It checks:
 - B2-only persistent writes;
 - no material/world/reputation state mutation;
 - local `goto` / `label` integrity;
-- station-access continuity and exception-accountability invariants;
+- station-access continuity including cargo, emergency access, capacity, temporary routing, and privacy;
+- exception-accountability invariants;
 - explicit preservation of uncertainty around the Hicemus/Conlatio political division.
 
-## Required exact-head validation before READY
+## Remaining validation before READY
 
-Confirm on the final B2 head:
-
-1. `Fork simulation and story validation` is terminal SUCCESS;
-2. changed-content style is terminal SUCCESS;
-3. focused story validation discovers and passes `validate_b2_hicemus_access_compact.py`;
-4. A1 simulation/state-ownership contracts remain green;
-5. `Fork save-load integration smoke` is terminal SUCCESS, including production configure/build and stock persistence smoke.
-
-Actual-game acceptance should additionally exercise all three substantive routes, refusal, Review routing, both terminal settlements, one-shot aftermath behavior, and save/reload between stages.
+1. exact repaired-head `Fork save-load integration smoke` must reach terminal SUCCESS, including production configure/build and stock persistence smoke;
+2. the B1 dependency must itself reach an acceptable terminal validation state before integration;
+3. actual-game acceptance should exercise all three substantive routes, refusal, Review routing, both terminal settlements, one-shot aftermath behavior, and save/reload between stages.
 
 No PASS should be claimed for any gate that has not actually completed.
 
