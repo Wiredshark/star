@@ -1,0 +1,136 @@
+# A2 dynamic-narrative consumer for the A1 Free Worlds relief-demand loop.
+#
+# A1 remains sole owner of `world: free worlds relief demand`.
+# This slice reads that numeric world state, records only A2-owned player
+# priorities, and later reflects the choice after the relief surge subsides.
+
+mission "A2 Free Worlds Relief Coordination: Surge Briefing"
+	minor
+	name `Free Worlds Relief: Allocation Briefing`
+	description `Relief coordinator Imani Vale asks how emergency capacity should be allocated during a surge in arrivals from pirate-held space.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		"world: free worlds relief demand" >= 3
+		not "A2 Free Worlds Relief Coordination: briefing seen"
+	on offer
+		conversation
+			`A woman wearing a Free Worlds relief-service vest steps away from a crowded arrivals board. "Captain <last>? Imani Vale. We have too many emergency arrivals from pirate-held space and not enough slack left in the local aid network."`
+			branch severe
+				"world: free worlds relief demand" >= 5
+			`She points to three columns on her slate. "The demand is elevated but still recoverable if we stop treating every case as identical. I need one outside captain's judgment before the next allocation call."`
+				goto triage
+			label severe
+			`The arrivals board flashes red across nearly every shelter and resupply category. Vale exhales through her nose. "We are at the edge of what the local network can absorb. If we choose badly now, the backlog will start creating secondary emergencies."`
+			label triage
+			`She turns the slate toward you. "If you had one vote, what should the relief network protect first while the surge is this high?"`
+			choice
+				`\tProtect medical stabilization and life-support cases first, even if low-risk arrivals wait longer.`
+					goto medical
+				`\tMaximize shelter and resupply throughput so the queue itself stops creating new emergencies.`
+					goto throughput
+				`\tRedistribute arrivals across more ports and routes, even if that increases travel time and coordination cost.`
+					goto distribution
+				`\tI am not taking responsibility for a Free Worlds relief-allocation decision.`
+					goto refuse
+			label medical
+			`Vale marks the medical queue. "Severity before speed. That will leave some captains angry about waiting, but it gives the crews with failing life support a rule they can understand."`
+			action
+				"A2 Free Worlds Relief Coordination: briefing seen" = 1
+				"A2 Free Worlds Relief Coordination: priority medical" = 1
+				"A2 Free Worlds Relief Coordination: followup pending" = 1
+				decline
+			label throughput
+			`Vale circles the shelter and resupply columns. "Reduce the queue faster than new cases arrive. If we can prevent safe ships from becoming unsafe while they wait, the network buys itself capacity."`
+			action
+				"A2 Free Worlds Relief Coordination: briefing seen" = 1
+				"A2 Free Worlds Relief Coordination: priority throughput" = 1
+				"A2 Free Worlds Relief Coordination: followup pending" = 1
+				decline
+			label distribution
+			`Vale highlights a chain of secondary ports. "Spread the load instead of pretending the nearest hub has infinite capacity. More coordination, more transit, but fewer single points of failure."`
+			action
+				"A2 Free Worlds Relief Coordination: briefing seen" = 1
+				"A2 Free Worlds Relief Coordination: priority distribution" = 1
+				"A2 Free Worlds Relief Coordination: followup pending" = 1
+				decline
+			label refuse
+			`Vale locks the slate. "Fair. Advice stops being independent if somebody can later cite it as authorization." She records that you declined instead of leaving the field blank.`
+			action
+				"A2 Free Worlds Relief Coordination: briefing seen" = 1
+				"A2 Free Worlds Relief Coordination: refused" = 1
+				"A2 Free Worlds Relief Coordination: followup pending" = 1
+				decline
+
+mission "A2 Free Worlds Relief Coordination: After Action"
+	minor
+	name `Free Worlds Relief: After the Surge`
+	description `Imani Vale follows up after the emergency-arrival backlog returns below surge levels.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Free Worlds Relief Coordination: followup pending"
+		"world: free worlds relief demand" < 3
+		not "A2 Free Worlds Relief Coordination: followup seen"
+	on offer
+		conversation
+			branch medical_clear
+				has "A2 Free Worlds Relief Coordination: priority medical"
+				"world: free worlds relief demand" == 0
+			branch medical_residual
+				has "A2 Free Worlds Relief Coordination: priority medical"
+				"world: free worlds relief demand" > 0
+			branch throughput_clear
+				has "A2 Free Worlds Relief Coordination: priority throughput"
+				"world: free worlds relief demand" == 0
+			branch throughput_residual
+				has "A2 Free Worlds Relief Coordination: priority throughput"
+				"world: free worlds relief demand" > 0
+			branch distribution_clear
+				has "A2 Free Worlds Relief Coordination: priority distribution"
+				"world: free worlds relief demand" == 0
+			branch distribution_residual
+				has "A2 Free Worlds Relief Coordination: priority distribution"
+				"world: free worlds relief demand" > 0
+			`Vale recognizes you near the arrivals board. "No allocation question this time. I remember that you declined." She taps the closed review. "Nobody turned your refusal into an endorsement after you left."`
+			action
+				"A2 Free Worlds Relief Coordination: refusal respected" = 1
+				goto finish
+			label medical_clear
+			`Vale looks rested for the first time. "The emergency queue is clear. The medical-first rule slowed ordinary processing, but it prevented the worst cases from aging into disasters. We are keeping that escalation rule."`
+			action
+				"A2 Free Worlds Relief Coordination: Vale remembers medical clear" = 1
+				goto finish
+			label medical_residual
+			`Vale glances at a short remaining queue. "Demand is back below surge level, though not gone. Medical-first kept the dangerous cases from accumulating, but it also showed us exactly how much routine capacity we were missing."`
+			action
+				"A2 Free Worlds Relief Coordination: Vale remembers medical residual" = 1
+				goto finish
+			label throughput_clear
+			`Vale points to an empty overflow column. "The queue finally collapsed instead of reproducing itself. Throughput-first was ugly for a few individual schedules, but once safe ships stopped becoming emergencies in line, the whole network recovered faster."`
+			action
+				"A2 Free Worlds Relief Coordination: Vale remembers throughput clear" = 1
+				goto finish
+			label throughput_residual
+			`Vale shows you a few unresolved arrivals still being worked. "The queue is manageable now. Throughput-first bought us enough breathing room to stop secondary failures, but the remaining cases prove that speed alone is not spare capacity."`
+			action
+				"A2 Free Worlds Relief Coordination: Vale remembers throughput residual" = 1
+				goto finish
+			label distribution_clear
+			`Vale brings up a map of secondary ports. "The backlog is clear, and several ports that used to be passive receivers now have standing relief links. Distribution cost us fuel and coordination, but it left the network less brittle than before."`
+			action
+				"A2 Free Worlds Relief Coordination: Vale remembers distribution clear" = 1
+				goto finish
+			label distribution_residual
+			`Vale highlights two secondary ports still handling arrivals. "Demand is below surge level, but not zero. The distributed routing kept any one hub from failing outright, and now we have a better picture of where the network is genuinely thin."`
+			action
+				"A2 Free Worlds Relief Coordination: Vale remembers distribution residual" = 1
+			label finish
+			action
+				"A2 Free Worlds Relief Coordination: followup pending" = 0
+				"A2 Free Worlds Relief Coordination: followup seen" = 1
+				decline
