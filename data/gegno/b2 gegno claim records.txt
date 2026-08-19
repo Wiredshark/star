@@ -1,0 +1,152 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Gegno Claim Records character slice.
+#
+# This consumes the B1 Gegno Claim Marker Archive / Ore Measure Ledger history
+# and turns it into a present-day character dispute on Tschyss. The slice keeps
+# the established continuity boundary intact: practical shared records can exist
+# beneath Vi/Scin rivalry without implying political unification or friendship.
+# All writable state is B2-prefixed and this content does not alter material,
+# reputation, campaign, faction-attitude, mining-job, or upstream story state.
+
+
+event "B2 Gegno Claim Records: Review Ready"
+	"B2 Gegno Claim Records: review ready" = 1
+
+
+mission "B2 Gegno Claim Records: Offer"
+	minor
+	name `Marks That Outlive the Miners`
+	description `Two Gegno workers on Tschyss disagree about what a claim record should preserve when ore changes hands faster than trust does.`
+	source "Tschyss"
+	"offer precedence" 8
+	to offer
+		has "Gegno Asteroid Mining Prologue: done"
+		not "B2 Gegno Claim Records: introduced"
+		not "B2 Gegno Claim Records: declined"
+	on offer
+		conversation
+			`Near the commodity scales, a Gegno survey recorder who introduces themself as Tchei Ess is arguing with a hauler named Duei Ciech over a battered claim plate. Your translator renders the disagreement slowly: the plate is old, the deposit has been worked more than once, and the most recent cargo assay no longer matches the grade written by the first crew.`
+			`Tchei taps the claim plate. "The record should say who measured the site, what was removed, and when responsibility changed. If the grade falls, the next crew should know whether the deposit changed or the first record was wrong."`
+			`Duei answers, "A hauler cannot carry every old argument into a workshop. We need the current mass and purity first. History matters only if it changes whether the load can be trusted."`
+			choice
+				`\tUse a custody chain: every handoff records who measured the site, what was removed, and which measurement replaced the previous one.`
+					goto custody
+				`\tUse the current assay as the working truth, but keep disputed older measurements attached as warnings instead of active claims.`
+					goto assay
+				`\tPair both records: one line for physical assay, one for claim history, with neither allowed to silently overwrite the other.`
+					goto paired
+				`\tDecline to advise two rival crews on how to remember one another's work.`
+					goto decline
+			label custody
+			`You suggest treating every transfer as a custody handoff. The current assay may change, but the old measurement remains visible beside the name of the crew that made it and the quantity already removed. Tchei gives an approving hiss. Duei considers the plate for a moment, then says that a workshop could accept the record if the latest entry is always clearly marked.`
+			action
+				"B2 Gegno Claim Records: introduced" = 1
+				"B2 Gegno Claim Records: route custody chain" = 1
+				"B2 Gegno Claim Records: tchei trusts player" = 1
+				event "B2 Gegno Claim Records: Review Ready" 5 7
+				accept
+			label assay
+			`You side with Duei on the practical question: the workshop needs the current assay first. But you recommend preserving any disputed older measurement as a warning, not deleting it. Duei says that would let haulers move cargo without pretending the old claim never existed. Tchei agrees only after insisting that every replacement measurement name the crew responsible for it.`
+			action
+				"B2 Gegno Claim Records: introduced" = 1
+				"B2 Gegno Claim Records: route current assay" = 1
+				"B2 Gegno Claim Records: duei trusts player" = 1
+				event "B2 Gegno Claim Records: Review Ready" 5 7
+				accept
+			label paired
+			`You propose two linked records. The first carries the current mass, purity, and contamination notes used for trade. The second carries the claim history: who surveyed, who extracted, and which measurements were disputed. Tchei likes that neither record can erase the other. Duei likes that a hauler can read the working assay without reconstructing a territorial argument first.`
+			action
+				"B2 Gegno Claim Records: introduced" = 1
+				"B2 Gegno Claim Records: route paired ledger" = 1
+				"B2 Gegno Claim Records: tchei trusts player" = 1
+				"B2 Gegno Claim Records: duei trusts player" = 1
+				event "B2 Gegno Claim Records: Review Ready" 5 7
+				accept
+			label decline
+			`You tell them that a foreign captain should not decide which Gegno record deserves authority. Tchei takes the claim plate back. Duei shrugs and returns to the scales. The disagreement continues without you.`
+			action
+				"B2 Gegno Claim Records: declined" = 1
+				decline
+
+
+mission "B2 Gegno Claim Records: Review"
+	minor
+	name `The Second Mark`
+	description `Tchei Ess and Duei Ciech return after trying the record rule on several real mining handoffs.`
+	source "Tschyss"
+	"offer precedence" 8
+	to offer
+		has "B2 Gegno Claim Records: introduced"
+		has "B2 Gegno Claim Records: review ready"
+		not "B2 Gegno Claim Records: reviewed"
+	on offer
+		conversation
+			branch custody
+				has "B2 Gegno Claim Records: route custody chain"
+			branch assay
+				has "B2 Gegno Claim Records: route current assay"
+			`Tchei and Duei have turned your paired-ledger suggestion into a thick sample register. The physical assay and the claim history sit side by side. Their problem is no longer what to record, but what should happen when a crew hands the record to someone from the rival faction.`
+				goto settle
+			label custody
+			`Tchei shows you three successive entries on the same claim. The custody chain worked, but one receiving crew treated the oldest disputed measurement as proof that the newest crew had falsified its assay. Duei says the history became ammunition because the record never distinguished "preserved fact" from "still-active claim."`
+				goto settle
+			label assay
+			`Duei shows you a set of cargo tickets using the current-assay rule. Trade moved quickly, but one crew discarded an old contamination warning because it was no longer the active measurement. Tchei says the warning had stopped being commercially important and become physically important instead.`
+			label settle
+			choice
+				`\tAdopt a transferable claim record: every entry is tagged as current measurement, superseded measurement, hazard warning, or unresolved claim before it can move between crews.`
+					goto transferable
+				`\tRequire a two-signature handoff: the departing recorder certifies what the record means, and the receiving crew certifies what it accepts without endorsing old ownership claims.`
+					goto signatures
+			label transferable
+			`You recommend explicit status tags. A superseded measurement remains part of the history without pretending to be current. A hazard warning survives even when its commercial relevance changes. An unresolved ownership claim remains visible without forcing the receiving crew to accept it. Tchei says the categories preserve memory. Duei says they finally make the record portable.`
+			action
+				"B2 Gegno Claim Records: reviewed" = 1
+				"B2 Gegno Claim Records: settlement transferable record" = 1
+				"B2 Gegno Claim Records: tchei trusts player" = 1
+				"B2 Gegno Claim Records: duei trusts player" = 1
+				accept
+			label signatures
+			`You recommend a handoff signed from both sides. The departing recorder certifies which entries are current, historical, hazardous, or disputed. The receiving crew certifies only that it received those meanings intact. Duei says that prevents a signature from becoming a political concession. Tchei says it also prevents a new crew from claiming that an inconvenient warning was never passed along.`
+			action
+				"B2 Gegno Claim Records: reviewed" = 1
+				"B2 Gegno Claim Records: settlement two-signature handoff" = 1
+				"B2 Gegno Claim Records: duei trusts player" = 1
+				accept
+
+
+mission "B2 Gegno Claim Records: Tchei Remembers"
+	minor
+	name `Tchei Remembers`
+	description `Tchei Ess remembers the rule that let Gegno crews preserve useful facts without pretending their rivalry had disappeared.`
+	source "Tschyss"
+	"offer precedence" 8
+	to offer
+		not "B2 Gegno Claim Records: aftermath seen"
+		or
+			has "B2 Gegno Claim Records: settlement transferable record"
+			has "B2 Gegno Claim Records: settlement two-signature handoff"
+	on offer
+		conversation
+			branch signatures
+				has "B2 Gegno Claim Records: settlement two-signature handoff"
+			`Tchei Ess recognizes you beside a rack of newer claim plates. "The status tags survived. Current measurement, old measurement, hazard, unresolved claim. Vi and Scin crews still argue about the last category. They argue less about whether a warning was present, or which assay was actually used." Tchei seems satisfied with that narrower kind of agreement.`
+				goto finish
+			label signatures
+			`Tchei Ess recognizes you while two Gegno crews exchange a claim packet at the edge of the mining offices. "They signed only for the handoff, not for each other's ownership claims. That mattered. The record crossed the dispute without asking the dispute to end." Duei, working at a nearby scale, raises one hand in acknowledgment.`
+			label finish
+			action
+				"B2 Gegno Claim Records: aftermath seen" = 1
+				accept
