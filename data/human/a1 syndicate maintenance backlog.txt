@@ -3,6 +3,10 @@ event "ES A1: Syndicate Maintenance Backlog Recovery"
 	"world: syndicate maintenance backlog" -= 1
 	"world: syndicate maintenance backlog" >?= 0
 
+event "ES A1: Syndicate Parts Scarcity Recovery"
+	"world: syndicate parts scarcity" -= 1
+	"world: syndicate parts scarcity" >?= 0
+
 event "ES A1: Syndicate Maintenance Surge Ends"
 	clear "world: syndicate maintenance surge"
 	clear "world: syndicate maintenance surge notice seen"
@@ -39,8 +43,32 @@ mission "ES A1: Syndicate Maintenance Mobilization"
 		set "world: syndicate maintenance surge"
 		"world: syndicate maintenance backlog" -= 3
 		"world: syndicate maintenance backlog" >?= 0
+		"world: syndicate parts scarcity" += 2
+		"world: syndicate parts scarcity" <?= 6
+		event "ES A1: Syndicate Parts Scarcity Recovery" 4 4
+		event "ES A1: Syndicate Parts Scarcity Recovery" 8 8
 		event "ES A1: Syndicate Maintenance Surge Ends" 6 6
 		fail
+	destination "Earth"
+
+# Maintenance mobilizations consume replacement stock. Independent local
+# deliveries relieve one unit of scarcity at a time, creating a second-order
+# feedback loop instead of allowing emergency repairs to erase their own cost.
+mission "ES A1: Syndicate Parts Relief"
+	assisting
+	invisible
+	repeat
+	minor
+	to offer
+		"world: syndicate parts scarcity" >= 1
+	source
+		government "Syndicate"
+		not category "Fighter" "Drone"
+		not attributes "automaton"
+	on offer
+		"world: syndicate parts scarcity" -= 1
+		"world: syndicate parts scarcity" >?= 0
+		decline
 	destination "Earth"
 
 mission "ES A1: Syndicate Maintenance Surge Notice"
