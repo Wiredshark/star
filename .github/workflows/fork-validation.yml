@@ -42,7 +42,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip
 
       - name: Install validation dependencies
         run: python -m pip install --upgrade pip pytest regex
@@ -70,7 +69,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip
 
       - name: Install style dependency
         run: python -m pip install --upgrade pip regex
