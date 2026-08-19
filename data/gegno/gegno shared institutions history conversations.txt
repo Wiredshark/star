@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Gegno Claim Marker Archive"
+	minor
+	source "Tschyss"
+	"offer precedence" 5
+	to offer
+		has "Gegno Asteroid Mining Prologue: done"
+		random < 1
+	on offer
+		conversation
+			`A rough stone-lined display near the mining offices holds old survey markers recovered from exhausted claims. Most are simple objects: numbered plates, scratched route diagrams, and heavy stakes meant to remain visible after dust storms or years without maintenance. A translated note explains that miners needed durable ways to record who had measured a site, what had been removed, and which approach paths were considered safe.`
+			`\tThe archive does not pretend that the markers prevented conflict. Gegno Vi and Scin crews often disputed boundaries, access, and ownership, especially when a useful deposit lay close to territory claimed by the other side. What survived those disputes was the habit of leaving records precise enough that the next crew could understand what had already been done.`
+			`\tAccording to the final placard, the practice matters most where authority is uncertain. A claim marker cannot make rivals agree, but it can preserve enough shared facts that a disagreement begins with a map instead of a guess.`
+				decline
+
+
+mission "Gegno Ore Measure Ledger"
+	minor
+	source "Tschyss"
+	"offer precedence" 5
+	to offer
+		has "Gegno Asteroid Mining Prologue: done"
+		random < 1
+	on offer
+		conversation
+			`A thick ledger beside the commodity scales compares older Gegno descriptions of ore with the measurements now used by local miners. The earliest pages rely on appearance, tool wear, and how a sample behaved in a furnace. Later entries add standardized mass, purity, and contamination notes so that cargoes gathered by different crews could be priced without reopening every container.`
+			`\tA translator's annotation observes that the useful part of the system spread because miners, haulers, and workshops all needed the same answer to a practical question: how much usable material is actually in this load? Rival crews could disagree about politics or territory and still lose money if their measures were incompatible.`
+			`\tThe most recent pages are less a law than a collection of conventions. Their authority comes from repetition. A workshop that rejects the common measures must inspect everything itself; one that accepts them can trade, repair, and resupply much faster.`
+				decline
+
+
+mission "Gegno Distress Signal Archive"
+	minor
+	source "Tschyss"
+	"offer precedence" 5
+	to offer
+		has "Gegno Asteroid Mining Prologue: done"
+		random < 1
+	on offer
+		conversation
+			`A compact communications exhibit preserves several generations of short Gegno emergency signals. The oldest are little more than repeated tones identifying a damaged vessel or dangerous approach. Later examples distinguish collision risk, failed engines, medical emergencies, mining accidents, and requests for towing or spare equipment.`
+			`\tThe accompanying history is careful not to describe these signals as a treaty between the Gegno Vi and Scin. Instead, it says that miners and travelers kept rediscovering the same problem: vacuum, broken machinery, and unstable rock do not care which faction a crew belongs to. Even hostile traffic benefits from knowing whether an unfamiliar transmission means surrender, warning, or imminent disaster.`
+			`\tSome recordings were apparently ignored, and others ended in renewed fighting once the immediate danger passed. The archive treats that inconsistency as part of the tradition. A shared distress vocabulary creates the possibility of restraint without requiring either side to promise friendship.`
+				decline
+
+
+mission "Gegno Reused Works Register"
+	minor
+	source "Tschyss"
+	"offer precedence" 5
+	to offer
+		has "Gegno Asteroid Mining Prologue: done"
+		random < 1
+	on offer
+		conversation
+			`A construction register lists landing pads, storage pits, power conduits, and partially finished shelters that have been surveyed more than once by different Gegno crews. Several entries show one set of builders beginning a project and another later repairing, extending, or converting what was left behind.`
+			`\tA translated commentary explains the practical reason for keeping such records. In contested systems, control can change faster than heavy infrastructure can be rebuilt. Surveying an abandoned work site lets newcomers decide which foundations are sound, which utilities can be reused, and which structures may conceal damage or traps.`
+			`\tThe register makes no claim that reuse is peaceful. Some entries are plainly the aftermath of forced occupation. But the repeated inventories reveal a durable institution beneath the rivalry: whoever controls a site still needs to understand the material history of the people who worked there before them.`
+				decline
