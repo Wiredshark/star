@@ -1,0 +1,80 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+
+mission "Republic Evacuation Manifest Archive"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A temporary display beside the arrivals concourse holds stacks of copied passenger manifests. The oldest sheets are crowded with handwritten corrections: families split between ships, mechanics traveling with tool chests instead of luggage, children added in the margins, and destination fields changed after ports reported that their emergency shelters were full.`
+			`\tA curator's note explains that large evacuations repeatedly forced Republic worlds to improvise common manifest formats. Without them, receiving ports could not tell who had arrived, who was still missing, which families had been separated, or which passengers carried medical or technical skills that could help the host settlement absorb the influx.`
+			`\tOver time the improvised forms became standing emergency standards shared by port authorities, carriers, hospitals, and local governments. The display avoids claiming that the system ever worked perfectly. Several manifests are preserved precisely because their omissions led to months of searching after the immediate crisis had ended.`
+				decline
+
+
+
+mission "Republic Temporary Housing Register"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A municipal kiosk near the terminal exit displays an old emergency housing register. Rows of names are paired with spare rooms, dormitory bunks, converted warehouses, school halls, and prefabricated shelters. Some entries are marked with dates showing that arrangements meant to last a few days continued for months.`
+			`\tThe accompanying history describes how host worlds learned that transport was only the first part of evacuation. Large arrivals strained water, clinics, schools, transit, food distribution, and local rents long after damaged ships had been cleared from the routes.`
+			`\tRepeated crises produced agreements for sharing temporary housing costs and moving supplies between neighboring systems. The agreements were politically unpopular whenever they were activated, but the register notes that worlds which had once complained about supporting evacuees often appeared later in the same ledgers as places requesting help.`
+				decline
+
+
+
+mission "Republic Reciprocity Certificate Archive"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A glass case contains old professional certificates stamped by half a dozen different planetary authorities. Medical licenses, teaching credentials, engineering approvals, and apprenticeship records are displayed beside emergency notices authorizing their holders to work temporarily outside the worlds that issued them.`
+			`\tA caption explains that displaced populations often included people whose skills were urgently needed but whose qualifications were not recognized at their destination. During several prolonged emergencies, neighboring governments began accepting one another's records under temporary reciprocity rules rather than forcing evacuees to repeat years of certification.`
+			`\tMany of those temporary rules later became ordinary administrative agreements. The exhibit calls this one of the quieter consequences of repeated displacement: institutions designed to help people resume useful work during emergencies gradually made it easier for everyone else to move between Republic worlds as well.`
+				decline
+
+
+
+mission "Republic Return and Resettlement Ledger"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`An archive terminal offers access to anonymized copies of old return and resettlement ledgers. The entries are more complicated than a simple list of people going home. Some families returned as soon as transport resumed; others stayed where they had found work, moved again to join relatives, or accepted resettlement grants on worlds that needed labor.`
+			`\tThe archivist's commentary says early relief policy often treated displacement as finished once a route reopened. Administrators eventually learned to track a longer recovery: damaged homes, closed employers, lost records, school enrollment, family reunification, and whether return transport actually existed when people were ready to use it.`
+			`\tThat history is why modern resettlement programs distinguish between ending an immediate emergency and reducing the backlog it leaves behind. A route can be safe again while thousands of individual lives remain unsettled, and the ledgers are a reminder that recovery has always taken longer than the crisis that made the headlines.`
+				decline
