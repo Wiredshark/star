@@ -1,0 +1,36 @@
+# A1 world simulation: Republic displacement transit load.
+#
+# Cross-system feedback between Republic civilian displacement pressure and the
+# authoritative Southern Rim transit-congestion state. When displacement is
+# acute, a qualifying Republic-to-Free-Worlds crossing consumes one unit of
+# routing capacity. A short latch prevents repeated crossings from turning a
+# single crisis into runaway congestion; recovery reuses the existing transit
+# decay event so there remains only one congestion truth for later A2/A3 use.
+
+
+event "ES A1: Republic Displacement Routing Load Ends"
+	clear "world: republic displacement routing load"
+
+
+mission "ES A1: Republic Displacement Transit Load"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+		neighbor government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "previous system government: Republic"
+		"world: republic displacement pressure" >= 4
+		not "world: republic displacement routing load"
+		"world: southern rim transit congestion" < 6
+	on offer
+		set "world: republic displacement routing load"
+		"world: southern rim transit congestion" += 1
+		"world: southern rim transit congestion" <?= 6
+		event "ES A1: Southern Rim Transit Congestion Decay" 3 3
+		event "ES A1: Republic Displacement Routing Load Ends" 4 4
+		fail
