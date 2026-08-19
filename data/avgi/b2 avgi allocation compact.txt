@@ -1,0 +1,133 @@
+# B2 Avgi Allocation Compact production slice.
+# Consumes B1 allocation-ledger and Twilight Guard civil-defense history.
+
+mission "B2 Avgi Allocation Compact: Offer"
+	minor
+	name `Reserve of Last Resort`
+	description `Consonance allocation clerk Verdigris and Twilight Guard reserve officer Ochre disagree over who should authorize emergency dee releases.`
+	source
+		government "Avgi (Consonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		not "B2 Avgi Allocation Compact: introduced"
+		not "B2 Avgi Allocation Compact: declined"
+	on offer
+		conversation
+			`A brightly colored allocation board near the port authority office is covered with power-demand forecasts, reserve levels, and evacuation-priority codes. Two Avgi are arguing beneath it. One, Verdigris, introduces themself as a Consonance allocation clerk. The other, Ochre, wears the markings of a Twilight Guard reserve officer.`
+			`Verdigris gestures at a column of old emergency-ledger references. "Objection. Guard requests are allowed to bypass ordinary allocation review whenever a civil-defense alert is declared. Historical necessity, yes. Present abuse potential, also yes. A shelter grid and a weapons depot can both be called urgent, but they do not serve the same population."`
+			`Ochre answers with a flick of both wings. "Counterpoint. During an attack, delay is itself an allocation decision. If a reserve crew waits for a civilian office to certify each draw, the power may arrive after the warning network, interceptors, or medical staging system has already failed."`
+			choice
+				`\tBack Verdigris: preserve an explicit civilian-service floor before Guard priority applies.`
+					goto verdigris
+				`\tBack Ochre: let the Guard make immediate reserve draws during declared alerts, with review afterward.`
+					goto ochre
+				`\tPropose a shared ledger with pre-authorized emergency classes and one reserve picture.`
+					goto paired
+				`\tDecline to referee Avgi emergency-allocation policy.`
+					goto decline
+			label verdigris
+			`You tell Ochre that emergency authority should begin with a published civilian-service floor: shelter power, medical staging, warning systems, and other life-preserving loads cannot be silently consumed by competing priorities. Verdigris gives a rapid nod. Ochre replies, "Concession. A floor can work if it is defined before the alarm, not negotiated during it."`
+			action
+				"B2 Avgi Allocation Compact: introduced" = 1
+				"B2 Avgi Allocation Compact: route verdigris" = 1
+				"B2 Avgi Allocation Compact: verdigris trusts player" = 1
+			accept
+			label ochre
+			`You tell Verdigris that emergency reserve officers need authority to act before a cascading failure becomes irreversible, provided every draw is logged and reviewed afterward. Ochre clicks their beak in approval. Verdigris answers, "Acceptance with condition. Review must reconstruct what was displaced, not merely confirm that the Guard believed itself urgent."`
+			action
+				"B2 Avgi Allocation Compact: introduced" = 1
+				"B2 Avgi Allocation Compact: route ochre" = 1
+				"B2 Avgi Allocation Compact: ochre trusts player" = 1
+			accept
+			label paired
+			`You suggest that the argument exists because the two offices are looking at different ledgers. Civilian floors, Guard reserve classes, shelter loads, and discretionary industry draws could be pre-classified against a single reserve picture. During an alert, the Guard could act inside those classes immediately; anything outside them would require an explicit exception visible to both offices. Verdigris begins rewriting columns on the board. Ochre says, "Assessment. Less freedom than I prefer. More speed than your office currently permits."`
+			action
+				"B2 Avgi Allocation Compact: introduced" = 1
+				"B2 Avgi Allocation Compact: route paired" = 1
+				"B2 Avgi Allocation Compact: verdigris trusts player" = 1
+				"B2 Avgi Allocation Compact: ochre trusts player" = 1
+			accept
+			label decline
+			`You tell them that a visiting human captain is a poor substitute for an Avgi emergency-allocation commission. Verdigris answers, "Acknowledgment. Sensible." Ochre adds, "Dry observation. Sensible decisions are not the usual reason outsiders become involved in our institutions."`
+			action
+				"B2 Avgi Allocation Compact: declined" = 1
+			decline
+
+mission "B2 Avgi Allocation Compact: Review"
+	minor
+	name `The Same Reserve Picture`
+	description `Return after the Consonance allocation office and Twilight Guard have tested the emergency-reserve arrangement you helped shape.`
+	source
+		government "Avgi (Consonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		has "B2 Avgi Allocation Compact: introduced"
+		not "B2 Avgi Allocation Compact: reviewed"
+	on offer
+		conversation
+			branch verdigris
+				has "B2 Avgi Allocation Compact: route verdigris"
+			branch ochre
+				has "B2 Avgi Allocation Compact: route ochre"
+			`Verdigris and Ochre have replaced the old side-by-side ledgers with a single emergency reserve board. Civilian-service floors, Guard response classes, and discretionary loads are listed together. Ochre says, "Result. During the last alert, my office drew reserve power without waiting for a second authorization because the approved response class was already visible." Verdigris adds, "And the civilian floor remained visible while they did it."`
+			choice
+				`\tFormalize the shared board as a public emergency ledger with protected civilian floors and pre-authorized Guard response classes.`
+					goto publicledger
+				`\tKeep separate authorities, but require a dual-threshold release with automatic joint review when a draw crosses declared limits.`
+					goto dualthreshold
+			label verdigris
+			`Verdigris shows you a test report from a simulated grid failure. The civilian floor prevented an industrial reserve transfer from consuming power assigned to shelters and medical staging, but Ochre's office had to request an exception when interceptor charging exceeded the preplanned defense allotment. Ochre says, "Criticism. The exception arrived in time because this was a drill." Verdigris replies, "Then the threshold needs a faster exception path, not an invisible one."`
+			choice
+				`\tPublish one emergency ledger with protected civilian floors and pre-authorized Guard response classes.`
+					goto publicledger
+				`\tUse a dual-threshold release so exceptional Guard draws can happen immediately but trigger mandatory joint review.`
+					goto dualthreshold
+			label ochre
+			`Ochre shows you a real alert log. Their office drew reserve energy immediately for warning relays and interceptor readiness, then reported the draw after the alert. Verdigris found that the action had displaced a scheduled industrial load that nobody had marked as deferrable. "Complaint," Verdigris says. "The Guard moved quickly because the ledger knew only what the Guard needed." Ochre answers, "Agreement. Then teach the ledger what everyone can afford to lose."`
+			choice
+				`\tMove to one public emergency ledger so every protected and deferrable load is visible before the alarm.`
+					goto publicledger
+				`\tPreserve immediate Guard authority, but make any draw beyond declared thresholds trigger automatic joint review and restoration planning.`
+					goto dualthreshold
+			label publicledger
+			`You recommend a public emergency ledger shared by the Consonance allocation office and Twilight Guard. Civilian-service floors are published in advance, Guard response classes receive explicit pre-authorization, discretionary loads are marked as deferrable, and every emergency draw is recorded against the same reserve picture. Verdigris calls it allocation authority that can be audited before and after a crisis. Ochre calls it a battle plan for electricity.`
+			action
+				"B2 Avgi Allocation Compact: reviewed" = 1
+				"B2 Avgi Allocation Compact: settlement public emergency ledger" = 1
+				"B2 Avgi Allocation Compact: verdigris trusts player" = 1
+			accept
+			label dualthreshold
+			`You recommend preserving separate civilian and Guard authority while defining explicit release thresholds in advance. The Guard may draw immediately inside its declared emergency class. A draw beyond that class is still permitted when delay would be dangerous, but it automatically creates a joint review record identifying what was displaced, why the threshold was crossed, and what must be restored first afterward. Ochre accepts the speed. Verdigris accepts that exceptional authority now leaves an exceptional record.`
+			action
+				"B2 Avgi Allocation Compact: reviewed" = 1
+				"B2 Avgi Allocation Compact: settlement dual threshold" = 1
+				"B2 Avgi Allocation Compact: ochre trusts player" = 1
+			accept
+
+mission "B2 Avgi Allocation Compact: Verdigris Remembers"
+	minor
+	name `Verdigris Remembers`
+	description `Verdigris remembers how the emergency-reserve dispute changed Avgi allocation practice.`
+	source
+		government "Avgi (Consonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		not "B2 Avgi Allocation Compact: aftermath seen"
+		or
+			has "B2 Avgi Allocation Compact: settlement public emergency ledger"
+			has "B2 Avgi Allocation Compact: settlement dual threshold"
+	on offer
+		conversation
+			branch dualthreshold
+				has "B2 Avgi Allocation Compact: settlement dual threshold"
+			`Verdigris spots you beside a public allocation display. "Satisfaction. The emergency ledger is boring now." They point to a page showing shelter floors, medical loads, Guard response classes, and deferrable industry demand. "Everyone complains before an alert, when the categories are set. During the alert, everyone can see the same reserve picture. Ochre considers this evidence that bureaucracy can occasionally be useful."`
+			goto record
+			label dualthreshold
+			`Verdigris shows you a threshold-review notice from a recent civil-defense alert. "Observation. Ochre's office crossed the declared reserve class before my office could respond. Correct action, probably. More importantly, the exception record existed before anyone could rewrite the story afterward." The notice lists the displaced load, the reason for the draw, and the restoration order. "We still disagree. Now the disagreement has memory."`
+			label record
+			action
+				"B2 Avgi Allocation Compact: aftermath seen" = 1
+			accept
