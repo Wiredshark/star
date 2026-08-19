@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Remnant History: Korath Exile Raid Ledger"
+	minor
+	invisible
+	source
+		government "Remnant"
+	to offer
+		has "Remnant: Cognizance 2: done"
+		random < 4
+	on offer
+		conversation
+			`A Remnant archive has assembled old reports of Korath exile raids into a single ledger. The entries are not arranged by battle, but by what disappeared afterward: preserved food, reactor parts, medicine, tools, replacement hull material, and occasionally whole cargo loads that seem mundane beside the weapons carried by the raiders.`
+			`\tAn archivist explains that the pattern changed how the Remnant interpreted the exile threat. The Korath near the galactic core are dangerous raiders, but their targets also reveal chronic shortages. A raid can be both an act of violence and evidence that a fleet or settlement lacks the supply network needed to obtain ordinary necessities peacefully.`
+			`\tThe ledger therefore records losses separately from presumed motives. It is meant to preserve two facts at once: the raids harmed real communities, and the cargo taken can still reveal the material pressures shaping exile behavior.`
+				decline
+
+
+mission "Remnant History: Korath Hunter Evidence Register"
+	minor
+	invisible
+	source
+		government "Remnant"
+	to offer
+		has "Remnant: Cognizance 2: done"
+		random < 4
+	on offer
+		conversation
+			`A xenobiology register displays recordings from the first confirmed Korath hunts in the Nenia system. Beside the images of injured void sprites are sensor tracks, weapon-scoring comparisons, recovered equipment notes, and annotations marking which conclusions were direct observations and which were only hypotheses.`
+			`\tThe researchers who built the register were careful after realizing that the hunters were not simply passing through. The fleet had begun treating an unfamiliar native species as a resource worth pursuing, and that meant an ecological incident could become a military or technological one as soon as harvested material entered Korath logistics.`
+			`\tLater entries keep the same distinction between evidence and interpretation. The archive records what the exile hunters did, what materials they carried, and where they traveled without pretending that the Remnant fully understands the society or strategy behind those choices.`
+				decline
+
+
+mission "Remnant History: Korath Fleet Provenance Archive"
+	minor
+	invisible
+	source
+		government "Remnant"
+	to offer
+		has "Remnant: Cognizance 2: done"
+		random < 4
+	on offer
+		conversation
+			`A tactical archive maps Korath exile fleets by recurring ship combinations, repair signatures, recovered cargo, and the systems where each group was observed. Many entries remain uncertain because damaged ships change hands, are rebuilt from salvaged components, or vanish into regions where the Remnant cannot follow them safely.`
+			`\tA defense specialist says the record exists because a hostile fleet is not only a collection of hulls. Its history includes where it refuels, which components it can replace, what cargo it steals, which routes it revisits, and how quickly losses are repaired. Those patterns reveal whether a threat is an isolated raiding group or part of a larger support network.`
+			`\tThe archive deliberately avoids assigning every Korath ship to a single command structure. The exiles are treated as a population with overlapping fleets and material dependencies, not as a perfectly understood military organization.`
+				decline
+
+
+mission "Remnant History: Korath Recovery and Containment Ledger"
+	minor
+	invisible
+	source
+		government "Remnant"
+	to offer
+		has "Remnant: Cognizance 2: done"
+		random < 4
+	on offer
+		conversation
+			`A recovery ledger lists the aftermath of encounters with Korath exile ships: survivors found, wrecks inspected, unfamiliar components isolated, contaminated cargo discarded, and equipment transferred to researchers only after its origin and condition were recorded.`
+			`\tA Remnant technician explains that repeated contact forced them to separate battlefield victory from what came afterward. A disabled ship can contain wounded enemies, useful evidence, hazardous technology, stolen civilian goods, or equipment whose effects are not understood. Treating all of it as ordinary salvage would erase information and create new risks.`
+			`\tThe resulting procedure is deliberately conservative. Rescue, evidence preservation, technical study, and disposal are recorded as different obligations. The ledger has become part of how the Remnant remembers the exile conflict: not only as a sequence of attacks, but as an accumulating body of material evidence that must be handled without turning every discovery into another weapon.`
+				decline
