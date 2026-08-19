@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Run Endless Sky content style checks only on changed fork A1/A2/B2 data.
+"""Run Endless Sky content style checks only on changed fork B1/A1/A2/B2 data.
 
 The fork inherited a batch of pre-CI files without canonical copyright headers.
 Blocking every PR on that historical debt would hide whether a new change is
 clean. This wrapper makes the gate incremental: new or modified fork-authored
-A/B data must pass the normal project style checker, while untouched debt can be
+B/A data must pass the normal project style checker, while untouched debt can be
 repaired separately.
 """
 
@@ -43,6 +43,17 @@ def resolve_base(candidate: str, head: str) -> str:
     return result.stdout.strip()
 
 
+def is_fork_content(relative: Path) -> bool:
+    name = relative.name.lower()
+    return (
+        relative.suffix.lower() == ".txt"
+        and (
+            name.startswith(("a1", "a2", "b2"))
+            or name.endswith("history conversations.txt")
+        )
+    )
+
+
 def changed_paths(base: str, head: str) -> list[Path]:
     result = subprocess.run(
         ["git", "diff", "--name-only", "--diff-filter=ACMR", base, head, "--", "data"],
@@ -58,12 +69,7 @@ def changed_paths(base: str, head: str) -> list[Path]:
     selected: list[Path] = []
     for raw in result.stdout.splitlines():
         relative = Path(raw)
-        name = relative.name.lower()
-        if (
-            relative.suffix.lower() == ".txt"
-            and name.startswith(("a1", "a2", "b2"))
-            and (ROOT / relative).is_file()
-        ):
+        if is_fork_content(relative) and (ROOT / relative).is_file():
             selected.append(relative)
     return sorted(set(selected))
 
@@ -76,7 +82,7 @@ def main() -> int:
 
     print(f"Changed fork style range: {base}..{head}")
     if not files:
-        print("PASS: no changed A1/A2/B2 data files require style validation")
+        print("PASS: no changed B1/A1/A2/B2 data files require style validation")
         return 0
 
     print(f"Checking {len(files)} changed fork data file(s):")
