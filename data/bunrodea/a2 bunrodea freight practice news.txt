@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# A2 ambient consequence consumer for the integrated B2 Bunrodea Freight Petition Compact.
+# Reads only terminal B2 settlement memory after Sedi Var's aftermath conversation.
+
+news "A2 Bunrodea freight practice portable Megasa"
+	location
+		government "Bunrodea (Megasa)"
+	to show
+		has "B2 Bunrodea Freight Petition Compact: aftermath seen"
+		has "B2 Bunrodea Freight Petition Compact: settlement portable docket"
+	name
+		phrase
+			"bunrodea"
+	message
+		word
+			`"Freight crews are carrying certified transport facts forward inside petition dockets now. A Megasa ship can finish a transfer without pretending that an Erabu estate's liability appeal has already been decided."`
+			`"The new petition dockets keep quantity, seals, route, and delivery time fixed once a port certifies them. Megasa crews say that means an estate may appeal liability without making completed freight work disappear from the record."`
+
+news "A2 Bunrodea freight practice portable Erabu"
+	location
+		government "Bunrodea"
+	to show
+		has "B2 Bunrodea Freight Petition Compact: aftermath seen"
+		has "B2 Bunrodea Freight Petition Compact: settlement portable docket"
+	name
+		phrase
+			"bunrodea"
+	message
+		word
+			`"Estate factors have begun treating certified freight facts as fixed evidence inside a portable petition docket. Ownership and liability still require their proper approvals, but an appeal no longer rewrites what the port already verified."`
+			`"Bunrodea petition clerks are separating evidence from judgment more carefully. Certified cargo facts travel with the docket, while estate authority and liability remain appealable fields rather than assumptions hidden in a manifest."`
+
+news "A2 Bunrodea freight practice dual Megasa"
+	location
+		government "Bunrodea (Megasa)"
+	to show
+		has "B2 Bunrodea Freight Petition Compact: aftermath seen"
+		has "B2 Bunrodea Freight Petition Compact: settlement dual ledger"
+	name
+		phrase
+			"bunrodea"
+	message
+		word
+			`"Several freight offices now keep operational transfers and petition authority in separate linked ledgers. Megasa crews like that completed work remains visible even while an estate dispute stays open on the neighboring record."`
+			`"The dual-ledger rule is spreading through freight offices: one record says what moved and when, another says who still owes approval or liability. Permanent cross-references keep either side from claiming the other record never existed."`
+
+news "A2 Bunrodea freight practice dual Erabu"
+	location
+		government "Bunrodea"
+	to show
+		has "B2 Bunrodea Freight Petition Compact: aftermath seen"
+		has "B2 Bunrodea Freight Petition Compact: settlement dual ledger"
+	name
+		phrase
+			"bunrodea"
+	message
+		word
+			`"Estate petition offices are adopting paired ledgers with explicit review deadlines. Freight acceptance no longer masquerades as an authority ruling, and a delayed petition must now state why its linked operational record is still waiting."`
+			`"The realm has not reduced estate authority to a cargo field. Instead, freight and petition ledgers are being cross-linked so transport facts survive transfer while signatures, liability, and appeal remain in the authority record where they belong."`
