@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Pirate Prize Ledger Archive"
+	minor
+	source
+		government "Pirate"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A battered terminal near the docks contains copies of old prize ledgers: lists of captured cargoes, damaged ships, disputed salvage, and the names of crews who claimed a share. The oldest entries are inconsistent, each crew recording its own version of who risked what and who was owed.`
+			`\tLater ledgers use more regular categories for salvage rights, repair costs, informants, wounded crew, and shares owed to captains or boarding parties. A note from the archivist points out that these conventions were never a universal pirate code. They spread because crews that expected to bargain with one another needed some way to compare claims without reopening every old fight.`
+			`\tThe exhibit ends with several contradictory rulings on the same kind of dispute. The lesson seems less that pirates developed law than that repeated violence created an incentive for limited rules wherever the same crews expected to meet again.`
+				decline
+
+
+mission "Pirate Safe Harbor Register"
+	minor
+	source
+		government "Pirate"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Someone has mounted a collection of old docking tokens, painted hull marks, and handwritten berth lists behind a sheet of scratched plastic. The accompanying text describes ports that survived by distinguishing ships arriving to trade or repair from ships arriving to settle a score.`
+			`\tIndividual harbors developed their own signals for declaring temporary neutrality: weapons restrictions near inhabited docks, fees for armed escorts, protected repair windows, and agreements that a captain who broke harbor peace could be refused fuel, parts, or buyers afterward. None of the rules extended very far beyond the port that enforced them.`
+			`\tThe register notes that the strongest sanction was often commercial rather than legal. A harbor did not need to control every pirate crew if enough mechanics, fences, and suppliers agreed that a captain who made business impossible was bad for everyone.`
+				decline
+
+
+mission "Pirate Repair Debt Archive"
+	minor
+	source
+		government "Pirate"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A repair shop waiting room has framed several generations of debt markers: stamped plates, signed manifests, and cryptic notes promising cargo, labor, protection, or future payment in exchange for keeping a ship operational. Some of the oldest markers are little more than a mechanic's name and a captain's scratch mark.`
+			`\tThe display explains that remote yards could not always demand cash up front. Mechanics learned which captains repaid debts, which crews could supply scarce parts, and which promises were valuable because other traders would honor them. Over time, reputation became a crude form of credit linking shipyards, fences, couriers, and crews that otherwise trusted very little.`
+			`\tA final placard observes that this kind of credit remains deliberately personal. It works because obligations are remembered, traded, and sometimes inherited by crews, not because any central authority guarantees the debt.`
+				decline
+
+
+mission "Pirate Warning Code Archive"
+	minor
+	source
+		government "Pirate"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`An old communications console cycles through reconstructed bursts of static, clipped phrases, and obsolete transponder patterns. The archive identifies them as fragments of warning systems used by raiders, smugglers, and independent port operators to report patrols, blockades, ambushes, or unusually profitable traffic.`
+			`\tThe codes changed constantly because any signal useful to pirates was also useful to authorities trying to intercept them. Even so, recurring conventions emerged: short descriptions of ship type, direction, risk, and urgency that could be understood by crews who did not share a captain or organization.`
+			`\tThe curator describes the result as an information network without much institutional loyalty. Crews might compete violently over prizes while still passing along a warning about a patrol, because tomorrow's warning could be the one that kept their own ship out of a trap.`
+				decline
