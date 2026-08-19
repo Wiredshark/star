@@ -1,0 +1,68 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Remnant Continuity Archive"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A quiet archive near the spaceport preserves copies of household records, technical manuals, song notation, and early settlement inventories. The oldest material is uneven: some pages are meticulous, while others are fragments copied from damaged storage or reconstructed from several families' memories.`
+			`\tA signed explanation says that isolation made continuity an institution rather than an assumption. The first settlers had fled the Alpha Wars with whatever records they could carry, and later generations repeatedly recopied medical histories, engineering knowledge, family links, and pieces of the ancestral culture so that a single accident or failed archive would not erase them.`
+				decline
+
+
+mission "Remnant Watch Rotation Archive"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A public security exhibit displays old patrol rosters beside increasingly elaborate threat tables. Early entries name individual ships and handwritten rendezvous points. Later records add standardized warning levels, identification checks, reserve assignments, salvage calls, and carefully timed launch windows.`
+			`\tThe accompanying notes describe these procedures as the accumulated result of living for generations in a region where hostile Korath vessels could appear with little warning. What began as local watch duty gradually became a shared system for deciding who patrols, who escorts civilians, who remains in reserve, and how every departing ship is warned about the same threat picture.`
+				decline
+
+
+mission "Remnant Salvage Provenance Archive"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A technical gallery contains rows of alien components mounted beside Remnant-made replacements. Some artifacts are recognizable as Korath or other non-human technology; others have been rebuilt so many times that only a few original pieces remain.`
+			`\tAn archivist explains in sign that recovered technology was never treated as a single discovery. Salvage crews, engineers, and defense units developed records for where a component came from, how it had been damaged, which interfaces were understood, and what modifications had been made before it entered ordinary service. Over generations, that habit turned scavenged hardware into a body of repeatable engineering knowledge rather than a collection of irreplaceable curiosities.`
+				decline
+
+
+mission "Remnant Reserve Ledger"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A civic display shows old reserve ledgers listing food, medicine, structural materials, spare machinery, transport capacity, and emergency berths. The entries are grouped not only by settlement, but by how long each stockpile could sustain neighboring communities if normal traffic were interrupted.`
+			`\tThe display explains that the Remnant's isolation made shortages a collective security problem. Local stores remained locally managed, but settlements gradually adopted common reporting and transfer practices so that patrol losses, damaged transports, or temporary route closures would not force every world to discover too late what the others could spare. The ledgers became as much a map of mutual obligation as an inventory.`
+				decline
