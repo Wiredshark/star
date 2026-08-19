@@ -4,7 +4,7 @@
 B2 STORY CHARACTERS + DYNAMIC CONTENT
 
 ## Verdict
-PARTIAL pending exact-head repository-native validation.
+READY for A3 review/integration.
 
 ## Repository state
 - Authoritative repository: `Wiredshark/star`
@@ -12,7 +12,9 @@ PARTIAL pending exact-head repository-native validation.
 - B1 parent branch/head: `agent/b1-incipias-early-spaceflight-institutions-20260819-0819` @ `70a673bee11e66bec81d12a7e9efc2ecf1a10612`
 - B2 branch: `agent/b2-incipias-license-compact-20260819-0823`
 - Production commit: `325e3c7c85885b81b61af80b10e7243a21eff253`
-- Validator commit: `9d8efae5d7d1876bcc890b1760aafd6ee80ee702`
+- Initial validator commit: `9d8efae5d7d1876bcc890b1760aafd6ee80ee702`
+- Validator wording fixes: `4f1ee33dca578a5d6243015cb7cea5e57907f9da`, `d6da91c9994f973799388632c00cf4b9e08acb46`
+- Exact repository-native validated production/data/validator/handoff head: `d6da91c9994f973799388632c00cf4b9e08acb46`
 
 ## Scope
 Adds a three-mission recurring Incipias character arc that consumes B1's crew-license/private-spaceflight institutional history.
@@ -61,12 +63,20 @@ Focused validator checks:
 - explicit B1 crew-license/private-spaceflight continuity;
 - refusal isolation from the Review chain.
 
-## Validation status
-At handoff creation time, repository-native PR validation has not yet completed on the exact B2 head. Do not promote this handoff to READY until:
-1. `Fork simulation and story validation` succeeds on the exact production/validator/handoff head or an exact successor containing only handoff-status wording;
-2. changed-content style succeeds;
-3. the focused validator is included in the repository-wide story validator discovery and passes;
-4. production build/save-load integration smoke succeeds or A3 explicitly documents and accepts a narrower non-persistence boundary.
+## Validation evidence
+Exact validated head `d6da91c9994f973799388632c00cf4b9e08acb46`:
+- `Fork simulation and story validation` run `32252843359`: **SUCCESS**.
+- changed fork content style: **SUCCESS**.
+- focused story validator discovery: **33 checks, all passed**, including `validate_b2_incipias_license_compact.py` after CI-driven wording repair.
+- A1 simulation contract tests in the same repository-native workflow: **SUCCESS**.
+- `Fork save-load integration smoke` run `32252843353`: **SUCCESS**.
+- production executable configure/build: **SUCCESS**.
+- stock save-load smoke cases: **SUCCESS**.
+
+The B1 parent exact head `70a673bee11e66bec81d12a7e9efc2ecf1a10612` is also repository-native green for both simulation/story validation and save-load integration smoke.
+
+## CI-driven repair history
+The first two exact-head story runs correctly caught validator assertions that were stricter than the actual production wording (`private ships`, then `private spacecraft`). No production content was changed in response. The validator was corrected to test the exact production concept (`privately owned ship`) while retaining the intended B1 continuity check. The third exact-head run passed fully.
 
 ## A3 integration notes
 Integrate the B1 Incipias early-spaceflight institutional-history parent first, then this B2 branch. Preserve the rule that `Registrar` and `Pilot` are player-private descriptors only. Do not reinterpret portable endorsements as a galaxy-wide license treaty or centralized Incipias bureaucracy.
