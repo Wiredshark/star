@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # A2 ambient consequence consumer for the integrated Republic customs-review slice.
 #
 # Public attribution is consent-bounded: these News groups appear only after
@@ -66,3 +79,4 @@ news "A2 Republic customs precedent formal process"
 		word
 			`"Republic port-rights observers are circulating a training example in which declining an informal customs interview was recorded as a request for formal process, not as adverse evidence. The example is anonymized and focused on procedure rather than the captain involved."`
 			`"A Republic customs training note now states explicitly that refusing an improvised dockside interview does not make the review flag stronger. If an office wants substantive answers, it has to identify the formal process it is actually using."`
+
