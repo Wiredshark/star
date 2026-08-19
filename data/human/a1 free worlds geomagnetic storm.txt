@@ -1,0 +1,95 @@
+# A1 world simulation: Free Worlds geomagnetic-storm navigation pressure.
+event "ES A1: Free Worlds Geomagnetic Storm Ends"
+	clear "world: free worlds geomagnetic storm active"
+	clear "world: free worlds geomagnetic storm advisory seen"
+
+event "ES A1: Free Worlds Geomagnetic Storm Cooldown Ends"
+	clear "world: free worlds geomagnetic storm cooldown"
+
+event "ES A1: Free Worlds Navigation Strain Recovery"
+	"world: free worlds geomagnetic navigation strain" -= 1
+	"world: free worlds geomagnetic navigation strain" >?= 0
+
+mission "ES A1: Free Worlds Geomagnetic Storm Cycle"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	to offer
+		not "world: free worlds geomagnetic storm active"
+		not "world: free worlds geomagnetic storm cooldown"
+	on offer
+		set "world: free worlds geomagnetic storm active"
+		set "world: free worlds geomagnetic storm cooldown"
+		event "ES A1: Free Worlds Geomagnetic Storm Ends" 3 3
+		event "ES A1: Free Worlds Geomagnetic Storm Cooldown Ends" 14 14
+		fail
+	destination "Earth"
+
+mission "ES A1: Free Worlds Geomagnetic Storm Pressure"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	to offer
+		has "world: free worlds geomagnetic storm active"
+		"world: free worlds geomagnetic navigation strain" < 6
+	on offer
+		"world: free worlds geomagnetic navigation strain" += 1
+		"world: free worlds geomagnetic navigation strain" <?= 6
+		event "ES A1: Free Worlds Navigation Strain Recovery" 2 2
+		decline
+	destination "Earth"
+
+mission "ES A1: Free Worlds Geomagnetic Storm Advisory"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	to offer
+		has "world: free worlds geomagnetic storm active"
+		not "world: free worlds geomagnetic storm advisory seen"
+	on offer
+		message
+			text "Free Worlds navigation beacons report a regional geomagnetic storm. Pilots are advised to expect intermittent sensor noise and routing delays until the disturbance passes."
+		set "world: free worlds geomagnetic storm advisory seen"
+		fail
+	destination "Earth"
+
+mission "ES A1: Free Worlds Navigation Strain Advisory"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	to offer
+		"world: free worlds geomagnetic navigation strain" >= 3
+		not "world: free worlds geomagnetic strain advisory seen"
+	on offer
+		message
+			text "Repeated storm disruptions are straining Free Worlds navigation services. Traffic control is prioritizing beacon recalibration and route verification while conditions recover."
+		set "world: free worlds geomagnetic strain advisory seen"
+		fail
+	destination "Earth"
+
+mission "ES A1: Free Worlds Navigation Strain Advisory Reset"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	to offer
+		"world: free worlds geomagnetic navigation strain" <= 1
+		has "world: free worlds geomagnetic strain advisory seen"
+	on offer
+		clear "world: free worlds geomagnetic strain advisory seen"
+		fail
+	destination "Earth"
