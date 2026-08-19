@@ -1,0 +1,43 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# A1 Merchant salvage-demand propagation.
+# Sustained rescue-network overload raises bounded salvage demand. Each activation
+# is rate-limited independently from the accepted rescue-load state, and every
+# contribution decays on a deterministic eight-day horizon.
+
+event "ES A1: Merchant Salvage Demand Recovery"
+	"world: merchant salvage demand" -= 1
+	"world: merchant salvage demand" >?= 0
+
+event "ES A1: Merchant Salvage Demand Latch Ends"
+	clear "world: merchant salvage demand active"
+
+mission "ES A1: Merchant Salvage Demand"
+	invisible
+	entering
+	non-blocking
+	repeat
+	to offer
+		"world: merchant rescue load" >= 3
+		"world: merchant salvage demand" < 4
+		not "world: merchant salvage demand active"
+	on offer
+		set "world: merchant salvage demand active"
+		"world: merchant salvage demand" += 1
+		"world: merchant salvage demand" <?= 4
+		event "ES A1: Merchant Salvage Demand Recovery" 8 8
+		event "ES A1: Merchant Salvage Demand Latch Ends" 5 5
+		fail
+	destination "Earth"
