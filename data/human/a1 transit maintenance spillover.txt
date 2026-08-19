@@ -1,0 +1,34 @@
+# A1 world simulation: Southern Rim transit congestion -> Syndicate maintenance spillover.
+#
+# High Southern Rim congestion can turn routing delay into industrial wear for the
+# Syndicate. The first qualifying Syndicate arrival during a severe congestion
+# episode adds one bounded case to the existing maintenance backlog. A four-day
+# latch prevents rapid crossings from repeatedly amplifying one congestion spike,
+# while the maintenance system's own seven-day recovery drains each contribution.
+# This bridge reads congestion without mutating it.
+
+
+event "ES A1: Syndicate Transit Wear Latch Ends"
+	clear "world: syndicate transit wear active"
+
+
+mission "ES A1: Syndicate Transit Maintenance Spillover"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Syndicate"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: southern rim transit congestion" >= 4
+		"world: syndicate maintenance backlog" < 6
+		not "world: syndicate transit wear active"
+	on offer
+		set "world: syndicate transit wear active"
+		"world: syndicate maintenance backlog" += 1
+		"world: syndicate maintenance backlog" <?= 6
+		event "ES A1: Syndicate Maintenance Backlog Recovery" 7 7
+		event "ES A1: Syndicate Transit Wear Latch Ends" 4 4
+		fail
