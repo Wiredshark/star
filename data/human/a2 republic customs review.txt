@@ -1,0 +1,165 @@
+# A2 crime/law consumer for the A1 Republic customs-scrutiny signal.
+#
+# A1 remains the sole owner of `world: republic customs scrutiny` and Republic
+# border pressure. This file reads those authorities and writes only
+# `A2 Republic Customs Review:*` persistent narrative state.
+
+mission "A2 Republic Customs Review: Secondary Review"
+	minor
+	name `Secondary Review`
+	description `Republic customs examiner Elian Ward and port-rights observer Sera Noll ask how a heightened secondary inspection should be documented.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		"world: republic customs scrutiny" >= 3
+		not "A2 Republic Customs Review: introduced"
+	on offer
+		conversation
+			`A customs examiner in a plain Republic service jacket is waiting beside a secondary-inspection desk. "Captain <last>? Elian Ward. Your recent routing pattern has accumulated enough review flags that I am supposed to ask a few questions before the next office sees the same pattern and invents its own explanation."`
+			branch alert
+				"world: republic border pressure" >= 4
+			`A second official raises a hand before Ward continues. "Sera Noll, port-rights observer. I am here because a review flag is an administrative signal, not a finding. Whatever happens at this desk should still be legible to the next one."`
+				goto options
+			label alert
+			`A second official glances toward a display full of border alerts. "Sera Noll, port-rights observer. The broader security posture is already elevated, which is exactly why this desk needs to distinguish a general alert from evidence about one captain. A review flag is not a finding."`
+			label options
+			`Ward opens an inspection record. "I can document this four ways. I would rather you choose the scope now than argue later about what you agreed to."`
+			choice
+				`\tPermit a document-only audit of manifests, docking records, and declared cargo history, but no open-ended interview.`
+					goto audit
+				`\tRequire the office to state the factual basis for every secondary-inspection flag and preserve a challengeable written record.`
+					goto record
+				`\t[Underworld experience: repeated pirate contracts] Explain which route patterns are ordinary among pirate-space contractors and which would actually be unusual.`
+					to activate
+						"pirate jobs" >= 5
+					goto context
+				`\tDecline an informal interview and ask for formal process or counsel before answering substantive questions.`
+					goto counsel
+			label audit
+			`You authorize a narrow document review and make Ward list the categories before he opens the file. Noll adds a note that silence outside those categories is not a refusal to cooperate. Ward says, "Good. If the records answer the question, nobody needs to turn this into a personality test."`
+			action
+				"A2 Republic Customs Review: introduced" = 1
+				"A2 Republic Customs Review: route document audit" = 1
+				"A2 Republic Customs Review: disposition pending" = 1
+				decline
+			label record
+			`You ask Ward to write down what triggered the review, which facts are confirmed, which are inferred, and how the flag can be challenged. Noll immediately starts dictating headings. Ward looks annoyed for half a second, then says, "If another office is going to inherit this record, they should inherit the uncertainty too."`
+			action
+				"A2 Republic Customs Review: introduced" = 1
+				"A2 Republic Customs Review: route written basis" = 1
+				"A2 Republic Customs Review: disposition pending" = 1
+				decline
+			label context
+			`You explain that contractors working pirate-controlled ports often repeat the same fuel stops, brokers, and departure windows whether the cargo is legal or not. What would matter is a pattern that departs from those ordinary constraints. Ward begins splitting his route indicators into common and exceptional behavior. Noll says, "Context can narrow suspicion. It cannot become a confession simply because you know the context."`
+			action
+				"A2 Republic Customs Review: introduced" = 1
+				"A2 Republic Customs Review: route underworld context" = 1
+				"A2 Republic Customs Review: disposition pending" = 1
+				decline
+			label counsel
+			`You decline to answer an informal interview and ask Ward either to identify a formal process or close the conversation. Noll records the boundary before Ward can respond. "That is a valid answer," he says. "The review flag does not gain evidentiary weight because you declined to improvise a statement at a docking desk."`
+			action
+				"A2 Republic Customs Review: introduced" = 1
+				"A2 Republic Customs Review: route formal process" = 1
+				"A2 Republic Customs Review: disposition pending" = 1
+				decline
+
+
+mission "A2 Republic Customs Review: Disposition"
+	minor
+	name `Secondary Review: Disposition`
+	description `Elian Ward closes the heightened review after the underlying customs-scrutiny signal subsides.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Republic Customs Review: disposition pending"
+		"world: republic customs scrutiny" < 3
+		not "A2 Republic Customs Review: disposition seen"
+	on offer
+		conversation
+			branch audit
+				has "A2 Republic Customs Review: route document audit"
+			branch record
+				has "A2 Republic Customs Review: route written basis"
+			branch context
+				has "A2 Republic Customs Review: route underworld context"
+			`Ward finds you near the inspection desk with Noll beside him. "The heightened review posture has subsided. Because you asked for formal process, the file contains exactly that: no interview statement, no adverse inference from declining one, and no open administrative allegation waiting for the next port to rediscover."`
+			action
+				"A2 Republic Customs Review: outcome refusal preserved" = 1
+				goto finish
+			label audit
+			`Ward shows you a short closure note. "The document-only audit did what a narrow audit is supposed to do. The records explained the recurring route pattern without giving me a reason to widen the inquiry. I am closing the elevated review without pretending the audit proved facts it never tested." Noll has countersigned the scope description.`
+			action
+				"A2 Republic Customs Review: outcome bounded audit" = 1
+				goto finish
+			label record
+			`Noll hands you a copy of the final record before Ward speaks. The page separates confirmed facts, route-pattern inferences, and unresolved questions into different sections. Ward says, "The scrutiny level came down on its own timeline. The useful part of your demand is that the next examiner can now see what this office actually knew instead of treating the existence of a flag as evidence."`
+			action
+				"A2 Republic Customs Review: outcome written uncertainty" = 1
+				goto finish
+			label context
+			`Ward brings up two versions of the route analysis. The older one treated frequent pirate-space stops as one undifferentiated risk marker. The new one distinguishes ordinary contractor routing from genuinely exceptional deviations. "Your experience did not make the review disappear," he says. "It made the model less lazy about what the pattern meant."`
+			action
+				"A2 Republic Customs Review: outcome contextualized routing" = 1
+			label finish
+			`Noll closes her copy of the file. "The important part is that the administrative state changed without the dialogue pretending to own it. The record now says what happened while the review was elevated, and what did not happen."`
+			action
+				"A2 Republic Customs Review: disposition pending" = 0
+				"A2 Republic Customs Review: disposition seen" = 1
+				"A2 Republic Customs Review: later reader pending" = 1
+				decline
+
+
+mission "A2 Republic Customs Review: Noll Remembers"
+	minor
+	name `Noll Remembers`
+	description `Sera Noll remembers the procedural boundary you chose during the customs review.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Republic Customs Review: later reader pending"
+		not "A2 Republic Customs Review: later reader seen"
+	on offer
+		conversation
+			branch audit
+				has "A2 Republic Customs Review: outcome bounded audit"
+			branch record
+				has "A2 Republic Customs Review: outcome written uncertainty"
+			branch context
+				has "A2 Republic Customs Review: outcome contextualized routing"
+			`Noll recognizes you at another Republic port. "I remember the review where you insisted that declining an informal interview not be rewritten as evidence. I have used that file twice when younger observers asked what a clean refusal record should look like."`
+				goto choice
+			label audit
+			`Noll recognizes you beside a customs desk. "I remember your document-only audit. The useful precedent was not that you cooperated; it was that both sides wrote down the scope before anyone started reading. We have used the same boundary on several reviews since."`
+				goto choice
+			label record
+			`Noll is holding a form that looks suspiciously familiar. "The fact / inference / unresolved-question headings survived. Examiners complain about them, which means they are reading them. More importantly, later offices can tell the difference between inherited suspicion and inherited evidence."`
+				goto choice
+			label context
+			`Noll shows you a revised route-pattern guide. "Ward kept the distinction you forced into the analysis: ordinary contractor behavior is context, not proof. The guide still permits scrutiny. It just has to say what is actually unusual before calling the pattern suspicious."`
+			label choice
+			choice
+				`\tTell Noll she may cite the procedure, but not present you as endorsing every later use of it.`
+					goto bounded
+				`\tAsk her not to use your case as a future example.`
+					goto private
+			label bounded
+			`Noll nods. "Procedure, not personality. That is a better precedent anyway."`
+			action
+				"A2 Republic Customs Review: precedent use bounded" = 1
+				goto finish
+			label private
+			`Noll removes the case identifier from her training notes. "Understood. A useful record does not have to become a public story about the person inside it."`
+			action
+				"A2 Republic Customs Review: precedent kept private" = 1
+			label finish
+			action
+				"A2 Republic Customs Review: later reader pending" = 0
+				"A2 Republic Customs Review: later reader seen" = 1
+				decline
