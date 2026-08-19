@@ -1,0 +1,132 @@
+# A2 dynamic-narrative consumer for the A1 Syndicate maintenance-backlog loop.
+
+mission "A2 Syndicate Maintenance Triage: Surge Briefing"
+	minor
+	name `Syndicate Logistics: Emergency Triage`
+	description `Logistics coordinator Tessa Marr asks what the maintenance surge should protect first.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "world: syndicate maintenance surge"
+		not "A2 Syndicate Maintenance Triage: briefing seen"
+	on offer
+		conversation
+			`A woman with a logistics slate tucked under one arm steps out of a cluster of dispatchers and mechanics. "Captain <last>? Tessa Marr, interline maintenance coordination. You have arrived in the middle of a system-wide repair mobilization, which means every department has suddenly discovered that its delayed work is the most urgent work in human space."`
+			branch severe
+				"world: syndicate maintenance backlog" >= 3
+			`She lowers her voice. "The surge is buying us room, but the remaining backlog is manageable if we do not waste it. I need an outside captain's answer before the allocation meeting starts."`
+				goto triage
+			label severe
+			`She turns the slate so you can see a column of deferred inspections still glowing amber. "The surge is active and the backlog is still high. We can move crews, parts, and dock windows, but not fast enough to satisfy every contract that waited too long."`
+			label triage
+			`Marr taps three categories on the slate. "If you had one vote in the allocation room, what should survive the shortage first?"`
+			choice
+				`\tProtect stranded crews and unsafe ships first, even when the cargo is low-value.`
+					goto safety
+				`\tKeep contract-critical freight lanes moving. A repair system that ignores schedules can create a second shortage.`
+					goto contracts
+				`\tSpend the surge on deferred maintenance while the crews are mobilized, even if near-term schedules slip.`
+					goto resilience
+				`\tI am not taking responsibility for a Syndicate allocation decision.`
+					goto refuse
+			label safety
+			`Marr studies you for a moment, then marks a new priority code. "Human exposure before invoice exposure. Operations will complain that it is subjective, but at least the rule is legible to the crews who have to execute it."`
+			action
+				"A2 Syndicate Maintenance Triage: briefing seen" = 1
+				"A2 Syndicate Maintenance Triage: priority safety" = 1
+				"A2 Syndicate Maintenance Triage: followup pending" = 1
+				decline
+			label contracts
+			`Marr marks the freight-lane column. "Continuity first. Not glamorous, but a stalled industrial route can strand ten ships for every one we repair out of sequence."`
+			action
+				"A2 Syndicate Maintenance Triage: briefing seen" = 1
+				"A2 Syndicate Maintenance Triage: priority contracts" = 1
+				"A2 Syndicate Maintenance Triage: followup pending" = 1
+				decline
+			label resilience
+			`Marr circles the oldest inspection queue. "Use the mobilization to erase debt instead of just moving it. That will cost schedule performance now, but it gives the next dispatcher fewer hidden failures to inherit."`
+			action
+				"A2 Syndicate Maintenance Triage: briefing seen" = 1
+				"A2 Syndicate Maintenance Triage: priority resilience" = 1
+				"A2 Syndicate Maintenance Triage: followup pending" = 1
+				decline
+			label refuse
+			`Marr locks the slate. "Fair. Outside advice is only useful if nobody can later pretend it was an authorization." She records the refusal beside your name instead of leaving the field blank.`
+			action
+				"A2 Syndicate Maintenance Triage: briefing seen" = 1
+				"A2 Syndicate Maintenance Triage: refused" = 1
+				"A2 Syndicate Maintenance Triage: followup pending" = 1
+				decline
+
+mission "A2 Syndicate Maintenance Triage: After Action"
+	minor
+	name `Syndicate Logistics: After the Surge`
+	description `Tessa Marr follows up after the maintenance mobilization ends.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Syndicate Maintenance Triage: followup pending"
+		not "world: syndicate maintenance surge"
+		not "A2 Syndicate Maintenance Triage: followup seen"
+	on offer
+		conversation
+			branch safety_high
+				has "A2 Syndicate Maintenance Triage: priority safety"
+				"world: syndicate maintenance backlog" >= 3
+			branch safety_low
+				has "A2 Syndicate Maintenance Triage: priority safety"
+				"world: syndicate maintenance backlog" < 3
+			branch contracts_high
+				has "A2 Syndicate Maintenance Triage: priority contracts"
+				"world: syndicate maintenance backlog" >= 3
+			branch contracts_low
+				has "A2 Syndicate Maintenance Triage: priority contracts"
+				"world: syndicate maintenance backlog" < 3
+			branch resilience_high
+				has "A2 Syndicate Maintenance Triage: priority resilience"
+				"world: syndicate maintenance backlog" >= 3
+			branch resilience_low
+				has "A2 Syndicate Maintenance Triage: priority resilience"
+				"world: syndicate maintenance backlog" < 3
+			`Marr recognizes you near the dispatch boards and lifts both hands before you can object. "No allocation question this time. I remembered that you declined." She shows you the closed review. "The refusal stayed a refusal. Nobody cited you as support after you left."`
+			action
+				"A2 Syndicate Maintenance Triage: refusal respected" = 1
+				goto finish
+			label safety_high
+			`Marr looks more tired than before. "The surge ended, but the backlog is still ugly. Your safety-first rule did at least keep the remaining queue from becoming a casualty list. We delayed profitable work, and I would make the same trade again."`
+			action
+				"A2 Syndicate Maintenance Triage: Marr remembers safety under pressure" = 1
+				goto finish
+			label safety_low
+			`Marr greets you with a relieved nod. "The backlog is down to something ordinary dispatch can handle. The safety-first rule survived review, too. We now have explicit authority to pull an unsafe ship ahead of a higher-value contract."`
+			action
+				"A2 Syndicate Maintenance Triage: Marr remembers safety stabilized" = 1
+				goto finish
+			label contracts_high
+			`Marr points to a still-crowded maintenance board. "We kept the critical freight lanes moving, but the remaining backlog tells the other half of the story. Continuity bought time; it did not erase the repair debt. That distinction is in the after-action now."`
+			action
+				"A2 Syndicate Maintenance Triage: Marr remembers contracts under pressure" = 1
+				goto finish
+			label contracts_low
+			`Marr taps a row of cleared route alerts. "The freight-priority rule worked better than I expected. Once the critical lanes stopped cascading delays into each other, the maintenance queue finally began shrinking instead of just changing shape."`
+			action
+				"A2 Syndicate Maintenance Triage: Marr remembers contracts stabilized" = 1
+				goto finish
+			label resilience_high
+			`Marr gives you a rueful smile. "We spent the surge on old repair debt, and the backlog is still high. Operations hates that sentence. The useful part is that the remaining work is newer and better documented; fewer failures are hiding inside nominally healthy schedules."`
+			action
+				"A2 Syndicate Maintenance Triage: Marr remembers resilience under pressure" = 1
+				goto finish
+			label resilience_low
+			`Marr shows you the oldest inspection date on the board. It is recent enough to be boring. "That was the point of the deferred-maintenance strategy. The surge ended with fewer hidden obligations than it started with. We paid schedule pain up front and actually retired some debt."`
+			action
+				"A2 Syndicate Maintenance Triage: Marr remembers resilience stabilized" = 1
+			label finish
+			action
+				"A2 Syndicate Maintenance Triage: followup pending" = 0
+				"A2 Syndicate Maintenance Triage: followup seen" = 1
+				decline
