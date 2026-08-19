@@ -1,0 +1,47 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "A2 Heliarch Procedure Reflection"
+	minor
+	source
+		government "Coalition"
+	"offer precedence" 4
+	to offer
+		random < 1
+		has "license: Coalition"
+		not "A2 Heliarch Procedure Reflection: resolved"
+	on offer
+		conversation
+			`You pause at a Heliarch archive terminal after reading several institutional records. The exhibits have a common theme: written procedure can preserve disagreement, evidence, and responsibility across a large institution. They are equally clear that a procedure is evidence of how a decision was reached, not proof that the decision was correct.`
+			`\tA public annotation prompt asks what lesson you intend to carry into your own dealings with Coalition institutions. It does not ask you to speak for the Heliarchs.`
+			choice
+				`Treat procedure as a record that makes authority inspectable.`
+					goto inspectable
+				`Treat procedure as a starting point that must remain open to contrary evidence.`
+					goto revisable
+				`Keep the archives as context, not as a rule for future disputes.`
+					goto contextual
+			label inspectable
+				`You save a private note: when authority matters, ask what was recorded, who objected, who was responsible, and whether the chain can later be inspected.`
+				accept
+			label revisable
+				`You save a private note: procedure is useful when it preserves enough evidence to expose its own mistakes and permit revision.`
+				accept
+			label contextual
+				`You save no general rule. The records remain historical context rather than borrowed Heliarch authority.`
+				accept
+	on accept
+		conversation
+			`The terminal closes without endorsement or credential. Whatever lesson you took from the archive remains your own.`
+		decline
