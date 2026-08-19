@@ -2,9 +2,10 @@
 #
 # Reuses the authoritative Republic border-pressure signal instead of creating
 # a second copy of security truth. Sustained border pressure produces a bounded
-# civilian-displacement signal. The response temporarily suppresses retriggers,
-# scheduled recovery decays displacement, and a high-pressure resettlement surge
-# consumes part of the backlog. Later A2/A3 systems can read the persistent state.
+# civilian-displacement signal. Recovery decays displacement, while resettlement
+# surge capacity is intentionally gated behind reduced border pressure so the
+# system cannot "solve" displacement while the source crisis is still acute.
+# Later A2/A3 systems can read the persistent numeric state.
 
 event "ES A1: Republic Displacement Recovery"
 	"world: republic displacement pressure" -= 1
@@ -38,6 +39,9 @@ mission "ES A1: Republic Displacement Escalation"
 		event "ES A1: Republic Displacement Response Ends" 4 4
 		fail
 
+# Negative-feedback recovery. A high displacement backlog alone is no longer
+# enough to trigger a resettlement surge: border pressure must have receded.
+# This gives the source crisis and the recovery response explicit hysteresis.
 mission "ES A1: Republic Resettlement Surge"
 	invisible
 	entering
@@ -48,6 +52,7 @@ mission "ES A1: Republic Resettlement Surge"
 	destination "Earth"
 	to offer
 		"world: republic displacement pressure" >= 4
+		"world: republic border pressure" <= 2
 		not "world: republic resettlement surge"
 	on offer
 		set "world: republic resettlement surge"
