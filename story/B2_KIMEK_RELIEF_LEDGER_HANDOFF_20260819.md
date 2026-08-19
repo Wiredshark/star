@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native validation on the exact final head. Do not integrate until the focused validator, changed-content style checks, simulation/story workflow, production build, and stock save/load smoke are green.
+READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -12,7 +12,8 @@ PARTIAL pending repository-native validation on the exact final head. Do not int
 - Exact B1 parent SHA: `261a8ca291af59248aa2d46ac14f5866813bbdc9`
 - B2 branch: `agent/b2-kimek-relief-ledger-20260819-0927`
 - Production commit: `b3b35046b67795a8cd824d57fbdfc69a5fa44e87`
-- Focused-validator commit: `7a8a494f36497057598c8b06768d79ec6cd8ec1e`
+- Initial focused-validator commit: `7a8a494f36497057598c8b06768d79ec6cd8ec1e`
+- Exact CI-validated production/data/validator head: `025fd168b2912f87ac98f9de41451e1c5cc95b49`
 - Draft PR: #88
 - Integration authority remains A3. B2 must not self-integrate.
 
@@ -59,21 +60,24 @@ B2 does not write `world:*`, credits, reputation, combat rating, cargo, outfits,
 
 ## Validation
 
+The first simulation/story CI pass found one focused-validator defect: it required the literal phrase `shared manifests`, while the production content expressed the same B1 continuity through public need records, trusted carriers, winter medicine, and translated species-specific categories. The validator was repaired without weakening production behavior.
+
+On exact validated head `025fd168b2912f87ac98f9de41451e1c5cc95b49`:
+
+- `Fork simulation and story validation`: SUCCESS;
+- focused story validator discovery: SUCCESS, including `validate_b2_kimek_relief_ledger.py`;
+- A1 simulation/state-ownership contracts: SUCCESS;
+- changed fork content style: SUCCESS;
+- `Fork save-load integration smoke`: SUCCESS;
+- production Endless Sky configure: SUCCESS;
+- production Endless Sky build: SUCCESS;
+- stock persistence smoke cases: `Saving during conversation`, `Loading and Reloading`, and `Loading and Saving`: SUCCESS.
+
 Focused validator command:
 
 ```text
 python3 tools/story/validate_b2_kimek_relief_ledger.py "data/coalition/b2 kimek relief ledger.txt"
 ```
-
-Required broader acceptance before READY:
-
-- repository focused story validator discovery / full story suite;
-- changed-content style validation;
-- A1 simulation/state-ownership contracts;
-- production Endless Sky configure/build;
-- stock persistence smoke: `Saving during conversation`, `Loading and Reloading`, `Loading and Saving`.
-
-At handoff creation time those repository-native workflows had not yet produced terminal results for this branch, so no PASS is claimed here.
 
 ## A3 integration notes
 
