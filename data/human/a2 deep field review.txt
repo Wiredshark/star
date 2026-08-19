@@ -1,0 +1,112 @@
+# A2 Deep Field Review production slice.
+#
+# This slice uses stock mission/conversation/condition persistence only. It
+# connects existing Deep scientific-history and convoy-service state to a later
+# player-facing RPG conversation without creating a dialogue-only shadow store.
+
+mission "A2 Deep Field Review: Arcos Interview"
+	minor
+	name `Deep Field Review`
+	description `Speak with Deep research coordinator Selene Arcos about how field experience should influence a new survey protocol.`
+	source
+		attributes "deep"
+		not attributes "station"
+	to offer
+		not "A2 Deep Field Review: Arcos Interview: done"
+		not "A2 Deep Field Review: declined"
+	on offer
+		conversation
+			`A research coordinator in a dark blue Deep survey jacket is reviewing expedition summaries beside the concourse map. "Captain <last>? Selene Arcos. I am revising the field-review protocol for crews who bring us unusual material or observations. Right now it rewards complete reports, but not the kind of experience that tells you which missing details are dangerous."`
+			`Arcos turns the slate toward you. "I want a protocol that values experience without turning seniority into authority. Tell me what should make us listen differently to a returning captain."`
+			choice
+				`\t[Scientific history: Mystery Cubes investigation] A captain who has already carried an anomalous investigation through to completion should be asked what did not fit the original hypothesis.`
+					to display
+						has "Deep: Mystery Cubes 4: done"
+					goto anomaly
+				`\t[Field service: repeated Deep convoy work] Repeated route service matters because it teaches what normal operations look like before an anomaly appears.`
+					to activate
+						"deep convoy" >= 2
+					goto service
+				`\tDo not privilege credentials. Require every review to separate direct observation, inference, and secondhand reports.`
+					goto method
+				`\tTell Arcos you do not want your service history used to shape Deep research policy.`
+					goto refuse
+			label anomaly
+			`Arcos studies your record, then highlights the section for unresolved observations. "That is useful. An experienced investigator should not get a louder vote; they should get an explicit place to record where the model failed."`
+			action
+				"A2 Deep Field Review: route anomaly" = 1
+				"A2 Deep Field Review: arcos trusts scientific judgment" = 1
+				"A2 Deep Field Review: followup pending" = 1
+			accept
+			label service
+			`You point out that repeated convoy work gives a captain a baseline for traffic, delays, sensor clutter, and ordinary route hazards. Arcos adds a comparison field to the draft. "Experience as calibration, not rank. I can defend that."`
+			action
+				"A2 Deep Field Review: route field service" = 1
+				"A2 Deep Field Review: arcos trusts operational judgment" = 1
+				"A2 Deep Field Review: followup pending" = 1
+			accept
+			label method
+			`You tell Arcos that the safest protocol is one that forces every captain to distinguish what they saw from what they concluded. She rewrites the first page around evidence classes instead of experience tiers. "Less flattering. More reproducible."`
+			action
+				"A2 Deep Field Review: route method" = 1
+				"A2 Deep Field Review: arcos trusts process" = 1
+				"A2 Deep Field Review: followup pending" = 1
+			accept
+			label refuse
+			`You tell Arcos that your old jobs should not become policy merely because they are easy to cite. She nods and closes your record. "Then I will record that boundary too. Refusing to become an example is still useful information about how this process should work."`
+			action
+				"A2 Deep Field Review: declined" = 1
+			decline
+
+
+mission "A2 Deep Field Review: Arcos Remembers"
+	minor
+	name `Arcos Remembers`
+	description `See how Selene Arcos incorporated your advice into the Deep field-review protocol.`
+	source
+		attributes "deep"
+		not attributes "station"
+	to offer
+		has "A2 Deep Field Review: followup pending"
+		not "A2 Deep Field Review: Arcos Remembers: done"
+	on offer
+		conversation
+			branch anomaly
+				has "A2 Deep Field Review: route anomaly"
+			branch service
+				has "A2 Deep Field Review: route field service"
+			`Arcos catches you near a departures board and shows you the finalized review form. The first section now separates observation, inference, and hearsay. "Captains complain that it makes reports slower. The analysts complain less about trying to reconstruct what actually happened."`
+			action
+				"A2 Deep Field Review: arcos future methods contact" = 1
+			goto finish
+			label anomaly
+			`Arcos shows you a new section labeled "model-breaking observations." "Your Mystery Cubes history convinced the board that unresolved evidence should survive a successful mission instead of being polished out of the final report. We have already reopened two old files because of it."`
+			action
+				"A2 Deep Field Review: arcos future anomaly contact" = 1
+			goto finish
+			label service
+			`Arcos points to a comparison field now required on repeat routes. "The new protocol asks experienced crews what was normal before it asks what was strange. It turns route familiarity into context without treating veteran captains as infallible."`
+			action
+				"A2 Deep Field Review: arcos future field contact" = 1
+			label finish
+			action
+				"A2 Deep Field Review: followup pending" = 0
+			accept
+
+
+mission "A2 Deep Field Review: Refusal Reader"
+	minor
+	name `Arcos Respects the Boundary`
+	description `Selene Arcos remembers that you declined to let your service history become a research-policy example.`
+	source
+		attributes "deep"
+		not attributes "station"
+	to offer
+		has "A2 Deep Field Review: declined"
+		not "A2 Deep Field Review: Refusal Reader: done"
+	on offer
+		conversation
+			`Arcos recognizes you but does not open your service record. "I kept your refusal in the protocol notes. It became the reason we now require explicit consent before a captain's named history is used as a training case. I thought you would want to know the boundary held."`
+			action
+				"A2 Deep Field Review: refusal respected" = 1
+			accept
