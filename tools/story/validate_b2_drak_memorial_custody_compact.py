@@ -22,6 +22,7 @@ def main() -> None:
         fail(f"missing content file: {path}")
 
     text = path.read_text(encoding="utf-8")
+    lower = text.lower()
 
     missions = re.findall(r'^mission "([^"]+)"$', text, flags=re.MULTILINE)
     expected = [
@@ -103,22 +104,23 @@ def main() -> None:
 
     # Preserve B1's central Drak continuity: stewardship balances extinction
     # prevention, memorial custody, intervention restraint, autonomy, and memory.
-    continuity_phrases = (
-        "extinct",
-        "preserve",
-        "danger",
-        "intervention",
-        "memory",
-        "autonomy",
-    )
-    for phrase in continuity_phrases:
-        if phrase not in text.lower():
+    # The autonomy invariant is represented here by restraint/refusal language rather
+    # than requiring the literal English word "autonomy" in Drak telepathic prose.
+    for phrase in ("extinct", "preserve", "danger", "intervention", "memory"):
+        if phrase not in lower:
             fail(f"missing B1 stewardship continuity concept: {phrase}")
+    for phrase in (
+        "does not give you a rule",
+        "refuse to offer a judgment",
+        "declining to decide",
+    ):
+        if phrase not in lower:
+            fail(f"missing restraint/autonomy continuity phrase: {phrase}")
 
     # The two final policies must retain provenance rather than pretending that
     # later safety edits were part of the vanished culture's original design.
     for phrase in ("provenance", "original", "alteration", "intervention record"):
-        if phrase not in text.lower():
+        if phrase not in lower:
             fail(f"missing provenance invariant: {phrase}")
 
     print("PASS: B2 Drak Memorial Custody Compact structure validated")
@@ -128,6 +130,7 @@ def main() -> None:
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Custodian Remembers")
     print("PASS: mutation_surface=B2 conditions only")
+    print("PASS: autonomy_model=restraint + refusal, not invented authority")
 
 
 if __name__ == "__main__":
