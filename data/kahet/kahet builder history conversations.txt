@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Ka'het History: Shell Provenance Archive"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		has "First Contact: Ka'het: Remnant 1B: offered"
+		random < 1
+	on offer
+		conversation
+			`A Remnant research exhibit contains old survey maps of the Ember Wastes covered in tiny symbols. Each marks where a Ka'het shell or fragment was found, how deeply it was buried, which systems remained intact, and whether later salvage crews had altered the site before researchers arrived.`
+			`\tAn archivist explains in sign that the first discoveries were often treated simply as sources of useful machinery. Once the same biological structures and artificial exoskeletons appeared at many sites, researchers began recording provenance much more carefully. A component recovered from a crash thousands of years old could tell a very different story from one moved between settlements or rebuilt by later engineers.`
+			`\tThose records eventually allowed the Remnant to compare wrecks across worlds instead of treating each find in isolation. The archive does not claim to know every circumstance that brought the shells north of the Graveyard; its purpose is to preserve enough context that future discoveries can refine the history rather than erase it.`
+				decline
+
+
+mission "Ka'het History: Builder-Ka'het Distinction Ledger"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		has "First Contact: Ka'het: Remnant 1B: offered"
+		random < 1
+	on offer
+		conversation
+			`A xenobiology archive displays diagrams of a Ka'het beside sketches copied from Builder ruins. The labels are unusually cautious. "Ka'het" identifies the enormous living organism and its fitted exoskeleton; "Builder" is reserved for the vanished civilization whose facilities appear to have created, equipped, and maintained them.`
+			`\tA researcher says that this distinction became important as Graveyard surveys accumulated. Early reports sometimes used "ship," "creature," and "Builder machine" almost interchangeably. Boarding evidence, surviving production facilities, and translated records gradually forced researchers to separate the living Ka'het from the civilization that engineered their shells and from the automated machinery that still services them.`
+			`\tThe ledger also preserves uncertainty. It records what the surviving facilities do and what the Ka'het are physically, but avoids turning those observations into claims about why the Builders created them or why later generations ceased obeying their creators. Those questions remain historical problems rather than labels disguised as answers.`
+				decline
+
+
+mission "Ka'het History: Lost Network Register"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		has "First Contact: Ka'het: Remnant 1B: offered"
+		random < 1
+	on offer
+		conversation
+			`A communications archive preserves fragments of Ka'het status traffic translated during decades of Graveyard scouting. Many entries are mundane: patrol progress, resource transfers, equipment checks, requests for assistance, and attempts to contact stations or planets that no longer answer.`
+			`\tThe archivist points out that the repeated failed connections are valuable precisely because they were routine. Surviving Ka'het continue to refer to an older network of worlds, stations, and tasks long after much of that network disappeared. Comparing those messages with ruins and planetary surveys gives researchers a way to reconstruct which facilities once depended on one another without assuming every surviving machine possesses an accurate history.`
+			`\tThe register keeps original signals, translations, and later interpretations separate. A station name in an automated report can establish that a connection was expected; it cannot by itself explain when the station was lost, what destroyed it, or whether the sender understands that the wider Builder civilization is gone.`
+				decline
+
+
+mission "Ka'het History: Graveyard Collapse Chronology"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		has "First Contact: Ka'het: Remnant 1B: offered"
+		random < 1
+	on offer
+		conversation
+			`A historical display attempts to reconstruct the fall of the Builders without reducing it to a single date. Planetary ruins, abandoned farms, defense stations, damaged industrial sites, and surviving Ka'het production facilities are arranged as overlapping layers rather than a neat sequence of battles.`
+			`\tThe accompanying notes describe a civilization already spread across several worlds when its own living weapons became a persistent threat. Some settlements were destroyed directly, some infrastructure failed after attacks or environmental damage, and other facilities outlived the communities they had been built to serve. Later Ka'het activity added another layer to ruins that were already ancient.`
+			`\tResearchers therefore maintain a chronology of evidence rather than a single story of collapse. When a translated record, wreck, or newly accessible site changes the order of known events, the archive is revised. The result is less dramatic than a legend of one final battle, but far more useful for understanding how an interplanetary society could contract over generations until only its machines, ruins, and creations remained.`
+				decline
