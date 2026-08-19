@@ -1,0 +1,173 @@
+# A2 staged Imani Rook mediation slice.
+#
+# This replaces the older candidate's ambiguous accept/on-complete lifecycle with
+# independent one-shot offered conversations backed by ordinary persistent
+# conditions. Existing player history remains authoritative and read-only.
+
+mission "A2 Rook Mediation: First Meeting"
+	minor
+	name `Rook Mediation`
+	description `Port mediator Imani Rook asks how a disputed convoy-loss claim should be investigated.`
+	source "New Boston"
+	"offer precedence" 9
+	to offer
+		not "A2 Rook Mediation: briefing seen"
+	on offer
+		conversation
+			`Imani Rook, a port mediator with a slate full of damage reports, stops you near the New Boston concourse. "Captain <last>, I need an outside view. A freight captain and a yard crew are blaming each other for a convoy loss, and both sides have enough evidence to make this ugly."`
+			`Rook turns the slate so you can see three conflicting timelines. "I am not asking you to decide who deserves to win. I am asking what kind of evidence should control what happens next."`
+			choice
+				`\tHear both accounts, preserve the uncertainty, and reconcile the timelines before assigning blame.`
+					goto balanced
+				`\t[Combat experience: convoy command] Reconstruct the loss from formation discipline, threat contacts, and escort decisions.`
+					to activate
+						"combat rating" >= 5
+					goto command
+				`\t[Prior service: Deep convoy] Compare manifests, rendezvous timing, and escort obligations before hearing closing arguments.`
+					to display
+						has "Deep: Syndicate Convoy: done"
+					goto logistics
+				`\tDecline to let either side use your name as outside authority.`
+					goto refuse
+			label balanced
+			`You ask Rook to separate testimony from records and preserve both parties' claims until the timelines can be reconciled. She nods. "That buys us time without pretending uncertainty is proof."`
+			action
+				"A2 Rook Mediation: briefing seen" = 1
+				"A2 Rook Mediation: route balanced" = 1
+				"A2 Rook Mediation: review pending" = 1
+				decline
+			label command
+			`You point out that formation spacing, reaction times, and hostile contacts can distinguish equipment failure from command failure without guessing at motive. Rook marks the route on her slate. "Good. Experience tells us which evidence to test; it does not get to replace the evidence."`
+			action
+				"A2 Rook Mediation: briefing seen" = 1
+				"A2 Rook Mediation: route command" = 1
+				"A2 Rook Mediation: review pending" = 1
+				decline
+			label logistics
+			`You recognize the same handoff ambiguity that can sink a convoy contract before the first jump. You tell Rook to compare manifests, departure acknowledgements, and escort assumptions. "A prior service record is not authority by itself," she says, "but it can tell us which documents matter."`
+			action
+				"A2 Rook Mediation: briefing seen" = 1
+				"A2 Rook Mediation: route logistics" = 1
+				"A2 Rook Mediation: review pending" = 1
+				decline
+			label refuse
+			`You tell Rook that a neutral signature would only disguise uncertainty as judgment. She closes the slate. "Fair. Refusal is better than false certainty. I will record that you declined rather than letting either side turn silence into support."`
+			action
+				"A2 Rook Mediation: briefing seen" = 1
+				"A2 Rook Mediation: refused" = 1
+				"A2 Rook Mediation: refusal reader pending" = 1
+				decline
+
+
+mission "A2 Rook Mediation: Case Review"
+	minor
+	name `Rook Mediation: What the Record Showed`
+	description `Imani Rook reports what the convoy-loss investigation found after applying the method you recommended.`
+	source "New Boston"
+	"offer precedence" 9
+	to offer
+		has "A2 Rook Mediation: review pending"
+		not "A2 Rook Mediation: review seen"
+	on offer
+		conversation
+			branch command
+				has "A2 Rook Mediation: route command"
+			branch logistics
+				has "A2 Rook Mediation: route logistics"
+			`Rook has reduced the original argument to a single reconciled timeline. "Hearing both sides first exposed two timestamps that neither party had challenged because each assumed the other used the same clock reference. Once we preserved the uncertainty instead of rewarding the louder story, the rest became ordinary evidence."`
+			action
+				"A2 Rook Mediation: outcome balanced" = 1
+				goto finish
+			label command
+			`Rook shows you a revised incident map. "The formation reconstruction held up. The escort changed spacing after the first hostile contact, which made a later equipment fault look like the original cause. Your command experience did not decide the case; it identified the sequence we needed to test."`
+			action
+				"A2 Rook Mediation: outcome command" = 1
+				goto finish
+			label logistics
+			`Rook lays two manifests side by side. "The handoff records exposed the failure. The carrier and yard were working from different escort obligations, both signed at different stages of the same contract. Your prior convoy service pointed us to the broken handoff rather than giving either side a shortcut to the verdict."`
+			action
+				"A2 Rook Mediation: outcome logistics" = 1
+			label finish
+			`She closes the case file. "The settlement preserves the disputed evidence and the corrected timeline. More importantly, neither side gets to rewrite what we did into a claim that experience made somebody automatically right."`
+			action
+				"A2 Rook Mediation: review pending" = 0
+				"A2 Rook Mediation: review seen" = 1
+				"A2 Rook Mediation: later reader pending" = 1
+				decline
+
+
+mission "A2 Rook Mediation: Later Reader"
+	minor
+	name `Rook Remembers`
+	description `Imani Rook remembers how you approached the convoy-loss dispute.`
+	source "New Boston"
+	"offer precedence" 9
+	to offer
+		has "A2 Rook Mediation: later reader pending"
+		not "A2 Rook Mediation: later reader seen"
+	on offer
+		conversation
+			branch command
+				has "A2 Rook Mediation: outcome command"
+			branch logistics
+				has "A2 Rook Mediation: outcome logistics"
+			`Rook recognizes you beside the concourse records desk. "I have another disputed file, but I remembered your rule from the convoy case: preserve the uncertainty before asking who benefits from resolving it. The junior mediators are using that phrasing now."`
+				goto choice
+			label command
+			`Rook taps a new convoy diagram as you approach. "I remembered how you used command experience last time: as a way to test the record, not override it. I have another incident where the difference matters."`
+				goto choice
+			label logistics
+			`Rook is already holding two manifests when she sees you. "I remembered that you looked for the broken handoff before choosing a side. We changed the intake form so every disputed transfer now records who believed they owned the next obligation."`
+			label choice
+			choice
+				`\tTell Rook she may ask again when a complete record exists.`
+					goto available
+				`\tTell Rook not to treat one useful consultation as a standing obligation.`
+					goto unavailable
+			label available
+			`Rook nods. "Understood. Invitation, not assignment."`
+			action
+				"A2 Rook Mediation: future contact welcomed" = 1
+				goto finish
+			label unavailable
+			`Rook closes the new file. "Also understood. Remembering how you helped is not the same as assuming you owe me another answer."`
+			action
+				"A2 Rook Mediation: future contact declined" = 1
+			label finish
+			action
+				"A2 Rook Mediation: later reader pending" = 0
+				"A2 Rook Mediation: later reader seen" = 1
+				decline
+
+
+mission "A2 Rook Mediation: Refusal Reader"
+	minor
+	name `Rook Respects the Refusal`
+	description `Imani Rook confirms that your refusal to judge the convoy-loss case remained a refusal.`
+	source "New Boston"
+	"offer precedence" 9
+	to offer
+		has "A2 Rook Mediation: refusal reader pending"
+		not "A2 Rook Mediation: refusal reader seen"
+	on offer
+		conversation
+			`Rook gives you a brief nod as you pass the records desk. "Captain. I kept your refusal in the case file exactly as a refusal. Neither party was allowed to cite you as outside support, and the final finding does not imply that you endorsed it by staying out."`
+			choice
+				`\tTell her that was the point.`
+					goto respected
+				`\tAsk her not to involve you in future mediation at all.`
+					goto nofuture
+			label respected
+			`Rook nods. "Then the record says what you meant it to say."`
+			action
+				"A2 Rook Mediation: refusal respected" = 1
+				goto finish
+			label nofuture
+			`Rook deletes your name from a small list of outside contacts. "Done. A boundary is only useful if it changes what happens next."`
+			action
+				"A2 Rook Mediation: no future mediation" = 1
+			label finish
+			action
+				"A2 Rook Mediation: refusal reader pending" = 0
+				"A2 Rook Mediation: refusal reader seen" = 1
+				decline
