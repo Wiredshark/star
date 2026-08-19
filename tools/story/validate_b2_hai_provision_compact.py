@@ -51,16 +51,21 @@ labels = set(re.findall(r"^\s*label ([A-Za-z0-9_ -]+)\s*$", text, re.MULTILINE))
 missing = sorted(gotos - labels)
 assert not missing, f"goto targets without labels: {missing}"
 
-# Review consumes all three initial routes. The dual-ledger route is the intended fallthrough.
+# Review consumes threshold/manifest explicitly; dual-ledger is the intended fallthrough path.
 for route in ("threshold", "manifest"):
     assert f"branch {route}" in text
-assert 'has "B2 Hai Provision Compact: route dual ledger"' in text
 assert text.count('"B2 Hai Provision Compact: reviewed" = 1') == 2
+
+# The aftermath reader must consume both mutually exclusive terminal settlements.
+assert 'has "B2 Hai Provision Compact: settlement dual ledger"' in text
+assert 'has "B2 Hai Provision Compact: settlement bounded review"' in text
+assert 'not "B2 Hai Provision Compact: aftermath seen"' in text
 
 print("PASS: B2 Hai Provision Compact structure validated")
 print("PASS: missions=3")
 print("PASS: named_characters=2")
 print("PASS: initial_routes=3 + refusal")
+print("PASS: review_routing=threshold/manifest branches + dual-ledger fallthrough")
 print("PASS: terminal_settlements=2")
 print("PASS: source_scope=inhabited Hai government")
 print("PASS: later_reader=Marr Remembers")
