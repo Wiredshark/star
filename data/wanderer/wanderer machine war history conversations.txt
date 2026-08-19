@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Wanderer History: Machine War Armistice Archive"
+	minor
+	invisible
+	source
+		government "Wanderer"
+	to offer
+		has "wanderers sestor done"
+		random < 4
+	on offer
+		conversation
+			`A public archive is displaying records from the campaigns against the Kor Mereti and Kor Sestor machines. The entries are arranged by observed behavior rather than by appearance: attack patterns, retreat responses, repair routines, factory signals, and the few occasions when one machine faction reacted differently from the other.`
+			`\tA Wanderer researcher explains that ending the machine war required more than destroying drones. Their people had to learn which actions were part of a faction's inherited directives, which were responses to immediate threats, and which assumptions came only from observers trying to impose simple motives on autonomous weapons.`
+			`\tThe archive preserves those distinctions because the peace is also a historical lesson. The Wanderers describe themselves as having ended the war between the Kor Mereti and Kor Sestor, but the records deliberately separate what they observed from what they inferred about machines whose original makers and orders are still only partly understood.`
+				decline
+
+
+mission "Wanderer History: Factory Deactivation Provenance Ledger"
+	minor
+	invisible
+	source
+		government "Wanderer"
+	to offer
+		has "wanderers sestor done"
+		random < 4
+	on offer
+		conversation
+			`A technical ledger lists machine factories, disabled production lines, recovered control equipment, and components that disappeared before the Wanderers could catalogue them. Each entry distinguishes material that was destroyed in place from material removed for study, salvage, or an unknown destination.`
+			`\tOne note concerns the Kor Sestor factory whose shutdown helped end the war. Beside it is a warning that the Korath exiles took enough technology from the facility to begin producing war drones of their own.`
+			`\tA technician tells you that this is why provenance became as important as disarmament. Shutting down a dangerous factory ends one immediate threat; knowing where its machine tools, control systems, and expertise went determines whether the same threat can simply reappear somewhere else under new ownership.`
+				decline
+
+
+mission "Wanderer History: Reclamation Safety Map"
+	minor
+	invisible
+	source
+		government "Wanderer"
+	to offer
+		has "wanderers sestor done"
+		random < 4
+	on offer
+		conversation
+			`A wall-sized map of the former Korath war zone is covered in layers of ecological surveys and machine-threat annotations. Some worlds are marked for active restoration, others for continued observation, and a few regions still carry warnings about autonomous systems or unexplained signals.`
+			`\tA terraforming specialist explains that the Wanderers began surveying these worlds before the machine conflict was settled. That created an awkward lesson: a planet could be environmentally ready for restoration while still being strategically unsafe for scientists, settlers, or repair crews.`
+			`\tThe reclamation map grew from keeping those two judgments separate. Ecological need does not prove operational safety, and military quiet does not prove that a damaged biosphere has recovered. Every new colony or restoration project is therefore compared against both records instead of treating the end of the war as the end of the region's hazards.`
+				decline
+
+
+mission "Wanderer History: Autonomous Weapon Custody Record"
+	minor
+	invisible
+	source
+		government "Wanderer"
+	to offer
+		has "wanderers sestor done"
+		random < 4
+	on offer
+		conversation
+			`Inside a research building, damaged machine cores and control assemblies are stored behind separate barriers. Their labels include where each part was recovered, which faction was believed to have operated it, what tests were performed, and whether the identification remains uncertain.`
+			`\tA Wanderer guard says the collection exists because salvaged weapons can become historical evidence, research material, or a new source of danger depending on how they are handled. Early expeditions often wanted to understand the drones well enough to communicate with them; later events proved that recovered machine technology could also be copied and returned to war.`
+			`\tThe custody record does not prohibit study. Instead, it preserves a chain of responsibility between battlefield recovery, scientific examination, storage, and any later transfer. The institution is a reminder that the machine war left behind more than wreckage: it left technology whose history continues whenever someone decides to use it again.`
+				decline
