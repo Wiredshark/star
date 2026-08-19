@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Pug Occupation Evidence Archive"
+	minor
+	source
+		government "Neutral"
+		system "Deneb"
+	"offer precedence" 5
+	to offer
+		has "main plot completed"
+		random < 1
+	on offer
+		conversation
+			`A public archive near the spaceport preserves maintenance logs, emergency reports, photographs, and witness statements from the period when the Pug occupied this region. The displays are unusually careful about separating what investigators could verify from what frightened residents believed at the time.`
+			`	One curator explains that this practice grew out of an uncomfortable fact: the occupation was undeniable, but many ordinary accounts did not fit the usual expectations of a conquering army. Some workers reported little direct interference or damage, while officials had no reliable way to ask the occupiers what they intended. Later inquiries therefore kept original testimony beside physical evidence rather than forcing every account into a single explanation.`
+				decline
+
+
+mission "Pug Infrastructure Stewardship Register"
+	minor
+	source
+		government "Neutral"
+		system "Deneb"
+	"offer precedence" 5
+	to offer
+		has "main plot completed"
+		random < 1
+	on offer
+		conversation
+			`A technical-history exhibit documents the slow transfer of alien-built structures into ordinary civilian use. Early inspection teams mapped unfamiliar power paths, sealed systems they could not identify, and marked components that could be maintained safely with human tools without pretending to understand the whole design.`
+			`	The register eventually became a shared reference for port engineers, utility crews, insurers, and emergency services. Its rules favor reversible repairs and meticulous records whenever Pug construction is involved. The exhibit notes that preserving a working city built by another species required a different habit from either salvaging alien technology or replacing it outright: sometimes the safest form of understanding was knowing exactly what had not yet been understood.`
+				decline
+
+
+mission "Pug Contact Testimony Archive"
+	minor
+	source
+		government "Neutral"
+		system "Deneb"
+	"offer precedence" 5
+	to offer
+		has "main plot completed"
+		random < 1
+	on offer
+		conversation
+			`A small research room contains hundreds of recorded interviews about encounters with the Pug: dock workers, pilots, soldiers, translators, medics, and civilians all describing behavior that they interpreted in different ways. The catalog deliberately preserves contradictions instead of smoothing them into a single official narrative.`
+			`	An introductory note explains why. Even after direct contact, the Pug have often remained difficult or impossible for humans to question, and encounters elsewhere have shown that a language barrier can make apparent silence look like deliberate secrecy. The archive therefore distinguishes observed actions from guessed motives, giving later diplomats and historians a record of uncertainty rather than a false certainty inherited from the first witnesses.`
+				decline
+
+
+mission "Deneb Post-Pug Traffic Ledger"
+	minor
+	source
+		government "Neutral"
+		system "Deneb"
+	"offer precedence" 5
+	to offer
+		has "main plot completed"
+		random < 1
+	on offer
+		conversation
+			`A port-history display charts traffic through Deneb after the Pug were gone. Ship counts rose quickly as merchants rediscovered the system's value as a route between several human regions. Old landing schedules show long queues, improvised holding patterns, and temporary cargo yards appearing faster than permanent port facilities could be expanded.`
+			`	The display follows the administrative response: standardized queue notices, overflow berths, shared arrival records, emergency priority rules, and agreements for rerouting delayed cargo. What began as a practical response to a strange postwar bottleneck became part of the port's normal operating memory. The exhibit treats this as one of the quieter consequences of the Pug episode: alien history reshaped human trade even after the aliens themselves had left.`
+				decline
