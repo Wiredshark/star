@@ -1,0 +1,40 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# A1 world simulation: Merchant rescue load -> Free Worlds defense strain.
+#
+# A sustained Merchant rescue burden represents damaged commercial traffic and
+# response crews competing for safe routing. When that burden is acute, the next
+# qualifying arrival in Free Worlds space adds one bounded unit to the existing
+# Free Worlds defense-strain signal. A six-day latch prevents repeated jumps from
+# multiplying a single rescue episode; the accepted defense-strain recovery event
+# owns decay. This bridge reads Merchant rescue load but never mutates it.
+
+
+event "ES A1: Merchant Rescue Free Worlds Defense Spillover Latch Ends"
+	clear "world: merchant rescue free worlds defense spillover active"
+
+
+mission "ES A1: Merchant Rescue Free Worlds Defense Spillover"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: merchant rescue load" >= 3
+		"world: free worlds defense strain" < 5
+		not "world: merchant rescue free worlds defense spillover active"
+	on offer
+		set "world: merchant rescue free worlds defense spillover active"
+		"world: free worlds defense strain" += 1
+		"world: free worlds defense strain" <?= 5
+		event "ES A1: Free Worlds Defense Strain Recovery" 6 6
+		event "ES A1: Merchant Rescue Free Worlds Defense Spillover Latch Ends" 6 6
+		fail
