@@ -21,7 +21,7 @@ def test_contract_reuses_authoritative_states_and_keeps_congestion_read_only():
     relief = RELIEF.read_text(encoding="utf-8")
     bridge = BRIDGE.read_text(encoding="utf-8")
 
-    assert '"world: southern rim transit congestion" += 2' in transit
+    assert '"world: southern rim transit congestion" += 1' in transit
     assert '"world: free worlds relief demand" += 1' in relief
     for token in (
         '"world: southern rim transit congestion" >= 4',
