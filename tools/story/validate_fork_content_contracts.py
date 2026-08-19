@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Cross-file structural and state-ownership QA for fork-authored A1/A2/B2 data.
+"""Cross-file structural and state-ownership QA for fork-authored B1/A1/A2/B2 data.
 
 Focused per-slice validators are useful but cannot detect collisions between files.
 This check deliberately stays conservative: it validates only invariants that are
-supposed to hold across every fork-authored A1/A2/B2 slice.
+supposed to hold across every fork-authored B1/A1/A2/B2 slice.
 """
 
 from __future__ import annotations
@@ -40,11 +40,17 @@ class ForkFile:
         return self.path.relative_to(ROOT).as_posix()
 
 
+def classify(path: Path) -> str | None:
+    name = path.name.lower()
+    if name.endswith("history conversations.txt"):
+        return "B1"
+    return next((prefix.upper() for prefix in ("a1", "a2", "b2") if name.startswith(prefix)), None)
+
+
 def discover_files() -> list[ForkFile]:
     result: list[ForkFile] = []
     for path in sorted(DATA.rglob("*.txt")):
-        name = path.name.lower()
-        layer = next((prefix.upper() for prefix in ("a1", "a2", "b2") if name.startswith(prefix)), None)
+        layer = classify(path)
         if layer:
             result.append(ForkFile(path, layer))
     return result
@@ -66,7 +72,7 @@ def find_world_writes(text: str) -> set[str]:
 def main() -> int:
     files = discover_files()
     if not files:
-        print("FAIL: no fork-authored A1/A2/B2 data files discovered")
+        print("FAIL: no fork-authored B1/A1/A2/B2 data files discovered")
         return 1
 
     errors: list[str] = []
@@ -86,7 +92,7 @@ def main() -> int:
         for condition in writes:
             world_writers[condition].add(item.relative)
 
-        if item.layer in {"A2", "B2"} and writes:
+        if item.layer in {"B1", "A2", "B2"} and writes:
             for condition in sorted(writes):
                 errors.append(
                     f"{item.relative}: {item.layer} may read but not write A1 world authority {condition!r}"
@@ -120,6 +126,7 @@ def main() -> int:
 
     print("Fork content contract summary")
     print(f"files={len(files)}")
+    print(f"b1_files={counts['files_b1']}")
     print(f"a1_files={counts['files_a1']}")
     print(f"a2_files={counts['files_a2']}")
     print(f"b2_files={counts['files_b2']}")
@@ -133,9 +140,9 @@ def main() -> int:
             print(f"- {error}")
         return 1
 
-    print("PASS: mission/event names are unique across fork A1/A2/B2 data")
+    print("PASS: mission/event names are unique across fork B1/A1/A2/B2 data")
     print("PASS: every parsed mission goto target has a label in the same mission")
-    print("PASS: A2/B2 do not mutate A1 world:* authority")
+    print("PASS: B1/A2/B2 do not mutate A1 world:* authority")
     print("PASS: all discovered world:* writers are A1-owned")
     return 0
 
