@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Hicemus History: Contact Testimony Register"
+	minor
+	invisible
+	source
+		government "Hicemus"
+	to offer
+		has "Incipias: Help The Stranded 2: done"
+		random < 4
+	on offer
+		conversation
+			`A station wall displays a long sequence of colored bands beside simplified ship silhouettes. Some entries are paired with recordings of moving gradients, while others include diagrams of hand motions, docking positions, or pieces of equipment.`
+			`\tAn Incipias attendant explains through your translator that the register preserves encounters where the participants did not share a language. The oldest entries separate what a witness actually saw from what they believed a color, movement, or machine was meant to communicate.`
+			`\tAs Hicemus ships ranged farther from familiar ports, that distinction became increasingly important. A mistaken interpretation could turn a rescue into a threat or a warning into an insult. Their contact history therefore accumulated as a record of uncertainty as much as a record of discovery.`
+				decline
+
+
+mission "Hicemus History: Emergency Compatibility Ledger"
+	minor
+	invisible
+	source
+		government "Hicemus"
+	to offer
+		has "Incipias: Help The Stranded 2: done"
+		random < 4
+	on offer
+		conversation
+			`Near a repair bay, technicians compare crates of tools and replacement parts against a public catalog. Each item is surrounded by colored warnings and sketches showing which Incipias fittings, voltages, pressures, or hull connections it can safely be used with.`
+			`\tA mechanic explains that early off-world crews often carried whatever repair equipment their own builders preferred. When a damaged ship was far from its home workshop, rescuers could arrive with perfectly good supplies that simply could not be connected or safely operated.`
+			`\tThe compatibility ledger grew from those failures. It never made every ship identical, but it gave ports and rescue crews a shared memory of adapters, safe substitutions, and emergency procedures. The result is less a technological standard than an institution for making unlike equipment useful to one another when time matters most.`
+				decline
+
+
+mission "Hicemus History: Station Access Archive"
+	minor
+	invisible
+	source
+		government "Hicemus"
+	to offer
+		has "Incipias: Help The Stranded 2: done"
+		random < 4
+	on offer
+		conversation
+			`A broad directory in the station changes color as crowds move through adjoining corridors. Some routes are marked for cargo, some for visitors, some for maintenance crews, and several quiet passages appear to bypass the busiest public areas entirely.`
+			`\tA station worker says that the Hicemus learned gradually that an orbital settlement needs rules that a ground city can often leave implicit. Visitors cannot simply wander through life-support machinery, repair traffic cannot stop whenever a public corridor fills, and an emergency route is useless if nobody remembers to keep it clear.`
+			`\tOld routing maps are kept beside the current one. Expansion, new workshops, larger ships, and periods of heavier traffic each forced the station to redraw its internal geography. The archive makes the station itself look like a historical document: every corridor records some past compromise between access, safety, work, and privacy.`
+				decline
+
+
+mission "Hicemus History: Outer Survey Petition Archive"
+	minor
+	invisible
+	source
+		government "Hicemus"
+	to offer
+		has "Incipias: Help The Stranded 2: done"
+		random < 4
+	on offer
+		conversation
+			`In a civic chamber, a display lists requests for information about distant systems. Beside each request are fragments of scanner readings, travelers' reports, rejected interpretations, and questions that remain unanswered.`
+			`\tAn Incipias archivist explains that Hicemus leaders began collecting such petitions as their people pushed beyond routes they understood well. A government could decide where to send a ship or what risks to accept, but it could not manufacture reliable knowledge of places its crews had never reached.`
+			`\tThe archive therefore records both policy and ignorance. Reports from miners, stranded crews, foreign visitors, and explorers sit beside official questions, and later evidence is allowed to contradict earlier assumptions. Their expansion into space appears to have created an institution whose purpose is not to pretend the unknown is known, but to remember exactly which uncertainties still matter.`
+				decline
