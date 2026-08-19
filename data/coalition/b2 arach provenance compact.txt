@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Arach Provenance Compact character slice.
+#
+# This consumes B1's Arach mining-provenance, freight-contract, and courier-relay
+# history. The player privately thinks of the two recurring Arach as the Assayer
+# and the Carrier; those are not canonical Arach names, titles, or offices.
+# B2 writes only B2-prefixed state and does not alter material rewards, faction
+# attitudes, world simulation state, or upstream B1/A2 conditions.
+
+
+event "B2 Arach Provenance Compact: Review Ready"
+	"B2 Arach Provenance Compact: review ready" = 1
+
+
+mission "B2 Arach Provenance Compact: Offer"
+	minor
+	name `The Ore That Changed Hands`
+	description `Two Arach traders disagree about whether a disputed ore shipment should carry its mine history or only the condition recorded at each freight handoff.`
+	source
+		government "Coalition"
+		attributes "arach"
+	"offer precedence" 8
+	to offer
+		has "license: Coalition"
+		not "B2 Arach Provenance Compact: introduced"
+		not "B2 Arach Provenance Compact: declined"
+	on offer
+		conversation
+			`Two Arach are studying the same cargo record from opposite ends of a public terminal. You privately think of one as the Assayer: every claim is answered with mine maps, sample numbers, and old survey notes. The other becomes the Carrier in your mind: every claim is answered with transfer seals, hold conditions, and the exact time each ship accepted custody.`
+			`The shipment between them is ordinary ore except for one problem. Its composition is poorer than the mine's historical assays suggest, but every freight handoff says the containers arrived sealed and undamaged. The Assayer argues that the original provenance must travel with the cargo or no later buyer can tell whether the dispute began underground. The Carrier argues that freight crews should only be accountable for the state they actually received and transferred.`
+			choice
+				`\tMake provenance portable: every transfer should preserve the mine, assay, and incident history alongside the freight record.`
+					goto provenance
+				`\tKeep custody narrow: each carrier records only condition, seal state, delays, and responsibility during its own leg.`
+					goto custody
+				`\tPair the records: preserve mine provenance and freight custody as distinct linked histories that can disagree without overwriting each other.`
+					goto paired
+				`\tDecline to help settle an Arach accounting dispute.`
+					goto decline
+			label provenance
+			`You tell them that a buyer should be able to follow the shipment all the way back to the mine. The Carrier accepts that condition reports still matter, but warns that later crews must not inherit blame merely because an older record travels with the cargo. The Assayer agrees to mark provenance as evidence of origin, not proof of where the loss occurred.`
+			action
+				"B2 Arach Provenance Compact: introduced" = 1
+				"B2 Arach Provenance Compact: route portable provenance" = 1
+				"B2 Arach Provenance Compact: assayer trusts player" = 1
+				event "B2 Arach Provenance Compact: Review Ready" 5 7
+				accept
+			label custody
+			`You tell them that responsibility should stay legible at each handoff. The Carrier immediately starts rewriting the transfer record so every seal, delay, and observed condition belongs to one leg only. The Assayer agrees, but insists the mine history remain available as a separate source rather than disappearing when custody changes.`
+			action
+				"B2 Arach Provenance Compact: introduced" = 1
+				"B2 Arach Provenance Compact: route bounded custody" = 1
+				"B2 Arach Provenance Compact: carrier trusts player" = 1
+				event "B2 Arach Provenance Compact: Review Ready" 5 7
+				accept
+			label paired
+			`You suggest two linked records. One follows what the ore was believed to be at the mine; the other follows what each carrier actually observed and accepted. Neither record is allowed to silently rewrite the other. The Assayer calls that enough continuity to investigate the source. The Carrier calls it enough separation to keep a later handoff from becoming an inherited confession.`
+			action
+				"B2 Arach Provenance Compact: introduced" = 1
+				"B2 Arach Provenance Compact: route paired histories" = 1
+				"B2 Arach Provenance Compact: assayer trusts player" = 1
+				"B2 Arach Provenance Compact: carrier trusts player" = 1
+				event "B2 Arach Provenance Compact: Review Ready" 5 7
+				accept
+			label decline
+			`You leave the dispute to them. The Carrier closes the transfer ledger. The Assayer returns to the archive of old assays. Neither asks you to choose again.`
+			action
+				"B2 Arach Provenance Compact: declined" = 1
+				decline
+
+
+mission "B2 Arach Provenance Compact: Review"
+	minor
+	name `A Record That Survives Transfer`
+	description `The Assayer and Carrier return after discovering that copied freight summaries can preserve a conclusion while dropping the evidence that produced it.`
+	source
+		government "Coalition"
+		attributes "arach"
+	"offer precedence" 8
+	to offer
+		has "B2 Arach Provenance Compact: introduced"
+		has "B2 Arach Provenance Compact: review ready"
+		not "B2 Arach Provenance Compact: reviewed"
+	on offer
+		conversation
+			branch provenance
+				has "B2 Arach Provenance Compact: route portable provenance"
+			branch custody
+				has "B2 Arach Provenance Compact: route bounded custody"
+			`The Assayer and Carrier show you three copies of the same paired record. Each copy is internally accurate, but the shortest version has quietly dropped the uncertainty around the original assay. "Nothing false was added," the Assayer says. "The problem is what stopped traveling." The Carrier taps the transfer stamps. "A record can survive every handoff and still lose the boundary between what was observed and what was inferred."`
+				goto settle
+			label provenance
+			`The Assayer shows you a buyer's copy of the portable provenance file. The mine history survived, but the copied summary turned 'historically expected grade' into a statement that the disputed shipment definitely left the mine at that grade. The Carrier points out that every later freight leg is now being judged against an inference that hardened into a fact while the record was copied.`
+				goto settle
+			label custody
+			`The Carrier shows you a clean chain of custody. Every handoff is precise, but a downstream buyer copied only the last two legs and concluded that anything before them was irrelevant. The Assayer says the narrow custody model preserved responsibility while allowing origin evidence to fall out of view.`
+			label settle
+			choice
+				`\tAdopt a provenance packet: every portable summary must carry source, observation, uncertainty, transformation, and the link back to the full record.`
+					goto packet
+				`\tAdopt a dispute ledger: provenance and custody remain separate, but any unresolved contradiction between them must travel with every downstream copy until formally closed.`
+					goto dispute
+			label packet
+			`You recommend a compact provenance packet that travels with every copied summary. It names the source record, what was directly observed, what was inferred, what was transformed or condensed, and where the full record can be checked. The Assayer says that keeps history useful without turning an old assay into a verdict. The Carrier says it also gives each later crew a way to show exactly which conclusion they accepted and which they merely inherited.`
+			action
+				"B2 Arach Provenance Compact: reviewed" = 1
+				"B2 Arach Provenance Compact: settlement provenance packet" = 1
+				"B2 Arach Provenance Compact: assayer trusts player" = 1
+				accept
+			label dispute
+			`You recommend a linked dispute ledger. Mine provenance and freight custody remain separate records, but a contradiction between them becomes its own portable state. Nobody may close it merely by copying a shorter summary; a later buyer can see both histories and whether the discrepancy was investigated, reassigned, or left unresolved. The Carrier calls it responsibility without inherited guilt. The Assayer calls it memory without inherited certainty.`
+			action
+				"B2 Arach Provenance Compact: reviewed" = 1
+				"B2 Arach Provenance Compact: settlement portable dispute ledger" = 1
+				"B2 Arach Provenance Compact: carrier trusts player" = 1
+				accept
+
+
+mission "B2 Arach Provenance Compact: Assayer Remembers"
+	minor
+	name `Assayer Remembers`
+	description `The Arach you privately think of as the Assayer remembers how the disputed shipment changed the way records travel with cargo.`
+	source
+		government "Coalition"
+		attributes "arach"
+	"offer precedence" 8
+	to offer
+		not "B2 Arach Provenance Compact: aftermath seen"
+		or
+			has "B2 Arach Provenance Compact: settlement provenance packet"
+			has "B2 Arach Provenance Compact: settlement portable dispute ledger"
+	on offer
+		conversation
+			branch dispute
+				has "B2 Arach Provenance Compact: settlement portable dispute ledger"
+			`The Assayer recognizes you beside a public cargo terminal. "The provenance packets are being copied with the ore now. Buyers can still argue about what a mine should have produced, but they can see which line was an observation and which was an expectation. The arguments became slower to simplify and faster to audit."`
+				goto finish
+			label dispute
+			`The Assayer recognizes you beside a public cargo terminal. "The dispute ledger has become annoying in exactly the useful way. A contradiction follows the shipment until somebody resolves it. A later carrier cannot erase mine history, and an old assay cannot accuse a later carrier by itself. We have to preserve both the evidence and the fact that we still disagree."`
+			label finish
+			action
+				"B2 Arach Provenance Compact: aftermath seen" = 1
+				accept
