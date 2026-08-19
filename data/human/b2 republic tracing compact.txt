@@ -1,0 +1,140 @@
+# B2 Republic Tracing Compact production slice.
+#
+# Consumes B1's Republic evacuation-manifest / return-and-resettlement history
+# plus A1's authoritative displacement / resettlement state. B2 owns only its
+# character-memory conditions and never writes any world:* variable.
+
+mission "B2 Republic Tracing Compact: Offer"
+	minor
+	name `Names That Did Not Return`
+	description `Republic reunification caseworker Anika Saye and host-world records registrar Corin Vell disagree over how tracing records should follow displaced families through resettlement.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	to offer
+		has "world: republic resettlement surge"
+		"world: republic displacement pressure" >= 2
+		not "B2 Republic Tracing Compact: introduced"
+		not "B2 Republic Tracing Compact: declined"
+	on offer
+		conversation
+			`A temporary casework table has been pushed beside the arrivals registry. Anika Saye, a Republic reunification caseworker, is comparing passenger manifests against family-tracing requests while Corin Vell, a host-world records registrar, marks several names as "present address uncertain."`
+			`Saye says, "The surge is moving people again before every family file is complete. If a parent returns home while a child stays for school, or a mechanic accepts work on a third world, the tracing request must survive the transfer."`
+			`Vell taps the registry. "And if every temporary case stays open forever, the host world never knows which obligations actually moved with the person. We need consent, current addresses, and a clear rule for who owns the next update."`
+			choice
+				`\tBack Saye: family-tracing cases stay open across every move until reunification or an explicit decision to close them.`
+					goto family
+				`\tBack Vell: each move must establish a current address, consent status, and responsible records office before the old file can close.`
+					goto registry
+				`\tSeparate the questions: keep tracing portable, but let return or local settlement remain a distinct voluntary decision.`
+					goto compact
+				`\tDecline to redesign casework during an active resettlement surge.`
+					goto decline
+			label family
+			`You argue that family tracing should follow the person rather than the office. A move cannot silently end a missing-relative search merely because the old housing assignment or passenger manifest has closed. Saye agrees. Vell says, "Then the portable file needs a current custodian, or portability becomes another word for nowhere."`
+			action
+				"B2 Republic Tracing Compact: introduced" = 1
+				"B2 Republic Tracing Compact: route portable tracing" = 1
+				"B2 Republic Tracing Compact: saye trusts player" = 1
+			accept
+			label registry
+			`You tell Saye that every transfer should identify a current address, the resident's consent about contact sharing, and the office responsible for the next update. Vell agrees, while Saye warns that administrative closure cannot be mistaken for family reunification. You recommend that the record distinguish "case transferred" from "case resolved."`
+			action
+				"B2 Republic Tracing Compact: introduced" = 1
+				"B2 Republic Tracing Compact: route accountable registry" = 1
+				"B2 Republic Tracing Compact: vell trusts player" = 1
+			accept
+			label compact
+			`You propose two independent tracks. A tracing file remains portable until reunification or an explicit closure decision, while return, onward migration, and local settlement are recorded separately as voluntary choices. Vell says that gives each office a legible responsibility. Saye says it prevents "going home" from becoming an administrative assumption about what every displaced person wants.`
+			action
+				"B2 Republic Tracing Compact: introduced" = 1
+				"B2 Republic Tracing Compact: route dual track" = 1
+				"B2 Republic Tracing Compact: saye trusts player" = 1
+				"B2 Republic Tracing Compact: vell trusts player" = 1
+			accept
+			label decline
+			`You tell them an active surge is the wrong moment to invent a new records doctrine. Saye returns to the manifest stack. Vell nods toward the unresolved names and says, "Fair. But if the system cannot tell the difference between moved, returned, settled, and reunited, the paperwork will make that decision for us."`
+			action
+				"B2 Republic Tracing Compact: declined" = 1
+			decline
+
+
+mission "B2 Republic Tracing Compact: Review"
+	minor
+	name `The File That Followed`
+	description `Return after the displacement backlog eases and see which tracing rules survived ordinary Republic administration.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	to offer
+		has "B2 Republic Tracing Compact: introduced"
+		"world: republic displacement pressure" < 2
+		not "world: republic resettlement surge"
+		not "B2 Republic Tracing Compact: reviewed"
+	on offer
+		conversation
+			branch portable
+				has "B2 Republic Tracing Compact: route portable tracing"
+			branch registry
+				has "B2 Republic Tracing Compact: route accountable registry"
+			`Saye shows you a family file that crossed three worlds without being closed, while Vell points to a separate settlement record showing that one adult chose to remain on the host world. "The tracing question stayed open," Saye says. "The residence question did not." Vell adds, "Two records, two decisions, one chain of custody."`
+			choice
+				`\tFormalize a portable family file: tracing follows the person across moves, while residence and return choices remain separate records.`
+					goto portableSettlement
+				`\tFormalize a consent ledger: each transfer records contact-sharing consent, current custodian, and whether tracing remains open.`
+					goto consentSettlement
+			label portable
+			`The portable tracing rule kept several family searches alive through multiple transfers, but two destination offices disagreed about who was responsible for updating the current address. Vell says, "The case survived. Ownership of the next update did not." Saye agrees that portability needs an explicit custodian at every handoff.`
+			choice
+				`\tKeep the portable family file, but require every transfer to name the next records custodian.`
+					goto portableSettlement
+				`\tUse a consent ledger that records custodian, current address, and whether the family search remains active.`
+					goto consentSettlement
+			label registry
+			`The accountable-registry rule made transfers easier to audit, but one office closed a tracing file when a resident chose local settlement. Saye says, "They answered where the person lives and treated it as an answer to who they are still looking for." Vell says the register needs an explicit tracing status separate from residence.`
+			choice
+				`\tCreate a portable family file whose tracing status is independent of residence or return decisions.`
+					goto portableSettlement
+				`\tExpand the consent ledger so every transfer separately records address, custodian, contact-sharing consent, and tracing status.`
+					goto consentSettlement
+			label portableSettlement
+			`You recommend a portable family file. Tracing status follows a displaced resident across return, onward migration, or local settlement until reunification or explicit closure. Each transfer names the next records custodian, while housing, employment, and residence choices remain separate administrative records. Saye calls it a way to keep a person from disappearing between systems. Vell calls it a chain of custody that finally has an owner at every step.`
+			action
+				"B2 Republic Tracing Compact: reviewed" = 1
+				"B2 Republic Tracing Compact: settlement portable family file" = 1
+				"B2 Republic Tracing Compact: saye trusts player" = 1
+				"B2 Republic Tracing Compact: vell trusts player" = 1
+			accept
+			label consentSettlement
+			`You recommend a consent ledger. Every transfer records the resident's current address, the office responsible for the next update, whether contact information may be shared, and whether a family-tracing case remains open. A move, return, or local settlement can change one field without silently changing the others. Vell says the ledger makes responsibility auditable. Saye says it makes administrative consent visible instead of assumed.`
+			action
+				"B2 Republic Tracing Compact: reviewed" = 1
+				"B2 Republic Tracing Compact: settlement consent ledger" = 1
+				"B2 Republic Tracing Compact: vell trusts player" = 1
+			accept
+
+
+mission "B2 Republic Tracing Compact: Saye Remembers"
+	minor
+	name `Saye Remembers`
+	description `Anika Saye remembers how Republic tracing practice changed after the resettlement surge.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	to offer
+		not "B2 Republic Tracing Compact: aftermath seen"
+		or
+			has "B2 Republic Tracing Compact: settlement portable family file"
+			has "B2 Republic Tracing Compact: settlement consent ledger"
+	on offer
+		conversation
+			branch consent
+				has "B2 Republic Tracing Compact: settlement consent ledger"
+			`Saye recognizes you beside an arrivals board. "We still have unresolved cases, but a move no longer closes them by accident. A tracing file can follow someone home, onward, or into permanent local settlement without pretending those choices are the same thing. Vell still complains about incomplete addresses. I complain about incomplete families. At least the system now knows the difference."`
+			goto record
+			label consent
+			`Saye is reviewing a transfer record when she recognizes you. "The consent ledger has become ordinary paperwork now. Address, custodian, contact permission, tracing status: separate fields, separate decisions. It sounds bureaucratic until you see the alternative. People used to vanish from a search because somebody marked a housing case closed."`
+			label record
+			action
+				"B2 Republic Tracing Compact: aftermath seen" = 1
+			accept
