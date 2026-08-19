@@ -1,0 +1,95 @@
+# A1 world simulation: Merchant repair backlog.
+#
+# This loop consumes the existing Merchant rescue-load signal rather than
+# duplicating distress truth. Sustained rescue pressure creates a bounded repair
+# backlog. Once the rescue source has materially recovered, emergency yard
+# capacity can mobilize to accelerate backlog reduction. This gives later A2/A3
+# consumers a persistent repair/salvage demand signal with explicit hysteresis.
+
+event "ES A1: Merchant Repair Backlog Recovery"
+	"world: merchant repair backlog" -= 1
+	"world: merchant repair backlog" >?= 0
+	clear "world: merchant repair backlog notice seen"
+
+event "ES A1: Merchant Repair Pressure Window Ends"
+	clear "world: merchant repair pressure active"
+
+event "ES A1: Merchant Repair Surge Ends"
+	clear "world: merchant repair surge"
+	clear "world: merchant repair surge notice seen"
+
+mission "ES A1: Merchant Repair Backlog Escalation"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: merchant rescue load" >= 3
+		not "world: merchant repair pressure active"
+		"world: merchant repair backlog" < 6
+	on offer
+		set "world: merchant repair pressure active"
+		"world: merchant repair backlog" += 2
+		"world: merchant repair backlog" <?= 6
+		event "ES A1: Merchant Repair Backlog Recovery" 6 6
+		event "ES A1: Merchant Repair Pressure Window Ends" 3 3
+		fail
+
+# Negative feedback is intentionally gated on source recovery. Yard surge capacity
+# cannot erase the backlog while rescue operations are still heavily loaded.
+mission "ES A1: Merchant Repair Surge"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		"world: merchant repair backlog" >= 4
+		"world: merchant rescue load" <= 1
+		not "world: merchant repair surge"
+	on offer
+		set "world: merchant repair surge"
+		"world: merchant repair backlog" -= 2
+		"world: merchant repair backlog" >?= 0
+		event "ES A1: Merchant Repair Surge Ends" 5 5
+		fail
+
+mission "ES A1: Merchant Repair Backlog Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		"world: merchant repair backlog" >= 3
+		not "world: merchant repair backlog notice seen"
+	on offer
+		message
+			text "Merchant service channels report a growing repair queue behind recent rescue operations. Tug crews are clearing disabled ships faster than civilian yards can return them to service, increasing demand for parts, salvage, and dock capacity."
+		set "world: merchant repair backlog notice seen"
+		fail
+
+mission "ES A1: Merchant Repair Surge Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		has "world: merchant repair surge"
+		not "world: merchant repair surge notice seen"
+	on offer
+		message
+			text "Merchant yards are temporarily pooling spare berths, salvage teams, and component stock to cut a lingering repair queue now that rescue traffic has eased."
+		set "world: merchant repair surge notice seen"
+		fail
