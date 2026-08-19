@@ -1,0 +1,138 @@
+# B2 Remnant Continuity Compact production slice.
+#
+# This content consumes B1's Remnant continuity, watch-rotation, salvage-provenance,
+# and reserve-ledger institutional history. It turns those survival institutions
+# into a named-character dispute about rapid emergency transfers versus auditable
+# provenance and local stewardship.
+#
+# Stock mission/conversation/global-condition mechanisms only. This slice does
+# not alter reputation, cargo, credits, combat state, outfits, or any world:* state.
+
+mission "B2 Remnant Continuity Compact: Offer"
+	minor
+	name `The Borrowed Reserve`
+	description `Reserve coordinator Nera Venn and salvage engineer Corin Taal disagree over how emergency stores and rebuilt components should move between Remnant settlements.`
+	source
+		government "Remnant"
+	to offer
+		not "B2 Remnant Continuity Compact: introduced"
+		not "B2 Remnant Continuity Compact: declined"
+	on offer
+		conversation
+			`A reserve office beside the port has two walls that seem to contradict each other. One is covered in emergency ledgers showing food, medicine, machinery, transport capacity, and spare berths available to neighboring settlements. The other is covered in component tags that trace salvaged machinery through repairs, substitutions, and repeated rebuilds.`
+			`Nera Venn, a Remnant reserve coordinator, is trying to authorize a transfer of emergency machinery before the next patrol window closes. Corin Taal, a salvage engineer, refuses to release one rebuilt assembly until its provenance record identifies which replacement interfaces were tested after the last overhaul.`
+			`Venn signs, "If every transfer waits for a perfect record, the reserve arrives after the emergency." Taal answers aloud, "And if survival justifies losing the record, the next settlement inherits a machine nobody can safely maintain."`
+			choice
+				`\tBack Venn: emergency continuity comes first, with the receiving settlement responsible for completing the record after transfer.`
+					goto continuity
+				`\tBack Taal: no critical component should move without a complete provenance and interface record.`
+					goto provenance
+				`\tPair them: allow rapid transfer with a minimum custody record, then require a bounded technical reconciliation after arrival.`
+					goto compact
+				`\tDecline to interfere in a system the Remnant have refined for generations.`
+					goto decline
+			label continuity
+			`You argue that a reserve system exists to keep failure in one settlement from becoming failure everywhere. The sending office should record the item, custodian, destination, and known hazards, but a missing maintenance detail should not automatically stop an urgent transfer. Venn nods. Taal signs back, "Then the receiving engineer must inherit the unfinished record as an obligation, not as a blank."`
+			action
+				"B2 Remnant Continuity Compact: introduced" = 1
+				"B2 Remnant Continuity Compact: route continuity" = 1
+				"B2 Remnant Continuity Compact: venn trusts player" = 1
+			accept
+			label provenance
+			`You side with Taal. The Remnant survive because repairs remain repeatable across generations; an emergency component without known interfaces, modifications, and failure history may simply move the danger somewhere else. Venn concedes the point but signs, "Then the record standard must be small enough to finish while the launch window is still open."`
+			action
+				"B2 Remnant Continuity Compact: introduced" = 1
+				"B2 Remnant Continuity Compact: route provenance" = 1
+				"B2 Remnant Continuity Compact: taal trusts player" = 1
+			accept
+			label compact
+			`You propose two records instead of one impossible standard. The transfer cannot leave without a custody minimum: item identity, source, known hazards, responsible sender, responsible receiver, and unresolved technical questions. The complete provenance can follow during a mandatory reconciliation after arrival. Venn signs, "The reserve moves." Taal adds, "And the uncertainty moves with a name attached to it."`
+			action
+				"B2 Remnant Continuity Compact: introduced" = 1
+				"B2 Remnant Continuity Compact: route compact" = 1
+				"B2 Remnant Continuity Compact: venn trusts player" = 1
+				"B2 Remnant Continuity Compact: taal trusts player" = 1
+			accept
+			label decline
+			`You decline to rewrite procedures whose mistakes may have consequences you cannot see. Venn signs that caution is reasonable. Taal looks back at the incomplete component record and says, "The problem will still be here after the patrol window."`
+			action
+				"B2 Remnant Continuity Compact: declined" = 1
+			decline
+
+
+mission "B2 Remnant Continuity Compact: Review"
+	minor
+	name `After the Transfer`
+	description `Return after the disputed reserve transfer and see what the Remnant kept from the compromise.`
+	source
+		government "Remnant"
+	to offer
+		has "B2 Remnant Continuity Compact: introduced"
+		not "B2 Remnant Continuity Compact: reviewed"
+	on offer
+		conversation
+			branch continuity
+				has "B2 Remnant Continuity Compact: route continuity"
+			branch provenance
+				has "B2 Remnant Continuity Compact: route provenance"
+			`Venn and Taal have turned your paired proposal into a working form. The transfer ledger records who released the machinery, who accepted it, what was known at departure, and which technical questions remain open. A second section tracks the reconciliation deadline and every later correction without erasing the original uncertainty.`
+			choice
+				`\tFormalize a continuity compact: minimum custody record at departure, mandatory provenance reconciliation after arrival.`
+					goto custodysettlement
+				`\tFormalize a two-key reserve: urgent transfers may launch quickly, but both reserve and technical custodians must acknowledge unresolved risk.`
+					goto twokeysettlement
+			label continuity
+			`The machinery arrived in time, but the receiving engineers spent a full watch rotation reconstructing which interface had been modified. Venn signs, "The reserve did its job." Taal replies, "And then six people repeated work the sending settlement already knew." They agree that urgency needs a minimum technical record that cannot be deferred.`
+			choice
+				`\tRequire a custody minimum before departure and a bounded provenance reconciliation after arrival.`
+					goto custodysettlement
+				`\tRequire both a reserve custodian and technical custodian to sign any transfer that carries unresolved engineering risk.`
+					goto twokeysettlement
+			label provenance
+			`The record was complete, but the transfer missed the first patrol window and a neighboring settlement had to ration replacement machinery for another day. Taal says, "The machine arrived safe." Venn signs, "The delay was also a failure mode." They agree that a complete archive cannot be the only acceptable state during an emergency.`
+			choice
+				`\tDefine a smaller custody record that permits launch, then require full reconciliation after arrival.`
+					goto custodysettlement
+				`\tUse a two-key exception: reserve and technical custodians jointly acknowledge the unresolved risk before an urgent launch.`
+					goto twokeysettlement
+			label custodysettlement
+			`You recommend a continuity compact. No urgent transfer leaves without item identity, source, known hazards, sender, receiver, and an explicit list of unresolved questions. The receiving settlement inherits both the hardware and a deadline to reconcile the full provenance. Later corrections append to the original transfer record instead of rewriting it. Venn calls it a reserve ledger that admits uncertainty. Taal calls it provenance that does not pretend emergencies wait.`
+			action
+				"B2 Remnant Continuity Compact: reviewed" = 1
+				"B2 Remnant Continuity Compact: settlement custody reconciliation" = 1
+				"B2 Remnant Continuity Compact: venn trusts player" = 1
+				"B2 Remnant Continuity Compact: taal trusts player" = 1
+			accept
+			label twokeysettlement
+			`You recommend a two-key reserve rule. Routine transfers still require full provenance, but a time-critical launch may proceed with an incomplete technical record only when both the reserve custodian and technical custodian acknowledge the same unresolved risks and name the receiving engineer responsible for reconciliation. Venn signs that no single office can hide behind urgency. Taal says no engineer can quietly convert caution into a veto.`
+			action
+				"B2 Remnant Continuity Compact: reviewed" = 1
+				"B2 Remnant Continuity Compact: settlement two key reserve" = 1
+				"B2 Remnant Continuity Compact: venn trusts player" = 1
+				"B2 Remnant Continuity Compact: taal trusts player" = 1
+			accept
+
+
+mission "B2 Remnant Continuity Compact: Taal Remembers"
+	minor
+	name `Taal Remembers`
+	description `Corin Taal remembers how the Remnant changed emergency transfers without discarding technical memory.`
+	source
+		government "Remnant"
+	to offer
+		not "B2 Remnant Continuity Compact: aftermath seen"
+		or
+			has "B2 Remnant Continuity Compact: settlement custody reconciliation"
+			has "B2 Remnant Continuity Compact: settlement two key reserve"
+	on offer
+		conversation
+			branch twokey
+				has "B2 Remnant Continuity Compact: settlement two key reserve"
+			`Taal recognizes you near a rack of tagged replacement assemblies. "The reconciliation rule is still in use. A hurried transfer can admit what nobody knows yet, but it cannot make that ignorance anonymous. The receiving engineer sees the open questions before opening the crate, and later corrections remain attached to the original record."`
+			goto record
+			label twokey
+			`Taal points to two signatures on a transfer tag. "Reserve custodian and technical custodian. Either of us can slow a routine transfer. Neither of us can quietly turn an emergency into someone else's problem. If we launch with uncertainty, we agree on the uncertainty first."`
+			label record
+			action
+				"B2 Remnant Continuity Compact: aftermath seen" = 1
+			accept
