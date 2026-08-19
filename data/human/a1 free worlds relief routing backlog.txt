@@ -1,0 +1,66 @@
+# A1 world simulation: Free Worlds relief-routing backlog feedback.
+#
+# This connects two existing A1 authorities: humanitarian relief demand and
+# Southern Rim transit congestion. When both are elevated, inbound Free Worlds
+# routing accumulates a bounded coordination backlog. Sustained backlog can in
+# turn add one temporary relief-demand contribution, modeling delayed delivery
+# and shelter turnover. Every numeric contribution schedules an exact matching
+# recovery; short latches prevent one crossing from repeatedly amplifying state.
+
+
+event "ES A1: Free Worlds Relief Routing Backlog Recovery"
+	"world: free worlds relief routing backlog" -= 1
+	"world: free worlds relief routing backlog" >?= 0
+
+
+event "ES A1: Free Worlds Relief Routing Observation Ends"
+	clear "world: free worlds relief routing observation"
+
+
+event "ES A1: Free Worlds Relief Routing Feedback Ends"
+	clear "world: free worlds relief routing feedback"
+
+
+mission "ES A1: Free Worlds Relief Routing Backlog"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds relief demand" >= 3
+		"world: southern rim transit congestion" >= 3
+		"world: free worlds relief routing backlog" < 4
+		not "world: free worlds relief routing observation"
+	on offer
+		set "world: free worlds relief routing observation"
+		"world: free worlds relief routing backlog" += 1
+		"world: free worlds relief routing backlog" <?= 4
+		event "ES A1: Free Worlds Relief Routing Backlog Recovery" 6 6
+		event "ES A1: Free Worlds Relief Routing Observation Ends" 2 2
+		fail
+
+
+mission "ES A1: Free Worlds Relief Routing Feedback"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds relief routing backlog" >= 2
+		"world: free worlds relief demand" < 5
+		not "world: free worlds relief routing feedback"
+	on offer
+		set "world: free worlds relief routing feedback"
+		"world: free worlds relief demand" += 1
+		"world: free worlds relief demand" <?= 5
+		event "ES A1: Free Worlds Relief Demand Recovery" 4 4
+		event "ES A1: Free Worlds Relief Routing Feedback Ends" 3 3
+		fail
