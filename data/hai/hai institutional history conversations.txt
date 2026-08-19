@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Hai Stewardship Archive"
+	minor
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A quiet civic archive displays maintenance ledgers for buildings, transit systems, irrigation works, and public machinery whose service lives span many generations. The oldest entries are sparse and idiosyncratic. Later records use increasingly consistent inspections, replacement schedules, and handoff notes, with each steward recording what the next generation will need to know.`
+			`	A Hai archivist explains that the apparent permanence of their cities is less a matter of structures that never wear out than of institutions that expect care to continue long after any one worker retires. Over time, local customs for preserving tools, documenting repairs, and training successors became ordinary public practice, making ancient infrastructure feel less like a relic and more like a continuing obligation.`
+				decline
+
+
+mission "Hai Guest Settlement Register"
+	minor
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A community center keeps a collection of old orientation guides written for newcomers from human space. Early editions are little more than translated maps and food warnings. Newer ones add language lessons, school information, business customs, housing advice, and explanations of which local services humans tend to use differently from Hai residents.`
+			`	The display describes human settlement not as a single planned migration, but as a long accumulation of merchants, families, workers, and travelers who decided to stay. Hai institutions adapted slowly in response: signs became multilingual, schools learned to accommodate unfamiliar childhood customs, and ports developed routines for residents whose relatives and business ties remained beyond the wormhole.`
+				decline
+
+
+mission "Hai Provision Compact Archive"
+	minor
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A regional agricultural museum has devoted one room to old harvest-allocation records. The documents track reserves, transport capacity, crop failures, and shipments between worlds, but one category repeatedly appears without being treated as ordinary trade: food and other necessities sent northward despite recurring raids and political hostility.`
+			`	The accompanying commentary says that the policy was argued over many times, especially after costly attacks. Supporters insisted that defensive force and humanitarian provision answered different questions: communities could repel raids without deciding that civilians beyond the border should be left without the necessities of life. What began as emergency shipments eventually accumulated procedures for reserves, routing, and accountability that survived changes in local leadership.`
+				decline
+
+
+mission "Hai Quiet Border Archive"
+	minor
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A historical display near a port security office contains warning beacons, patrol schedules, civilian evacuation notices, and old maps of the northern approaches. The exhibit is striking for how rarely the documents describe offensive objectives. Most concern detection, interception, protected routes, rescue responsibilities, and the difficult task of keeping ordinary traffic moving while raids remained possible.`
+			`	A note from the curators argues that the border's long stability came from making restraint procedural rather than merely aspirational. Patrol officers were given narrow defensive duties, merchants learned standardized warning practices, and civil authorities maintained relief and rescue arrangements separately from military responses. The resulting system did not end conflict, but it made escalation less dependent on the anger or fear of whoever happened to respond first.`
+				decline
