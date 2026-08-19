@@ -1,0 +1,151 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Quarg Stewardship Boundaries character slice.
+#
+# This turns B1's Protected Community Ledger into a present-day Quarg stewardship
+# dispute about protection, local authority, and when a protector should step back.
+# It writes only B2-prefixed state and does not alter Quarg campaign, Korath, Drak,
+# credits, reputation, cargo, outfits, or A1 simulation state.
+
+
+event "B2 Quarg Stewardship Boundaries: Review Ready"
+	"B2 Quarg Stewardship Boundaries: review ready" = 1
+
+
+mission "B2 Quarg Stewardship Boundaries: Offer"
+	minor
+	name `The Weight of Shelter`
+	description `A Quarg refuge steward asks where protection should end when a sheltered community can again make some of its own decisions.`
+	source
+		government "Quarg"
+	"offer precedence" 8
+	to offer
+		has "First Contact: Quarg: offered"
+		has "Quarg History: Protected Community Ledger: offered"
+		not "B2 Quarg Stewardship Boundaries: introduced"
+		not "B2 Quarg Stewardship Boundaries: declined"
+	on offer
+		conversation
+			`A Quarg in layered gray work-cloth approaches you beside a public planning display. You recognize the same categories you saw in the protected-community archive: food, habitat, medical access, translation, transport, and local administration. The Quarg says, "Human friend, you have read the old ledger. We would value a younger species' answer to a question that our own records do not settle."`
+			`It explains that one protected community now has enough population, transport, and local expertise to resume more of its own administration. The Quarg can continue approving every emergency allocation, or they can transfer more authority before every risk has disappeared. "Protection is easy to begin when danger is plain. It is harder to know when protection itself becomes too much authority."`
+			choice
+				`\tTransfer ordinary decisions first. Keep Quarg intervention only for clearly defined survival emergencies.`
+					goto autonomy
+				`\tKeep joint review for now, but require every Quarg intervention to carry an explicit reason and expiration point.`
+					goto accountable
+				`\tCreate two ledgers: one for local decisions and one for protector obligations, with neither side able to silently rewrite the other.`
+					goto dual
+				`\tDecline to advise the Quarg on another community's authority.`
+					goto decline
+			label autonomy
+			`You suggest transferring ordinary administration immediately while writing a narrow list of survival conditions that still permit Quarg intervention. The steward studies the display for a long moment. "Then protection becomes an exception instead of the default. This risks delay when danger returns, but it also makes the community's authority visible in ordinary life."`
+			action
+				"B2 Quarg Stewardship Boundaries: introduced" = 1
+				"B2 Quarg Stewardship Boundaries: route local autonomy" = 1
+				"B2 Quarg Stewardship Boundaries: steward trusts player" = 1
+				event "B2 Quarg Stewardship Boundaries: Review Ready" 6 9
+				accept
+			label accountable
+			`You recommend joint review for a while longer, but with a written justification and expiration point every time the Quarg override a local decision. The steward says, "Then even a necessary intervention admits that it is temporary. A future steward cannot inherit authority merely because an earlier one once needed it."`
+			action
+				"B2 Quarg Stewardship Boundaries: introduced" = 1
+				"B2 Quarg Stewardship Boundaries: route accountable protection" = 1
+				"B2 Quarg Stewardship Boundaries: steward trusts player" = 1
+				event "B2 Quarg Stewardship Boundaries: Review Ready" 6 9
+				accept
+			label dual
+			`You suggest separate records: the community records its own decisions, while the Quarg record the obligations they have promised to fulfill. If a protector intervenes, the two records must show exactly where the boundary changed and why. The steward clicks its teeth softly. "A ledger that remembers both responsibility and restraint. That may be harder to administer, which is sometimes a sign that the distinction is real."`
+			action
+				"B2 Quarg Stewardship Boundaries: introduced" = 1
+				"B2 Quarg Stewardship Boundaries: route dual ledger" = 1
+				"B2 Quarg Stewardship Boundaries: steward trusts player" = 1
+				event "B2 Quarg Stewardship Boundaries: Review Ready" 6 9
+				accept
+			label decline
+			`You tell the steward that the protected community should answer the question itself. The Quarg bows its head. "A refusal may also contain advice. We will not record your silence as consent."`
+			action
+				"B2 Quarg Stewardship Boundaries: declined" = 1
+				decline
+
+
+mission "B2 Quarg Stewardship Boundaries: Review"
+	minor
+	name `The Boundary Written Down`
+	description `The Quarg refuge steward returns after testing your proposed boundary between protection and local authority.`
+	source
+		government "Quarg"
+	"offer precedence" 8
+	to offer
+		has "B2 Quarg Stewardship Boundaries: introduced"
+		has "B2 Quarg Stewardship Boundaries: review ready"
+		not "B2 Quarg Stewardship Boundaries: reviewed"
+	on offer
+		conversation
+			branch autonomy
+				has "B2 Quarg Stewardship Boundaries: route local autonomy"
+			branch accountable
+				has "B2 Quarg Stewardship Boundaries: route accountable protection"
+			`The steward returns with two columns of records. "Your two-ledger method exposed a problem. The local council may decide freely, yet our old supply promises still create expectations that can become authority by habit. We need a rule for when a promise to help permits a protector to decide."`
+				goto settle
+			label autonomy
+			`The steward says ordinary decisions transferred cleanly, but the first equipment shortage produced a dispute over what counted as a survival emergency. "If every difficult shortage becomes an emergency, our authority returns through vocabulary. If we define emergency too narrowly, we may preserve independence by allowing preventable harm."`
+				goto settle
+			label accountable
+			`The steward says written expiration points helped, but repeated temporary interventions began to resemble a permanent system. "Each action was justified. Their accumulation was not. We need a record that can ask whether many reasonable exceptions have recreated the old default."`
+			label settle
+			choice
+				`\tAdopt a narrow stewardship covenant: local authority is the default, and Quarg intervention requires a named survival trigger, written scope, and automatic review.`
+					goto covenant
+				`\tAdopt a paired-duty register: the community records decisions while the Quarg record promised aid, and intervention requires both a local request or an immediate survival threat.`
+					goto paired
+			label covenant
+			`You recommend a covenant that begins with local authority rather than protection. A Quarg intervention must name the survival trigger, state exactly what authority is being exercised, and schedule an automatic review of whether that authority should end. The steward says, "Then protection remains something we do, not something we become."`
+			action
+				"B2 Quarg Stewardship Boundaries: reviewed" = 1
+				"B2 Quarg Stewardship Boundaries: settlement narrow covenant" = 1
+				"B2 Quarg Stewardship Boundaries: steward trusts player" = 1
+				accept
+			label paired
+			`You recommend keeping the records separate but binding them together at the moment of intervention. Promised aid remains a Quarg duty, while ordinary decisions remain local. The protector may decide only when the community requests it or an immediate survival threat leaves no time to ask. The steward replies, "Then assistance does not quietly carry jurisdiction inside it."`
+			action
+				"B2 Quarg Stewardship Boundaries: reviewed" = 1
+				"B2 Quarg Stewardship Boundaries: settlement paired duty register" = 1
+				"B2 Quarg Stewardship Boundaries: steward trusts player" = 1
+				accept
+
+
+mission "B2 Quarg Stewardship Boundaries: Steward Remembers"
+	minor
+	name `The Steward Remembers`
+	description `The Quarg refuge steward remembers the boundary your advice helped make explicit.`
+	source
+		government "Quarg"
+	"offer precedence" 8
+	to offer
+		not "B2 Quarg Stewardship Boundaries: aftermath seen"
+		or
+			has "B2 Quarg Stewardship Boundaries: settlement narrow covenant"
+			has "B2 Quarg Stewardship Boundaries: settlement paired duty register"
+	on offer
+		conversation
+			branch paired
+				has "B2 Quarg Stewardship Boundaries: settlement paired duty register"
+			`The steward recognizes you near another planning display. "The covenant is now deliberately inconvenient to invoke. A steward must identify the threat, the scope, and the review date. This has slowed us several times. It has also prevented temporary urgency from becoming inherited authority. The protected community now argues with us more often, which I have learned may be evidence that protection is succeeding."`
+				goto finish
+			label paired
+			`The steward recognizes you and shows you two records that no longer share a heading. "Their decisions remain theirs. Our promises remain ours. When the two must meet, the reason is written at the boundary rather than hidden inside the word 'protection.' We have intervened less often, but our obligations are clearer when we do."`
+			label finish
+			action
+				"B2 Quarg Stewardship Boundaries: aftermath seen" = 1
+				accept
