@@ -1,0 +1,34 @@
+# A1 world simulation: Republic displacement -> Free Worlds relief spillover.
+#
+# This bridge reuses two accepted A1 states rather than duplicating either source
+# of truth. When Republic displacement is severe, the next qualifying arrival in
+# Free Worlds space adds one temporary case to the existing relief-demand backlog.
+# A five-day latch prevents repeated crossings from amplifying one displacement
+# episode every jump; the relief system's own four-day recovery drains the added
+# contribution. The bridge never mutates Republic displacement pressure.
+
+
+event "ES A1: Republic Displacement Relief Spillover Latch Ends"
+	clear "world: republic displacement relief spillover active"
+
+
+mission "ES A1: Republic Displacement Relief Spillover"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: republic displacement pressure" >= 4
+		"world: free worlds relief demand" < 5
+		not "world: republic displacement relief spillover active"
+	on offer
+		set "world: republic displacement relief spillover active"
+		"world: free worlds relief demand" += 1
+		"world: free worlds relief demand" <?= 5
+		event "ES A1: Free Worlds Relief Demand Recovery" 4 4
+		event "ES A1: Republic Displacement Relief Spillover Latch Ends" 5 5
+		fail
