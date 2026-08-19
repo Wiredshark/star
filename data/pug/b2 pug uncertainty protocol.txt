@@ -1,0 +1,156 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Pug Uncertainty Protocol production slice.
+# Consumes B1 Pug-contact testimony/evidence memory without inventing Pug motives,
+# institutions, or internal history. The player privately thinks of two recurring
+# human specialists as the Archivist and Interpreter; these are not formal titles.
+
+
+event "B2 Pug Uncertainty Protocol: Review Ready"
+	"B2 Pug Uncertainty Protocol: review ready" = 1
+
+
+mission "B2 Pug Uncertainty Protocol: Offer"
+	minor
+	name `What the Record Cannot Say`
+	description `Two Deneb specialists disagree over how uncertain Pug-contact evidence should travel into operational reports.`
+	source
+		government "Neutral"
+		system "Deneb"
+	"offer precedence" 8
+	to offer
+		has "main plot completed"
+		has "Pug Contact Testimony Archive: offered"
+		not "B2 Pug Uncertainty Protocol: introduced"
+		not "B2 Pug Uncertainty Protocol: declined"
+	on offer
+		conversation
+			`In a side room of Deneb's contact archive, two familiar human specialists are arguing over the same encounter report. One spends most of the time tracing recordings back to witnesses, sensor logs, and physical evidence, so privately you have begun thinking of that one as the Archivist. The other compares speech fragments, gestures, context, and failed translation attempts, so in your own head you call that one the Interpreter. Neither is a title they have introduced themselves with.`
+			`\tA patrol report describes a Pug vessel holding position beside a damaged freighter. The raw record proves where the ship was, how long it remained, and what systems changed on the freighter afterward. The dispute is over the sentence that says the Pug "waited to ensure the crew was safe." The Interpreter thinks that is the most useful reading for future crews. The Archivist says the record can support "remained nearby after the emergency," but not the motive.`
+			choice
+				`\tKeep operational reports strictly observational. If motive is uncertain, do not place it in the main record.`
+					goto observation
+				`\tAllow a best interpretation when crews need actionable guidance, but mark confidence and competing explanations clearly.`
+					goto interpretation
+				`\tCarry both layers together: an immutable observation record plus a separately labeled interpretation that can change without rewriting the evidence.`
+					goto paired
+				`\tDecline to decide how Deneb's specialists should describe another species' intentions.`
+					goto decline
+			label observation
+			`You point to the raw timeline and suggest that the operational record stop where verification stops. The Archivist nods and removes the sentence about motive from the primary report. The Interpreter keeps a separate note explaining why several specialists still think the Pug may have been helping. Crews will receive less confident advice, but nobody will inherit a guess disguised as an observation.`
+			action
+				"B2 Pug Uncertainty Protocol: introduced" = 1
+				"B2 Pug Uncertainty Protocol: route observation" = 1
+				"B2 Pug Uncertainty Protocol: archivist trusts player" = 1
+				event "B2 Pug Uncertainty Protocol: Review Ready" 7 11
+				accept
+			label interpretation
+			`You argue that uncertainty should not make a report useless. The Interpreter rewrites the sentence as a probable interpretation and adds a confidence marker plus the strongest competing explanation. The Archivist accepts the wording only after the original observations are linked directly beneath it. Crews will have guidance, but the guidance now admits what could prove it wrong.`
+			action
+				"B2 Pug Uncertainty Protocol: introduced" = 1
+				"B2 Pug Uncertainty Protocol: route interpretation" = 1
+				"B2 Pug Uncertainty Protocol: interpreter trusts player" = 1
+				event "B2 Pug Uncertainty Protocol: Review Ready" 7 11
+				accept
+			label paired
+			`You suggest treating observation and interpretation as linked records with different ownership. The Archivist freezes the sensor timeline and witness provenance. The Interpreter creates a second layer for possible motives, translation hypotheses, and confidence. A later analyst may revise the second layer without changing the first. Both specialists agree that disagreement becomes easier to preserve when it has somewhere explicit to live.`
+			action
+				"B2 Pug Uncertainty Protocol: introduced" = 1
+				"B2 Pug Uncertainty Protocol: route paired" = 1
+				"B2 Pug Uncertainty Protocol: archivist trusts player" = 1
+				"B2 Pug Uncertainty Protocol: interpreter trusts player" = 1
+				event "B2 Pug Uncertainty Protocol: Review Ready" 7 11
+				accept
+			label decline
+			`You tell them that uncertainty about the Pug is exactly why you should not become the deciding voice in someone else's archive. The Interpreter closes the draft report. The Archivist leaves the raw evidence untouched. Their disagreement continues without your name attached to either side.`
+			action
+				"B2 Pug Uncertainty Protocol: declined" = 1
+				decline
+
+
+mission "B2 Pug Uncertainty Protocol: Review"
+	minor
+	name `The Copy of a Guess`
+	description `The Archivist and Interpreter return after seeing uncertainty disappear as contact reports are copied between crews and agencies.`
+	source
+		government "Neutral"
+		system "Deneb"
+	"offer precedence" 8
+	to offer
+		has "B2 Pug Uncertainty Protocol: introduced"
+		has "B2 Pug Uncertainty Protocol: review ready"
+		not "B2 Pug Uncertainty Protocol: reviewed"
+	on offer
+		conversation
+			branch observation
+				has "B2 Pug Uncertainty Protocol: route observation"
+			branch interpretation
+				has "B2 Pug Uncertainty Protocol: route interpretation"
+			`The Archivist and Interpreter show you three copies of the same report. Your paired record survived intact in the archive, but one shipping office exported only the interpretation summary and another copied a sentence from that summary into a safety bulletin. By the third copy, a tentative explanation has become an unattributed fact.`
+				goto settle
+			label observation
+			`The Archivist says the observation-only report remained precise, but crews built their own informal explanations in message boards and local safety notes. Several of those guesses now circulate without any link back to the evidence that originally constrained them. Removing interpretation from the official record did not remove interpretation from practice; it merely moved it somewhere harder to audit.`
+				goto settle
+			label interpretation
+			`The Interpreter says the confidence-marked report worked well at Deneb, but copies made elsewhere often dropped the confidence field while preserving the headline conclusion. A useful shorthand became a confident assertion after two or three transfers. The problem is no longer how one analyst writes uncertainty. It is how uncertainty survives copying.`
+			label settle
+			choice
+				`\tUse a provenance ladder: every claim carries a machine-readable link to the observation, interpretation step, confidence, and later revisions that produced it.`
+					goto provenance
+				`\tUse an uncertainty envelope: any exported conclusion about Pug intent must carry its confidence, alternatives, and a warning when the source cannot establish motive.`
+					goto envelope
+			label provenance
+			`You recommend making the chain itself portable. A copied claim carries identifiers for the source observations, the analyst who interpreted them, the confidence assigned at the time, and any later revision. A crew may still quote the short conclusion, but the path back to what was actually seen remains attached. The Archivist calls it evidence custody for ideas; the Interpreter says it gives changing explanations a history instead of pretending each revision was always obvious.`
+			action
+				"B2 Pug Uncertainty Protocol: reviewed" = 1
+				"B2 Pug Uncertainty Protocol: settlement provenance ladder" = 1
+				"B2 Pug Uncertainty Protocol: archivist trusts player" = 1
+				"B2 Pug Uncertainty Protocol: interpreter trusts player" = 1
+				accept
+			label envelope
+			`You recommend treating uncertainty as part of the conclusion rather than optional metadata. Any exported statement about Pug intent must carry the confidence level, the strongest surviving alternative, and an explicit note when the source proves behavior but not motive. The Interpreter says the summary remains useful. The Archivist points out that copying it incorrectly now requires deleting a visible warning instead of merely forgetting an invisible field.`
+			action
+				"B2 Pug Uncertainty Protocol: reviewed" = 1
+				"B2 Pug Uncertainty Protocol: settlement uncertainty envelope" = 1
+				"B2 Pug Uncertainty Protocol: archivist trusts player" = 1
+				"B2 Pug Uncertainty Protocol: interpreter trusts player" = 1
+				accept
+
+
+mission "B2 Pug Uncertainty Protocol: Archivist Remembers"
+	minor
+	name `The Archivist Remembers`
+	description `A Deneb archivist remembers the distinction your advice helped preserve between Pug behavior and human interpretation.`
+	source
+		government "Neutral"
+		system "Deneb"
+	"offer precedence" 8
+	to offer
+		not "B2 Pug Uncertainty Protocol: aftermath seen"
+		or
+			has "B2 Pug Uncertainty Protocol: settlement provenance ladder"
+			has "B2 Pug Uncertainty Protocol: settlement uncertainty envelope"
+	on offer
+		conversation
+			branch envelope
+				has "B2 Pug Uncertainty Protocol: settlement uncertainty envelope"
+			`The Archivist recognizes you beside a terminal showing a recent Pug-contact report. Its short operational conclusion is followed by a visible chain: sensor record, witness statement, translation attempt, analyst interpretation, confidence change, and a later revision. The Interpreter is updating one hypothesis without touching the underlying observations. The archive can change its mind without changing its memory.`
+				goto finish
+			label envelope
+			`The Archivist recognizes you and opens a recent contact bulletin. Its first paragraph offers crews a practical interpretation, but the uncertainty travels in the same block: moderate confidence, two viable alternatives, and a blunt sentence saying that observed behavior does not establish motive. The Interpreter says crews complain about the extra words. The Archivist says that is preferable to inheriting certainty nobody actually earned.`
+			label finish
+			action
+				"B2 Pug Uncertainty Protocol: aftermath seen" = 1
+				accept
