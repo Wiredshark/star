@@ -1,3 +1,16 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # A1 world simulation: Republic customs scrutiny.
 #
 # This crime/law state connects two existing authorities instead of copying them:
@@ -5,8 +18,10 @@
 # A captain with repeated underworld history who crosses directly from Pirate space
 # into Republic territory can build temporary customs scrutiny. Routine crossings
 # contribute +1; crossings during an already-heightened border posture contribute
-# +2. Each contribution schedules an equal seven-day decay, and the signal is
-# bounded to 0..6.
+# +2. Elevated crossings also start a four-day review cooldown so repeated border
+# transits cannot stack +2 pressure every day while one secondary-inspection cycle
+# is still active. Each scrutiny contribution schedules an equal seven-day decay,
+# and the signal remains bounded to 0..6.
 
 
 event "ES A1: Republic Customs Scrutiny Decay 1"
@@ -19,6 +34,10 @@ event "ES A1: Republic Customs Scrutiny Decay 2"
 	"world: republic customs scrutiny" -= 2
 	"world: republic customs scrutiny" >?= 0
 	clear "world: republic customs scrutiny notice seen"
+
+
+event "ES A1: Republic Customs Review Cooldown"
+	clear "world: republic customs review cooldown"
 
 
 mission "ES A1: Republic Customs Scrutiny Routine Crossing"
@@ -56,10 +75,13 @@ mission "ES A1: Republic Customs Scrutiny Elevated Crossing"
 		"pirate jobs" >= 3
 		"world: republic border pressure" >= 4
 		"world: republic customs scrutiny" < 5
+		not "world: republic customs review cooldown"
 	on offer
 		"world: republic customs scrutiny" += 2
 		"world: republic customs scrutiny" <?= 6
+		set "world: republic customs review cooldown"
 		event "ES A1: Republic Customs Scrutiny Decay 2" 7 7
+		event "ES A1: Republic Customs Review Cooldown" 4 4
 		fail
 
 
