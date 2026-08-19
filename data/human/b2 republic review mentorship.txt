@@ -1,0 +1,151 @@
+# B2 Republic Review Mentorship character slice.
+#
+# This deepens the A2 Republic Customs Review by following Sera Noll after the
+# player's review has closed. B2 reads A2 legal-memory state and writes only
+# B2-prefixed relationship/content conditions. It never writes A1 world state,
+# pirate-job history, material rewards, or reputation.
+
+
+event "B2 Republic Review Mentorship: Practice Ready"
+	"B2 Republic Review Mentorship: practice ready" = 1
+
+
+mission "B2 Republic Review Mentorship: Offer"
+	minor
+	name `A Case Without a Captain`
+	description `Sera Noll and junior port-rights observer Mara Keene ask how a resolved customs-review case should be taught without turning one captain into a permanent exhibit.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "A2 Republic Customs Review: later reader seen"
+		not "B2 Republic Review Mentorship: introduced"
+		not "B2 Republic Review Mentorship: declined"
+	on offer
+		conversation
+			branch private
+				has "A2 Republic Customs Review: precedent kept private"
+			`Sera Noll is seated beside a junior port-rights observer who is deleting names from a training worksheet. "Captain <last>, this is Mara Keene. I promised your old review would not become a story about you, but the procedural problem it exposed keeps recurring."`
+			`Keene turns the worksheet so you can see four empty headings: evidence, inference, scope, and consent. "I can teach the structure without teaching the person. What I do not know is how much of the original sequence has to remain for the lesson to make sense."`
+				goto choices
+			label public
+			`Noll is speaking with a junior port-rights observer over a stack of training files. "Captain <last>, this is Mara Keene. You allowed the procedure from your old review to be cited, but not as a blanket endorsement. Mara is trying to turn that boundary into something a new observer can actually use."`
+			`Keene says, "If I strip away too much context, the lesson becomes 'fill in the right boxes.' If I keep too much, it starts teaching people to imitate one case instead of reason about the next one."`
+			label choices
+			branch public
+				has "A2 Republic Customs Review: precedent use bounded"
+			choice
+				`\tBuild an anonymized casebook: preserve the sequence of decisions, but remove identifying details and route-specific biography.`
+					goto casebook
+				`\tUse supervised live clinics where trainees must explain the evidence/inference boundary aloud before they can widen a review.`
+					goto clinic
+				`\tKeep the material inside private mentorship: observers may study the reasoning, but the original review never becomes a reusable model file.`
+					goto mentorship
+				`\tDecline to turn the old review into training material at all.`
+					goto decline
+			label casebook
+			`You suggest an anonymized casebook that preserves the order of decisions and the mistakes each decision was meant to prevent, while removing your identity, ship history, and exact route pattern. Keene starts rewriting the file as a sequence of questions instead of a sequence of facts. Noll says, "Good. A precedent should teach what had to be justified, not who happened to be standing at the desk."`
+			action
+				"B2 Republic Review Mentorship: introduced" = 1
+				"B2 Republic Review Mentorship: route anonymized casebook" = 1
+				"B2 Republic Review Mentorship: keene trusts player" = 1
+				event "B2 Republic Review Mentorship: Practice Ready" 5 7
+				accept
+			label clinic
+			`You recommend live clinics. A trainee may inherit a review flag, but before widening the inquiry they must say what is confirmed, what is inferred, what authority permits the next step, and what the captain has actually consented to. Keene looks relieved. "So the training object is the explanation, not the old case." Noll nods. "And a supervisor can hear when an inference has quietly turned into a fact."`
+			action
+				"B2 Republic Review Mentorship: introduced" = 1
+				"B2 Republic Review Mentorship: route supervised clinic" = 1
+				"B2 Republic Review Mentorship: noll trusts player" = 1
+				"B2 Republic Review Mentorship: keene trusts player" = 1
+				event "B2 Republic Review Mentorship: Practice Ready" 5 7
+				accept
+			label mentorship
+			`You tell Keene that the safest lesson may be a private one: Noll can teach the reasoning directly, but no portable case file should outlive the context that made each boundary necessary. Keene closes the worksheet and starts taking notes on process instead. Noll says, "That costs us convenience. It also prevents a training example from becoming an unofficial rule."`
+			action
+				"B2 Republic Review Mentorship: introduced" = 1
+				"B2 Republic Review Mentorship: route private mentorship" = 1
+				"B2 Republic Review Mentorship: noll trusts player" = 1
+				event "B2 Republic Review Mentorship: Practice Ready" 5 7
+				accept
+			label decline
+			`You ask Noll to keep the old review closed. Keene deletes the remaining notes and says, "Then I will learn the principle from current work, not by reopening yours." Noll accepts the answer without argument.`
+			action
+				"B2 Republic Review Mentorship: declined" = 1
+				decline
+
+
+mission "B2 Republic Review Mentorship: Practice Review"
+	minor
+	name `The Observer's Question`
+	description `Mara Keene returns after testing the training rule against ordinary Republic review work.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Republic Review Mentorship: introduced"
+		has "B2 Republic Review Mentorship: practice ready"
+		not "B2 Republic Review Mentorship: reviewed"
+	on offer
+		conversation
+			branch casebook
+				has "B2 Republic Review Mentorship: route anonymized casebook"
+			branch clinic
+				has "B2 Republic Review Mentorship: route supervised clinic"
+			`Keene finds you with Noll nearby. "The private mentorship worked, but it has a weakness. Two observers can learn the same principle from Sera and still write completely different records. We need some durable structure without turning your review into the template."`
+				goto settle
+			label casebook
+			`Keene shows you an anonymized training file. "The casebook preserved the sequence, but one trainee treated the example as a checklist and skipped the part where the factual basis was supposed to change the next step. The file needs explicit stop points: places where an observer has to say why the review may continue." Noll says the same mistake is how administrative habits become invisible authority.`
+				goto settle
+			label clinic
+			`Keene says the live clinics exposed weak reasoning quickly, but supervisors disagreed about what counted as an adequate explanation. "One heard 'route pattern' and accepted it. Another demanded the examiner identify what was unusual about the pattern. We need a common review record, not a common conclusion."`
+			label settle
+			choice
+				`\tAdopt an abstract safeguards record: every review logs evidence, inference, scope authority, consent boundary, and the reason for each escalation.`
+					goto safeguards
+				`\tAdopt supervised review circles: observers compare live cases using a shared reasoning rubric, but no prior captain's file becomes binding precedent.`
+					goto circle
+			label safeguards
+			`You recommend a short safeguards record attached to every elevated review. It does not dictate the answer; it forces each office to separate evidence from inference, identify its authority, record consent limits, and explain every escalation. Keene says that gives trainees something durable to compare without borrowing the identity of an older case. Noll calls it "portable accountability instead of portable suspicion."`
+			action
+				"B2 Republic Review Mentorship: reviewed" = 1
+				"B2 Republic Review Mentorship: settlement safeguards record" = 1
+				"B2 Republic Review Mentorship: noll trusts player" = 1
+				"B2 Republic Review Mentorship: keene trusts player" = 1
+				accept
+			label circle
+			`You recommend supervised review circles. Trainees bring current cases, state the evidence/inference boundary aloud, and compare reasoning against a shared rubric. Prior files may supply questions, never binding answers. Keene says it keeps the training social enough to expose weak assumptions. Noll says it also keeps responsibility with the current observer instead of letting a dead file make the decision.`
+			action
+				"B2 Republic Review Mentorship: reviewed" = 1
+				"B2 Republic Review Mentorship: settlement supervised review circle" = 1
+				"B2 Republic Review Mentorship: keene trusts player" = 1
+				accept
+
+
+mission "B2 Republic Review Mentorship: Keene Remembers"
+	minor
+	name `Keene Remembers`
+	description `Mara Keene remembers what the first review lesson taught her about evidence, authority, and the people inside administrative records.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Republic Review Mentorship: aftermath seen"
+		or
+			has "B2 Republic Review Mentorship: settlement safeguards record"
+			has "B2 Republic Review Mentorship: settlement supervised review circle"
+	on offer
+		conversation
+			branch circle
+				has "B2 Republic Review Mentorship: settlement supervised review circle"
+			`Keene recognizes you near a customs office. "The safeguards record is boring enough that people actually use it. Evidence, inference, authority, consent, escalation. The useful part is that a later office can inherit the questions without inheriting the certainty. Sera says that is what we were trying to protect in your old review all along."`
+				goto finish
+			label circle
+			`Keene recognizes you after a review-circle session. "The trainees argue more now. That is useful. If an examiner says a route pattern is suspicious, somebody asks what makes it unusual. If a captain declines an informal interview, somebody asks whether the refusal changed any fact. We stopped teaching the old case and started teaching each other how to notice the leap."`
+			label finish
+			action
+				"B2 Republic Review Mentorship: aftermath seen" = 1
+				accept
