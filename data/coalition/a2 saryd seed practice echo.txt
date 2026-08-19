@@ -1,0 +1,102 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# A2 Saryd Seed Practice Echo.
+# Consumes the resolved B2 Saryd seed-stewardship settlement read-only and lets
+# the player bound how that precedent should travel. Keeper/Grower remain
+# player-private shorthand, not Saryd names or offices.
+
+mission "A2 Saryd Seed Practice Echo: Offer"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "saryd"
+	to offer
+		has "B2 Saryd Seed Stewardship: aftermath seen"
+		not "A2 Saryd Seed Practice Echo: introduced"
+		not "A2 Saryd Seed Practice Echo: declined"
+		random < 26
+	on offer
+		conversation
+			branch reserve
+				has "B2 Saryd Seed Stewardship: settlement local reserve covenant"
+			`At another seed exchange, the Saryd you privately think of as the Keeper shows you a request from a distant community. They have heard that an earlier emergency ended with portable seed records and want to copy the practice. The Grower points out that their crops, climate, and archive habits are different. A useful precedent can become a bad rule if its limits disappear while it travels.`
+			goto choose
+			label reserve
+			`At another seed exchange, the Saryd you privately think of as the Keeper shows you a request from a distant community. They have heard that an earlier emergency ended with protected local reserves and want to copy the practice. The Grower points out that their crops, climate, and archive habits are different. A useful precedent can become a bad rule if its limits disappear while it travels.`
+			label choose
+			`\tNeither Saryd treats your earlier involvement as authority. They ask only what should travel with the story of what happened.`
+			choice
+				`\tKeep the precedent local. Other exchanges should solve their own problem without borrowing this settlement as a model.`
+					goto local
+				`\tCarry forward the method only: record origin, uncertainty, field results, and what must remain available for comparison, then let each exchange choose its own settlement.`
+					goto method
+				`\tAllow the settlement to be cited as a bounded example, but require the differences in crop, climate, urgency, and record quality to travel with it.`
+					goto example
+				`\tDecline to decide how Saryd exchanges should reuse their own precedent.`
+					goto decline
+			label local
+			`You ask them to leave the old settlement where it happened. The Keeper closes the request without attaching the earlier case. The Grower agrees that a story can remain useful without becoming portable policy.`
+			action
+				"A2 Saryd Seed Practice Echo: introduced" = 1
+				"A2 Saryd Seed Practice Echo: route local" = 1
+			accept
+			label method
+			`You separate the reasoning from the answer. The Keeper writes down provenance, uncertainty, retained reference material, and what changed in the field. The Grower adds urgency, access, and the cost of delay. The distant exchange receives questions to ask, not a settlement to copy.`
+			action
+				"A2 Saryd Seed Practice Echo: introduced" = 1
+				"A2 Saryd Seed Practice Echo: route method" = 1
+			accept
+			label example
+			`You let the earlier settlement travel only with its boundary conditions attached. The Keeper adds the record quality and retained reference material. The Grower adds the emergency pressure, climate, and access constraints. Anyone citing the example will also inherit a list of reasons it may not fit.`
+			action
+				"A2 Saryd Seed Practice Echo: introduced" = 1
+				"A2 Saryd Seed Practice Echo: route bounded example" = 1
+			accept
+			label decline
+			`You leave the question with the exchanges themselves. The Keeper and Grower return to the request without treating your silence as permission.`
+			action
+				"A2 Saryd Seed Practice Echo: declined" = 1
+			decline
+
+mission "A2 Saryd Seed Practice Echo: Reflection"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "saryd"
+	to offer
+		has "A2 Saryd Seed Practice Echo: introduced"
+		not "A2 Saryd Seed Practice Echo: reflection seen"
+		random < 30
+	on offer
+		conversation
+			branch method
+				has "A2 Saryd Seed Practice Echo: route method"
+			branch example
+				has "A2 Saryd Seed Practice Echo: route bounded example"
+			`The Keeper recognizes you beside a local exchange ledger. The distant request is still filed as correspondence rather than precedent. Their exchange reached a different answer, and nobody here treats that difference as a failure. The Grower remarks that keeping one settlement local also kept anyone from mistaking your earlier participation for standing authority.`
+			goto done
+			label method
+			`The Keeper shows you three exchanges that used the same questions and reached three different settlements. Their records can still be compared because origin, uncertainty, field performance, and retained reference material are visible. The Grower points out that the method traveled farther than any single answer could have without pretending the worlds were interchangeable.`
+			goto done
+			label example
+			`The Grower shows you an exchange that cited the old settlement, then rejected part of it because its climate and emergency pressure were different. The Keeper is pleased that the citation includes the disagreement. The example traveled, but its limits traveled with it, so copying it required an argument rather than deference.`
+			label done
+			action
+				"A2 Saryd Seed Practice Echo: reflection seen" = 1
+			accept
