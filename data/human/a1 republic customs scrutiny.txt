@@ -55,7 +55,7 @@ mission "ES A1: Republic Customs Scrutiny Elevated Crossing"
 		has "previous system government: Pirate"
 		"pirate jobs" >= 3
 		"world: republic border pressure" >= 4
-		"world: republic customs scrutiny" <= 4
+		"world: republic customs scrutiny" < 5
 	on offer
 		"world: republic customs scrutiny" += 2
 		"world: republic customs scrutiny" <?= 6
