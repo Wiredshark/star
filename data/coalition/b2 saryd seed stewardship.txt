@@ -1,0 +1,151 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Saryd Seed Stewardship production slice.
+# Consumes B1 seed-lineage exchange and ecological-recovery history without
+# inventing a centralized Saryd authority. The player privately uses Keeper and
+# Grower as shorthand for two recurring Saryd encountered around seed exchanges.
+
+mission "B2 Saryd Seed Stewardship: Offer"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "saryd"
+	to offer
+		not "B2 Saryd Seed Stewardship: introduced"
+		not "B2 Saryd Seed Stewardship: declined"
+		random < 18
+	on offer
+		conversation
+			`Near a seed-exchange archive, two Saryd are arguing over a row of sealed cases. You have seen both at similar exchanges on other worlds. One is usually checking old lineage labels against newer machine-readable records, so privately you have started thinking of that one as the Keeper. The other tends to arrive with growers, soil notes, and requests from settlements whose harvests are failing, so in your own head you call that one the Grower. Neither word is a name or office they have given you.`
+			`\tA fungal blight has damaged a staple crop in several nearby settlements. The Grower wants resistant seed released immediately from the exchange. The Keeper points to incomplete lineage notes: the stored strain survived a different climate, and mixing it widely before its origin and traits are recorded may erase a local variety that cannot easily be reconstructed later.`
+			choice
+				`\tProtect the lineage record first. Release should wait until origin, traits, and local variants are documented well enough to preserve what may be lost.`
+					goto provenance
+				`\tProtect access first. A seed archive that preserves perfect records while settlements lose a harvest has forgotten why the exchange exists.`
+					goto access
+				`\tUse a paired release: send enough resistant seed for the emergency, but require every recipient to return planting, survival, and cross-breeding records to the exchange.`
+					goto paired
+				`\tDecline to decide how another society should balance a living crop against its historical record.`
+					goto decline
+			label provenance
+			`You point to the gaps in the lineage record and then to the sealed cases. The Keeper relaxes slightly and begins arranging a rapid cataloging session. The Grower accepts the delay with visible frustration. The local variety will not vanish anonymously, but every day spent reconstructing its history is another day damaged fields remain short of resistant seed.`
+			action
+				"B2 Saryd Seed Stewardship: introduced" = 1
+				"B2 Saryd Seed Stewardship: route provenance" = 1
+				"B2 Saryd Seed Stewardship: keeper trusts player" = 1
+			accept
+			label access
+			`You point from the resistant seed to the affected-settlement requests. The Grower immediately starts arranging distribution. The Keeper reluctantly adds provisional tags to each release. The harvest response will begin sooner, but the archive now depends on recipients remembering to report what was planted, crossed, or lost while the emergency is still unfolding.`
+			action
+				"B2 Saryd Seed Stewardship: introduced" = 1
+				"B2 Saryd Seed Stewardship: route access" = 1
+				"B2 Saryd Seed Stewardship: grower trusts player" = 1
+			accept
+			label paired
+			`You separate a small emergency release from the untouched reserve and then point to the archive's return-record fields. The Grower brightens at the immediate distribution while the Keeper adds a requirement that every receiving settlement report planting location, survival, cross-breeding, and retained local seed. The exchange accepts that emergency use can change a lineage, but not that the change should become invisible.`
+			action
+				"B2 Saryd Seed Stewardship: introduced" = 1
+				"B2 Saryd Seed Stewardship: route paired" = 1
+				"B2 Saryd Seed Stewardship: keeper trusts player" = 1
+				"B2 Saryd Seed Stewardship: grower trusts player" = 1
+			accept
+			label decline
+			`You step away from the cases. The Keeper and Grower return to their argument, one pointing to incomplete records and the other to damaged harvest reports. The seed remains sealed while they search for a compromise without you.`
+			action
+				"B2 Saryd Seed Stewardship: declined" = 1
+			decline
+
+mission "B2 Saryd Seed Stewardship: Review"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "saryd"
+	to offer
+		has "B2 Saryd Seed Stewardship: introduced"
+		not "B2 Saryd Seed Stewardship: reviewed"
+		random < 24
+	on offer
+		conversation
+			branch provenance
+				has "B2 Saryd Seed Stewardship: route provenance"
+			branch access
+				has "B2 Saryd Seed Stewardship: route access"
+			`The Keeper and Grower find you beside a much larger exchange map. Your paired release worked well enough that other communities copied it. The trouble is that each settlement returned a different kind of record. Some tracked exact parent lines, some only field performance, and some preserved local seed but forgot to record which emergency strain had crossed with it.`
+			`\tThe emergency passed, but the exchange now has more living diversity and less certainty about how parts of it are related. The question is no longer whether seed should move. It is how a shared exchange can preserve local adaptation while keeping records useful enough to travel between worlds.`
+			choice
+				`\tCreate a portable seed passport: origin, known crosses, field performance, retained local reserve, and uncertainty travel with every distributed line.`
+					goto passport
+				`\tCreate a local reserve covenant: exchanges may distribute working seed freely, but every participating community must preserve and periodically verify an uncrossed local reserve.`
+					goto reserve
+			label provenance
+			`Your earlier insistence on complete lineage records preserved several local varieties that would otherwise have been mixed anonymously. The Keeper shows you careful histories. The Grower, however, points to settlements that built their own informal exchanges during the delay, often with poorer records than the shared archive would have accepted.`
+			choice
+				`\tUse portable seed passports so communities can move seed quickly without stripping away origin, uncertainty, and reserve information.`
+					goto passport
+				`\tUse a local reserve covenant so emergency distribution can move faster while each community preserves an uncrossed reference population.`
+					goto reserve
+			label access
+			`Your earlier release reached damaged fields quickly, and the Grower shows you several recovered harvests. The Keeper has also found cases where the resistant strain crossed so widely that nobody can now identify which traits came from the older local line. The food survived, but part of the ecological record became guesswork.`
+			choice
+				`\tUse portable seed passports so future emergency releases carry origin, cross, performance, uncertainty, and reserve information with them.`
+					goto passport
+				`\tUse a local reserve covenant so every community keeps an uncrossed reference even while working seed is distributed and adapted.`
+					goto reserve
+			label passport
+			`You recommend a portable seed passport. A distributed line does not need a perfect family tree, but its record travels with it: where it came from, what it is known to have crossed with, how it performed, what local reserve was retained, and where the archive is uncertain. The Grower can move useful seed without pretending every planting is the same, while the Keeper can preserve history without freezing a living crop in place.`
+			action
+				"B2 Saryd Seed Stewardship: reviewed" = 1
+				"B2 Saryd Seed Stewardship: settlement portable seed passport" = 1
+				"B2 Saryd Seed Stewardship: keeper trusts player" = 1
+				"B2 Saryd Seed Stewardship: grower trusts player" = 1
+			accept
+			label reserve
+			`You recommend a local reserve covenant. Communities remain free to distribute, cross, and adapt working seed, but each exchange participant preserves an uncrossed reference population and periodically verifies that it still exists. The archive stops treating preservation as a demand that nothing change; instead, it keeps a living point of comparison so adaptation does not erase its own history.`
+			action
+				"B2 Saryd Seed Stewardship: reviewed" = 1
+				"B2 Saryd Seed Stewardship: settlement local reserve covenant" = 1
+				"B2 Saryd Seed Stewardship: keeper trusts player" = 1
+				"B2 Saryd Seed Stewardship: grower trusts player" = 1
+			accept
+
+mission "B2 Saryd Seed Stewardship: Keeper Remembers"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "saryd"
+	to offer
+		not "B2 Saryd Seed Stewardship: aftermath seen"
+		or
+			has "B2 Saryd Seed Stewardship: settlement portable seed passport"
+			has "B2 Saryd Seed Stewardship: settlement local reserve covenant"
+		random < 28
+	on offer
+		conversation
+			branch reserve
+				has "B2 Saryd Seed Stewardship: settlement local reserve covenant"
+			`The Keeper recognizes you beside a seed-exchange terminal and brings up a line that has now traveled through three climates. Its portable record lists an old local origin, two known crosses, several field-performance notes, a preserved reserve, and one uncertainty that nobody has tried to hide. The Grower is nearby arranging another transfer. The seed has changed, but the archive can still explain how and where.`
+			goto done
+			label reserve
+			`The Keeper recognizes you beside a bank of small cultivation cases. Each community represented on the display has a working population and a separately verified local reserve. The Grower points out that several working lines have changed dramatically after new climates and diseases, while their reference populations remain available for comparison. Preservation and adaptation have stopped competing for the same handful of seeds.`
+			label done
+			action
+				"B2 Saryd Seed Stewardship: aftermath seen" = 1
+			accept
