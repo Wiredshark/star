@@ -1,0 +1,148 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Incipias License Compact production slice.
+# Consumes B1 crew-license and early private-spaceflight history without inventing
+# canonical Incipias personal names or formal offices. The player privately uses
+# Registrar and Pilot as shorthand for two recurring Incipias encountered at ports.
+
+mission "B2 Incipias License Compact: Offer"
+	landing
+	minor
+	invisible
+	source
+		government "Conlatio"
+	to offer
+		not "B2 Incipias License Compact: introduced"
+		not "B2 Incipias License Compact: declined"
+		random < 18
+	on offer
+		conversation
+			`Near a licensing terminal, two Incipias are trading increasingly sharp bands of color across their skin. You have seen both around Conlatio ports before. One is usually arranging crew records and training symbols, so in your own head you have started calling that one the Registrar. The other is usually beside a small privately owned ship and carries the worn equipment of a working pilot, so you privately think of that one as the Pilot. Neither word is a name or title they have given you.`
+			`\tThe terminal shows a crew-license renewal with one category marked incomplete. The Pilot repeatedly points to a long record of flights, repairs, and uneventful returns. The Registrar points instead to the missing category and then to a newer class of ship. Their spacefaring society has expanded quickly enough that experience and formal categories no longer always line up.`
+			choice
+				`\tKeep the standard strict. Experience should not silently substitute for a category created for a different class of ship.`
+					goto standard
+				`\tRecognize demonstrated experience. A licensing system that ignores safe practice will lose the trust of the people it is meant to guide.`
+					goto experience
+				`\tUse a provisional renewal: recognize the experience, but require supervised flights before the new category becomes portable.`
+					goto provisional
+				`\tDecline to judge a licensing dispute in a society whose rules you only partly understand.`
+					goto decline
+			label standard
+			`You point to the missing category and then to the unfamiliar ship class. The Registrar's colors settle into a steady pattern and a new training entry appears on the terminal. The Pilot responds with a brief dark pulse, then begins reviewing the requirement. The rule remains predictable, but the system has treated years of safe work as evidence that matters only after the correct box is checked.`
+			action
+				"B2 Incipias License Compact: introduced" = 1
+				"B2 Incipias License Compact: route standard" = 1
+				"B2 Incipias License Compact: registrar trusts player" = 1
+			accept
+			label experience
+			`You point to the Pilot's long flight record and then to the renewal symbol. The Pilot flashes bright green while the Registrar hesitates, finally adding an endorsement tied to the existing record. The immediate mismatch is solved, but the exception leaves a harder question: which kinds of experience should count when thousands of private crews begin asking for the same treatment?`
+			action
+				"B2 Incipias License Compact: introduced" = 1
+				"B2 Incipias License Compact: route experience" = 1
+				"B2 Incipias License Compact: pilot trusts player" = 1
+			accept
+			label provisional
+			`You indicate the Pilot's record, the missing category, and a sequence of supervised-flight symbols. After several attempts the Registrar and Pilot seem to understand. The renewal becomes provisional rather than denied: prior experience counts, but the unfamiliar class must still be demonstrated under observation before the endorsement can travel to other ports.`
+			action
+				"B2 Incipias License Compact: introduced" = 1
+				"B2 Incipias License Compact: route provisional" = 1
+				"B2 Incipias License Compact: registrar trusts player" = 1
+				"B2 Incipias License Compact: pilot trusts player" = 1
+			accept
+			label decline
+			`You hold up both hands and step away. The Pilot and Registrar return to the terminal, their colors less heated but no closer to agreement. The unresolved renewal remains on the screen when you leave.`
+			action
+				"B2 Incipias License Compact: declined" = 1
+			decline
+
+mission "B2 Incipias License Compact: Review"
+	landing
+	minor
+	invisible
+	source
+		government "Conlatio"
+	to offer
+		has "B2 Incipias License Compact: introduced"
+		not "B2 Incipias License Compact: reviewed"
+		random < 24
+	on offer
+		conversation
+			branch standard
+				has "B2 Incipias License Compact: route standard"
+			branch experience
+				has "B2 Incipias License Compact: route experience"
+			`The Registrar and Pilot find you again beside a much larger licensing display. The provisional renewal you suggested has been copied by other ports. Most pilots completed their supervised flights without incident, but different ports recorded the result in slightly different ways. A credential accepted at one dock can still become ambiguous at the next.`
+			`\tThe dispute is no longer whether exceptions should exist. It is whether a young spacefaring society can let every port interpret those exceptions independently without recreating the informal system the growing license register was meant to replace.`
+			choice
+				`\tCreate a portable endorsement: the evidence, supervision, ship class, and limits travel with the license so another port can understand exactly what was approved.`
+					goto portable
+				`\tCreate a tiered renewal: local ports may recognize experience temporarily, but a shared category requires a second independent review before it becomes portable.`
+					goto tiered
+			label standard
+			`Your earlier insistence on the formal category produced a surge of retraining. The rule remained clear, but the Registrar now shows you a growing queue of experienced private pilots whose old work does not map cleanly onto the multiplying categories. The Pilot points to several who have stopped flying while they wait.`
+			choice
+				`\tMake completed retraining a portable endorsement whose evidence and limits travel with the license.`
+					goto portable
+				`\tAllow a temporary local renewal, but require a second review before the new category travels to other ports.`
+					goto tiered
+			label experience
+			`Your earlier support for demonstrated experience solved several renewals quickly. The Pilot shows you crews still working safely. The Registrar, however, has collected a set of exceptions that use different evidence for similar ships. What began as practical judgment is becoming another layer of unwritten custom.`
+			choice
+				`\tTurn each exception into a portable endorsement with explicit evidence, ship class, supervision, and limits.`
+					goto portable
+				`\tKeep local discretion temporary and require a second independent review before an exception becomes a shared category.`
+					goto tiered
+			label portable
+			`You recommend a portable endorsement. A license may recognize prior experience or supervised conversion without pretending that every ship class is identical, but the record must travel with the credential: what evidence was accepted, what was demonstrated, which class it covers, and what limits remain. Another port can honor the decision without having to guess what the first port meant.`
+			action
+				"B2 Incipias License Compact: reviewed" = 1
+				"B2 Incipias License Compact: settlement portable endorsement" = 1
+				"B2 Incipias License Compact: registrar trusts player" = 1
+				"B2 Incipias License Compact: pilot trusts player" = 1
+			accept
+			label tiered
+			`You recommend a tiered renewal. A port may keep an experienced crew flying under a temporary local endorsement, but portability requires a second independent review of the evidence and the ship-class difference. The system keeps room for judgment while preventing a single convenient exception from quietly becoming a galaxy-wide rule.`
+			action
+				"B2 Incipias License Compact: reviewed" = 1
+				"B2 Incipias License Compact: settlement tiered renewal" = 1
+				"B2 Incipias License Compact: registrar trusts player" = 1
+				"B2 Incipias License Compact: pilot trusts player" = 1
+			accept
+
+mission "B2 Incipias License Compact: Registrar Remembers"
+	landing
+	minor
+	invisible
+	source
+		government "Conlatio"
+	to offer
+		not "B2 Incipias License Compact: aftermath seen"
+		or
+			has "B2 Incipias License Compact: settlement portable endorsement"
+			has "B2 Incipias License Compact: settlement tiered renewal"
+		random < 28
+	on offer
+		conversation
+			branch tiered
+				has "B2 Incipias License Compact: settlement tiered renewal"
+			`The Registrar notices you near a departure board and brings up a license record filled with linked symbols. The Pilot's original renewal is still visible, but now every endorsement carries the evidence and limits that produced it. A second port has accepted the record without rewriting it. The Pilot flashes a calm green pattern as a younger crew compares its own training against the same standard. A growing bureaucracy has learned to remember why a judgment was made, not only that it was made.`
+			goto done
+			label tiered
+			`The Registrar notices you near a departure board and shows you a stack of local endorsements. Each has an expiration marker and a second-review field. Several have become shared categories after independent review; others remain local because the evidence was too narrow. The Pilot is helping a younger crew prepare one of those reviews. The system has not eliminated judgment, but it has stopped temporary convenience from becoming invisible precedent.`
+			label done
+			action
+				"B2 Incipias License Compact: aftermath seen" = 1
+			accept
