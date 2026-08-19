@@ -1,0 +1,89 @@
+# A2 ambient consequence consumer for the integrated Free Worlds relief-allocation slice.
+#
+# This file reads only persistent A2 outcome memory and publishes it through
+# stock News `to show` conditions. It does not mutate A1 relief-demand state or
+# create a second policy authority.
+
+news "A2 Free Worlds relief policy medical clear"
+	location
+		government "Free Worlds"
+	to show
+		has "A2 Free Worlds Relief Coordination: followup seen"
+		has "A2 Free Worlds Relief Coordination: Vale remembers medical clear"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"The relief offices are keeping the medical-first escalation rule from the last arrival surge. Dock crews say the emergency queue cleared without letting the worst life-support cases age in line."`
+			`"One thing survived the last relief surge: medical cases now jump the routine shelter queue before they become terminal problems. It costs schedule discipline, but nobody wants to relearn why the rule exists."`
+
+news "A2 Free Worlds relief policy medical residual"
+	location
+		government "Free Worlds"
+	to show
+		has "A2 Free Worlds Relief Coordination: followup seen"
+		has "A2 Free Worlds Relief Coordination: Vale remembers medical residual"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"The Free Worlds kept the medical-first rule after the last surge, but the relief boards are still arguing about routine capacity. The dangerous cases stopped accumulating; the ordinary backlog exposed where the network is thin."`
+			`"Relief crews say triage worked better than capacity did. The worst emergencies moved first, but the remaining queue made it obvious that prioritization cannot manufacture spare beds or fuel."`
+
+news "A2 Free Worlds relief policy throughput clear"
+	location
+		government "Free Worlds"
+	to show
+		has "A2 Free Worlds Relief Coordination: followup seen"
+		has "A2 Free Worlds Relief Coordination: Vale remembers throughput clear"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"The relief service is still using the high-throughput queue discipline tested during the last surge. Once safe arrivals stopped turning into emergencies while waiting, the overflow finally disappeared."`
+			`"Port managers used to treat relief throughput like ordinary freight scheduling. After the last surge cleared, several hubs kept the faster handoff rules because the queue itself had been creating casualties."`
+
+news "A2 Free Worlds relief policy throughput residual"
+	location
+		government "Free Worlds"
+	to show
+		has "A2 Free Worlds Relief Coordination: followup seen"
+		has "A2 Free Worlds Relief Coordination: Vale remembers throughput residual"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"The relief queue is manageable now, but not empty. The throughput-first plan stopped secondary emergencies from multiplying, and then ran straight into the network's actual capacity limit."`
+			`"Fast processing bought the relief hubs breathing room, not abundance. The remaining cases are why the Free Worlds are talking about reserve capacity instead of just better queue software."`
+
+news "A2 Free Worlds relief policy distribution clear"
+	location
+		government "Free Worlds"
+	to show
+		has "A2 Free Worlds Relief Coordination: followup seen"
+		has "A2 Free Worlds Relief Coordination: Vale remembers distribution clear"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Several secondary Free Worlds ports still have relief links left over from the last surge. Spreading arrivals cost more fuel, but the backlog cleared without one hub becoming the single point of failure."`
+			`"The emergency routing map has more active ports than it did before the last surge. People complain about the coordination overhead, but nobody is eager to go back to funneling every case through the nearest major hub."`
+
+news "A2 Free Worlds relief policy distribution residual"
+	location
+		government "Free Worlds"
+	to show
+		has "A2 Free Worlds Relief Coordination: followup seen"
+		has "A2 Free Worlds Relief Coordination: Vale remembers distribution residual"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"The Free Worlds are keeping several secondary relief ports active while the last cases work through the system. Distributed routing prevented a hub failure, but it also mapped exactly which regions still lack reserve capacity."`
+			`"Relief traffic is still spread across more ports than usual. The surge is over, but the remaining cases are turning temporary routing links into a debate about permanent regional capacity."`
