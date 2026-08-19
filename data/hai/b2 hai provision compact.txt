@@ -1,0 +1,141 @@
+# B2 Hai Provision Compact production slice.
+#
+# This content consumes the B1 "Hai Provision Compact Archive" and turns its
+# long-running separation of defensive force from humanitarian provision into
+# a named-character dispute over how emergency provisioning should remain
+# accountable without becoming a military instrument.
+#
+# Stock mission/conversation/global-condition mechanisms only. This slice does
+# not alter Hai/Unfettered reputation, combat state, cargo, credits, or any
+# simulation-owned world condition.
+
+mission "B2 Hai Provision Compact: Offer"
+	minor
+	name `The Reserve Ledger`
+	description `Provision steward Tami and human logistics coordinator Leah Marr disagree over how northern emergency shipments should be authorized and audited.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	to offer
+		not "B2 Hai Provision Compact: introduced"
+		not "B2 Hai Provision Compact: declined"
+	on offer
+		conversation
+			`A public reserve office has projected two manifests onto the same wall. One lists food, water recyclers, and medical supplies waiting for northbound shipment. The other lists recent losses along the same routes. Tami, a Hai provision steward, is quietly moving quantities between columns while Leah Marr, a human logistics coordinator who grew up beyond the wormhole, argues with a security clerk over a new approval form.`
+			`Tami says, "The reserve exists because civilian need does not become less real when the border is dangerous. But every emergency shipment now passes through so many exceptional approvals that the procedure itself is beginning to decide who receives aid."`
+			`Marr points at the loss ledger. "And if the procedure ignores risk, the same ships get volunteered until nobody will sign for the route. Human carriers read a vague promise very differently from a Hai public office that expects the institution to outlast all of us."`
+			choice
+				`\tBack Tami: keep humanitarian authority independent and publish a fixed civilian-need threshold for release.`
+					goto threshold
+				`\tBack Marr: require a route-risk declaration and explicit carrier commitment before the reserve releases supplies.`
+					goto manifest
+				`\tSplit the problem: civilian need triggers release, but routing and carrier commitments are recorded separately and reviewed after each shipment.`
+					goto dual
+				`\tTell them the compact has survived this long without your vote.`
+					goto decline
+			label threshold
+			`You argue that the first decision should remain civilian: whether the need justifies releasing the reserve. Security and routing can shape how the cargo travels, but not whether a hungry settlement counts as an emergency. Tami inclines her head. Marr replies, "Then write the threshold clearly enough that nobody can quietly move it when the next raid happens."`
+			action
+				"B2 Hai Provision Compact: introduced" = 1
+				"B2 Hai Provision Compact: route threshold" = 1
+				"B2 Hai Provision Compact: tami trusts player" = 1
+			accept
+			label manifest
+			`You tell Tami that a reserve promise is not operational until the people moving it know the route risk and agree to the terms. Marr nods. Tami answers, "Then the declaration must document risk without turning danger into a veto over need."`
+			action
+				"B2 Hai Provision Compact: introduced" = 1
+				"B2 Hai Provision Compact: route manifest" = 1
+				"B2 Hai Provision Compact: marr trusts player" = 1
+			accept
+			label dual
+			`You suggest two linked records. The civilian ledger decides when the reserve should be released. A separate routing ledger records danger, escorts, carrier consent, delays, and losses. Tami says, "Need remains a civil judgment." Marr adds, "And the people flying the route stop disappearing into a footnote."`
+			action
+				"B2 Hai Provision Compact: introduced" = 1
+				"B2 Hai Provision Compact: route dual ledger" = 1
+				"B2 Hai Provision Compact: tami trusts player" = 1
+				"B2 Hai Provision Compact: marr trusts player" = 1
+			accept
+			label decline
+			`You tell them that a compact older than your involvement should not be rewritten because a passing captain happened to be standing near the ledger. Tami accepts that without offense. Marr says, "Fair. Just remember that 'the institution will handle it' is still a decision made by people."`
+			action
+				"B2 Hai Provision Compact: declined" = 1
+			decline
+
+
+mission "B2 Hai Provision Compact: Review"
+	minor
+	name `After the Northbound Run`
+	description `Return after the reserve office has tested its revised procedures and see what survived the argument.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	to offer
+		has "B2 Hai Provision Compact: introduced"
+		not "B2 Hai Provision Compact: reviewed"
+	on offer
+		conversation
+			branch threshold
+				has "B2 Hai Provision Compact: route threshold"
+			branch manifest
+				has "B2 Hai Provision Compact: route manifest"
+			`The next northbound shipment has already departed. On the wall, the reserve-release record and the route record are displayed side by side. Tami says the separation prevented the security review from quietly redefining civilian need. Marr says the route record made carrier refusals, delays, and risk assumptions visible instead of treating them as failures of goodwill.`
+			choice
+				`\tFormalize the dual-ledger rule: civilian release authority first, route accountability second.`
+					goto dualsettlement
+				`\tCreate a joint review panel that can revise routing practice but may not retroactively redefine civilian need.`
+					goto reviewpanel
+			label threshold
+			`The published need threshold made reserve release predictable, but the first dangerous route exposed an old weakness: the office could decide that aid should move without recording who had accepted the operational risk. Marr says, "The need test worked. The handoff after it did not." Tami agrees that a humanitarian rule is stronger when its implementation is reviewable.`
+			choice
+				`\tPair the threshold with a permanent route ledger documenting consent, delays, escorts, and losses.`
+					goto dualsettlement
+				`\tUse a joint post-run review to improve routing without allowing security staff to alter the civilian threshold.`
+					goto reviewpanel
+			label manifest
+			`The route declaration reduced confusion among carriers, but Tami found that each new security annotation created another opportunity to delay release. She says, "Risk became legible, which is useful. It also became administratively powerful." Marr answers, "Then constrain what the risk record is allowed to decide."`
+			choice
+				`\tSeparate the records permanently: civilian need authorizes release; the route manifest governs only execution.`
+					goto dualsettlement
+				`\tCreate a joint review panel that audits route practice but cannot veto a valid civilian-need finding.`
+					goto reviewpanel
+			label dualsettlement
+			`You recommend making the separation explicit. The reserve office publishes the civilian standard and records every release against it. A second ledger records route risk, carrier consent, escorts, deviations, delays, and losses. Neither ledger can silently substitute for the other. Tami likes that humanitarian authority stays civilian. Marr likes that operational burden becomes visible enough to improve rather than merely repeat.`
+			action
+				"B2 Hai Provision Compact: reviewed" = 1
+				"B2 Hai Provision Compact: settlement dual ledger" = 1
+				"B2 Hai Provision Compact: tami trusts player" = 1
+				"B2 Hai Provision Compact: marr trusts player" = 1
+			accept
+			label reviewpanel
+			`You recommend a small joint review after each exceptional shipment. Civil provision officers retain authority over whether need qualifies for reserve release. Route planners and carrier representatives can change routing, escort, scheduling, and documentation practices, but cannot retroactively declare that the civilian need never existed. Tami calls the boundary necessary. Marr calls the review useful because someone finally has to answer for repeated operational mistakes.`
+			action
+				"B2 Hai Provision Compact: reviewed" = 1
+				"B2 Hai Provision Compact: settlement bounded review" = 1
+				"B2 Hai Provision Compact: tami trusts player" = 1
+			accept
+
+
+mission "B2 Hai Provision Compact: Marr Remembers"
+	minor
+	name `Marr Remembers`
+	description `Leah Marr remembers how the reserve compact changed after the argument over civilian need and route risk.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	to offer
+		not "B2 Hai Provision Compact: aftermath seen"
+		or
+			has "B2 Hai Provision Compact: settlement dual ledger"
+			has "B2 Hai Provision Compact: settlement bounded review"
+	on offer
+		conversation
+			branch review
+				has "B2 Hai Provision Compact: settlement bounded review"
+			`Marr catches you near a public freight display. "The two-ledger rule survived. The reserve office decides whether the need qualifies; the route ledger records what it actually costs people to move the shipment. Last week a carrier refused an escort plan and nobody called that a failure of solidarity. They changed the route, documented why, and the cargo still moved." She glances northward. "Turns out accountability works better when it can see both the civilians waiting and the crews flying."`
+			goto record
+			label review
+			`Marr points to a posted review summary. "The panel has no authority to decide that civilians were not hungry after all. That matters. But it can ask why three captains rejected the same route, why an escort arrived late, or why a delay kept recurring." She smiles. "The old compact kept the moral line. The new procedure gives the operational mistakes somewhere to go besides memory."`
+			label record
+			action
+				"B2 Hai Provision Compact: aftermath seen" = 1
+			accept
