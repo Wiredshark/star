@@ -4,7 +4,7 @@
 - verdict: PARTIAL
 - authoritative base/integration SHA: `bdeb9c4ba6c9d0203ff75532e38cd7f4334dbdd8`
 - isolated branch: `agent/a1-republic-displacement-transit-load-20260819-1718`
-- A1 commit SHA: filled by the producing commit; A3 must integrate the exact branch head only after executing the listed validation.
+- exact A1 integration candidate commit SHA: `b80ec738bfdbcb9df8c8344a864c3486752820a1`
 
 ## Implemented feedback loop
 
@@ -28,7 +28,7 @@ Acute Republic civilian displacement (`world: republic displacement pressure >= 
 
 The GitHub-only execution path used for this backup run could not execute the repository because the live private host checkout is an unrelated Fallout repository. Therefore this handoff is deliberately PARTIAL rather than claiming unrun tests.
 
-A3 (or a later A1 validation pass) should run from the exact commit:
+A3 (or a later A1 validation pass) should run from exact commit `b80ec738bfdbcb9df8c8344a864c3486752820a1`:
 
 ```text
 python3 tests/a1/test_displacement_transit_load_model.py
@@ -49,4 +49,4 @@ Also run the repository's standard Endless Sky data/parser or simulation validat
 
 - Runtime parser and save/load evidence are not available in this run and must be obtained before integration.
 - This slice intentionally does not add player-facing news or policy responses; those belong to later stages.
-- Do not merge this branch directly. A3 should validate and integrate the exact A1 commit under the normal integration protocol.
+- Do not merge this branch directly. A3 should validate and integrate exact commit `b80ec738bfdbcb9df8c8344a864c3486752820a1` under the normal integration protocol.
