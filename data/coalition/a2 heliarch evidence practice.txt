@@ -1,0 +1,88 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "A2 Heliarch Evidence Practice: Reflection"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "license: Coalition"
+		has "B2 Heliarch Evidence Handoff: aftermath seen"
+		not "A2 Heliarch Evidence Practice: resolved"
+		random < 28
+	on offer
+		conversation
+			`A Heliarch archive terminal shows a short procedural note derived from recent evidence-transfer work. It does not identify you as an author or grant you any standing. The note asks only what lesson you intend to carry into your own future dealings with evidence and institutional claims.`
+			branch provenance
+				has "B2 Heliarch Evidence Handoff: settlement provenance packet"
+				`The example emphasizes that useful analysis can travel quickly when its source, transformations, uncertainty, and responsible analysts travel with it.`
+				goto choose
+			`The example emphasizes that consequential findings can remain operationally useful while still being subject to independent reproduction from sealed evidence.`
+			label choose
+			choice
+				`Carry forward the method: ask for provenance before treating an analysis product as evidence.`
+					goto method
+				`Carry forward the challenge: ask what independent check could falsify a consequential conclusion.`
+					goto challenge
+				`Keep the lesson local. Do not turn one Heliarch settlement into a general rule.`
+					goto local
+			label method
+			`You record a private practice note: derived material is most useful when the path from source to interpretation remains inspectable.`
+			action
+				"A2 Heliarch Evidence Practice: resolved" = 1
+				"A2 Heliarch Evidence Practice: method" = 1
+			accept
+			label challenge
+			`You record a private practice note: confidence should rise only when an important conclusion survives a meaningful attempt to reproduce or disprove it.`
+			action
+				"A2 Heliarch Evidence Practice: resolved" = 1
+				"A2 Heliarch Evidence Practice: challenge" = 1
+			accept
+			label local
+			`You keep no transferable rule. The Heliarch settlement remains context for one institution and one chain of evidence.`
+			action
+				"A2 Heliarch Evidence Practice: resolved" = 1
+				"A2 Heliarch Evidence Practice: local" = 1
+			accept
+
+
+mission "A2 Heliarch Evidence Practice: Later Reflection"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "license: Coalition"
+		has "A2 Heliarch Evidence Practice: resolved"
+		not "A2 Heliarch Evidence Practice: reflection seen"
+		random < 34
+	on offer
+		conversation
+			branch method
+				has "A2 Heliarch Evidence Practice: method"
+				`A later Coalition report reaches you with a confident summary but an incomplete chain of transformations. Your private note is useful precisely because it does not tell you whether the report is true; it tells you what provenance to request before relying on it.`
+				goto done
+			branch challenge
+				has "A2 Heliarch Evidence Practice: challenge"
+				`A later Coalition report reaches you with two teams disagreeing over a critical finding. Your private note does not choose a winner. It reminds you to look for the test capable of exposing which assumptions produced the disagreement.`
+				goto done
+			`A later Coalition report reaches you carrying a procedural analogy to the old Heliarch case. Because you kept that lesson local, you treat the analogy as context rather than borrowed authority and judge the new evidence on its own record.`
+			label done
+			`Nothing in the exchange makes you a Heliarch representative, investigator, clerk, or procedural authority. The practice remains yours, and the evidence remains answerable to its own chain.`
+			action
+				"A2 Heliarch Evidence Practice: reflection seen" = 1
+			decline
