@@ -1,0 +1,154 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Wanderer Machine Custody Compact production slice.
+# Consumes B1 post-machine-war provenance and custody institutions. "Curator"
+# and "Engineer" are the player's private shorthand for two recurring Wanderers,
+# not formal titles, offices, or claims about Wanderer political structure.
+
+
+event "B2 Wanderer Machine Custody Compact: Review Ready"
+	"B2 Wanderer Machine Custody Compact: review ready" = 1
+
+
+mission "B2 Wanderer Machine Custody Compact: Offer"
+	minor
+	name `The Core and the Copy`
+	description `Two Wanderers disagree over whether a recovered autonomous-machine control core should remain sealed as evidence or be copied for isolated study.`
+	source
+		government "Wanderer"
+	"offer precedence" 8
+	to offer
+		has "wanderers sestor done"
+		has "Wanderer History: Factory Deactivation Provenance Ledger: offered"
+		has "Wanderer History: Autonomous Weapon Custody Record: offered"
+		not "B2 Wanderer Machine Custody Compact: introduced"
+		not "B2 Wanderer Machine Custody Compact: declined"
+	on offer
+		conversation
+			`In a secured research hall, a Wanderer archivist you privately think of as the Curator is arguing with a machine engineer you think of as the Engineer. Between them sits a damaged control core recovered from a former Kor Sestor battlefield. Its outer shell is inert, but the custody record says fragments of its control logic can still be read.`
+			`\tThe Curator wants the original left sealed. The core is evidence from the machine war: where it was found, how it was damaged, which tests were attempted, and what later transfers occurred may matter as much as the code itself. The Engineer agrees that the original must be preserved, but says a carefully isolated copy could help identify dangerous control patterns before another recovered system is powered by accident.`
+			choice
+				`\tKeep the original sealed and require every later study to begin from a documented provenance review rather than a working copy.`
+					goto custody
+				`\tPermit an isolated working image, but record every transformation and prohibit the copy from being treated as equivalent to the battlefield original.`
+					goto sandbox
+				`\tUse a paired model: one untouched evidentiary original and one explicitly derived research image linked by a permanent chain of transformations.`
+					goto paired
+				`\tDecline to decide how the Wanderers should balance postwar evidence with machine research.`
+					goto decline
+			label custody
+			`You side with the Curator. The sealed core remains the source of record, and each proposed study begins with its recovery location, prior tests, chain of custody, and unresolved identification notes. The Engineer accepts the limit, but asks that future researchers be allowed to request a fresh derived image rather than repeatedly handling the original hardware.`
+			action
+				"B2 Wanderer Machine Custody Compact: introduced" = 1
+				"B2 Wanderer Machine Custody Compact: route custody" = 1
+				"B2 Wanderer Machine Custody Compact: curator trusts player" = 1
+				event "B2 Wanderer Machine Custody Compact: Review Ready" 7 11
+				accept
+			label sandbox
+			`You side with the Engineer on bounded study. The research image is created inside an isolated system with no weapons, network links, or autonomous actuators attached. The Curator adds a record of every extraction and normalization step so that a convenient working image cannot later be mistaken for an untouched copy of the recovered core.`
+			action
+				"B2 Wanderer Machine Custody Compact: introduced" = 1
+				"B2 Wanderer Machine Custody Compact: route sandbox" = 1
+				"B2 Wanderer Machine Custody Compact: engineer trusts player" = 1
+				event "B2 Wanderer Machine Custody Compact: Review Ready" 7 11
+				accept
+			label paired
+			`You argue that evidence custody and research utility fail when they are forced into the same object. The original core remains sealed under the existing custody record. A separate research image carries its source identifier, extraction method, deleted or unreadable regions, every later transformation, and a warning that results produced from the derivative cannot silently rewrite the original record.`
+			action
+				"B2 Wanderer Machine Custody Compact: introduced" = 1
+				"B2 Wanderer Machine Custody Compact: route paired" = 1
+				"B2 Wanderer Machine Custody Compact: curator trusts player" = 1
+				"B2 Wanderer Machine Custody Compact: engineer trusts player" = 1
+				event "B2 Wanderer Machine Custody Compact: Review Ready" 7 11
+				accept
+			label decline
+			`You tell them that a surviving institution should not turn a visitor's preference into a rule for dangerous machine evidence. The Curator keeps the core sealed, and the Engineer leaves the research request unresolved. Their disagreement remains part of the custody record instead of becoming policy through your authority.`
+			action
+				"B2 Wanderer Machine Custody Compact: declined" = 1
+				decline
+
+
+mission "B2 Wanderer Machine Custody Compact: Review"
+	minor
+	name `A Copy With No Battlefield`
+	description `The Curator and Engineer return after a copied machine-analysis package preserved a conclusion while losing the provenance and transformation history that limited it.`
+	source
+		government "Wanderer"
+	"offer precedence" 8
+	to offer
+		has "B2 Wanderer Machine Custody Compact: introduced"
+		has "B2 Wanderer Machine Custody Compact: review ready"
+		not "B2 Wanderer Machine Custody Compact: reviewed"
+	on offer
+		conversation
+			branch custody
+				has "B2 Wanderer Machine Custody Compact: route custody"
+			branch sandbox
+				has "B2 Wanderer Machine Custody Compact: route sandbox"
+			`The Curator and Engineer show you a technical briefing copied between research teams. The briefing correctly identifies a control pattern found in the recovered core, but the exported summary no longer says that the pattern came from a damaged region reconstructed from several incomplete reads. A downstream lab has begun treating a derived interpretation as though it were direct battlefield evidence.`
+				goto settle
+			label custody
+			`The sealed-original rule protected the evidence, but a later researcher manually transcribed one result into a separate technical note. The note survived while its recovery context did not. The core remained untouched, yet the conclusion escaped the very provenance discipline meant to contain it.`
+				goto settle
+			label sandbox
+			`The isolated research image prevented the recovered hardware from being repeatedly handled, but a copy of the image was later normalized for another analysis tool. Its metadata recorded the new format and forgot which unreadable regions had been reconstructed. A safe derivative acquired more certainty each time it became easier to use.`
+			label settle
+			choice
+				`\tCreate a transferable custody packet: every derivative carries source recovery, custody history, extraction method, transformations, uncertainty, and the responsible research chain.`
+					goto packet
+				`\tRequire two-key derivative review: research copies may circulate, but any claim used for weapons, autonomous control, or historical attribution must be reproducible from the sealed original by an independent team.`
+					goto twokey
+			label packet
+			`You suggest treating provenance as part of the machine data rather than an attachment that can be dropped. Every derivative receives a compact record of where the original was recovered, who handled it, how the copy was extracted, which regions were missing or reconstructed, what transformations followed, and which conclusions remain uncertain. A copied result can travel, but its chain of responsibility travels with it.`
+			action
+				"B2 Wanderer Machine Custody Compact: reviewed" = 1
+				"B2 Wanderer Machine Custody Compact: settlement transferable custody packet" = 1
+				"B2 Wanderer Machine Custody Compact: curator trusts player" = 1
+				"B2 Wanderer Machine Custody Compact: engineer trusts player" = 1
+				accept
+			label twokey
+			`You argue that convenience should not decide when a derivative becomes authoritative. Research teams may use isolated working copies, but conclusions that could justify arming, activating, attributing, or transferring dangerous machine technology require an independent reexamination tied back to the sealed original. The second team does not have to agree, but disagreement remains visible instead of being erased by the newest copy.`
+			action
+				"B2 Wanderer Machine Custody Compact: reviewed" = 1
+				"B2 Wanderer Machine Custody Compact: settlement two-key derivative review" = 1
+				"B2 Wanderer Machine Custody Compact: curator trusts player" = 1
+				"B2 Wanderer Machine Custody Compact: engineer trusts player" = 1
+				accept
+
+
+mission "B2 Wanderer Machine Custody Compact: Engineer Remembers"
+	minor
+	name `Engineer Remembers`
+	description `The Engineer remembers the rule that now follows dangerous machine research away from its original battlefield evidence.`
+	source
+		government "Wanderer"
+	"offer precedence" 8
+	to offer
+		not "B2 Wanderer Machine Custody Compact: aftermath seen"
+		or
+			has "B2 Wanderer Machine Custody Compact: settlement transferable custody packet"
+			has "B2 Wanderer Machine Custody Compact: settlement two-key derivative review"
+	on offer
+		conversation
+			branch twokey
+				has "B2 Wanderer Machine Custody Compact: settlement two-key derivative review"
+			`The Engineer recognizes you beside a diagnostic display. A new machine-control fragment has arrived from a distant recovery site. The working image is useful, but its custody packet plainly marks an unreadable region, a reconstructed checksum, and the point where a later analysis became interpretation rather than direct observation. The Curator has not made the data less useful; they have made its limits portable.`
+				goto finish
+			label twokey
+			`The Engineer recognizes you while two research teams compare independent reconstructions of the same recovered control fragment. Their conclusions disagree about whether one sequence is a weapon-selection routine or a damaged maintenance response. Neither claim has been promoted to fact. The sealed original, both derivation chains, and the disagreement remain linked until another test can actually distinguish them.`
+			label finish
+			action
+				"B2 Wanderer Machine Custody Compact: aftermath seen" = 1
+				accept
