@@ -1,0 +1,217 @@
+# Copyright (c) 2026 by Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 exploration consumer for stock visited-system history in the hazardous
+# Beyond Patir cluster. The visited-system conditions remain engine-owned and
+# read-only. This slice persists only how the player chooses to share survey data.
+
+mission "A2 Beyond Patir Survey: Field Review"
+	minor
+	name `Beyond Patir Field Review`
+	description `Deep survey analyst Nadiya Voss asks how observations from several Beyond Patir black-hole systems should be recorded.`
+	source
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "visited system: Athiri"
+		has "visited system: Chanai"
+		has "visited system: Ghila"
+		not "A2 Beyond Patir Survey: introduced"
+	on offer
+		conversation
+			`A Deep survey analyst is waiting beside a projection of three distorted gravity wells. "Captain <last>? Nadiya Voss. Your navigation history shows something our remote models do not: you have crossed Athiri, Chanai, and Ghila and returned with the same ship registry attached to the observations."`
+			`She rotates the projection. Shield loss, fuel draw, and the safe approach geometry separate into different layers. "The question is not whether the cluster is dangerous. We know that. The question is what part of one captain's experience is safe to turn into guidance for the next captain."`
+			choice
+				`\tPublish conservative approach corridors first. A safety chart can admit uncertainty and still keep crews away from the worst geometry.`
+					goto corridors
+				`\tPublish the raw measurements and reconstruction method. Let other crews reproduce the result before anyone turns it into a rule.`
+					goto raw
+				`\tTreat a single returning vessel as one sample. Hold the interpretation until independent crews report the same pattern.`
+					goto replicate
+				`\t[Extended field survey: Maithi, Mitera, and Thepa] Separate effects that recur across the cluster from effects tied to individual black holes.`
+					to display
+						has "visited system: Maithi"
+						has "visited system: Mitera"
+						has "visited system: Thepa"
+					goto extended
+				`\tKeep your route logs private. Returning alive does not make the expedition a public research asset.`
+					goto private
+			label corridors
+			`You tell Voss to lead with geometry that survived all three crossings: where approach angles became unforgiving, where retreat remained possible, and where a conservative captain should stop treating the system like ordinary space. She removes the word "safe" from the draft title. "Good. A corridor can reduce exposure without promising that the hazard will behave."`
+			action
+				"A2 Beyond Patir Survey: introduced" = 1
+				"A2 Beyond Patir Survey: route conservative corridors" = 1
+				"A2 Beyond Patir Survey: followup pending" = 1
+				decline
+			label raw
+			`You ask Voss to publish sensor timing, ship configuration, reconstruction assumptions, and the parts of the log that had to be discarded. She nods. "A result another crew cannot challenge is only a story with numbers attached. I will publish the method before the conclusion."`
+			action
+				"A2 Beyond Patir Survey: introduced" = 1
+				"A2 Beyond Patir Survey: route reproducible data" = 1
+				"A2 Beyond Patir Survey: followup pending" = 1
+				decline
+			label replicate
+			`You remind Voss that one vessel means one hull, one shielding profile, one pilot, and one sequence of decisions. She marks the interpretation provisional. "Then we preserve the observation and refuse to pretend the sample size grew because the route was dramatic."`
+			action
+				"A2 Beyond Patir Survey: introduced" = 1
+				"A2 Beyond Patir Survey: route independent replication" = 1
+				"A2 Beyond Patir Survey: followup pending" = 1
+				decline
+			label extended
+			`You add Maithi, Mitera, and Thepa to the projection and separate the recurring shield-stripping environment from the black-hole-specific approach hazards. Voss redraws the report around cluster-wide effects and local effects. "That is a stronger claim than three isolated anecdotes, and a narrower one than saying every system behaves the same."`
+			action
+				"A2 Beyond Patir Survey: introduced" = 1
+				"A2 Beyond Patir Survey: route extended comparison" = 1
+				"A2 Beyond Patir Survey: followup pending" = 1
+				decline
+			label private
+			`You tell Voss that your navigation history proves where you went, not that the Deep owns the resulting record. She closes the projection. "Understood. I can acknowledge that the observations exist without copying them into a research file. I will record the consent boundary, not the route data."`
+			action
+				"A2 Beyond Patir Survey: introduced" = 1
+				"A2 Beyond Patir Survey: route private" = 1
+				"A2 Beyond Patir Survey: refusal reader pending" = 1
+				decline
+
+
+mission "A2 Beyond Patir Survey: Publication Result"
+	minor
+	name `Beyond Patir: What Survived Review`
+	description `Nadiya Voss shows you what remained after the hazard-survey record was challenged and revised.`
+	source
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Beyond Patir Survey: followup pending"
+		not "A2 Beyond Patir Survey: followup seen"
+	on offer
+		conversation
+			branch corridors
+				has "A2 Beyond Patir Survey: route conservative corridors"
+			branch raw
+				has "A2 Beyond Patir Survey: route reproducible data"
+			branch replicate
+				has "A2 Beyond Patir Survey: route independent replication"
+			`Voss meets you with two reports open side by side. "The extended comparison held up. Reviewers agreed that the shield-stripping environment repeats across the region, while the close-approach damage profile depends strongly on the local black-hole geometry. The final chart says exactly that and stops there."`
+			action
+				"A2 Beyond Patir Survey: outcome layered hazard model" = 1
+				goto finish
+			label corridors
+			`Voss shows you a navigation overlay with broad exclusion zones rather than a thin recommended line. "Crews wanted a single safe route. We refused. The published chart identifies lower-exposure approaches and the points beyond which the observations stop supporting advice. Two survey captains have already returned with corrections instead of casualties."`
+			action
+				"A2 Beyond Patir Survey: outcome bounded navigation chart" = 1
+				goto finish
+			label raw
+			`Voss hands you a review packet full of annotations. "Three teams reconstructed your crossings from the raw timing data. One corrected our estimate of when shield loss accelerated in Chanai. That correction is now part of the public dataset, which is exactly why publishing the method mattered."`
+			action
+				"A2 Beyond Patir Survey: outcome reproducible dataset" = 1
+				goto finish
+			label replicate
+			`Voss points to a report marked with several independent ship registries. "We waited. The second and third crews reproduced the broad pattern but not every threshold your vessel recorded. The final guidance separates stable observations from ship-dependent behavior instead of averaging the disagreement away."`
+			action
+				"A2 Beyond Patir Survey: outcome replicated limits" = 1
+			label finish
+			`She closes the review packet. "What survived is smaller than the first draft and more useful. Nobody has to trust your reputation, my interpretation, or the drama of the route. They can see what was observed, what was inferred, and where the evidence stops."`
+			action
+				"A2 Beyond Patir Survey: followup pending" = 0
+				"A2 Beyond Patir Survey: followup seen" = 1
+				"A2 Beyond Patir Survey: later reader pending" = 1
+				decline
+
+
+mission "A2 Beyond Patir Survey: Later Reader"
+	minor
+	name `The Patir Notes Travel`
+	description `A later Deep survey conversation remembers the evidence standard you chose for the Beyond Patir observations.`
+	source
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Beyond Patir Survey: later reader pending"
+		not "A2 Beyond Patir Survey: later reader seen"
+	on offer
+		conversation
+			branch corridors
+				has "A2 Beyond Patir Survey: outcome bounded navigation chart"
+			branch raw
+				has "A2 Beyond Patir Survey: outcome reproducible dataset"
+			branch replicate
+				has "A2 Beyond Patir Survey: outcome replicated limits"
+			`Voss catches you beside a Deep survey board. A new field report uses the same cluster-wide / local-effect split you argued for. "The Patir review gave us a useful habit: compare first, generalize second. The format has moved beyond that one cluster now."`
+				goto choice
+			label corridors
+			`Voss shows you a navigation bulletin from a completely different hazardous route. Its map uses broad lower-exposure regions and explicit uncertainty boundaries. "The Patir chart taught the cartographers to stop drawing precision they did not actually possess."`
+				goto choice
+			label raw
+			`Voss is reviewing a survey packet whose raw timing files are attached before its conclusions. "Your Patir decision became a default for disputed field results. If the method cannot travel with the claim, the claim waits."`
+				goto choice
+			label replicate
+			`Voss points to a provisional marker on a new hazard report. "The Patir review made this symbol respectable. One crew can report an observation without forcing the next crew to treat it as settled guidance."`
+			label choice
+			choice
+				`\tLet the Deep keep using the method, but keep your name out of later training examples.`
+					goto anonymous
+				`\tLet Voss cite the Patir review as a named example when the evidence trail remains attached.`
+					goto named
+			label anonymous
+			`Voss removes the pilot identifier from the training index. "Method without mythology. That is easy to defend."`
+			action
+				"A2 Beyond Patir Survey: precedent anonymous" = 1
+				goto finish
+			label named
+			`Voss leaves the identifier in place and adds a link to the full review history. "Then anyone who sees the example also sees the corrections, uncertainty, and arguments that produced it."`
+			action
+				"A2 Beyond Patir Survey: precedent named with record" = 1
+			label finish
+			action
+				"A2 Beyond Patir Survey: later reader pending" = 0
+				"A2 Beyond Patir Survey: later reader seen" = 1
+				decline
+
+
+mission "A2 Beyond Patir Survey: Privacy Reader"
+	minor
+	name `Voss Keeps the Logs Private`
+	description `Nadiya Voss confirms that declining to share your Beyond Patir route logs remained a real boundary.`
+	source
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Beyond Patir Survey: refusal reader pending"
+		not "A2 Beyond Patir Survey: refusal reader seen"
+	on offer
+		conversation
+			`Voss recognizes you and leaves the survey terminal closed. "I wanted you to know the privacy note held. The Deep file records that a returning captain declined to release route logs. It does not contain your sensor trace, reconstructed approach geometry, or a claim that silence validated anybody else's model."`
+			choice
+				`\tAllow the anonymous fact that a survey record was withheld to remain in the methodology notes.`
+					goto anonymous
+				`\tAsk Voss to remove even the anonymous case from future training material.`
+					goto remove
+			label anonymous
+			`Voss nods. "Then the lesson is only that missing data must stay missing in the analysis. No invented substitute, no implied consent."`
+			action
+				"A2 Beyond Patir Survey: private refusal anonymously noted" = 1
+				goto finish
+			label remove
+			`Voss deletes the training reference. "Done. A consent boundary should not become a teaching asset by being renamed."`
+			action
+				"A2 Beyond Patir Survey: private refusal fully removed" = 1
+			label finish
+			action
+				"A2 Beyond Patir Survey: refusal reader pending" = 0
+				"A2 Beyond Patir Survey: refusal reader seen" = 1
+				decline
+
