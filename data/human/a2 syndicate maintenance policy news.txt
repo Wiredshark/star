@@ -1,0 +1,103 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 ambient consequence consumer for the integrated Syndicate maintenance-triage arc.
+#
+# These groups publish only resolved Tessa Marr after-action outcomes. They do not
+# write the A1 maintenance backlog/surge or alter the player's A2 policy memory.
+# Refusal remains private and therefore has no ambient News consumer.
+
+news "A2 Syndicate maintenance policy safety pressure"
+	location
+		government "Syndicate"
+	to show
+		has "A2 Syndicate Maintenance Triage: followup seen"
+		has "A2 Syndicate Maintenance Triage: Marr remembers safety under pressure"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Syndicate repair dispatchers are still using the safety-first exception from the last maintenance surge. The queue remains heavy, but unsafe ships can be pulled forward without pretending the delay is a contract failure."`
+			`"The maintenance backlog is still visible on Syndicate boards, but one rule survived the surge: a ship with a credible safety problem can outrank a more profitable repair slot. Crews say the queue is slower to argue about even when it is not shorter."`
+
+news "A2 Syndicate maintenance policy safety stable"
+	location
+		government "Syndicate"
+	to show
+		has "A2 Syndicate Maintenance Triage: followup seen"
+		has "A2 Syndicate Maintenance Triage: Marr remembers safety stabilized"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Syndicate maintenance offices kept the safety-priority code after the surge ended. Mechanics can now move an unsafe ship ahead of higher-value work without asking each dispatcher to reinvent the justification."`
+			`"The emergency repair queue has mostly normalized, but its safety exception became permanent. Dock crews say the useful change is not faster work; it is knowing which kind of delay the system is willing to accept."`
+
+news "A2 Syndicate maintenance policy contracts pressure"
+	location
+		government "Syndicate"
+	to show
+		has "A2 Syndicate Maintenance Triage: followup seen"
+		has "A2 Syndicate Maintenance Triage: Marr remembers contracts under pressure"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Syndicate dispatchers are still protecting contract-critical freight lanes while the repair queue stays crowded. The policy kept several industrial routes from cascading into wider delays, but maintenance planners admit it did not erase the underlying repair debt."`
+			`"Critical freight still gets continuity protection in the Syndicate maintenance network. It bought the industrial routes time, not a clean slate; the remaining backlog is why dispatchers now distinguish continuity from recovery."`
+
+news "A2 Syndicate maintenance policy contracts stable"
+	location
+		government "Syndicate"
+	to show
+		has "A2 Syndicate Maintenance Triage: followup seen"
+		has "A2 Syndicate Maintenance Triage: Marr remembers contracts stabilized"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"The Syndicate kept the freight-continuity rules tested during the last repair surge. Once the critical routes stopped feeding delays into one another, the ordinary maintenance queue finally began behaving like a queue instead of a chain reaction."`
+			`"Dispatch boards still mark contract-critical routes, but the notation now survives outside emergency conditions. Planners say the last surge proved that a few protected links can keep routine repair work from inheriting every upstream delay."`
+
+news "A2 Syndicate maintenance policy resilience pressure"
+	location
+		government "Syndicate"
+	to show
+		has "A2 Syndicate Maintenance Triage: followup seen"
+		has "A2 Syndicate Maintenance Triage: Marr remembers resilience under pressure"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"The Syndicate's last maintenance mobilization spent heavily on old inspection debt, and the queue is still high. Mechanics defend the choice by pointing out that the remaining work is newer, documented, and less likely to hide failures inside apparently healthy schedules."`
+			`"Repair demand is still elevated, but the oldest deferred inspections disappeared during the last surge. Operations hated the near-term delays; maintenance crews say they would rather see a large honest backlog than a smaller one with unknown failures buried inside it."`
+
+news "A2 Syndicate maintenance policy resilience stable"
+	location
+		government "Syndicate"
+	to show
+		has "A2 Syndicate Maintenance Triage: followup seen"
+		has "A2 Syndicate Maintenance Triage: Marr remembers resilience stabilized"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Syndicate maintenance planners are keeping the deferred-work retirement rule from the last surge. The oldest inspection dates are now recent enough to be unremarkable, which is exactly what the mechanics wanted."`
+			`"The post-surge maintenance boards look boring again. Planners credit a policy of retiring old inspection debt while crews were already mobilized, even when doing so made short-term schedules worse before the queue finally settled."`
+
