@@ -6,7 +6,7 @@ import re
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data" / "human" / "b2 republic review mentorship.txt"
 TEXT = DATA.read_text(encoding="utf-8")
-PREFIX = "B2 Republic Review Mentorship:"
+PREFIX = "B2 Republic Review Mentorship: "
 
 MISSIONS = [
     "B2 Republic Review Mentorship: Offer",
@@ -33,7 +33,6 @@ def test_named_character_and_a2_dependencies():
     assert "Sera Noll" in TEXT
     assert "Mara Keene" in TEXT
     assert 'has "A2 Republic Customs Review: later reader seen"' in TEXT
-    assert 'has "A2 Republic Customs Review: precedent use bounded"' not in mission_block(MISSIONS[0]) or "precedent use bounded" in TEXT
     assert 'has "A2 Republic Customs Review: precedent kept private"' in TEXT
 
 
@@ -75,7 +74,6 @@ def test_local_gotos_resolve():
 
 
 def test_b2_does_not_mutate_upstream_or_material_state():
-    # A2 conditions may be read, but never assigned/cleared by B2.
     forbidden_assignment_prefixes = (
         "A2 Republic Customs Review:",
         "world:",
