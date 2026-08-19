@@ -1,0 +1,152 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Kor Efret Reconstruction Compact production slice.
+# Consumes B1 salvage-provenance, sealed-habitat, restoration-obligation, and
+# ecological-recovery institutions without inventing a new formal Kor Efret office.
+# The player privately thinks of two recurring workers as the Recorder and the
+# Repairer; neither term is presented as a Korath title or canonical name.
+
+mission "B2 Kor Efret Reconstruction Compact: Offer"
+	landing
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		not "B2 Kor Efret Reconstruction Compact: introduced"
+		not "B2 Kor Efret Reconstruction Compact: declined"
+		random < 18
+	on offer
+		conversation
+			`Two Kor Efreti are arguing beside a stack of dismantled ventilation machinery. You have seen both around the port before. One is almost always carrying marked tablets and sorting tags; in your own head you have started calling this one the Recorder. The other usually appears wherever a pump, conduit, or habitat seal has failed, so you privately think of that one as the Repairer. Neither term is something the Korath have offered as a name or title.`
+			`\tBetween them lies a corroded air recycler taken from a sealed district. The Recorder keeps pointing to scratches and painted marks on its casing, then toward the abandoned district. The Repairer points toward an occupied block where another ventilation system is visibly struggling. Even without a shared language, the disagreement is clear: the part can keep people alive now, but removing it changes the record of what remains to be restored later.`
+			choice
+				`\tKeep the component with the sealed district until its provenance and restoration obligation are fully recorded.`
+					goto record
+				`\tUse the component where it can save an occupied habitat now. A dead system should not hold working parts hostage.`
+					goto repair
+				`\tTransfer the component, but make the transfer itself part of both records: where it came from, why it moved, and what obligation remains behind.`
+					goto paired
+				`\tDecline to judge a reconstruction dispute you only partly understand.`
+					goto decline
+			label record
+			`You point from the component to the Recorder's tablet, then back toward the sealed district. The Recorder responds immediately, tracing the old damage marks and adding a new notation. The Repairer hisses in frustration and gestures toward the occupied block. Your choice preserves a clean chain of evidence, but it leaves a working machine idle while another district struggles.`
+			action
+				"B2 Kor Efret Reconstruction Compact: introduced" = 1
+				"B2 Kor Efret Reconstruction Compact: route record" = 1
+				"B2 Kor Efret Reconstruction Compact: recorder trusts player" = 1
+			accept
+			label repair
+			`You point toward the occupied block and mime moving the recycler there. The Repairer answers with an emphatic palm-up gesture and begins preparing the component for transport. The Recorder does not interfere, but carefully copies the casing marks before the machine leaves. The immediate need is served; whether the old district's unfinished obligation survives the transfer is less certain.`
+			action
+				"B2 Kor Efret Reconstruction Compact: introduced" = 1
+				"B2 Kor Efret Reconstruction Compact: route repair" = 1
+				"B2 Kor Efret Reconstruction Compact: repairer trusts player" = 1
+			accept
+			label paired
+			`You point to the recycler, the tablet, the occupied block, and finally the sealed district, repeating the sequence until both Kor Efreti stop arguing. The Recorder adds a transfer mark beside the old provenance record. The Repairer adds a second mark beside the destination sketch. The component can move, but the abandoned district does not disappear from the ledger merely because one useful piece has left it.`
+			action
+				"B2 Kor Efret Reconstruction Compact: introduced" = 1
+				"B2 Kor Efret Reconstruction Compact: route paired" = 1
+				"B2 Kor Efret Reconstruction Compact: recorder trusts player" = 1
+				"B2 Kor Efret Reconstruction Compact: repairer trusts player" = 1
+			accept
+			label decline
+			`You hold up both palms and step away. The Recorder and Repairer resume their argument, but more slowly. Before you leave, the Recorder adds a mark indicating that the dispute itself remains unresolved.`
+			action
+				"B2 Kor Efret Reconstruction Compact: declined" = 1
+			decline
+
+mission "B2 Kor Efret Reconstruction Compact: Review"
+	landing
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		has "B2 Kor Efret Reconstruction Compact: introduced"
+		not "B2 Kor Efret Reconstruction Compact: reviewed"
+		random < 24
+	on offer
+		conversation
+			branch record
+				has "B2 Kor Efret Reconstruction Compact: route record"
+			branch repair
+				has "B2 Kor Efret Reconstruction Compact: route repair"
+			`The Recorder and Repairer find you again beside a public reconstruction display. The transferred recycler is now running in an occupied district, and the display shows cleaner air readings there. The sealed district it came from is still marked unsafe. A second line on the display shows that its restoration entry has remained open rather than vanishing with the component.`
+			`\tThe new problem is subtler. Several other workshops have begun copying the transfer. Useful components are moving toward urgent repairs, but some donor sites are becoming little more than stripped shells. The records preserve where each part went; they do not yet say when dismantling a damaged district becomes abandonment rather than repair.`
+			choice
+				`\tUse a transferable provenance bond: every moved component keeps its full history, while the donor site retains an explicit replacement or closure obligation.`
+					goto bond
+				`\tUse a restoration-priority ledger: components may move only when the donor site's habitability, ecological recovery, and replacement prospects are recorded well enough to justify the loss.`
+					goto priority
+			label record
+			`Your earlier insistence on provenance kept the first machine from moving until the record was complete. The delay mattered, but once the transfer was documented other workshops copied the procedure. The Recorder now shows you an uncomfortable result: perfect histories can still describe a district being dismantled one justified component at a time.`
+			choice
+				`\tBind every transfer to a continuing replacement or closure obligation at the donor site.`
+					goto bond
+				`\tRequire restoration-priority evidence before a donor site can lose more components.`
+					goto priority
+			label repair
+			`Your earlier decision got the recycler into service quickly. The occupied block's air readings improved, and the Repairer points to them with obvious satisfaction. But the Recorder has reconstructed the transfer after the fact and found that other crews copied the emergency logic without preserving the same care. One sealed district has lost enough machinery that reopening it may now cost more than rebuilding elsewhere.`
+			choice
+				`\tMake future emergency transfers carry a durable replacement or closure obligation.`
+					goto bond
+				`\tMake future transfers depend on a restoration-priority record for the donor site.`
+					goto priority
+			label bond
+			`You recommend a transferable provenance bond. A salvaged component may serve a more urgent repair, but its origin, damage history, repairs, and destination travel with it. Separately, the donor district keeps an open obligation: replace the lost capability, formally close the site after evidence shows recovery is impractical, or record why its purpose has changed. Moving a part no longer erases either its history or the promise left behind.`
+			action
+				"B2 Kor Efret Reconstruction Compact: reviewed" = 1
+				"B2 Kor Efret Reconstruction Compact: settlement provenance bond" = 1
+				"B2 Kor Efret Reconstruction Compact: recorder trusts player" = 1
+				"B2 Kor Efret Reconstruction Compact: repairer trusts player" = 1
+			accept
+			label priority
+			`You recommend a restoration-priority ledger. Before a component leaves a damaged site, the record must show the site's current habitability, environmental recovery, remaining systems, and realistic replacement prospects. Emergency use can still outrank future restoration, but the trade is made against measured recovery rather than convenience. The Repairer keeps access to scarce parts; the Recorder keeps dismantling from becoming invisible abandonment.`
+			action
+				"B2 Kor Efret Reconstruction Compact: reviewed" = 1
+				"B2 Kor Efret Reconstruction Compact: settlement restoration priority" = 1
+				"B2 Kor Efret Reconstruction Compact: recorder trusts player" = 1
+				"B2 Kor Efret Reconstruction Compact: repairer trusts player" = 1
+			accept
+
+mission "B2 Kor Efret Reconstruction Compact: Recorder Remembers"
+	landing
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		not "B2 Kor Efret Reconstruction Compact: aftermath seen"
+		or
+			has "B2 Kor Efret Reconstruction Compact: settlement provenance bond"
+			has "B2 Kor Efret Reconstruction Compact: settlement restoration priority"
+		random < 28
+	on offer
+		conversation
+			branch priority
+				has "B2 Kor Efret Reconstruction Compact: settlement restoration priority"
+			`The Recorder notices you beside a reconstruction board and beckons you over. Several transferred components are now represented by paired marks: one following the machine to its new workshop, one remaining with the district that surrendered it. The Repairer arrives carrying a replacement assembly and slots its tag beside one of the old obligations. You recognize the pattern even without reading the language. Salvage can move; responsibility does not vanish with it.`
+			goto record
+			label priority
+			`The Recorder notices you beside a reconstruction board and points out three damaged districts. One has been reopened, one remains sealed while its soil and air readings improve, and one has been formally stripped after repeated measurements showed that rebuilding there would consume resources needed elsewhere. The Repairer adds a transfer mark to the last entry. For once, dismantling looks less like forgetting and more like a decision the next generation will be able to reconstruct.`
+			label record
+			action
+				"B2 Kor Efret Reconstruction Compact: aftermath seen" = 1
+			accept
