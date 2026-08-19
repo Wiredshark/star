@@ -1,0 +1,75 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# A2 ambient consequence consumer for the integrated B2 Incipias License Compact.
+# Reads only the terminal B2 settlement and aftermath state. It does not mutate
+# B2 state or create a second licensing authority.
+
+news "A2 Incipias license practice portable pilot"
+	location
+		government "Conlatio"
+	to show
+		has "B2 Incipias License Compact: aftermath seen"
+		has "B2 Incipias License Compact: settlement portable endorsement"
+	name
+		word
+			"Incipias Captain"
+			"Incipias Crew Member"
+	message
+		word
+			`"My license-record now carries the ship-class, evidence, supervised-flight record, and remaining limits together. Another port understood it without making me prove the same history again."`
+			`"Portable endorsements are becoming normal here. They do not erase the difference between ships; they make the reason for an exception visible when a crew reaches the next port."`
+
+news "A2 Incipias license practice portable registrar"
+	location
+		government "Conlatio"
+	to show
+		has "B2 Incipias License Compact: aftermath seen"
+		has "B2 Incipias License Compact: settlement portable endorsement"
+	name
+		word
+			"Incipias Crew Member"
+	message
+		word
+			`"The new endorsement records are longer, but fewer renewal disputes start from missing context. A port can see what was demonstrated, which ship class was approved, and what limits still apply."`
+			`"Our license system is learning to preserve reasons, not only outcomes. That matters now that privately owned ships travel farther than the port where their crews first trained."`
+
+news "A2 Incipias license practice tiered pilot"
+	location
+		government "Conlatio"
+	to show
+		has "B2 Incipias License Compact: aftermath seen"
+		has "B2 Incipias License Compact: settlement tiered renewal"
+	name
+		word
+			"Incipias Captain"
+			"Incipias Crew Member"
+	message
+		word
+			`"A local renewal can keep an experienced crew flying while the second review is prepared. If the evidence is too narrow, the permission stays local instead of quietly becoming a shared rule."`
+			`"The second-review step is slower than a simple exception, but at least temporary permission and portable licensing are no longer the same thing. Everyone can see where local judgment ends."`
+
+news "A2 Incipias license practice tiered registrar"
+	location
+		government "Conlatio"
+	to show
+		has "B2 Incipias License Compact: aftermath seen"
+		has "B2 Incipias License Compact: settlement tiered renewal"
+	name
+		word
+			"Incipias Crew Member"
+	message
+		word
+			`"Some temporary renewals have passed independent review and become shared categories. Others expired locally because the evidence did not support a broader rule. That distinction is proving useful."`
+			`"We still allow judgment at the port where a problem appears, but portable categories now need a second set of eyes. It is harder for one convenient exception to become invisible precedent."`
