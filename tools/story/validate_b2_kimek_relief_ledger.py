@@ -94,7 +94,7 @@ def main() -> None:
             fail(f"unresolved local goto labels: {sorted(missing)}")
 
     for phrase in (
-        "shared manifests",
+        "public need record",
         "trusted carriers",
         "winter medicine",
         "translated into several species-specific categories",
