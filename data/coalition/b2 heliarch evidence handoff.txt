@@ -1,0 +1,139 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Heliarch Evidence Handoff production slice.
+# Consumes B1 Heliarch evidence-custody and investigative-review history while
+# keeping all new persistent state under the B2 prefix. The player privately uses
+# Clerk and Investigator as shorthand for two recurring Heliarchs; neither label
+# is presented as a canonical Heliarch title or office.
+
+mission "B2 Heliarch Evidence Handoff: Offer"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "license: Coalition"
+		not "B2 Heliarch Evidence Handoff: introduced"
+		not "B2 Heliarch Evidence Handoff: declined"
+		random < 18
+	on offer
+		conversation
+			`Outside a Heliarch transfer room, two familiar figures are arguing over a sealed navigation processor. You have crossed paths with both during earlier inspections. One usually stands beside custody logs and transfer seals, so privately you have started thinking of that one as the Clerk. The other tends to arrive from active investigations with incomplete reports and urgent questions, so in your own head you call that one the Investigator. Neither word is a name or office they have given you.`
+			`\tThe processor came from a seized courier used by a smuggling network. Its original casing and access seal now belong to an evidence chain that crosses several Coalition jurisdictions. The Investigator says the field team needs the processor immediately because another courier may depart before a formal transfer is complete. The Clerk says an unexplained gap in custody could make every later conclusion harder to defend.`
+			choice
+				`\tProtect custody first. Seal the original and release only a verified diagnostic copy after the transfer record is complete.`
+					goto custody
+				`\tProtect the investigation first. Let the field team take temporary possession of the original under a logged emergency release.`
+					goto field
+				`\tUse a paired handoff: keep the original sealed, make a witnessed working image now, and record every transformation or interpretation applied to that copy.`
+					goto paired
+				`\tDecline to advise the Heliarchs on how to balance an active investigation against their own evidence rules.`
+					goto decline
+			label custody
+			`The Clerk begins a full transfer entry while the Investigator waits for a verified image. The original will remain cleanly attributable, but the field team loses time while seals, witnesses, and extraction notes are completed.`
+			action
+				"B2 Heliarch Evidence Handoff: introduced" = 1
+				"B2 Heliarch Evidence Handoff: route custody" = 1
+				"B2 Heliarch Evidence Handoff: clerk trusts player" = 1
+			accept
+			label field
+			`The Investigator signs an emergency release and carries the processor toward a waiting analysis team. The Clerk records the handoff, the stated urgency, and every person expected to touch the device. The investigation moves faster, but the original evidence is now exposed to more handling and more possible explanations for any later discrepancy.`
+			action
+				"B2 Heliarch Evidence Handoff: introduced" = 1
+				"B2 Heliarch Evidence Handoff: route field" = 1
+				"B2 Heliarch Evidence Handoff: investigator trusts player" = 1
+			accept
+			label paired
+			`The Clerk keeps the original under seal while the Investigator brings in a second witness and a clean analysis system. A working image is produced immediately, but its record includes the source seal, extraction method, software used, and every later transformation. The field team gets something useful without pretending that a working copy is identical to untouched evidence.`
+			action
+				"B2 Heliarch Evidence Handoff: introduced" = 1
+				"B2 Heliarch Evidence Handoff: route paired" = 1
+				"B2 Heliarch Evidence Handoff: clerk trusts player" = 1
+				"B2 Heliarch Evidence Handoff: investigator trusts player" = 1
+			accept
+			label decline
+			`You leave the question to the Heliarchs. The Clerk keeps one hand on the transfer log while the Investigator keeps looking toward the departure board. Their argument continues without your judgment.`
+			action
+				"B2 Heliarch Evidence Handoff: declined" = 1
+			decline
+
+
+mission "B2 Heliarch Evidence Handoff: Review"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "license: Coalition"
+		has "B2 Heliarch Evidence Handoff: introduced"
+		not "B2 Heliarch Evidence Handoff: reviewed"
+		random < 24
+	on offer
+		conversation
+			branch custody
+				has "B2 Heliarch Evidence Handoff: route custody"
+				`The Clerk and Investigator find you again beside a review terminal. The verified copy did eventually reach the field team, but one important timestamp was translated by the processor's old firmware before the copy was made. The custody record is clean; the meaning of one derived fact is not.`
+				goto question
+			branch field
+				has "B2 Heliarch Evidence Handoff: route field"
+				`The Clerk and Investigator find you again beside a review terminal. The emergency release helped the field team intercept another courier, but the processor passed through several hands before it returned. The lead was useful; reconstructing which interpretation came from the original device and which came from field notes is now difficult.`
+				goto question
+			`The Clerk and Investigator find you again beside a review terminal. The paired handoff preserved the original and a detailed working-copy record, but the field team produced several derived maps and translated timestamps. Nothing is missing; the problem is deciding which later products still carry enough provenance to support an official conclusion.`
+			label question
+			`\tThe Investigator says future teams need a rule that allows useful analysis to travel without every derived result being treated as untouched evidence. The Clerk agrees, but insists that later readers must be able to reconstruct how a conclusion moved from observation to interpretation.`
+			choice
+				`\tCreate a portable provenance packet. Every working copy and derived result should carry its source seal, extraction method, transformations, uncertainty, and responsible analyst.`
+					goto provenance
+				`\tRequire independent re-examination for critical findings. Working copies can guide the field, but conclusions used for sanctions or tribunals should be reproducible from the sealed original by a second team.`
+					goto reexamine
+			label provenance
+			`The Clerk begins defining a compact record that can travel with analysis products without pretending they are originals. The Investigator adds fields for operational urgency and alternative explanations. The result preserves speed while making the path from observation to conclusion inspectable.`
+			action
+				"B2 Heliarch Evidence Handoff: reviewed" = 1
+				"B2 Heliarch Evidence Handoff: settlement provenance packet" = 1
+			accept
+			label reexamine
+			`The Investigator accepts that field conclusions can remain provisional until a second team can reproduce the critical parts from sealed evidence. The Clerk adds a record linking the operational finding, the independent re-examination, and any disagreement between them. Speed still matters, but irreversible decisions gain a second evidentiary path.`
+			action
+				"B2 Heliarch Evidence Handoff: reviewed" = 1
+				"B2 Heliarch Evidence Handoff: settlement independent reexamination" = 1
+			accept
+
+
+mission "B2 Heliarch Evidence Handoff: Clerk Remembers"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "license: Coalition"
+		has "B2 Heliarch Evidence Handoff: reviewed"
+		not "B2 Heliarch Evidence Handoff: aftermath seen"
+		random < 30
+	on offer
+		conversation
+			branch provenance
+				has "B2 Heliarch Evidence Handoff: settlement provenance packet"
+				`The Heliarch you privately call the Clerk gives you a brief nod beside another evidence transfer. A field map on the terminal now carries a compact provenance packet: original seal, extraction history, transformations, uncertainty, and the analyst responsible for each step. "People still disagree with conclusions," the Clerk says. "Now they can disagree with the record in front of them."`
+				goto remember
+			`The Heliarch you privately call the Clerk gives you a brief nod beside another evidence transfer. A critical field conclusion is being reproduced from a sealed original by a second team while the first team's operational notes remain available nearby. "The second answer is not always the same," the Clerk says. "That is why both answers have to survive."`
+			label remember
+			`\tThe Investigator passes behind you with another live case and pauses only long enough to add, "A procedure is useful when it can survive people trying to prove it wrong." The two Heliarchs return to their work without suggesting that disagreement has disappeared.`
+			action
+				"B2 Heliarch Evidence Handoff: aftermath seen" = 1
+			decline
