@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Kor Efret History: Salvage Provenance Ledger"
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`Near the edge of the spaceport, several Kor Efreti are sorting scorched machine parts into shallow trays. Each fragment is marked with tiny scratches, tags, or painted symbols before being carried toward different workshops.`
+			`\tYou cannot read the records, but the repeated pattern is clear enough: where a component was recovered, what damage it suffered, which systems it was attached to, and whether a repair actually held. Parts too broken to reuse are still catalogued before being melted down.`
+			`\tThe habit feels older than any one reconstruction project. In a society forced to rebuild from the remains of its own machines and cities, salvage seems to have become more than scavenging. It is a way of turning loss into reproducible knowledge instead of repeating the same mistakes every generation.`
+				decline
+
+
+mission "Kor Efret History: Sealed Habitat Register"
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A work crew is inspecting an old building near the port. One Kor Efret moves methodically from window to vent to wall seam while another records measurements. Several openings carry faded markings beneath newer layers of sealant.`
+			`\tThe marks appear to distinguish structures that can be safely occupied, those that require filtered air, and those that should remain closed except to repair teams. You have seen workers seal damaged buildings with practiced speed before; here, the procedure looks formal enough to have become part of ordinary civic administration.`
+			`\tRepeated environmental hazards seem to have left behind an institutional memory of their own: not just shelters, but registries of which spaces can protect people, which seals have failed, and which repairs deserve priority when materials are scarce.`
+				decline
+
+
+mission "Kor Efret History: Restoration Obligation Ledger"
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A public terminal nearby displays a long sequence of pictograms beside sketches of roads, pumps, conduits, and damaged buildings. Kor Efreti stop to consult the display, occasionally arguing over one entry before adding another mark.`
+			`\tWhatever the exact language means, the structure resembles a ledger of unfinished obligations. One project concerns a collapsed utility line, another a contaminated lot, another a machine whose repair is waiting on a missing component. Names or workshop symbols appear beside many of the entries.`
+			`\tReconstruction here does not seem to end when emergency danger passes. The work is carried forward as a chain of promises: this system still needs repair, this district still needs cleaning, this workshop has taken responsibility, this task must survive the people who first recorded it.`
+				decline
+
+
+mission "Kor Efret History: Ecological Recovery Archive"
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`Inside a busy public building, several monitors cycle through images of local plants, animals, water samples, and stretches of damaged terrain. Some images are recent; others are old enough that entire districts have changed shape since they were taken.`
+			`\tKor Efret observers compare the records carefully, marking where vegetation has returned, where air or soil readings have improved, and where a promising recovery later failed. The archive treats living systems much like an engineer would treat a difficult machine: something that must be observed repeatedly before anyone can claim it has been repaired.`
+			`\tThe practice gives the devastation outside a different meaning. Restoration is not presented as a single future victory, but as a long record of measurements, reversals, and small recoveries that lets each generation know which interventions actually helped and which merely looked successful for a time.`
+				decline
