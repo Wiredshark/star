@@ -82,11 +82,13 @@ def main() -> None:
     if '"B2 Free Worlds Relief Bargain: aftermath seen" = 1' not in text:
         fail("missing one-shot aftermath state")
 
-    # This character slice should not create material/combat/reputation rewards.
-    forbidden = ("credits ", "reputation ", "combat rating", "cargo ")
-    for token in forbidden:
-        if token in text:
-            fail(f"unexpected direct gameplay reward/mutation token: {token.strip()}")
+    # Guard against direct material/combat/reputation mutation commands while
+    # allowing those words to appear naturally in dialogue prose.
+    forbidden_commands = ("credits ", "reputation ", "combat rating ", "cargo ")
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith(forbidden_commands):
+            fail(f"unexpected direct gameplay mutation command: {stripped}")
 
     labels, gotos = labels_and_gotos(text)
     missing = sorted(gotos - labels)
