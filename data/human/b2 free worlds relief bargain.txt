@@ -1,0 +1,138 @@
+# B2 Free Worlds Relief Bargain production slice.
+#
+# This content consumes the Free Worlds Relief Cooperative Archive and the
+# authoritative A1 `world: free worlds relief demand` signal. It turns the old
+# cooperative-aid institution into a named-character dispute over who should
+# absorb the commercial risk of emergency freight. B2 reads A1 state but never
+# writes or clears it. Stock mission/conversation/global-condition mechanisms only.
+
+mission "B2 Free Worlds Relief Bargain: Offer"
+	minor
+	name `Who Carries the Shortfall`
+	description `Relief coordinator Lysa Kern and independent carrier Oren Vale disagree over how emergency cargo should be funded during a Free Worlds relief surge.`
+	source
+		government "Free Worlds"
+	to offer
+		"world: free worlds relief demand" >= 3
+		not "B2 Free Worlds Relief Bargain: introduced"
+		not "B2 Free Worlds Relief Bargain: declined"
+	on offer
+		conversation
+			`The public freight board is crowded with emergency requests: reactor seals, field medicine, water processors, temporary shelter modules. Lysa Kern, a Free Worlds relief coordinator, is moving colored markers between destinations while Oren Vale, an independent carrier, watches one of his cargo contracts disappear under a red priority tag.`
+			`Kern says, "The cooperative can move the supplies. The problem is that the worlds asking for them are the ones least able to guarantee payment right now."`
+			`Vale answers, "Then every emergency turns independent carriers into lenders. Fuel, crew, insurance, and missed contracts are real costs even when the cargo is medicine."`
+			`Kern points to an old relief-cooperative plaque beside the board. "The whole reason this network exists is that a damaged world should not have to negotiate alone while people are waiting for pumps and antibiotics."`
+			choice
+				`\tBack Kern: participating worlds should maintain a standing reserve that guarantees emergency freight payment.`
+					goto reserve
+				`\tBack Vale: emergency contracts should guarantee carriers a minimum operating payment before departure.`
+					goto floor
+				`\tSplit the risk: reserve funds cover immediate operating costs, while receiving worlds repay the cooperative later when they recover.`
+					goto ledger
+				`\tTell them relief policy is their institution to settle, not yours.`
+					goto decline
+			label reserve
+			`You tell Vale that emergency freight cannot depend on whether the most damaged world still looks creditworthy. Kern nods. Vale replies, "Then fund the promise before the alarm. Do not call it solidarity and hand me an invoice nobody can pay."`
+			action
+				"B2 Free Worlds Relief Bargain: introduced" = 1
+				"B2 Free Worlds Relief Bargain: route reserve" = 1
+				"B2 Free Worlds Relief Bargain: kern trusts player" = 1
+			accept
+			label floor
+			`You tell Kern that emergency access collapses if independent carriers learn that answering the call means gambling their own solvency. Vale nods once. Kern says, "Then the minimum has to be predictable enough that dispatch can publish it before we start assigning hulls."`
+			action
+				"B2 Free Worlds Relief Bargain: introduced" = 1
+				"B2 Free Worlds Relief Bargain: route floor" = 1
+				"B2 Free Worlds Relief Bargain: vale trusts player" = 1
+			accept
+			label ledger
+			`You suggest separating immediate movement from final accounting. The cooperative reserve pays fuel, crew, and basic risk now; the receiving world records a recovery obligation that can be repaid after the crisis. Kern starts rewriting the dispatch form. Vale says, "That is at least a debt the institution chose, instead of one the carrier discovers afterward."`
+			action
+				"B2 Free Worlds Relief Bargain: introduced" = 1
+				"B2 Free Worlds Relief Bargain: route ledger" = 1
+				"B2 Free Worlds Relief Bargain: kern trusts player" = 1
+				"B2 Free Worlds Relief Bargain: vale trusts player" = 1
+			accept
+			label decline
+			`You tell them the Free Worlds have been arguing over shared burdens longer than you have been flying through them, and they do not need an outsider to cast the deciding vote. Kern exhales. Vale says, "Fair. Just make sure whoever decides has seen an actual fuel bill."`
+			action
+				"B2 Free Worlds Relief Bargain: declined" = 1
+			decline
+
+
+mission "B2 Free Worlds Relief Bargain: Review"
+	minor
+	name `After the Surge`
+	description `Return after the current relief surge has eased and see which freight-payment rule survived.`
+	source
+		government "Free Worlds"
+	to offer
+		has "B2 Free Worlds Relief Bargain: introduced"
+		"world: free worlds relief demand" < 3
+		not "B2 Free Worlds Relief Bargain: reviewed"
+	on offer
+		conversation
+			branch reserve
+				has "B2 Free Worlds Relief Bargain: route reserve"
+			branch floor
+				has "B2 Free Worlds Relief Bargain: route floor"
+			`The red emergency markers are gone from most of the freight board. Kern has added a new column to the cooperative ledger: immediate operating payment, followed by a separate recovery account for the receiving world. Vale taps the two figures. "The ships got paid enough to move. The worlds got time to recover. Now everyone is arguing about how long repayment should take instead of whether the cargo leaves at all."`
+			choice
+				`\tFormalize the split ledger: cooperative reserve first, recovery obligation later.`
+					goto shared
+				`\tMake the reserve absorb the emergency cost completely when a member world cannot safely repay it.`
+					goto mutual
+			label reserve
+			`The cooperative reserve covered the surge without delaying departures, but several worlds objected that they were paying into a fund whose benefits were impossible to predict. Kern says, "That is what reserves are for." Vale replies, "And predictable carrier terms are why the reserve worked instead of becoming another emergency appeal."`
+			choice
+				`\tKeep the reserve as a mutual obligation and guarantee emergency freight from it.`
+					goto mutual
+				`\tPair the reserve with recovery accounts so exceptional costs remain visible after the crisis.`
+					goto shared
+			label floor
+			`The guaranteed operating floor kept independent ships in the relief queue, but some receiving worlds left the surge with obligations they could not immediately cover. Vale says, "The carriers survived the job." Kern answers, "Now the cooperative has to decide whether saving a carrier by bankrupting a clinic counts as success."`
+			choice
+				`\tUse a shared recovery ledger: pay carriers immediately and defer the receiving world's obligation.`
+					goto shared
+				`\tShift catastrophic shortfalls into a mutual reserve instead of leaving them with the receiving world.`
+					goto mutual
+			label shared
+			`You recommend a standing two-stage rule. The cooperative guarantees immediate operating costs from a common reserve, then records a transparent recovery obligation that can be reduced, delayed, or forgiven through a later council decision. Kern likes that emergency dispatch no longer needs to settle fiscal policy on the loading pad. Vale likes that captains can price the job before launch.`
+			action
+				"B2 Free Worlds Relief Bargain: reviewed" = 1
+				"B2 Free Worlds Relief Bargain: settlement shared recovery ledger" = 1
+				"B2 Free Worlds Relief Bargain: kern trusts player" = 1
+				"B2 Free Worlds Relief Bargain: vale trusts player" = 1
+			accept
+			label mutual
+			`You recommend treating catastrophic relief freight as a genuinely mutual cost. Member worlds fund a reserve in advance; when a crisis crosses an agreed threshold, the cooperative pays the carrier and does not force the damaged world to recreate the emergency as debt. Vale insists the carrier terms stay explicit. Kern insists the threshold stay public. Both agree that the argument should happen before the next surge.`
+			action
+				"B2 Free Worlds Relief Bargain: reviewed" = 1
+				"B2 Free Worlds Relief Bargain: settlement mutual relief reserve" = 1
+				"B2 Free Worlds Relief Bargain: kern trusts player" = 1
+			accept
+
+
+mission "B2 Free Worlds Relief Bargain: Vale Remembers"
+	minor
+	name `Vale Remembers`
+	description `Oren Vale remembers how the relief surge changed the bargain between independent carriers and the Free Worlds cooperative.`
+	source
+		government "Free Worlds"
+	to offer
+		not "B2 Free Worlds Relief Bargain: aftermath seen"
+		or
+			has "B2 Free Worlds Relief Bargain: settlement shared recovery ledger"
+			has "B2 Free Worlds Relief Bargain: settlement mutual relief reserve"
+	on offer
+		conversation
+			branch mutual
+				has "B2 Free Worlds Relief Bargain: settlement mutual relief reserve"
+			`Vale catches you beside a freight kiosk. "The shared ledger survived. When the next emergency contract appeared, I knew what the cooperative would pay before I loaded the first crate. The receiving world still has an account afterward, but the council can adjust it without pretending my crew should finance the delay." He glances at the board. "Turns out I answer more relief calls when solidarity comes with accounting."`
+			goto record
+			label mutual
+			`Vale nods toward a new reserve notice on the freight board. "They finally decided some emergencies are a cost of being part of the network. My contract gets paid, the damaged world does not inherit the whole disaster as debt, and every member world gets to complain about the reserve contribution in advance." He smiles. "That last part may be the most Free Worlds solution of all."`
+			label record
+			action
+				"B2 Free Worlds Relief Bargain: aftermath seen" = 1
+			accept
