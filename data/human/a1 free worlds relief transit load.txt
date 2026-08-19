@@ -1,0 +1,51 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Free Worlds relief demand -> Southern Rim transit load.
+#
+# This bridge reuses the accepted relief-demand and transit-congestion states.
+# During a high relief-demand episode, the first qualifying inbound border crossing
+# represents aid, shelter, and redistribution traffic consuming shared routing
+# capacity. A four-day latch bounds amplification while the existing three-day
+# congestion decay drains this contribution. Relief demand remains read-only here.
+
+
+event "ES A1: Free Worlds Relief Routing Load Ends"
+	clear "world: free worlds relief routing load"
+
+
+mission "ES A1: Free Worlds Relief Transit Load"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+		neighbor government "Republic" "Neutral" "Independent"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds relief demand" >= 3
+		not "world: free worlds relief routing load"
+		or
+			has "previous system government: Republic"
+			has "previous system government: Neutral"
+			has "previous system government: Independent"
+		"world: southern rim transit congestion" < 6
+	on offer
+		set "world: free worlds relief routing load"
+		"world: southern rim transit congestion" += 1
+		"world: southern rim transit congestion" <?= 6
+		event "ES A1: Southern Rim Transit Congestion Decay" 3 3
+		event "ES A1: Free Worlds Relief Routing Load Ends" 4 4
+		fail
