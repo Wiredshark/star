@@ -36,6 +36,7 @@ def test_contract_text():
     assert '"pirate jobs" >= 3' in TEXT
     assert '"world: republic border pressure" < 4' in TEXT
     assert '"world: republic border pressure" >= 4' in TEXT
+    assert '"world: republic customs scrutiny" < 5' in TEXT
     assert '"world: republic customs scrutiny" += 1' in TEXT
     assert '"world: republic customs scrutiny" += 2' in TEXT
     assert TEXT.count('"world: republic customs scrutiny" <?= 6') == 2
