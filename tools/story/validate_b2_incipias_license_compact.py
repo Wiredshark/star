@@ -99,7 +99,7 @@ def main() -> None:
     # Consume B1's early-spaceflight institutions as explicit concepts.
     for phrase in (
         "crew-license",
-        "private ships",
+        "private spacecraft",
         "formal categories",
         "experience",
     ):
