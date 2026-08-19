@@ -1,0 +1,114 @@
+# Copyright (c) 2026 by Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Republic inspection backlog.
+#
+# Elevated Republic customs scrutiny now has an operational consequence instead
+# of remaining an isolated legal-pressure number. Inbound crossings at Earth
+# while scrutiny is elevated add temporary inspection backlog. Each contribution
+# schedules its own six-day recovery. When backlog becomes severe, a bounded
+# inspection surge consumes capacity, reducing both backlog and customs scrutiny,
+# then enters a five-day cooldown so the relief action cannot fire every crossing.
+# This forms a deterministic feedback loop:
+# customs scrutiny -> inspection backlog -> surge -> lower scrutiny/backlog -> recovery.
+# All A1-owned numeric state is bounded to 0..6 and defaults safely to zero in old saves.
+
+
+event "ES A1: Republic Inspection Backlog Recovery"
+	"world: republic inspection backlog" -= 1
+	"world: republic inspection backlog" >?= 0
+	clear "world: republic inspection backlog notice seen"
+
+
+event "ES A1: Republic Inspection Surge Ends"
+	clear "world: republic inspection surge"
+	clear "world: republic inspection surge notice seen"
+
+
+mission "ES A1: Republic Inspection Backlog Accrual"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: republic customs scrutiny" >= 3
+		"world: republic inspection backlog" < 6
+	on offer
+		"world: republic inspection backlog" += 1
+		"world: republic inspection backlog" <?= 6
+		event "ES A1: Republic Inspection Backlog Recovery" 6 6
+		fail
+
+
+mission "ES A1: Republic Inspection Capacity Surge"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: republic inspection backlog" >= 4
+		not "world: republic inspection surge"
+	on offer
+		set "world: republic inspection surge"
+		"world: republic inspection backlog" -= 3
+		"world: republic inspection backlog" >?= 0
+		"world: republic customs scrutiny" -= 1
+		"world: republic customs scrutiny" >?= 0
+		event "ES A1: Republic Inspection Surge Ends" 5 5
+		fail
+
+
+mission "ES A1: Republic Inspection Backlog Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: republic inspection backlog" >= 3
+		not "world: republic inspection backlog notice seen"
+	on offer
+		message
+			text "Republic port-control channels report that secondary inspection queues are running above normal capacity. Additional teams are being routed to Earth while the backlog remains elevated."
+		set "world: republic inspection backlog notice seen"
+		fail
+
+
+mission "ES A1: Republic Inspection Surge Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "world: republic inspection surge"
+		not "world: republic inspection surge notice seen"
+	on offer
+		message
+			text "Republic customs has activated a temporary inspection-capacity surge at Earth. Queue pressure is falling as additional teams clear deferred reviews."
+		set "world: republic inspection surge notice seen"
+		fail
