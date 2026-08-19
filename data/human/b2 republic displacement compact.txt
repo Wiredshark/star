@@ -1,0 +1,150 @@
+# B2 Republic Displacement Compact production slice.
+#
+# This content consumes A1's authoritative Republic civilian-displacement signal
+# and turns elevated displacement pressure into a persistent named-character
+# dispute over emergency housing, transport priority, and the rights of temporary
+# residents. B2 reads A1 world state but never writes it.
+#
+# Stock mission/conversation/global-condition mechanisms only. This slice does
+# not alter reputation, cargo, credits, combat state, or any world:* condition.
+
+mission "B2 Republic Displacement Compact: Offer"
+	minor
+	name `The Temporary Address`
+	description `Civil-relocation coordinator Lena Ortiz and independent transit operator Devin Hale disagree over how displaced residents should receive housing and passage priority.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	to offer
+		"world: republic displacement pressure" >= 2
+		not "B2 Republic Displacement Compact: introduced"
+		not "B2 Republic Displacement Compact: declined"
+	on offer
+		conversation
+			branch severe
+				"world: republic displacement pressure" >= 4
+			`A temporary relocation desk has overflowed into the port concourse. Lena Ortiz, a Republic civil-relocation coordinator, is sorting housing vouchers by destination while Devin Hale, an independent transit operator, argues with a clerk over a queue of families whose travel authorizations expire before the next scheduled departure.`
+			`Ortiz says, "The pressure is elevated, but still manageable if the rules remain predictable. A displaced family should not lose its place because a carrier found a more profitable passenger at the last minute."`
+			`Hale folds his arms. "Then stop writing priority rules as if every berth, bunk, and transfer window belongs to the state. Carriers can make emergency capacity available, but somebody has to record what was promised and when the promise ends."`
+			goto choose
+			label severe
+			`The relocation desk has become a wall of handwritten exceptions. Lena Ortiz, a Republic civil-relocation coordinator, is marking families for temporary housing while Devin Hale, an independent transit operator, points to departure boards where emergency holds now occupy whole blocks of capacity.`
+			`Ortiz says, "At this pressure, informal favors turn into a lottery. Families are being moved twice because one office treats a temporary address as disposable and another treats it as permanent."`
+			`Hale answers, "And carriers are receiving three different emergency instructions for the same berth. If this is a public obligation, make the obligation legible enough that private operators can actually fulfill it."`
+			label choose
+			choice
+				`\tBack Ortiz: displaced residents keep protected housing and passage priority until a documented handoff is complete.`
+					goto protection
+				`\tBack Hale: every emergency berth and temporary address must have a clear duration, responsible office, and transfer record.`
+					goto ledger
+				`\tSplit the problem: guarantee continuity for residents, but pair every protected placement with an auditable handoff ledger.`
+					goto compact
+				`\tDecline to help rewrite emergency rules while the queue is moving.`
+					goto decline
+			label protection
+			`You argue that displacement destroys continuity first: addresses, work schedules, school arrangements, medical appointments, and onward passage all become uncertain at once. Protected status should last until another office explicitly accepts responsibility. Ortiz nods. Hale says, "Then the handoff needs a name and a timestamp, or protected status becomes a promise nobody knows how to close."`
+			action
+				"B2 Republic Displacement Compact: introduced" = 1
+				"B2 Republic Displacement Compact: route continuity" = 1
+				"B2 Republic Displacement Compact: ortiz trusts player" = 1
+			accept
+			label ledger
+			`You tell Ortiz that emergency capacity cannot be sustained if each office can reserve it indefinitely without recording who owns the next decision. Hale agrees, but Ortiz insists that administrative clarity cannot become an excuse to drop a family between jurisdictions. You recommend explicit expiration and transfer records rather than informal release.`
+			action
+				"B2 Republic Displacement Compact: introduced" = 1
+				"B2 Republic Displacement Compact: route ledger" = 1
+				"B2 Republic Displacement Compact: hale trusts player" = 1
+			accept
+			label compact
+			`You propose a paired rule: the resident keeps protected continuity until a receiving office accepts the case, and every protected berth or temporary address carries a visible transfer record naming the responsible office, review time, and next destination. Ortiz says, "No silent discharge." Hale adds, "And no invisible reservation."`
+			action
+				"B2 Republic Displacement Compact: introduced" = 1
+				"B2 Republic Displacement Compact: route compact" = 1
+				"B2 Republic Displacement Compact: ortiz trusts player" = 1
+				"B2 Republic Displacement Compact: hale trusts player" = 1
+			accept
+			label decline
+			`You tell them that changing emergency rules in the middle of a displacement wave may create more confusion than it solves. Ortiz returns to the housing list. Hale says, "Fair. But if nobody writes down where responsibility changes hands, the queue will make the policy for us."`
+			action
+				"B2 Republic Displacement Compact: declined" = 1
+			decline
+
+
+mission "B2 Republic Displacement Compact: Review"
+	minor
+	name `After the Pressure Breaks`
+	description `Return after Republic displacement pressure eases and see which emergency rules survived ordinary operations.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	to offer
+		has "B2 Republic Displacement Compact: introduced"
+		"world: republic displacement pressure" < 2
+		not "B2 Republic Displacement Compact: reviewed"
+	on offer
+		conversation
+			branch continuity
+				has "B2 Republic Displacement Compact: route continuity"
+			branch ledger
+				has "B2 Republic Displacement Compact: route ledger"
+			`The relocation desk is smaller now. Ortiz shows you a case that crossed two ports without losing its protected status, while Hale points to the same case's transfer record: every berth hold, housing assignment, accepting office, and release time appears in one chain. "The paired rule survived the emergency," Ortiz says. Hale adds, "More importantly, it still makes sense when the emergency is over."`
+			choice
+				`\tFormalize a continuity compact: protection remains until an accepting office signs the handoff, and every reservation is auditable.`
+					goto compactsettlement
+				`\tUse bounded placement windows: protection is guaranteed, but each office must review and renew responsibility at explicit intervals.`
+					goto reviewsettlement
+			label continuity
+			`Protected status prevented several families from being dropped during transfers, but one housing office kept old placements open after responsibility had already shifted. Hale says, "The residents were protected. The capacity record was not." Ortiz agrees that continuity works better when transfer acceptance closes the previous reservation automatically.`
+			choice
+				`\tPair continuity protection with a mandatory accepting-office handoff and auditable reservation ledger.`
+					goto compactsettlement
+				`\tKeep continuity protection but require scheduled review windows so stale reservations cannot persist silently.`
+					goto reviewsettlement
+			label ledger
+			`The transfer ledger eliminated duplicate berth holds, but one family briefly lost protected status because an office treated an expired reservation as the end of public responsibility. Ortiz says, "The record was correct and the outcome was wrong." Hale answers, "Then the record needs to transfer responsibility, not merely terminate a slot."`
+			choice
+				`\tMake the handoff ledger carry protected status forward until the receiving office accepts responsibility.`
+					goto compactsettlement
+				`\tCreate bounded placement windows with automatic review before protection can lapse.`
+					goto reviewsettlement
+			label compactsettlement
+			`You recommend a formal continuity compact. A displaced resident keeps protected housing and passage status until a receiving office explicitly accepts the case. Every reserved berth, temporary address, review time, and transfer is logged in the same chain, so public responsibility and private capacity cannot disappear independently. Ortiz calls it a protection against silent discharge. Hale calls it a protection against invisible obligations.`
+			action
+				"B2 Republic Displacement Compact: reviewed" = 1
+				"B2 Republic Displacement Compact: settlement continuity compact" = 1
+				"B2 Republic Displacement Compact: ortiz trusts player" = 1
+				"B2 Republic Displacement Compact: hale trusts player" = 1
+			accept
+			label reviewsettlement
+			`You recommend bounded placement windows. Protected status cannot disappear merely because a reservation expires, but every responsible office must review the case at a published interval, renew its obligation, or obtain an explicit accepting-office transfer. Ortiz says the review prevents administrative abandonment. Hale says the expiration dates finally mean "review now" instead of "capacity reserved forever."`
+			action
+				"B2 Republic Displacement Compact: reviewed" = 1
+				"B2 Republic Displacement Compact: settlement bounded review" = 1
+				"B2 Republic Displacement Compact: ortiz trusts player" = 1
+			accept
+
+
+mission "B2 Republic Displacement Compact: Hale Remembers"
+	minor
+	name `Hale Remembers`
+	description `Devin Hale remembers how emergency relocation rules changed after the displacement wave eased.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	to offer
+		not "B2 Republic Displacement Compact: aftermath seen"
+		or
+			has "B2 Republic Displacement Compact: settlement continuity compact"
+			has "B2 Republic Displacement Compact: settlement bounded review"
+	on offer
+		conversation
+			branch bounded
+				has "B2 Republic Displacement Compact: settlement bounded review"
+			`Hale recognizes you beside a departure board. "The compact is still in use. A protected passenger cannot simply fall out of the system because one office closed a reservation, and a carrier can see exactly which office owns the next decision. We still argue about capacity. At least now the argument has an address."`
+			goto record
+			label bounded
+			`Hale taps a review notice attached to a housing transfer. "These used to be expiration dates. Now they force an office to renew responsibility or find an accepting office before the protection changes. Ortiz says that keeps people from disappearing administratively. I say it keeps emergency capacity from becoming permanent by accident. Same rule, different reason."`
+			label record
+			action
+				"B2 Republic Displacement Compact: aftermath seen" = 1
+			accept
