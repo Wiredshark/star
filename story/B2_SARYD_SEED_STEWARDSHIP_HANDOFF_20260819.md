@@ -1,12 +1,13 @@
 # B2 Saryd Seed Stewardship handoff
 
 **Stage:** B2 STORY CHARACTERS + DYNAMIC CONTENT  
-**Verdict:** PARTIAL pending exact-head repository-native validation  
+**Verdict:** READY for A3 review/integration  
 **Authoritative main observed at selection:** `6dc761ac941794c8b1125978d7bcd6eb811e3951`  
 **B1 parent:** `dadfb288911c3e6de14af4035d0dac85c6faa1df` (`agent/b1-saryd-civic-ecology-20260819-1022`)  
 **B2 branch:** `agent/b2-saryd-seed-stewardship-20260819-1028`  
 **Production commit:** `b273e40f8c41a28d4745516190d7ef371903ec59`  
-**Validator commit:** `7d1d0031c461a62c6faf47f4b65ee7e9e53d114d`
+**Validator commit:** `7d1d0031c461a62c6faf47f4b65ee7e9e53d114d`  
+**Exact production/data/validator/handoff head validated by CI:** `b0cdc5f41f4b49a6cd0ddaead34c185441802ea4`
 
 ## Character / dynamic-content behavior
 
@@ -79,19 +80,32 @@ The slice intentionally does not write:
 - `tools/story/validate_b2_saryd_seed_stewardship.py`
 - `story/B2_SARYD_SEED_STEWARDSHIP_HANDOFF_20260819.md`
 
-## Validation requested
+## Exact validation evidence
 
-Run against the exact final B2 head:
+Repository-native validation was executed automatically on exact head `b0cdc5f41f4b49a6cd0ddaead34c185441802ea4` after draft PR creation.
 
-- `python3 tools/story/validate_b2_saryd_seed_stewardship.py "data/coalition/b2 saryd seed stewardship.txt"`
-- automatic focused story validator suite;
-- changed-content style;
-- repository-wide simulation/story/state-ownership contracts;
-- production configure/build;
-- stock save-load integration smoke.
+### Fork simulation and story validation
 
-Do not promote to READY if any exact-head gate fails.
+Workflow run `32264564160` / run #87: **SUCCESS**.
+
+- changed fork content style: **SUCCESS**;
+- focused simulation and story contracts: **SUCCESS**;
+- automatic focused story validator suite, including `validate_b2_saryd_seed_stewardship.py`: **SUCCESS**;
+- A1 simulation contract tests: **SUCCESS**.
+
+### Fork save-load integration smoke
+
+Workflow run `32264564141` / run #76: **SUCCESS**.
+
+- install build/headless runtime dependencies: **SUCCESS**;
+- configure production executable: **SUCCESS**;
+- build production executable: **SUCCESS**;
+- stock save-load smoke cases: **SUCCESS**.
+
+The B1 parent itself was also re-checked during this B2 run: its simulation/story/style workflow and save-load integration workflow both completed successfully.
 
 ## A3 / B3 integration notes
 
 Integration order is B1 Saryd civic ecology institutional history first, then this B2 branch. Re-read current `main` immediately before integration because concurrent A/B work is expected. Preserve the distinction between shared ecological recordkeeping and centralized Saryd authority.
+
+The commit that changes this handoff from PARTIAL to READY is handoff-only; production data and validator code are unchanged from exact validated head `b0cdc5f41f4b49a6cd0ddaead34c185441802ea4`.
