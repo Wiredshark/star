@@ -1,0 +1,138 @@
+# B2 Paradise Service Compact production slice.
+#
+# This content consumes the Paradise Service District Museum history by turning
+# the public/private service-access problem into a named-character dispute.
+# It uses stock mission/conversation/global-condition mechanisms only.
+
+mission "B2 Paradise Service Compact: Offer"
+	minor
+	name `The Last Shuttle Up`
+	description `Transit coordinator Iona Mercer and estate liaison Celia Voss disagree about who should control late service access through a Paradise estate district.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	to offer
+		not "B2 Paradise Service Compact: introduced"
+		not "B2 Paradise Service Compact: declined"
+	on offer
+		conversation
+			`Two women are arguing beside a municipal shuttle display. One wears the gray-blue coat of a transit office; the other has the immaculate badge of an estate management consortium. The transit official notices you watching. "Iona Mercer," she says. "Celia Voss and I are trying to decide whether the last public shuttle should keep using an estate service gate after midnight."`
+			`Voss folds her arms. "The gate was built for contracted workers, deliveries, and emergency crews. The estate pays for the road, the scanners, and the security staff. Public transit turned a practical arrangement into an entitlement without negotiating what happens when the route becomes expensive or disruptive."`
+			`Mercer points toward a queue of cleaners, kitchen staff, mechanics, and drivers. "And those workers built their lives around a route that has functioned as public infrastructure for years. A service road stops being purely private when an entire district depends on it to get home."`
+			choice
+				`\tBack Mercer: late worker access should be protected as part of the public transit network.`
+					goto mercer
+				`\tBack Voss: the estate should retain control over a privately funded gate and road.`
+					goto voss
+				`\tAsk them to separate guaranteed access from who pays for the late route.`
+					goto compact
+				`\tTell them the district should settle its own transit argument.`
+					goto decline
+			label mercer
+			`You tell them that a route used by an entire workforce cannot be withdrawn like a private convenience. Mercer nods. Voss replies, "Then the municipality should be prepared to call it public infrastructure in the budget as well as in speeches."`
+			action
+				"B2 Paradise Service Compact: introduced" = 1
+				"B2 Paradise Service Compact: route mercer" = 1
+				"B2 Paradise Service Compact: mercer trusts player" = 1
+			accept
+			label voss
+			`You tell Mercer that public dependence does not erase the estate's ownership or operating costs. Voss gives you a measured nod. Mercer says, "Then we need a transition that does not strand people whose employers scheduled around this gate."`
+			action
+				"B2 Paradise Service Compact: introduced" = 1
+				"B2 Paradise Service Compact: route voss" = 1
+				"B2 Paradise Service Compact: voss trusts player" = 1
+			accept
+			label compact
+			`You suggest treating access and funding as separate questions: preserve a late worker corridor, then negotiate a municipal contribution for the hours that function as public transit. Mercer starts calculating service windows. Voss asks for a written review date instead of a permanent promise.`
+			action
+				"B2 Paradise Service Compact: introduced" = 1
+				"B2 Paradise Service Compact: route compact" = 1
+				"B2 Paradise Service Compact: mercer trusts player" = 1
+				"B2 Paradise Service Compact: voss trusts player" = 1
+			accept
+			label decline
+			`You tell them that the district has enough lawyers, planners, and transit staff to own the consequences of its own agreement. Mercer exhales through her nose. Voss says, "On that point, at least, we agree."`
+			action
+				"B2 Paradise Service Compact: declined" = 1
+			decline
+
+
+mission "B2 Paradise Service Compact: Review"
+	minor
+	name `Who Keeps the Gate Open`
+	description `Return after the service district has tested the transit arrangement you helped shape.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	to offer
+		has "B2 Paradise Service Compact: introduced"
+		not "B2 Paradise Service Compact: reviewed"
+	on offer
+		conversation
+			branch mercer
+				has "B2 Paradise Service Compact: route mercer"
+			branch voss
+				has "B2 Paradise Service Compact: route voss"
+			`Mercer and Voss have replaced their argument with a spreadsheet. The midnight shuttle is still running, but the municipality now pays for a defined late-service window while the estate keeps responsibility for the gate itself. "It is less satisfying than winning," Mercer says. Voss replies, "Which is usually how durable agreements feel."`
+			choice
+				`\tFormalize the shared-cost corridor as a standing service compact.`
+					goto shared
+				`\tTransfer the late route into the municipal network and compensate the estate for access.`
+					goto public
+			label mercer
+			`The late shuttle has become busier. Mercer says, "Protecting access worked. Paying for it did not solve itself." Voss shows you a maintenance ledger. "We kept the gate open, but every delay is now treated as proof that the estate should absorb another public cost."`
+			choice
+				`\tMake the municipality responsible for the late route and access payment.`
+					goto public
+				`\tKeep estate operation but bind both sides to a shared-cost service compact.`
+					goto shared
+			label voss
+			`The estate retained control of the gate, but worker complaints forced a temporary late-access guarantee. Mercer says, "We proved the route matters by nearly losing it." Voss replies, "And we proved that guarantees without funding are just invoices sent to whoever cannot close the road."`
+			choice
+				`\tTurn the late route into municipal transit with compensated estate access.`
+					goto public
+				`\tKeep the gate private but create a binding shared-cost service compact.`
+					goto shared
+			label public
+			`You recommend treating the late service as ordinary public transit: the municipality owns the schedule and compensates the estate for defined access and security costs. Voss insists on measurable service terms. Mercer agrees to publish them. The old service road remains privately built, but the route across it is no longer privately discretionary.`
+			action
+				"B2 Paradise Service Compact: reviewed" = 1
+				"B2 Paradise Service Compact: settlement municipal corridor" = 1
+				"B2 Paradise Service Compact: mercer trusts player" = 1
+			accept
+			label shared
+			`You recommend a standing compact: the estate keeps operating the gate, the municipality funds the late public-service window, and both sides publish a review schedule instead of treating every dispute as a referendum on ownership. Mercer calls it administratively ugly. Voss calls that a compliment.`
+			action
+				"B2 Paradise Service Compact: reviewed" = 1
+				"B2 Paradise Service Compact: settlement shared service compact" = 1
+				"B2 Paradise Service Compact: voss trusts player" = 1
+			accept
+
+
+mission "B2 Paradise Service Compact: Mercer Remembers"
+	minor
+	name `Mercer Remembers`
+	description `Iona Mercer remembers how the service-gate dispute changed late transit in the district.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	to offer
+		not "B2 Paradise Service Compact: aftermath seen"
+		or
+			has "B2 Paradise Service Compact: settlement municipal corridor"
+			has "B2 Paradise Service Compact: settlement shared service compact"
+	on offer
+		conversation
+			branch shared
+				has "B2 Paradise Service Compact: settlement shared service compact"
+			`Mercer catches you near the shuttle platforms. "The route is municipal now. The estate still owns the gate, but nobody can make a whole shift of workers renegotiate their commute because a private budget meeting went badly. Voss still sends me invoices with terrifying footnotes."`
+			goto record
+			label shared
+			`Mercer points to a notice listing the compact's service hours and review dates. "It is not elegant. That is why I trust it more than the old handshake. Workers know when the gate is guaranteed, the estate knows what the city will pay for, and neither side gets to pretend the other one does not exist."`
+			label record
+			action
+				"B2 Paradise Service Compact: aftermath seen" = 1
+			accept
