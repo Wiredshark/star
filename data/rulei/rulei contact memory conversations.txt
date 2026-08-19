@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Rulei History: Exposure Register"
+	minor
+	invisible
+	source "Earth"
+	to offer
+		has "First Contact: Rulei: offered"
+		random < 4
+	on offer
+		conversation
+			`A medical archive near the spaceport has begun collecting reports from crews who passed through Kanguwa or spent time near the scarred worlds there. The records look less like a diagnosis than a careful attempt to preserve circumstances: contact duration, distance from the strange vessel, headaches, auditory sensations, sleep disruption, and how quickly symptoms faded after departure.`
+			`\tA physician explains that early accounts were too strange to compare reliably. Some witnesses described whispers, others pressure or intrusive memories, and a few reported almost nothing. The register therefore keeps direct observations separate from assumptions about what caused them.`
+			`\tNo one here claims to understand Rulei psionics. The practical lesson is narrower: unusual contact can have measurable effects on human crews, and future researchers should inherit enough evidence to distinguish a recurring pattern from a story that merely grew in the retelling.`
+				decline
+
+
+mission "Rulei History: Testimony Protocol"
+	minor
+	invisible
+	source "Vinci"
+	to offer
+		has "First Contact: Rulei: offered"
+		random < 4
+	on offer
+		conversation
+			`A university archive displays several anonymized accounts of Rulei contact side by side. Each report is divided into two columns: what the witness remembers perceiving, and what the witness later concluded those sensations meant.`
+			`\tAn archivist says that the distinction became necessary almost immediately. A thousand apparent voices, a single translated word, a feeling of being watched, and an image appearing in someone's mind are all observations of a kind, but turning them into a history of Rulei motives is another step entirely.`
+			`\tModern testimony protocols preserve contradictions rather than smoothing them away. Researchers can compare recurring sensations across independent encounters while still seeing where interpretation, fear, expectation, or imperfect memory may have shaped the account.`
+				decline
+
+
+mission "Rulei History: Scarred World Survey Ledger"
+	minor
+	invisible
+	source "Midgard"
+	to offer
+		has "First Contact: Rulei: offered"
+		random < 4
+	on offer
+		conversation
+			`A planetary-science office keeps a restricted set of maps from the worlds around Kanguwa: surface spectra, scanner noise, landing durations, reported neurological effects, and photographs of the same purple, star-like formations seen near the ancient vessel.`
+			`\tA geologist points out that the ledger avoids one tempting phrase: "Rulei ruins." The worlds are scarred, the vessel is present, and the visual resemblance is striking, but none of those facts prove who made the formations, what happened to the planets, or whether the surviving ship caused any of it.`
+			`\tThe archive instead tracks what can be revisited. If a formation changes, if a landing produces a different effect, or if another system shows the same pattern, future expeditions will have a baseline that does not depend on committing to an explanation too early.`
+				decline
+
+
+mission "Rulei History: Umbral Reach Navigation Archive"
+	minor
+	invisible
+	source "Mirrorlake"
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		random < 4
+	on offer
+		conversation
+			`A navigation archive contains a growing collection of route notes from the dark systems east of the core. The entries record scanner failures, dim stellar objects, safe jump approaches, sightings of unfamiliar life, and the exact circumstances under which crews turned back.`
+			`\tA curator says the archive began after explorers realized that the Rulei warning about the "Umbral Reach" was important without being self-explanatory. The warning is preserved verbatim, but human route data is kept separately so later travelers can tell inherited caution from conditions that have actually been observed.`
+			`\tNo map here claims to explain the emptiness. Its purpose is to turn isolated expeditions into cumulative knowledge: where instruments become unreliable, where living things have been seen, and which hazards remain only suspected. In a region defined by uncertainty, careful records have become a form of infrastructure.`
+				decline
