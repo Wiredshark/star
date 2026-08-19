@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Drak History: Extinction Watch"
+	entering
+	minor
+	invisible
+	source
+		system "Fasitopfar"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`For an instant, the stars around your ship seem to rearrange themselves into a pattern that is not quite a map. Points brighten, dim, split, and vanish while an immense presence presses a sequence of impressions into your thoughts: observation, warning, intervention, retreat, remembrance.`
+			`\tThe pattern does not resemble a human bureaucracy, but the repetition feels procedural. Species and civilizations are watched across spans of time that make ordinary governments look temporary. Intervention appears to become more direct as extinction grows more likely, yet every step is paired with another impulse: preserve the subject's ability to choose its own future for as long as possible.`
+			`\tWhen the vision releases you, the systems marked as vanished are the ones that linger most clearly. Whatever maintains this record seems to treat failure not as a closed case, but as an obligation to remember what was lost.`
+				decline
+
+
+mission "Drak History: Memorial Custody"
+	entering
+	minor
+	invisible
+	source
+		system "Sayaiban"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A foreign memory settles over the cockpit. You perceive a long sequence of objects being catalogued after their makers disappeared: fragments of machines, preserved habitats, patterns of language, engineered organisms, and a few creations that remain active long after their creators are gone.`
+			`\tThe impressions distinguish preservation from approval. Some surviving works are dangerous. A thing may be contained, watched, isolated, or forbidden to outsiders and still be kept because destroying it would erase one of the last traces of the people who made it.`
+			`\tThe final image is a boundary held for an age: not a monument in the human sense, but a place where memory and hazard have become the same custodial problem. The presence withdraws before you can tell whether the lesson was intended for you or merely allowed to pass through your mind.`
+				decline
+
+
+mission "Drak History: Intervention Threshold"
+	entering
+	minor
+	invisible
+	source
+		system "Kasikfar"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`Your thoughts fill with overlapping scenes of conflicts that are impossible to place. In some, pale-gold vessels remain distant while younger species settle their own disputes. In others they appear between fleets, disable weapons, close routes, or stand guard over worlds that have become too vulnerable to defend themselves.`
+			`\tNo single rule is spoken, but a hierarchy of harms becomes clear. Ordinary rivalry is tolerated longer than systematic destruction. War is tolerated longer than extermination. The closer a conflict comes to making a people, culture, or biosphere impossible to recover, the less freedom the watchers grant themselves to remain passive.`
+			`\tYou are left with the unsettling sense that restraint is itself one of their institutions: not indifference, but a discipline maintained because power used too early can destroy the autonomy it claims to protect.`
+				decline
+
+
+mission "Drak History: Peacekeeping Record"
+	entering
+	minor
+	invisible
+	source
+		system "Peresedersi"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A slow pulse of images reaches you from somewhere beyond your instruments: opposing fleets separated by a silent ship, evacuation corridors held open, weapons rendered inert rather than destroyed, and empty systems watched long after the fighting that emptied them has ended.`
+			`\tThe scenes are not presented as victories. They read more like accumulated precedent. Some interventions prevented a massacre but hardened a grievance. Some preserved a population while failing to preserve its institutions. Some arrived too late and left only artifacts to guard.`
+			`\tAcross all of them, the same purpose repeats with slight corrections: enforce peace where necessary, prevent extinction where possible, and retain enough memory of every failure that the next decision is not made in ignorance. The last impression is not pride, but patience weighted by grief.`
+				decline
