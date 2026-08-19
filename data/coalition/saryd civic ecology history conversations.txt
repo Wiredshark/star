@@ -1,0 +1,77 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Saryd History: Forest Recovery Register"
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "saryd"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A public display near the edge of the spaceport shows a forest in layers: old burn scars, storm damage, later plantings, animal ranges, footpaths, and newer settlements are all superimposed over one another. The map is too detailed to be a tourist guide.`
+			`\tA Saryd studying the display explains that communities began keeping such records because recovery from fires and violent storms could take longer than the memory of any one household. Replanting the wrong slope, rebuilding across an animal route, or forgetting where erosion had followed an earlier disaster only made the next recovery harder.`
+			`\tOver time, local observations became a shared register used by foresters, builders, researchers, and neighboring settlements. The archive does not prevent forests from changing, but it keeps each generation from treating the landscape as though nothing difficult had ever happened there before.`
+				decline
+
+
+mission "Saryd History: Seed Lineage Exchange"
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "saryd"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`Several small cases are mounted behind glass in a civic hall. Each contains seeds beside handwritten-looking labels and much newer machine-readable tags. Some entries trace the same plant through many settlements and climates.`
+			`\tA Saryd visitor explains that exchanging seeds was once mostly a matter between neighboring communities. As travel grew easier, the practice expanded: families, growers, and researchers began recording which lineages survived drought, disease, unusual soil, or long transport, while still preserving older local varieties.`
+			`\tThe result is part agricultural record and part ecological insurance. A crop lost on one world may survive in another community's stores, while a wild strain preserved for no immediate profit can later prove useful to a damaged ecosystem or a changing climate.`
+				decline
+
+
+mission "Saryd History: Field Research Registry"
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "saryd"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A group of researchers gathers around a terminal filled with expedition notes, specimen records, conference references, and links to observations made from small science vessels. Several entries have been revised repeatedly by teams on different worlds.`
+			`\tOne researcher explains that Saryd field science became difficult to coordinate once scholars could travel freely between planets. The same organism might be named twice, an old observation could be mistaken for a new discovery, and useful negative results vanished when a researcher's private notes were lost.`
+			`\tShared registries grew from those inconveniences. They do not dictate what questions scholars may ask, but they preserve where evidence came from, who examined it, and which conclusions survived later scrutiny. Interstellar research became faster partly because failure no longer had to be rediscovered in isolation.`
+				decline
+
+
+mission "Saryd History: Cultural Commons Ledger"
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "saryd"
+		attributes "folklore"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`Outside a public performance ground, an archive lists old plays, local variants, borrowed costumes, stage designs, and the communities responsible for maintaining them. Some titles appear in dozens of versions, each with notes explaining how the performance differs.`
+			`\tA Saryd organizer says that when travel between worlds became routine, popular folklore celebrations began to spread far beyond the settlements that had preserved them. Rather than choosing one official version, hosts started recording scripts, props, songs, and regional changes so visiting performers could learn from one another without erasing local traditions.`
+			`\tThe ledger also records which spaces, equipment, and collections are kept available for public use. What began as a practical way to share stages and costumes became a civic memory of how stories changed while remaining recognizable across generations and worlds.`
+				decline
