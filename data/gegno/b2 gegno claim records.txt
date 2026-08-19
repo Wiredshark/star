@@ -18,7 +18,7 @@
 # the established continuity boundary intact: practical shared records can exist
 # beneath Vi/Scin rivalry without implying political unification or friendship.
 # All writable state is B2-prefixed and this content does not alter material,
-# reputation, campaign, or faction-attitude state.
+# reputation, campaign, faction-attitude, mining-job, or upstream story state.
 
 
 event "B2 Gegno Claim Records: Review Ready"
