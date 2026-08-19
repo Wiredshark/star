@@ -69,18 +69,22 @@ def test_later_reader_consumes_both_outcomes():
 
 
 def test_no_world_or_material_mutation():
-    lower = TEXT.lower()
-    forbidden = (
-        "world:",
-        "payment ",
-        "credits ",
-        "reputation ",
-        "combat rating",
-        "cargo ",
-        "outfit ",
+    # Inspect executable data lines, not comments/dialogue prose. B2 may discuss
+    # resources in text but must not issue material/reputation/world-state commands.
+    forbidden_commands = re.compile(
+        r'^\s*(?:payment|credits|reputation|combat rating|cargo|outfit)\b',
+        re.I,
     )
-    for token in forbidden:
-        assert token not in lower, f"unexpected mutation surface: {token}"
+    world_write = re.compile(
+        r'^\s*"world:[^"]+"\s*(?:=|\+\+|--|\+=|-=|\?=|<\?=|>\?=)',
+        re.I,
+    )
+    for line in TEXT.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or stripped.startswith("`"):
+            continue
+        assert not forbidden_commands.match(line), f"unexpected material/reputation command: {stripped}"
+        assert not world_write.match(line), f"unexpected world-state mutation: {stripped}"
 
 
 def test_local_goto_labels_resolve():
