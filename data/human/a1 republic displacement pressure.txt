@@ -1,0 +1,74 @@
+# A1 world simulation: Republic civilian displacement pressure.
+#
+# Reuses the authoritative Republic border-pressure signal instead of creating
+# a second copy of security truth. Sustained border pressure produces a bounded
+# civilian-displacement signal. The response temporarily suppresses retriggers,
+# scheduled recovery decays displacement, and a high-pressure resettlement surge
+# consumes part of the backlog. Later A2/A3 systems can read the persistent state.
+
+event "ES A1: Republic Displacement Recovery"
+	"world: republic displacement pressure" -= 1
+	"world: republic displacement pressure" >?= 0
+	clear "world: republic displacement notice seen"
+
+event "ES A1: Republic Displacement Response Ends"
+	clear "world: republic displacement response active"
+
+event "ES A1: Republic Resettlement Surge Ends"
+	clear "world: republic resettlement surge"
+
+mission "ES A1: Republic Displacement Escalation"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: republic border pressure" >= 4
+		not "world: republic displacement response active"
+		"world: republic displacement pressure" < 6
+	on offer
+		set "world: republic displacement response active"
+		"world: republic displacement pressure" += 2
+		"world: republic displacement pressure" <?= 6
+		event "ES A1: Republic Displacement Recovery" 8 8
+		event "ES A1: Republic Displacement Response Ends" 4 4
+		fail
+
+mission "ES A1: Republic Resettlement Surge"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		"world: republic displacement pressure" >= 4
+		not "world: republic resettlement surge"
+	on offer
+		set "world: republic resettlement surge"
+		"world: republic displacement pressure" -= 2
+		"world: republic displacement pressure" >?= 0
+		event "ES A1: Republic Resettlement Surge Ends" 6 6
+		fail
+
+mission "ES A1: Republic Displacement Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+	destination "Earth"
+	to offer
+		"world: republic displacement pressure" >= 2
+		not "world: republic displacement notice seen"
+	on offer
+		message
+			text "Republic civil-defense bulletins report that sustained frontier alerts are rerouting families and temporary workers away from exposed border routes. Regional authorities are opening short-term housing and transport capacity while the displacement pressure remains elevated."
+		set "world: republic displacement notice seen"
+		fail
