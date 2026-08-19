@@ -33,7 +33,6 @@ def main() -> None:
     if missions != expected:
         fail(f"expected missions {expected!r}, found {missions!r}")
 
-    # Preserve the recurring pair without inventing unsupported Incipias names or titles.
     for phrase in (
         "started calling that one the Registrar",
         "privately think of that one as the Pilot",
@@ -65,7 +64,6 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("later reader must persist completion")
 
-    # Every assignment-style persistent write stays inside the B2 namespace.
     for raw in re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, flags=re.MULTILINE):
         if not raw.startswith(PREFIX):
             fail(f"out-of-scope persistent write: {raw}")
@@ -85,7 +83,6 @@ def main() -> None:
         if " = " in stripped and any(token in stripped for token in forbidden_write_tokens):
             fail(f"forbidden direct state mutation: {line.strip()}")
 
-    # Validate local goto/label integrity for every mission.
     blocks = re.split(r'(?=^mission ")', text, flags=re.MULTILINE)
     for block in blocks:
         if not block.startswith("mission "):
@@ -96,18 +93,15 @@ def main() -> None:
         if missing:
             fail(f"unresolved local goto labels: {sorted(missing)}")
 
-    # Consume B1's early-spaceflight institutions as explicit concepts.
     for phrase in (
         "crew-license",
-        "private spacecraft",
+        "privately owned ship",
         "formal categories",
         "experience",
     ):
         if phrase not in lower:
             fail(f"missing B1 licensing continuity concept: {phrase}")
 
-    # Preserve the intended dynamic-content invariant: practical judgment can be
-    # recognized without silently replacing common standards with unwritten custom.
     for phrase in (
         "evidence and limits travel with the license",
         "temporary local endorsement",
@@ -117,7 +111,6 @@ def main() -> None:
         if phrase not in text:
             fail(f"missing license-accountability invariant: {phrase}")
 
-    # The refusal path must not enter the Review chain.
     offer_block = next(b for b in blocks if b.startswith(f'mission "{PREFIX} Offer"'))
     decline_block = offer_block.split("label decline", 1)[1]
     if f'"{PREFIX} introduced" = 1' in decline_block:
