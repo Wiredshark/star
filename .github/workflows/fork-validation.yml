@@ -1,0 +1,86 @@
+name: Fork simulation and story validation
+
+on:
+  pull_request:
+    paths:
+      - "data/**"
+      - "tests/a1/**"
+      - "tools/story/**"
+      - "utils/check_content_style.py"
+      - "utils/contentStyle.json"
+      - ".github/workflows/fork-validation.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "data/**"
+      - "tests/a1/**"
+      - "tools/story/**"
+      - "utils/check_content_style.py"
+      - "utils/contentStyle.json"
+      - ".github/workflows/fork-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fork-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  focused-validation:
+    name: Focused simulation and story contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install validation dependencies
+        run: python -m pip install --upgrade pip pytest regex
+
+      - name: Compile focused Python validation code
+        run: python -m compileall -q tools/story tests/a1
+
+      - name: Run all focused story validators
+        run: python tools/story/run_focused_validators.py
+
+      - name: Run A1 simulation contract tests
+        run: python -m pytest -q tests/a1
+
+  content-style-advisory:
+    name: Fork content style advisory
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install style dependency
+        run: python -m pip install --upgrade pip regex
+
+      - name: Check fork-authored A/B content style
+        shell: bash
+        run: |
+          python utils/check_content_style.py --no-correct --files \
+            data/human/a1*.txt \
+            data/human/a2*.txt \
+            data/human/b2*.txt \
+            data/hai/b2*.txt \
+            data/remnant/b2*.txt
