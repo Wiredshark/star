@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Ka'het Signal Interpretation production slice.
+# Consumes B1 Remnant archival practices around Ka'het status traffic and the
+# distinction among living Ka'het, their exoskeletons, Builder facilities, and
+# automated servicing machinery. "Interpreter" and "Scout" are the player's
+# private shorthand for two recurring Remnant researchers, not formal offices.
+
+
+event "B2 Ka'het Signal Interpretation: Review Ready"
+	"B2 Ka'het Signal Interpretation: review ready" = 1
+
+
+mission "B2 Ka'het Signal Interpretation: Offer"
+	minor
+	name `The Signal and the Site`
+	description `Two Remnant researchers disagree over how much operational weight to give translated Ka'het status traffic before a field team verifies what still exists.`
+	source
+		government "Remnant"
+	"offer precedence" 8
+	to offer
+		has "First Contact: Ka'het: Remnant 1B: offered"
+		has "Ka'het History: Lost Network Register: offered"
+		has "Ka'het History: Builder-Ka'het Distinction Ledger: offered"
+		not "B2 Ka'het Signal Interpretation: introduced"
+		not "B2 Ka'het Signal Interpretation: declined"
+	on offer
+		conversation
+			`A Remnant linguist you privately think of as the Interpreter waves you over to a table covered in translated Ka'het status traffic. Beside them, a field researcher you think of as the Scout has spread recent survey images across another display. The two are arguing in rapid sign over a signal that repeatedly requests maintenance support from a station which current charts list only as a debris field.`
+			`\tThe Interpreter says the message is useful even if the station is gone. Repeated destination names, resource requests, and patrol reports can reconstruct how the old Builder network was organized. The Scout agrees, but points at three other messages whose mapped destinations no longer match surviving terrain. A translation can preserve exactly what was transmitted while still describing a world that ceased to exist centuries ago.`
+			choice
+				`\tTreat the translated traffic as the primary historical map. Field teams should begin from the network the surviving signals still describe, then annotate what has changed.`
+					goto translation
+				`\tTreat field observation as primary for operational planning. Old traffic belongs in the archive until a current survey independently confirms a destination or hazard.`
+					goto field
+				`\tKeep a paired map: every translated claim travels with its source signal, confidence, and the most recent field observation, even when the two disagree.`
+					goto paired
+				`\tDecline to decide how the Remnant should turn centuries-old Ka'het traffic into present-day exploration guidance.`
+					goto decline
+			label translation
+			`You argue that the old network is still the best starting hypothesis the Remnant possess. The Interpreter marks every translated station, route, and resource request on a historical layer. The Scout adds a rule that nothing on that layer is automatically a safe destination: each symbol carries the age of its newest signal and the date of the latest confirming survey.`
+			action
+				"B2 Ka'het Signal Interpretation: introduced" = 1
+				"B2 Ka'het Signal Interpretation: route translation" = 1
+				"B2 Ka'het Signal Interpretation: interpreter trusts player" = 1
+				event "B2 Ka'het Signal Interpretation: Review Ready" 7 11
+				accept
+			label field
+			`You side with the Scout on operational decisions. A translated request can explain why a ruin matters, but a crew should not navigate toward an ancient instruction as though it were a current beacon. The Interpreter keeps the old traffic searchable and linked to candidate sites while the Scout labels each destination unverified until a modern observation establishes what remains.`
+			action
+				"B2 Ka'het Signal Interpretation: introduced" = 1
+				"B2 Ka'het Signal Interpretation: route field" = 1
+				"B2 Ka'het Signal Interpretation: scout trusts player" = 1
+				event "B2 Ka'het Signal Interpretation: Review Ready" 7 11
+				accept
+			label paired
+			`You suggest that the argument comes from forcing historical reconstruction and current navigation into one certainty scale. The Interpreter keeps the original signal, translation, and alternate readings. The Scout adds current observations, survey age, and whether a site still matches the translated description. Neither record overwrites the other when they conflict.`
+			action
+				"B2 Ka'het Signal Interpretation: introduced" = 1
+				"B2 Ka'het Signal Interpretation: route paired" = 1
+				"B2 Ka'het Signal Interpretation: interpreter trusts player" = 1
+				"B2 Ka'het Signal Interpretation: scout trusts player" = 1
+				event "B2 Ka'het Signal Interpretation: Review Ready" 7 11
+				accept
+			label decline
+			`You tell them that a living research program should not acquire its evidence rules from a visitor's preference. The Interpreter leaves the translation in the archive, and the Scout keeps the site off the current route board. Their disagreement remains visible rather than being converted into policy by your authority.`
+			action
+				"B2 Ka'het Signal Interpretation: declined" = 1
+				decline
+
+
+mission "B2 Ka'het Signal Interpretation: Review"
+	minor
+	name `A Map That Learned Too Slowly`
+	description `The Interpreter and Scout return after a copied survey summary preserved a conclusion but lost the age and contradiction that limited it.`
+	source
+		government "Remnant"
+	"offer precedence" 8
+	to offer
+		has "B2 Ka'het Signal Interpretation: introduced"
+		has "B2 Ka'het Signal Interpretation: review ready"
+		not "B2 Ka'het Signal Interpretation: reviewed"
+	on offer
+		conversation
+			branch translation
+				has "B2 Ka'het Signal Interpretation: route translation"
+			branch field
+				has "B2 Ka'het Signal Interpretation: route field"
+			`The Interpreter and Scout show you a navigation brief copied from their paired map. The brief correctly says that old Ka'het traffic identifies a maintenance station beyond a debris corridor, but the export omitted the alternate translation and the field note saying the apparent station structure had collapsed since the last survey. A downstream team read a historical relationship as a current route instruction.`
+				goto settle
+			label translation
+			`The historical network layer helped a survey team identify the remains of a Builder facility, but their copied route brief retained the station label and dropped the signal age. Another crew later treated the label as evidence that servicing machinery would still be active. The archive was correct about what the Ka'het had transmitted; the operational inference outlived the evidence that limited it.`
+				goto settle
+			label field
+			`A cautious field-only route avoided one obsolete destination, but a later survey summary recorded only "no station present." The original Ka'het traffic and an older ruin survey showed that a facility had existed there and may explain debris elsewhere in the system. By protecting crews from stale instructions, the operational record accidentally erased a useful historical relationship.`
+			label settle
+			choice
+				`\tCreate a confidence-tagged route atlas: every operational waypoint carries observation date, source type, translation confidence, and an explicit expiry for assumptions that have not been rechecked.`
+					goto atlas
+				`\tCreate a contradiction register: translated claims and field observations remain separate, and any unresolved mismatch must follow every summary until a new survey or translation closes it.`
+					goto contradiction
+			label atlas
+			`You suggest making uncertainty part of the route itself. A waypoint can say that a structure was observed recently, that a destination exists only in translated status traffic, or that a route is inferred from several weak signals. Each assumption receives a review date. The Interpreter keeps historical relationships visible; the Scout gets a route board that cannot silently turn old evidence into a permanent present-tense fact.`
+			action
+				"B2 Ka'het Signal Interpretation: reviewed" = 1
+				"B2 Ka'het Signal Interpretation: settlement confidence atlas" = 1
+				"B2 Ka'het Signal Interpretation: interpreter trusts player" = 1
+				"B2 Ka'het Signal Interpretation: scout trusts player" = 1
+				accept
+			label contradiction
+			`You argue that disagreement should remain portable instead of being resolved by whichever record was copied last. The archive stores the signal, translation, alternate readings, survey observation, and date as distinct linked entries. A route summary may prefer the newest field evidence for safety, but it must still disclose unresolved contradictions rather than deleting them. The Scout calls it a warning that survives copying. The Interpreter calls it a history that admits when it is unfinished.`
+			action
+				"B2 Ka'het Signal Interpretation: reviewed" = 1
+				"B2 Ka'het Signal Interpretation: settlement contradiction register" = 1
+				"B2 Ka'het Signal Interpretation: interpreter trusts player" = 1
+				"B2 Ka'het Signal Interpretation: scout trusts player" = 1
+				accept
+
+
+mission "B2 Ka'het Signal Interpretation: Scout Remembers"
+	minor
+	name `Scout Remembers`
+	description `The Scout remembers the rule your advice placed between old Ka'het traffic and present-day exploration.`
+	source
+		government "Remnant"
+	"offer precedence" 8
+	to offer
+		not "B2 Ka'het Signal Interpretation: aftermath seen"
+		or
+			has "B2 Ka'het Signal Interpretation: settlement confidence atlas"
+			has "B2 Ka'het Signal Interpretation: settlement contradiction register"
+	on offer
+		conversation
+			branch contradiction
+				has "B2 Ka'het Signal Interpretation: settlement contradiction register"
+			`The Scout recognizes you beside a route display. One destination is shaded rather than marked safe or lost: a translated Ka'het status request says a servicing node should exist there, a recent survey found only damaged machinery, and an alternate translation suggests the request may have referred to the wider system instead of a single station. The atlas gives the next expedition a useful hypothesis without pretending the hypothesis is a landmark.`
+				goto finish
+			label contradiction
+			`The Scout recognizes you while reviewing a survey packet. A red link connects a current debris-field observation with an old Ka'het maintenance request. Neither entry has been deleted, and the packet says plainly why they conflict. A new field team has been assigned to test the mismatch. The Interpreter has added another possible reading of the signal, but it appears as an interpretation rather than a corrected history. The disagreement has become a research target instead of an invisible editing choice.`
+			label finish
+			action
+				"B2 Ka'het Signal Interpretation: aftermath seen" = 1
+				accept
