@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Incipias History: Crew License Register"
+	minor
+	invisible
+	source
+		government "Conlatio"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`Near the port authority, a wall display cycles through rows of colored symbols beside silhouettes of different Incipias vessels. Pilots stop at the display, compare a few entries against their own records, and then continue toward the docks.`
+			`\tA nearby captain explains in halting translated speech that the register concerns who is permitted to operate and crew spacecraft. Renewals are strict, and the categories have multiplied as private ships have become common enough that the old informal practices no longer scale.`
+			`\tThe bureaucracy appears to be a fossil of the Incipias' recent transition into a spacefaring society: every new class of ship and every new kind of civilian flight created another reason to decide who was trained, who was responsible, and what evidence counted when something went wrong.`
+				decline
+
+
+mission "Incipias History: Atmospheric Flight Corridor Archive"
+	minor
+	invisible
+	source
+		government "Conlatio"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A public terminal shows a globe wrapped in shifting bands of color. At first it resembles a weather map, but small ship symbols repeatedly enter and leave the bands while markers flash over settlements and industrial sites below.`
+			`\tAn Incipias traveler gestures toward your ship, then toward the display, and explains that early spacecraft were also expected to cross the dense landscape-clouds of their origin-home. As traffic increased, flight paths, turbine-mode rules, emergency descent zones, and local warning signals had to become shared conventions rather than habits known only to experienced crews.`
+			`\tThe archive makes their space age look less like a single technological leap and more like an accumulation of traffic rules. Reaching orbit mattered, but so did learning how thousands of ordinary pilots could leave and return without turning the skies above their cities into a permanent emergency.`
+				decline
+
+
+mission "Incipias History: Mining Survey Register"
+	minor
+	invisible
+	source
+		government "Conlatio"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`Several miners are arguing over a cluster of three-dimensional maps filled with colored points and looping paths. Each point appears to carry a history: who surveyed it, what was extracted there, which hazards were encountered, and whether another expedition considered the site exhausted.`
+			`\tThe register seems to have grown alongside the Incipias mining fleets. Once enough civilian crews began leaving the home system, simply remembering which rocks had already been examined was no longer sufficient. Survey records became a way to avoid wasted voyages, conflicting claims, and repeated exposure to the same dangerous regions.`
+			`\tFor a species still early in its expansion beyond home, the maps function almost like a collective memory of exploration. Every mundane extraction job leaves behind information that makes the next journey slightly less uncertain.`
+				decline
+
+
+mission "Incipias History: Research Disclosure Ledger"
+	minor
+	invisible
+	source
+		government "Conlatio"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`In a crowded civic building, an Incipias technician studies a public index of research projects. Most entries are ordinary improvements to propulsion, shields, energy storage, or industrial equipment, but a handful contain little more than a project code and a notice that technical details remain restricted.`
+			`\tThe technician complains that major breakthroughs have become rare while government laboratories promise work that ordinary citizens cannot inspect. Another Incipias nearby responds by pointing to older entries where once-restricted projects were eventually published, standardized, and adopted by civilian yards.`
+			`\tThe disagreement suggests an institution still learning how to balance experimentation, safety, military secrecy, and public trust. Their scientific history is not only a list of inventions, but a recurring argument over when new knowledge stops belonging to the laboratory that discovered it and becomes infrastructure for everyone else.`
+				decline
