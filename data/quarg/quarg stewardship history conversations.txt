@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Quarg History: Ringworld Stewardship Archive"
+	minor
+	invisible
+	source
+		government "Quarg"
+	to offer
+		has "First Contact: Quarg: offered"
+		random < 4
+	on offer
+		conversation
+			`A public display near the docks shows cross-sections of a ringworld layered with maintenance routes, habitat zones, reservoirs, transit corridors, and structural inspection records. The accompanying translation explains that the Quarg do not treat such habitats as completed monuments. Every inhabited section is part of a continuing stewardship cycle in which wear, population changes, and ecological drift are measured across spans longer than many younger civilizations have existed.`
+			`\tThe archive gives no date for the beginning of the practice. Instead, it emphasizes continuity: each generation inherits records detailed enough to distinguish a temporary repair from a change that future custodians must understand.`
+				decline
+
+
+mission "Quarg History: Peaceful Port Register"
+	minor
+	invisible
+	source
+		government "Quarg"
+	to offer
+		has "First Contact: Quarg: offered"
+		random < 4
+	on offer
+		conversation
+			`An information alcove lists old port rules in several languages beside modern translations. The oldest entries are terse: visitors are expected to trade honestly, settle disputes without violence, and leave weapons secured aboard their ships. Later entries add procedures for arbitration, damaged cargo, rescue claims, and the protection of travelers whose governments are hostile to one another.`
+			`\tA note says the rules were never meant to make Quarg ports politically neutral in every conflict. Their purpose was narrower and more practical: anyone who arrived in peace should be able to depart in peace, and commerce should not become an excuse to carry distant wars onto Quarg worlds.`
+				decline
+
+
+mission "Quarg History: Protected Community Ledger"
+	minor
+	invisible
+	source
+		government "Quarg"
+	to offer
+		has "First Contact: Quarg: offered"
+		random < 4
+	on offer
+		conversation
+			`A quiet memorial wall contains no heroic portraits, only lists of settlements, transport routes, supply allotments, and population counts. The translation explains that the Quarg have repeatedly sheltered communities whose survival depended on separating them from an ongoing conflict. The records focus less on battles than on the difficult work afterward: food, habitat space, medical care, translation, local administration, and deciding how much authority the protected community should retain.`
+			`\tOne annotation warns that protection can preserve a people without resolving the conflict that endangered them. The archive therefore treats refuge as a continuing obligation rather than a single act of rescue.`
+				decline
+
+
+mission "Quarg History: Path Stewardship Record"
+	minor
+	invisible
+	source
+		government "Quarg"
+	to offer
+		has "First Contact: Quarg: offered"
+		random < 4
+	on offer
+		conversation
+			`A navigational exhibit maps ordinary hyperlanes beside broad blank regions where no public route is shown. The text says that the Quarg have traveled for millions of years and have learned to think of access between regions as something that carries responsibilities as well as opportunities. Some routes are surveyed and shared freely; others are watched closely because contact can expose a weaker society to dangers it is not prepared to face.`
+			`\tThe display carefully avoids describing the Quarg's own means of traveling beyond the ordinary pathways. It does, however, repeat a principle familiar from their conversations about the Drak: the ability to reach somewhere does not by itself create the right to open that path to everyone.`
+				decline
