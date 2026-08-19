@@ -1,0 +1,82 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 ambient consequence consumer for the integrated Republic customs-review slice.
+#
+# Public attribution is consent-bounded: these News groups appear only after
+# Sera Noll's later reader records `precedent use bounded`. If the player chose
+# `precedent kept private`, no public News consequence is emitted.
+#
+# This file reads A2 outcome memory only. It does not write Republic customs
+# scrutiny, border pressure, pirate-work history, or any dialogue-owned state.
+
+news "A2 Republic customs precedent bounded audit"
+	location
+		government "Republic"
+	to show
+		has "A2 Republic Customs Review: later reader seen"
+		has "A2 Republic Customs Review: precedent use bounded"
+		has "A2 Republic Customs Review: outcome bounded audit"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Republic customs offices are circulating a secondary-review template that fixes the scope of a document audit before anyone opens the file. Port-rights observers say the point is not leniency; it is keeping a narrow review from quietly becoming an unlimited one."`
+			`"A few Republic ports now write down the categories covered by a secondary document audit before inspecting anything. Examiners grumble about the paperwork, but the rule makes it harder to turn silence outside the agreed scope into suspicion."`
+
+news "A2 Republic customs precedent written uncertainty"
+	location
+		government "Republic"
+	to show
+		has "A2 Republic Customs Review: later reader seen"
+		has "A2 Republic Customs Review: precedent use bounded"
+		has "A2 Republic Customs Review: outcome written uncertainty"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Some Republic secondary-review forms now separate confirmed facts, route-pattern inferences, and unresolved questions into different sections. Customs officers still flag suspicious routes, but another port can see whether it inherited evidence or merely inherited doubt."`
+			`"Port-rights staff are pushing a fact / inference / unresolved-question format for Republic customs files. The change does not stop scrutiny; it stops the existence of an old flag from being mistaken for proof of whatever the next examiner suspects."`
+
+news "A2 Republic customs precedent contextualized routing"
+	location
+		government "Republic"
+	to show
+		has "A2 Republic Customs Review: later reader seen"
+		has "A2 Republic Customs Review: precedent use bounded"
+		has "A2 Republic Customs Review: outcome contextualized routing"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Republic route-screening guidance is starting to distinguish ordinary contractor traffic through pirate-controlled ports from genuinely exceptional deviations. Officials insist the change narrows bad indicators rather than relaxing the border posture."`
+			`"Customs analysts have revised one of the route-pattern guides used for secondary review. Frequent pirate-space stops can still attract attention, but examiners are being told to identify what is unusual about a route instead of treating familiarity with pirate ports as evidence by itself."`
+
+news "A2 Republic customs precedent formal process"
+	location
+		government "Republic"
+	to show
+		has "A2 Republic Customs Review: later reader seen"
+		has "A2 Republic Customs Review: precedent use bounded"
+		has "A2 Republic Customs Review: outcome refusal preserved"
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Republic port-rights observers are circulating a training example in which declining an informal customs interview was recorded as a request for formal process, not as adverse evidence. The example is anonymized and focused on procedure rather than the captain involved."`
+			`"A Republic customs training note now states explicitly that refusing an improvised dockside interview does not make the review flag stronger. If an office wants substantive answers, it has to identify the formal process it is actually using."`
+
