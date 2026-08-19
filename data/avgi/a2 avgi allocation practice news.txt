@@ -1,0 +1,96 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# A2 Avgi Allocation Practice News.
+# Read-only ambient consequences for the resolved B2 Avgi Allocation Compact.
+
+news "a2 avgi allocation practice public ledger"
+	to show
+		has "language: Avgi"
+		has "B2 Avgi Allocation Compact: aftermath seen"
+		has "B2 Avgi Allocation Compact: settlement public emergency ledger"
+	location
+		government "Avgi (Consonance)"
+		not attributes "aberrant siege"
+	name
+		word
+			"Allocation Clerk"
+			"Grid Planner"
+			"Port Scheduler"
+	message
+		word
+			`"Satisfaction. Emergency reserve boards are less dramatic now that shelter floors, Guard response classes, and deferrable loads are published on the same ledger."`
+			`"Observation. We argue about emergency priorities before the alarm now. That is an improvement over discovering them while the lights are already failing."`
+			`"Approval. The public reserve ledger has made it harder for any office to quietly redefine what counts as urgent after a crisis begins."`
+
+
+news "a2 avgi allocation practice public ledger guard"
+	to show
+		has "language: Avgi"
+		has "B2 Avgi Allocation Compact: aftermath seen"
+		has "B2 Avgi Allocation Compact: settlement public emergency ledger"
+	location
+		government "Avgi (Consonance)"
+		not attributes "aberrant siege"
+	name
+		word
+			"Twilight Guard Officer"
+			"Reserve Officer"
+			"Guard Dispatcher"
+	message
+		word
+			`"Practicality. A shared reserve picture lets us move immediately inside approved response classes without pretending civilian loads do not exist."`
+			`"Dry approval. Apparently transparency can be operationally useful when someone defines the categories before the shooting starts."`
+			`"Relief. Emergency draws are faster when everyone already knows which civilian floors may not be crossed."`
+
+
+news "a2 avgi allocation practice dual threshold"
+	to show
+		has "language: Avgi"
+		has "B2 Avgi Allocation Compact: aftermath seen"
+		has "B2 Avgi Allocation Compact: settlement dual threshold"
+	location
+		government "Avgi (Consonance)"
+		not attributes "aberrant siege"
+	name
+		word
+			"Allocation Reviewer"
+			"Emergency Auditor"
+			"Restoration Planner"
+	message
+		word
+			`"Approval. Exceptional Guard draws still happen, but crossing a declared threshold now creates a review record before anyone can rewrite the sequence afterward."`
+			`"Observation. The useful part of the dual-threshold rule is not that emergencies became tidy. It is that every untidy exception now identifies what was displaced and what must be restored first."`
+			`"Satisfaction. Separate authorities can disagree without losing the institutional memory of why an emergency limit was crossed."`
+
+
+news "a2 avgi allocation practice dual threshold guard"
+	to show
+		has "language: Avgi"
+		has "B2 Avgi Allocation Compact: aftermath seen"
+		has "B2 Avgi Allocation Compact: settlement dual threshold"
+	location
+		government "Avgi (Consonance)"
+		not attributes "aberrant siege"
+	name
+		word
+			"Twilight Guard Officer"
+			"Reserve Officer"
+			"Alert Coordinator"
+	message
+		word
+			`"Acceptance. We can still cross the declared reserve class when delay would be worse, but now the exception automatically carries its own reconstruction and restoration obligations."`
+			`"Assessment. The threshold system preserves speed without requiring the civilian office to trust that every emergency draw was harmless."`
+			`"Practicality. I would rather explain a justified exception afterward than wait for permission while a warning relay fails."`
+
