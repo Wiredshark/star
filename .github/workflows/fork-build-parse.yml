@@ -39,27 +39,42 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install system build dependencies
+        shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
+          set -euo pipefail
+          sudo apt-get update -qq >"$RUNNER_TEMP/apt.log" 2>&1 || { cat "$RUNNER_TEMP/apt.log"; exit 1; }
+          sudo apt-get install -y -qq --no-install-recommends \
             g++ cmake ninja-build pkgconf \
             libsdl2-dev libpng-dev libjpeg-dev libavif-dev \
             libgl1-mesa-dev libglew-dev libminizip-dev libopenal-dev \
-            libmad0-dev libflac++-dev uuid-dev
+            libmad0-dev libflac++-dev uuid-dev \
+            >>"$RUNNER_TEMP/apt.log" 2>&1 || { cat "$RUNNER_TEMP/apt.log"; exit 1; }
+          echo "System build dependencies installed."
 
       - name: Configure production executable
+        shell: bash
         run: |
+          set -euo pipefail
           cmake -S . -B build/fork-parse -G Ninja \
             -DES_USE_VCPKG=OFF \
             -DBUILD_TESTING=OFF \
-            -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_BUILD_TYPE=Release \
+            >"$RUNNER_TEMP/configure.log" 2>&1 || { cat "$RUNNER_TEMP/configure.log"; exit 1; }
+          tail -n 20 "$RUNNER_TEMP/configure.log"
 
       - name: Build production executable
-        run: cmake --build build/fork-parse --config Release --target EndlessSky --parallel 2
-
-      - name: Parse all production data and references
         shell: bash
         run: |
+          set -euo pipefail
+          cmake --build build/fork-parse --config Release --target EndlessSky --parallel 2 \
+            >"$RUNNER_TEMP/build.log" 2>&1 || { tail -n 200 "$RUNNER_TEMP/build.log"; exit 1; }
+          tail -n 20 "$RUNNER_TEMP/build.log"
+
+      - name: Parse all production data and references
+        id: parse
+        shell: bash
+        run: |
+          set -uo pipefail
           GAME="$(find build/fork-parse -maxdepth 3 -type f -name 'endless-sky' -perm -111 -print -quit)"
           if [[ -z "$GAME" ]]; then
             echo "FAIL: built Endless Sky executable was not found"
@@ -68,7 +83,30 @@ jobs:
           fi
           CONFIG_DIR="$RUNNER_TEMP/endless-sky-config"
           mkdir -p "$CONFIG_DIR"
+          PARSE_LOG="$RUNNER_TEMP/parse-output.txt"
           echo "Using executable: $GAME"
           echo "Using resources: $GITHUB_WORKSPACE"
           echo "Using config: $CONFIG_DIR"
-          "$GAME" --resources "$GITHUB_WORKSPACE" --config "$CONFIG_DIR" --parse-save
+          "$GAME" --resources "$GITHUB_WORKSPACE" --config "$CONFIG_DIR" --parse-save >"$PARSE_LOG" 2>&1
+          STATUS=$?
+          if [[ -f "$CONFIG_DIR/errors.txt" ]]; then
+            cp "$CONFIG_DIR/errors.txt" "$RUNNER_TEMP/errors.txt"
+          else
+            : >"$RUNNER_TEMP/errors.txt"
+          fi
+          echo "--- parser output ---"
+          cat "$PARSE_LOG"
+          echo "--- errors.txt ---"
+          cat "$RUNNER_TEMP/errors.txt"
+          exit "$STATUS"
+
+      - name: Upload parser diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-parse-diagnostics
+          path: |
+            ${{ runner.temp }}/parse-output.txt
+            ${{ runner.temp }}/errors.txt
+          if-no-files-found: warn
+          retention-days: 7
