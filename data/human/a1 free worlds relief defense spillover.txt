@@ -1,0 +1,46 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Free Worlds relief backlog -> defense strain spillover.
+#
+# Severe relief demand consumes civilian logistics and temporarily increases the
+# existing defense-strain signal on a qualifying Free Worlds arrival. The bridge
+# reads relief demand without changing it, caps defense strain at its accepted
+# maximum, and uses a six-day latch plus the existing six-day defense recovery so
+# repeated travel cannot create runaway mobilization pressure.
+
+
+event "ES A1: Free Worlds Relief Defense Spillover Latch Ends"
+	clear "world: free worlds relief defense spillover active"
+
+
+mission "ES A1: Free Worlds Relief Defense Spillover"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds relief demand" >= 4
+		"world: free worlds defense strain" < 5
+		not "world: free worlds relief defense spillover active"
+	on offer
+		set "world: free worlds relief defense spillover active"
+		"world: free worlds defense strain" += 1
+		"world: free worlds defense strain" <?= 5
+		event "ES A1: Free Worlds Defense Strain Recovery" 6 6
+		event "ES A1: Free Worlds Relief Defense Spillover Latch Ends" 6 6
+		fail
