@@ -1,0 +1,156 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Merchant Recovery Margin Compact.
+#
+# Consumes B1 Merchant rescue/recovery institutions and A1's authoritative
+# Merchant repair-backlog state. B2 never writes or clears A1 world state.
+# The resulting compact is a voluntary operating practice among participating
+# Merchant ports and associations, not a centralized Merchant government.
+
+
+mission "B2 Merchant Recovery Margin Compact: Offer"
+	minor
+	name `The Empty Berths`
+	description `Dispatcher Imani Vale and yard foreman Corin Beck disagree over how much repair capacity Merchant ports should reserve after a rescue surge.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		has "Merchant Recovery Margin Ledger: offered"
+		"world: merchant repair backlog" >= 3
+		not "B2 Merchant Recovery Margin Compact: introduced"
+		not "B2 Merchant Recovery Margin Compact: declined"
+	on offer
+		conversation
+			`A row of repair berths stands occupied by ships that have already survived their emergencies. None is in immediate danger now, but several still need structural work before they can return to service.`
+			`Imani Vale, a dispatcher coordinating rescue traffic between several Merchant ports, points to the queue. "The distress board is finally quieter. That does not mean the network is recovered. We used every spare tug crew and nearly every open yard slot getting ships here."`
+			`Corin Beck, a yard foreman with grease still on one sleeve, answers, "And if I leave berths empty because the next emergency might happen, the ships already waiting never get fixed. Reserve capacity is useful only if somebody can afford not to use it."`
+			`Vale says, "Then we need a rule for when a berth is truly spare and when using it spends tomorrow's rescue margin."`
+			choice
+				`\tBack Vale: protect a minimum emergency repair reserve even while ordinary backlog remains.`
+					goto reserve
+				`\tBack Beck: clear the existing queue first, then rebuild reserve capacity once ships are moving again.`
+					goto throughput
+				`\tPair both: every committed berth should record the displaced reserve obligation and when it must be restored.`
+					goto paired
+				`\tTell them each Merchant port should settle its own repair priorities.`
+					goto decline
+			label reserve
+			`You tell Beck that a network with no spare recovery capacity is one breakdown away from turning the next rescue into a larger crisis. Beck grimaces. "Then make the reserve visible. I do not want a dispatcher somewhere else calling my berth 'spare' while a half-repaired freighter is tied to it." Vale agrees that the protected margin needs a local, auditable definition.`
+			action
+				"B2 Merchant Recovery Margin Compact: introduced" = 1
+				"B2 Merchant Recovery Margin Compact: route reserve" = 1
+				"B2 Merchant Recovery Margin Compact: vale trusts player" = 1
+			accept
+			label throughput
+			`You tell Vale that a reserve which never becomes productive capacity can strand the ships the rescue system already saved. Beck nods. Vale answers, "Then backlog clearance cannot quietly become permanent reserve depletion. If we spend tomorrow's margin today, somebody has to record the debt."`
+			action
+				"B2 Merchant Recovery Margin Compact: introduced" = 1
+				"B2 Merchant Recovery Margin Compact: route throughput" = 1
+				"B2 Merchant Recovery Margin Compact: beck trusts player" = 1
+			accept
+			label paired
+			`You suggest treating each emergency reserve slot as an explicit obligation rather than an untouchable berth. A yard may use the capacity when backlog requires it, but the record must say what reserve was displaced, why, and when equivalent capacity is expected back. Beck says, "That I can schedule." Vale replies, "And I can tell the next dispatcher what capacity actually exists instead of what a spreadsheet assumes."`
+			action
+				"B2 Merchant Recovery Margin Compact: introduced" = 1
+				"B2 Merchant Recovery Margin Compact: route paired" = 1
+				"B2 Merchant Recovery Margin Compact: vale trusts player" = 1
+				"B2 Merchant Recovery Margin Compact: beck trusts player" = 1
+			accept
+			label decline
+			`You tell them an outsider should not turn one port's repair problem into a universal Merchant rule. Vale accepts that. Beck says, "Good. If somebody writes a compact, it should survive contact with an actual yard schedule."`
+			action
+				"B2 Merchant Recovery Margin Compact: declined" = 1
+			decline
+
+
+mission "B2 Merchant Recovery Margin Compact: Review"
+	minor
+	name `When the Queue Clears`
+	description `Return after the Merchant repair backlog has largely recovered and see whether the reserve argument produced a workable operating rule.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		has "B2 Merchant Recovery Margin Compact: introduced"
+		"world: merchant repair backlog" <= 1
+		not "B2 Merchant Recovery Margin Compact: reviewed"
+	on offer
+		conversation
+			branch reserve
+				has "B2 Merchant Recovery Margin Compact: route reserve"
+			branch throughput
+				has "B2 Merchant Recovery Margin Compact: route throughput"
+			`The repair queue has mostly cleared. Vale and Beck are comparing records from several ports that improvised their own versions of the paired rule. The numbers agree about how many berths were occupied, but not about whether a berth counted as reserve, ordinary capacity, or temporarily borrowed emergency margin.`
+			`Beck taps three entries that describe the same kind of berth three different ways. "Every port can defend its own label. The trouble starts when another dispatcher treats those labels as interchangeable."`
+			`Vale says, "Then the useful thing is not a universal berth category. It is a record that lets the next port understand what capacity was promised, what displaced it, and whether the obligation is still open."`
+			choice
+				`\tAdopt a portable recovery-margin packet that travels with every borrowed reserve commitment.`
+					goto packet
+				`\tAdopt a reconciliation cycle that compares current capacity against unresolved reserve obligations before old entries can be closed.`
+					goto reconcile
+			label reserve
+			`The protected-reserve approach prevented several ports from exhausting every berth, but the records show that some "reserved" slots were physically unavailable for unrelated maintenance. Beck says, "A reserve declared on paper is not the same thing as a berth a tug can actually use." Vale agrees that the record has to preserve current availability, not just policy intent.`
+			choice
+				`\tMake actual availability, promised reserve, displacement reason, and restoration status travel together in a portable packet.`
+					goto packet
+				`\tRequire periodic reconciliation between declared reserve and physically usable capacity.`
+					goto reconcile
+			label throughput
+			`Clearing the backlog first returned more ships to service quickly, but some yards rebuilt their emergency margin immediately while others simply kept every berth occupied once business recovered. Vale says, "The emergency ended, but the obligation to restore reserve capacity became optional the moment nobody was watching." Beck answers, "Then closure should require evidence that the reserve actually came back."`
+			choice
+				`\tCarry the displaced reserve obligation with every downstream capacity report until it is restored.`
+					goto packet
+				`\tKeep local scheduling freedom but require an explicit reconciliation cycle before reserve debt can be closed.`
+					goto reconcile
+			label packet
+			`You recommend a portable recovery-margin packet. Whenever reserve capacity is committed to ordinary repair work, the participating yard records the physically usable capacity, the reserve that was displaced, why it was spent, the expected restoration path, and whether that obligation remains open. Other Merchant ports can still set their own targets; the packet only prevents borrowed capacity from disappearing into a generic "available" number.`
+			action
+				"B2 Merchant Recovery Margin Compact: reviewed" = 1
+				"B2 Merchant Recovery Margin Compact: settlement margin packet" = 1
+				"B2 Merchant Recovery Margin Compact: vale trusts player" = 1
+			accept
+			label reconcile
+			`You recommend a recurring reconciliation cycle instead of one shared reserve formula. Participating yards keep local control over scheduling, but they periodically compare usable berths, standby repair crews, borrowed reserve, and unresolved restoration commitments. An old emergency entry cannot be marked closed merely because the original ship has departed. Beck says, "That keeps the schedule honest." Vale says, "And it tells dispatchers whether recovery is real instead of inferred."`
+			action
+				"B2 Merchant Recovery Margin Compact: reviewed" = 1
+				"B2 Merchant Recovery Margin Compact: settlement reconciliation" = 1
+				"B2 Merchant Recovery Margin Compact: beck trusts player" = 1
+			accept
+
+
+mission "B2 Merchant Recovery Margin Compact: Vale Remembers"
+	minor
+	name `Vale Remembers`
+	description `Imani Vale remembers how the repair-backlog dispute changed the way participating Merchant ports describe recovery capacity.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		not "B2 Merchant Recovery Margin Compact: aftermath seen"
+		or
+			has "B2 Merchant Recovery Margin Compact: settlement margin packet"
+			has "B2 Merchant Recovery Margin Compact: settlement reconciliation"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Merchant Recovery Margin Compact: settlement reconciliation"
+			`Vale shows you a capacity report from a neighboring port. The headline says three repair berths are available; the attached margin packet shows that one is promised as emergency reserve and another is temporarily borrowing a standby crew that must be restored within four days. "The number is still useful," she says. "Now it no longer pretends every berth means the same thing."`
+			goto record
+			label reconcile
+			`Vale is reviewing a short reconciliation summary. One yard cleared its emergency reserve debt completely; another still owes a standby crew and a tug slot after a busy maintenance week. "Nobody had to accept one central quota," she says. "They only had to stop calling an unresolved obligation finished because the crisis was over."`
+			label record
+			action
+				"B2 Merchant Recovery Margin Compact: aftermath seen" = 1
+			accept
