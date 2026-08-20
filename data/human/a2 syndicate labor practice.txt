@@ -1,0 +1,152 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 dynamic-narrative consumer for A1 Syndicate labor strain and crew rotation.
+# The player chooses a dockyard workforce practice during a live rotation, then
+# sees the consequences after A1 ends the rotation and labor strain recovers or
+# remains elevated. A1 world state is read-only.
+
+
+mission "A2 Syndicate Labor Practice: Rotation Briefing"
+	minor
+	name `Syndicate Dockyards: Rotation Practice`
+	description `Dockyard staffing coordinator Nera Voss asks what rule should guide a strained crew rotation.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "world: syndicate labor rotation active"
+		"world: syndicate labor strain" >= 2
+		not "A2 Syndicate Labor Practice: briefing seen"
+	on offer
+		conversation
+			`A staffing coordinator catches you beside a repair-yard shift board where whole teams are being moved between berths. "Captain <last>? Nera Voss. We are rotating crews before fatigue turns a repair shortage into a qualification shortage."`
+			`\tShe points to a second display copied from the yard's historical archive: old qualification ledgers, rest intervals, and temporary reassignment agreements. "The records all say the same thing in different language. Moving people is easy. Preserving what they know, when they are fit to work, and what authority follows them is harder."`
+			branch severe
+				"world: syndicate labor strain" >= 4
+			`Voss studies the live board. "The strain is still high enough that every bad reassignment creates work for someone else. I need a rule the dispatchers can actually apply."`
+				goto choose
+			label severe
+			`Voss taps several amber entries. "We are past ordinary scheduling pressure. Experienced crews are being asked to cover unfamiliar systems while their own queues keep moving. A sloppy rule now will hide the shortage rather than solve it."`
+			label choose
+			`She folds her arms. "If you had one vote in the rotation meeting, what principle should survive the emergency?"`
+			choice
+				`\tMatch crews to documented qualifications first, even if that leaves some berths waiting longer.`
+					goto qualifications
+				`\tProtect rest intervals first. A tired expert is not spare capacity.`
+					goto rest
+				`\tAllow cross-yard reassignment, but record exactly what authority and supervision travel with each temporary posting.`
+					goto reassignment
+				`\tI am not setting a Syndicate labor rule for your yards.`
+					goto refuse
+			label qualifications
+			`Voss marks the qualification column as the first filter. "Skill before headcount. Dispatch will hate the empty-looking slots, but at least we will stop counting an available person as available for every job."`
+			action
+				"A2 Syndicate Labor Practice: briefing seen" = 1
+				"A2 Syndicate Labor Practice: qualifications first" = 1
+				"A2 Syndicate Labor Practice: followup pending" = 1
+				decline
+			label rest
+			`Voss locks several crews out of voluntary overtime. "Rest as capacity protection. That costs hours today and preserves trained labor tomorrow. I can defend that in the meeting."`
+			action
+				"A2 Syndicate Labor Practice: briefing seen" = 1
+				"A2 Syndicate Labor Practice: rest protected" = 1
+				"A2 Syndicate Labor Practice: followup pending" = 1
+				decline
+			label reassignment
+			`Voss opens a temporary-posting template and adds fields for system qualification, supervisor, expiration, and return yard. "Mobility without pretending the reassignment erased where the authority came from. Good. That is specific enough to audit later."`
+			action
+				"A2 Syndicate Labor Practice: briefing seen" = 1
+				"A2 Syndicate Labor Practice: reassignment bounded" = 1
+				"A2 Syndicate Labor Practice: followup pending" = 1
+				decline
+			label refuse
+			`Voss closes the voting pane. "Fair. Advice becomes authority too easily once it enters a corporate record. I will mark this as no recommendation rather than an abstention somebody can reinterpret later."`
+			action
+				"A2 Syndicate Labor Practice: briefing seen" = 1
+				"A2 Syndicate Labor Practice: refused" = 1
+				"A2 Syndicate Labor Practice: followup pending" = 1
+				decline
+
+
+mission "A2 Syndicate Labor Practice: Rotation Review"
+	minor
+	name `Syndicate Dockyards: After the Rotation`
+	description `Nera Voss reviews what survived after the emergency crew rotation ended.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Syndicate Labor Practice: followup pending"
+		not "world: syndicate labor rotation active"
+		not "A2 Syndicate Labor Practice: followup seen"
+	on offer
+		conversation
+			branch qualifications_high
+				has "A2 Syndicate Labor Practice: qualifications first"
+				"world: syndicate labor strain" >= 2
+			branch qualifications_low
+				has "A2 Syndicate Labor Practice: qualifications first"
+				"world: syndicate labor strain" < 2
+			branch rest_high
+				has "A2 Syndicate Labor Practice: rest protected"
+				"world: syndicate labor strain" >= 2
+			branch rest_low
+				has "A2 Syndicate Labor Practice: rest protected"
+				"world: syndicate labor strain" < 2
+			branch reassignment_high
+				has "A2 Syndicate Labor Practice: reassignment bounded"
+				"world: syndicate labor strain" >= 2
+			branch reassignment_low
+				has "A2 Syndicate Labor Practice: reassignment bounded"
+				"world: syndicate labor strain" < 2
+			`Voss catches your eye and raises a hand before you can speak. "No second vote. You declined the first one, and the record still says exactly that." She shows you the closed review. "Nobody converted your refusal into support after the fact."`
+			action
+				"A2 Syndicate Labor Practice: refusal respected" = 1
+				goto finish
+			label qualifications_high
+			`Voss points to a board that is less chaotic but still crowded. "The rotation ended, yet labor strain remains elevated. Qualification-first kept us from solving the shortage on paper by moving the wrong people into the wrong berths. The queues are honest, even when they are ugly."`
+			action
+				"A2 Syndicate Labor Practice: Voss remembers qualifications under strain" = 1
+				goto finish
+			label qualifications_low
+			`Voss scrolls through the post-rotation report. "Labor strain is back near ordinary levels. The useful change is quieter: qualification matching stayed in the dispatcher workflow after the emergency ended. We stopped treating headcount as interchangeable skill."`
+			action
+				"A2 Syndicate Labor Practice: Voss remembers qualifications stabilized" = 1
+				goto finish
+			label rest_high
+			`Voss looks tired, though several names on her board are now marked unavailable for mandatory rest. "The strain is still elevated, but the rest rule prevented the same experts from absorbing every gap. We lost some short-term throughput and avoided turning fatigue into another shortage."`
+			action
+				"A2 Syndicate Labor Practice: Voss remembers rest under strain" = 1
+				goto finish
+			label rest_low
+			`Voss taps the recovery graph. "The strain came down without a second wave of crews timing out from exhaustion. That does not prove the rest rule caused the recovery, but it survived review because we can show what work it deferred and what labor it preserved."`
+			action
+				"A2 Syndicate Labor Practice: Voss remembers rest stabilized" = 1
+				goto finish
+			label reassignment_high
+			`Voss opens the temporary-posting register. "We are still short of labor, but the borrowed crews are not disappearing into the receiving yards. Every posting still names the qualification, supervisor, expiration, and home yard. Mobility stayed temporary instead of quietly becoming ownership."`
+			action
+				"A2 Syndicate Labor Practice: Voss remembers reassignment under strain" = 1
+				goto finish
+			label reassignment_low
+			`Voss closes the last temporary posting. "Labor strain is down, and the reassignment register gave us a clean way to send crews home without arguing over who had become responsible for what. The emergency ended with less administrative debt than it began with."`
+			action
+				"A2 Syndicate Labor Practice: Voss remembers reassignment stabilized" = 1
+			label finish
+			action
+				"A2 Syndicate Labor Practice: followup pending" = 0
+				"A2 Syndicate Labor Practice: followup seen" = 1
+				decline
