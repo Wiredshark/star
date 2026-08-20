@@ -10,6 +10,12 @@ required = [
     'has "B2 Republic Border Testimony Compact: aftermath seen"',
     '"world: republic border pressure" <= 2',
     '"world: republic border pressure" >= 4',
+    '[Evidence: Portable provenance packet]',
+    'has "B2 Republic Border Testimony Compact: settlement portable provenance packet"',
+    '[Verran trusts your evidence judgment]',
+    'has "B2 Republic Border Testimony Compact: verran trusts player"',
+    '[Settlement: Expiry and renewal]',
+    'has "B2 Republic Border Testimony Compact: settlement expiry and renewal"',
     '"A2 Republic Border Testimony Practice: lineage" = 1',
     '"A2 Republic Border Testimony Practice: independence" = 1',
     '"A2 Republic Border Testimony Practice: closure" = 1',
@@ -32,6 +38,10 @@ if text.count('mission "A2 Republic Border Testimony Practice:') != 2:
     raise SystemExit("expected exactly two A2 missions")
 if text.count('\t"offer precedence" 8') != 2:
     raise SystemExit("both production missions must outrank ambient history with offer precedence 8")
+if text.count('\t\t\t\t\tto display') < 3:
+    raise SystemExit("expected at least three persistent-state-dependent player responses")
+if text.count('[') < 3:
+    raise SystemExit("expected player-visible metadata labels on special responses")
 if '\n\t\t\taccept\n' in text:
     raise SystemExit("dialogue-only A2 missions must decline after recording state, not remain active via accept")
 if text.count('\n\t\t\tdecline\n') < 6:
