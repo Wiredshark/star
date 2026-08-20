@@ -2,7 +2,7 @@
 
 ## Stage / verdict
 - Stage: B2 STORY CHARACTERS + DYNAMIC CONTENT
-- Verdict: PARTIAL pending exact-head repository-native workflow completion
+- Verdict: READY for A3 review/integration
 - No self-integration. A3 retains integration authority.
 
 ## Repository authority
@@ -11,7 +11,8 @@
 - Branch: `agent/b2-wanderer-evacuation-recovery-20260820-1428`
 - Production commit: `b5cdcf3bf80c6da120d59a773c84ee86b3d28161`
 - Focused validator commit: `842ea4e955866a66cecda63e1b26d88f40e96775`
-- This handoff commit is the current candidate head when first written.
+- Exact production/validator/handoff candidate validated by repository-native CI: `c1df93201e16ed052e4091cc4b94028616151309`
+- This READY update is handoff-only; production content and validator are unchanged from the validated candidate.
 
 ## Scope
 Adds a three-mission Wanderer character/dynamic-content arc that consumes the newly integrated A1 `world: wanderer evacuation logistics strain` signal read-only.
@@ -56,28 +57,23 @@ The exposed private execution service reported four pre-existing service-owned o
 - `tools/story/validate_b2_wanderer_evacuation_recovery_compact.py`
 - `story/B2_WANDERER_EVACUATION_RECOVERY_COMPACT_HANDOFF_20260820.md`
 
-## Validation requested
-Focused validator:
+## Exact validation evidence
+On exact candidate `c1df93201e16ed052e4091cc4b94028616151309`:
+- `Fork simulation and story validation` run #256 / `32403648786`: **SUCCESS**.
+- Focused story/simulation validator discovery and execution: **SUCCESS**.
+- `validate_b2_wanderer_evacuation_recovery_compact.py`: **PASS** as part of the focused suite.
+- Changed-content style: **SUCCESS**.
+- A1 world-state ownership/regression contracts: **SUCCESS**.
+- `Fork save-load integration smoke` run #241 / `32403648876`: **SUCCESS**.
+- Production Endless Sky configure/build and stock save/load smoke: **SUCCESS**.
+
+Focused validator command:
 
 ```bash
 python3 tools/story/validate_b2_wanderer_evacuation_recovery_compact.py "data/wanderer/b2 wanderer evacuation recovery compact.txt"
 ```
 
-Repository-native gates required before READY:
-- focused story/simulation validator discovery and execution;
-- changed-content style;
-- A1 world-state ownership/regression contracts;
-- production Endless Sky configure/build;
-- stock save/load integration smoke.
-
-Actual-game acceptance should additionally exercise:
-- high-strain Offer gating;
-- all three substantive routes plus refusal;
-- persistence across save/reload;
-- Review availability only after A1 strain recovers to `<= 1`;
-- both mutually exclusive terminal settlements;
-- one-shot `Keeper Remembers` suppression after completion;
-- no mutation of A1 Wanderer evacuation strain.
+Actual-game acceptance can still exercise all four Offer choices, recovery gating, save/reload persistence, terminal settlement exclusivity, and one-shot aftermath behavior, but repository-native acceptance gates required for READY are green.
 
 ## A3 / B3 guidance
-A3 should re-read current `main`, verify ancestry and conflicts, and integrate only after exact-head repository-native validation is terminal green. B3 should preserve the distinction among safe arrival, current operational effect, borrowed-capacity restoration, closure evidence, and historical emergency records.
+A3 should re-read current `main`, verify ancestry and conflicts, and integrate only if the current branch remains semantically clean against newer authoritative work. B3 should preserve the distinction among safe arrival, current operational effect, borrowed-capacity restoration, closure evidence, and historical emergency records.
