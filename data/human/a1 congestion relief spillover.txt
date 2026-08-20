@@ -1,0 +1,54 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Southern Rim congestion -> Free Worlds relief spillover.
+#
+# Severe Southern Rim congestion can temporarily increase the accepted Free Worlds
+# relief-demand backlog because aid traffic spends longer queued, rerouted, or unable
+# to clear distribution corridors. The bridge treats congestion as read-only input,
+# adds one bounded relief contribution at most once per seven-day routing episode,
+# and delegates recovery to the existing four-day relief-demand decay event.
+#
+# The seven-day latch is intentionally longer than the downstream recovery horizon:
+# one congestion episode cannot self-amplify relief demand through repeated crossings.
+
+
+event "ES A1: Congestion Relief Spillover Latch Ends"
+	clear "world: congestion relief spillover active"
+
+
+mission "ES A1: Congestion Relief Spillover"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+		neighbor government "Republic" "Neutral" "Independent"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: southern rim transit congestion" >= 4
+		"world: free worlds relief demand" < 5
+		not "world: congestion relief spillover active"
+		or
+			has "previous system government: Republic"
+			has "previous system government: Neutral"
+			has "previous system government: Independent"
+	on offer
+		set "world: congestion relief spillover active"
+		"world: free worlds relief demand" += 1
+		"world: free worlds relief demand" <?= 5
+		event "ES A1: Free Worlds Relief Demand Recovery" 4 4
+		event "ES A1: Congestion Relief Spillover Latch Ends" 7 7
+		fail
