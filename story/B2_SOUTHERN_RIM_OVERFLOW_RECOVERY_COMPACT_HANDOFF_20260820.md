@@ -1,12 +1,14 @@
 # B2 Southern Rim Overflow Recovery Compact handoff
 
 **Stage:** B2 STORY CHARACTERS + DYNAMIC CONTENT  
-**Verdict:** PARTIAL pending exact-head repository-native validation  
+**Verdict:** READY for A3 review/integration  
 **Authoritative `main` observed at selection:** `afde12845a8426df9e39edea0b6f58d10ef2c9e7`  
+**Authoritative `main` rechecked after validation:** `56d6ee50f27b6555d4a3013dba150c55e5450d48`  
 **Required B1 parent:** `39a189069031cd8673362ea7d04b664ebac7db14`  
 **Branch:** `agent/b2-southern-rim-overflow-recovery-20260820-1324`  
 **Production commit:** `4a9f5536c708f894d44c9aba4b0ba0012d3cdcbb`  
-**Focused validator commit:** `08a512bcc752faec53e4cfd977963a4676094e9b`
+**Focused validator commit:** `08a512bcc752faec53e4cfd977963a4676094e9b`  
+**Exact fully validated production/validator/handoff candidate:** `d6e75ca279f09e7840d61b93855aafc75759d505`
 
 ## Scope
 
@@ -56,25 +58,26 @@ The existing A2 Southern Rim Traffic Coordination arc focuses on temporary routi
 - `tools/story/validate_b2_southern_rim_overflow_recovery_compact.py`
 - `story/B2_SOUTHERN_RIM_OVERFLOW_RECOVERY_COMPACT_HANDOFF_20260820.md`
 
-## Validation required
+## Exact validation evidence
 
-Run on the exact final branch head:
+Required B1 parent `39a189069031cd8673362ea7d04b664ebac7db14` is terminal green on both repository-native workflows:
 
-1. `python3 tools/story/validate_b2_southern_rim_overflow_recovery_compact.py "data/human/b2 southern rim overflow recovery compact.txt"`
-2. repository `Fork simulation and story validation`, including changed-content style and state-ownership contracts;
-3. repository `Fork save-load integration smoke`, including production configure/build and stock persistence smoke;
-4. actual-game acceptance when available:
-   - B1 archive and A2-after-action gates;
-   - renewed congestion `>= 4` Offer;
-   - all three substantive routes plus refusal;
-   - persistence across save/reload;
-   - Review only after A1 congestion recovers `<= 1`;
-   - exactly two mutually exclusive terminal settlements;
-   - one-shot `Kessler Remembers` aftermath;
-   - refusal suppresses Review/aftermath;
-   - no regression in A2 Southern Rim traffic offer precedence.
+- `Fork simulation and story validation` run `32343574572` / #191: **SUCCESS**
+- `Fork save-load integration smoke` run `32343574569` / #180: **SUCCESS**
 
-Do not promote to READY or integrate if repository-native validation is not terminal green.
+On exact B2 candidate `d6e75ca279f09e7840d61b93855aafc75759d505`:
+
+- `Fork simulation and story validation` run `32397670179` / #240: **SUCCESS**
+- focused simulation/story contracts: **SUCCESS**
+- all focused story validators, including `validate_b2_southern_rim_overflow_recovery_compact.py`: **SUCCESS**
+- A1 simulation/state-ownership contracts: **SUCCESS**
+- changed fork content style: **SUCCESS**
+- `Fork save-load integration smoke` run `32397670197` / #229: **SUCCESS**
+- production configure: **SUCCESS**
+- production build: **SUCCESS**
+- stock save-load smoke cases: **SUCCESS**
+
+The repository-native workflows therefore establish parser/style/state-ownership/build/persistence evidence for the exact candidate. Actual-game route-by-route manual acceptance remains a useful optional follow-up, not a blocker for A3 review under the current repository validation protocol.
 
 ## A3 / B3 integration guidance
 
