@@ -1,0 +1,80 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Successor History: Inter-House Port Compact"
+	landing
+	minor
+	source
+		attributes "successor"
+		not attributes "crime" "uninhabited"
+	to offer
+		has "language: Successor"
+		random < 4
+	on offer
+		conversation
+			`A port official is showing a younger clerk an old set of procedural tablets. The oldest layers are visibly patched and annotated, their formal Successor script crowded by later additions. Seeing your interest, the official explains that the rules began as agreements between rival High Houses whose ships increasingly needed to use one another's ports.`
+			`\tWhat started as a list of docking signals and quarantine practices gradually expanded into shared expectations for customs inspections, transaction taxes, emergency access, cargo disputes, and the scans visiting ships might be required to accept. No House surrendered control of its own ports; instead, each found that trade became easier when captains could predict which procedures would remain familiar across House boundaries.`
+			`\tThe clerk carefully copies one damaged clause into a newer archive. The official remarks that the compact survives not because the Houses agree on everything, but because generations of merchants, officers, and travelers have made interoperability too useful to abandon.`
+				decline
+
+
+mission "Successor History: Heritage Provenance Register"
+	landing
+	minor
+	source
+		attributes "successor"
+		not attributes "uninhabited"
+	to offer
+		has "language: Successor"
+		random < 4
+	on offer
+		conversation
+			`Near the spaceport, an educational display cycles through images of excavated structures, fragments of machinery, and carefully numbered storage vaults. A nearby student complains that "Predecessor His'try" is difficult precisely because so much of it must be reconstructed from damaged evidence rather than remembered chronicles.`
+			`\tThe accompanying archive describes a provenance system shared by universities, museums, laboratories, and House-sponsored expeditions. Finds are recorded with their original location, surrounding material, damage, previous repairs, and every later transfer between institutions. Competing interpretations are preserved alongside one another rather than silently replacing older ones.`
+			`\tThe stated purpose is less romantic than the sweeping heritage broadcasts you have seen elsewhere: a relic without context can still be beautiful, but it is much less useful for deciding what the Predecessors actually built, how they lived, or which modern Successor traditions truly descend from them.`
+				decline
+
+
+mission "Successor History: Morphic Interface Registry"
+	landing
+	minor
+	source
+		attributes "successor"
+		not attributes "uninhabited"
+	to offer
+		has "language: Successor"
+		random < 4
+	on offer
+		conversation
+			`A maintenance crew beside your landing pad is testing one of the Successors' morphic metal devices against several incompatible hose fittings and diagnostic sockets. Each successful shape is briefly connected to a datapad before the device relaxes back into a smooth sphere.`
+			`\tOne technician explains that adaptable hardware did not eliminate the need for standards. Instead, ports began keeping interface registries: dimensions, pressure limits, electrical behavior, control conventions, and records of which morphic configurations had already been tested safely. A device capable of becoming almost any connector is still dangerous if no one remembers what should flow through it.`
+			`\tOver time the registry became a form of shared engineering memory between House fleets, civilian ports, and manufacturers. New interfaces can be improvised quickly, but successful solutions are catalogued so that the next crew does not have to rediscover the same answer under emergency conditions.`
+				decline
+
+
+mission "Successor History: Transaction and Dispute Ledger"
+	landing
+	minor
+	source
+		attributes "successor"
+		not attributes "crime" "quiet" "uninhabited"
+	to offer
+		has "language: Successor"
+		random < 4
+	on offer
+		conversation
+			`A merchant and a port officer are arguing over a cargo transfer. Rather than settle the matter from memory, they eventually produce matching transaction records showing the cargo's declared condition, the time it changed hands, the tax assessed, and the inspection that followed.`
+			`\tA bystander tells you that such ledgers grew alongside inter-House commerce. Early records were mostly for collecting revenue, but merchants soon demanded that the same systems preserve evidence useful in damaged-cargo claims, delayed deliveries, contested ownership, and accusations of improper inspection. The Houses found that surveillance was easier to tolerate when the records could also constrain officials and counterparties.`
+			`\tThe dispute ends without much ceremony: one entry is corrected, responsibility is assigned, and both parties leave with copies. The institution appears less like a single Successor court than a habit of preserving enough common evidence that disagreements can be resolved without every commercial mistake becoming a political quarrel between Houses.`
+				decline
