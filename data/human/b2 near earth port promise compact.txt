@@ -1,0 +1,165 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Near Earth Port Promise Compact.
+#
+# This character slice consumes the integrated B1 Near Earth Maintenance Ledger,
+# which frames early Near Earth infrastructure as a network of repeated promises:
+# compatible parts, trained mechanics, borrowed tools, fuel transfers, and labor
+# exchanged against future work. The present-day dispute is not whether those
+# obligations should exist, but how a promise survives when a repair changes ports,
+# crews, compatible substitutes, or responsible people.
+
+
+event "B2 Near Earth Port Promise Compact: Review Ready"
+	"B2 Near Earth Port Promise Compact: review ready" = 1
+
+
+mission "B2 Near Earth Port Promise Compact: Offer"
+	minor
+	name `The Repair That Moved Ports`
+	description `Mira Hollis and Jonas Keene disagree over how a transferred ship repair should preserve the promise made by the original Near Earth port.`
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	to offer
+		has "Near Earth Maintenance Ledger: offered"
+		not "B2 Near Earth Port Promise Compact: introduced"
+		not "B2 Near Earth Port Promise Compact: declined"
+	on offer
+		conversation
+			`Mira Hollis, a port maintenance coordinator, is arguing with Jonas Keene, an independent mechanic, over a freighter whose radiator repair began two systems ago. The first yard promised a replacement assembly, but traffic delays pushed the ship onward before the part arrived. Jonas installed a compatible substitute here and kept the ship moving.`
+			`Mira taps the old service entry. "The original port still owes the replacement. Jonas solved today's failure, but no one has decided whether that promise now belongs to this yard, the captain, or the port that made it." Jonas folds his arms. "And if the substitute proves permanent, sending the original part later may solve nothing."`
+			choice
+				`\tKeep the original promise attached to the ship until it is explicitly fulfilled, transferred, substituted, or forgiven.`
+					goto promise
+				`\tLet the receiving yard close the old promise when it installs an acceptable substitute, but require the exact substitution and acceptance to be recorded.`
+					goto substitute
+				`\tKeep two linked records: the original obligation and the current repair state. Neither silently overwrites the other.`
+					goto paired
+				`\tRefuse to turn one awkward repair into a general Near Earth rule.`
+					goto decline
+			label promise
+			`You argue that the promise should travel with the ship. A new mechanic can complete it, replace it with an agreed equivalent, or explicitly release the original yard, but merely moving ports does not erase the obligation. Mira likes the continuity. Jonas says the record must also show what work has already been done.`
+			action
+				"B2 Near Earth Port Promise Compact: introduced" = 1
+				"B2 Near Earth Port Promise Compact: route promise follows ship" = 1
+				"B2 Near Earth Port Promise Compact: mira trusts player" = 1
+				event "B2 Near Earth Port Promise Compact: Review Ready" 7 11
+				accept
+			label substitute
+			`You argue that a repair system should recognize useful work rather than preserve obsolete paperwork forever. The receiving yard may close the old obligation when the captain accepts an equivalent repair, but the record must identify the substitute, why it was considered compatible, and who accepted it as satisfying the earlier promise. Jonas approves. Mira says that prevents a convenient substitution from becoming an undocumented rewrite.`
+			action
+				"B2 Near Earth Port Promise Compact: introduced" = 1
+				"B2 Near Earth Port Promise Compact: route accepted substitute" = 1
+				"B2 Near Earth Port Promise Compact: jonas trusts player" = 1
+				event "B2 Near Earth Port Promise Compact: Review Ready" 7 11
+				accept
+			label paired
+			`You separate the two questions. One record says what was originally promised and by whom. The other says what the ship currently has, what was repaired, what substitute was installed, and whether the captain accepted it. The records remain linked until someone explicitly reconciles them. Mira and Jonas both begin revising the service form.`
+			action
+				"B2 Near Earth Port Promise Compact: introduced" = 1
+				"B2 Near Earth Port Promise Compact: route paired records" = 1
+				"B2 Near Earth Port Promise Compact: mira trusts player" = 1
+				"B2 Near Earth Port Promise Compact: jonas trusts player" = 1
+				event "B2 Near Earth Port Promise Compact: Review Ready" 7 11
+				accept
+			label decline
+			`You tell them that the captain needs a working radiator, not a constitutional convention. Mira accepts the point. Jonas says each yard can keep handling transfers case by case unless enough failures prove a general rule is necessary.`
+			action
+				"B2 Near Earth Port Promise Compact: declined" = 1
+				decline
+
+
+mission "B2 Near Earth Port Promise Compact: Review"
+	minor
+	name `When Compatible Is Not Identical`
+	description `Return after Mira Hollis and Jonas Keene have used the repair-transfer arrangement long enough to discover where compatibility and obligation records can diverge.`
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	to offer
+		has "B2 Near Earth Port Promise Compact: introduced"
+		has "B2 Near Earth Port Promise Compact: review ready"
+		not "B2 Near Earth Port Promise Compact: reviewed"
+	on offer
+		conversation
+			branch promise
+				has "B2 Near Earth Port Promise Compact: route promise follows ship"
+			branch substitute
+				has "B2 Near Earth Port Promise Compact: route accepted substitute"
+			`Mira and Jonas have collected a handful of transferred repairs. The newest case looks simple until Jonas points out that two ports use the word compatible differently. One means the part fits. Another means it also survives the same heat, pressure, maintenance interval, and control assumptions. The copied service summary says only that an equivalent part was installed.`
+			choice
+				`\tUse a portable obligation packet: original promise, responsible party, current repair state, substitute provenance, compatibility assumptions, acceptance, and closure evidence travel together.`
+					goto packet
+				`\tUse a reconciliation rule: original obligation and current repair state remain separate until a later review explicitly closes, transfers, or reopens the promise.`
+					goto reconcile
+			label promise
+			`Keeping the original promise visible prevented one transfer from disappearing, but a copied record still reduced "equivalent under these conditions" to simply "equivalent." Mira says continuity without technical context can preserve the wrong obligation just as effectively as losing the promise entirely.`
+			choice
+				`\tCarry the promise and the technical basis for any substitute in one portable packet.`
+					goto packet
+				`\tKeep the promise and current repair state separate until an explicit reconciliation closes them.`
+					goto reconcile
+			label substitute
+			`The accepted-substitute route kept ships moving, but one yard copied only the fact that a replacement had been accepted. It dropped the pressure range and service interval that made the substitute acceptable in the first place. Jonas says a useful local repair became an over-broad claim when it traveled.`
+			choice
+				`\tMake substitute provenance and operating assumptions travel with the closure record.`
+					goto packet
+				`\tRequire later reconciliation so local acceptance cannot silently erase the original promise.`
+					goto reconcile
+			label packet
+			`You recommend a portable obligation packet. It carries the original promise, who made it, the current repair state, every substitute or transferred responsibility, the technical assumptions behind compatibility, the captain's acceptance, and explicit closure evidence. A copied summary can be shorter, but it must point back to the complete packet.`
+			action
+				"B2 Near Earth Port Promise Compact: reviewed" = 1
+				"B2 Near Earth Port Promise Compact: settlement portable obligation packet" = 1
+				"B2 Near Earth Port Promise Compact: mira trusts player" = 1
+				"B2 Near Earth Port Promise Compact: jonas trusts player" = 1
+				accept
+			label reconcile
+			`You recommend keeping the original obligation and the current repair state as separate linked records. A later reconciliation must explicitly say whether the old promise was fulfilled, transferred, replaced by an accepted equivalent, forgiven, or reopened after the substitute failed. Compatible work can keep a ship moving without automatically rewriting the history of who still owes what.`
+			action
+				"B2 Near Earth Port Promise Compact: reviewed" = 1
+				"B2 Near Earth Port Promise Compact: settlement reconciliation rule" = 1
+				"B2 Near Earth Port Promise Compact: mira trusts player" = 1
+				"B2 Near Earth Port Promise Compact: jonas trusts player" = 1
+				accept
+
+
+mission "B2 Near Earth Port Promise Compact: Jonas Remembers"
+	minor
+	name `Jonas Remembers`
+	description `Jonas Keene remembers whether Near Earth repair transfers learned to distinguish a working substitute from a closed obligation.`
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	to offer
+		not "B2 Near Earth Port Promise Compact: aftermath seen"
+		or
+			has "B2 Near Earth Port Promise Compact: settlement portable obligation packet"
+			has "B2 Near Earth Port Promise Compact: settlement reconciliation rule"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Near Earth Port Promise Compact: settlement reconciliation rule"
+			`Jonas shows you a service summary for a ship that crossed four Near Earth ports after an emergency repair. The first page is short, but every transferred promise, compatibility limit, and closure record can still be traced backward. "The ship does not care which yard kept the paperwork," he says. "It does care whether the next mechanic knows what the last one actually meant."`
+			goto record
+			label reconcile
+			`Jonas shows you two linked records for the same ship. One says the current repair is serviceable. The other still shows an unresolved promise from the original yard because the captain never accepted the substitute as permanent. "Both statements are true," he says. "That used to be the part our paperwork could not express."`
+			label record
+			action
+				"B2 Near Earth Port Promise Compact: aftermath seen" = 1
+				accept
