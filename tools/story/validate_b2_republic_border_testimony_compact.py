@@ -107,7 +107,7 @@ def main() -> None:
         "corrections",
         "contradictions",
         "current disposition",
-        "resolved warnings stop propagating as active warnings",
+        "stop circulating as active warnings",
         "genuinely new observation",
     )
     for fragment in required_fragments:
