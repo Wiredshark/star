@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Free Worlds Space Weather Cooperative Archive"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "world: free worlds geomagnetic storm active"
+	on offer
+		conversation
+			`A public terminal has switched from ordinary local notices to an exhibit about the Free Worlds' early space-weather cooperatives. The oldest records are collections of observations from independent ports: beacon drift, radio noise, sensor faults, and reports from captains who noticed the same disturbances hours or days apart.`
+			`\tNo single world had enough instruments to map a regional event reliably, so observatories and traffic offices began exchanging measurements in common formats. What started as informal warnings gradually became shared watch lists, advisory thresholds, and agreements about who would keep transmitting when another system's instruments were degraded.`
+			`\tThe exhibit notes that the modern warning network still reflects that history. A storm is treated as a regional problem before it becomes any one port's emergency, because the most useful measurement may come from a world that is not yet suffering the worst effects.`
+				decline
+
+
+mission "Free Worlds Beacon Calibration Archive"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "world: free worlds geomagnetic storm active"
+	on offer
+		conversation
+			`Near the traffic-control office is a display of retired beacon components tagged with calibration dates and handwritten fault notes. The accompanying history explains that repeated stellar disturbances made one lesson unavoidable: a navigation signal could remain strong enough to hear while becoming unreliable enough to mislead.`
+			`\tPorts responded by keeping comparison records between local beacons, independent shipboard observations, and neighboring systems. Crews learned to document not only when a beacon failed, but how its readings drifted before failure and which replacement settings remained stable after the disturbance passed.`
+			`\tThose records eventually turned beacon recalibration into a shared maintenance discipline rather than a collection of isolated repairs. The archive's final panel calls this one of the Free Worlds' quieter forms of mutual defense: preventing a bad signal from sending somebody else's ship into danger.`
+				decline
+
+
+mission "Free Worlds Route Verification Ledger"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: free worlds geomagnetic navigation strain" >= 2
+	on offer
+		conversation
+			`A navigation office has opened an old route-verification ledger for public viewing while traffic is under strain. Each entry compares several sources before a route was cleared: beacon timing, recent captain reports, sensor confidence, known system conditions, and whether an alternate path remained available.`
+			`\tThe notes show that these procedures did not begin as a centralized rule. Different worlds developed their own habits after storms, equipment failures, and overloaded traffic corridors produced conflicting information. Over time, pilots and controllers learned which pieces of evidence could be checked against one another and which were merely repeated copies of the same uncertain report.`
+			`\tThe modern practice that grew from those ledgers is deliberately conservative. When navigation services are strained, a route is not considered trustworthy because one display says it is clear; controllers look for independent agreement and keep fallback paths visible until conditions normalize.`
+				decline
+
+
+mission "Free Worlds Navigation Priority Register"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: free worlds geomagnetic navigation strain" >= 3
+	on offer
+		conversation
+			`A temporary notice about routing delays is mounted beside a historical priority register used during earlier navigation emergencies. The surviving entries list medical transports, rescue craft, fuel tenders, repair crews, food shipments, passenger vessels, and ordinary freight, along with arguments over which should move first through a limited safe corridor.`
+			`\tThe archive explains that the Free Worlds never solved those arguments with a single permanent ranking. Instead, ports developed procedures for declaring why a shipment received priority, recording who was delayed, and revisiting the order when conditions changed. Neighboring systems also learned to share overflow berths and redirect traffic rather than letting one congested port make every decision alone.`
+			`\tThe result is less a hierarchy than an accounting system for scarcity. When too many ships need the same reliable route, the public record makes emergency choices visible enough to question later and structured enough that the next port can understand what has already been deferred.`
+				decline
