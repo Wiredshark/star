@@ -1,0 +1,85 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: residual Deep archaeological-security pressure.
+#
+# Stock Deep Archaeology 5 begins after the Midgard mapping expedition discovers
+# an artificial singularity and Deep ships pursue the expedition back toward
+# Vinci. Once that chase has resolved, the next qualifying return to the Deep
+# registers one bounded residual security-response episode. The stock archaeology
+# campaign remains read-only and registration is one-shot; there is no recurring
+# pressure source after the four scheduled recovery obligations are created.
+
+
+event "ES A1: Deep Archaeology Security Pressure Recovery"
+	"world: deep archaeology security pressure" -= 1
+	"world: deep archaeology security pressure" >?= 0
+
+
+mission "ES A1: Deep Archaeology Security Pressure Registration"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		attributes "deep"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "Deep Archaeology 5: done"
+		not "world: deep archaeology security response registered"
+	on offer
+		set "world: deep archaeology security response registered"
+		"world: deep archaeology security pressure" += 4
+		"world: deep archaeology security pressure" <?= 4
+		event "ES A1: Deep Archaeology Security Pressure Recovery" 4 4
+		event "ES A1: Deep Archaeology Security Pressure Recovery" 8 8
+		event "ES A1: Deep Archaeology Security Pressure Recovery" 12 12
+		event "ES A1: Deep Archaeology Security Pressure Recovery" 16 16
+		fail
+
+
+mission "ES A1: Deep Archaeology Security Pressure Advisory"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		attributes "deep"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: deep archaeology security pressure" >= 3
+		not "world: deep archaeology security pressure advisory seen"
+	on offer
+		message
+			text "Deep security traffic shows a temporary increase in archaeological-site monitoring, field-work review, and movement checks around sensitive historical locations. The response is being treated as a finite follow-up to the recent mapping incident rather than a permanent change in regional access."
+		set "world: deep archaeology security pressure advisory seen"
+		fail
+
+
+mission "ES A1: Deep Archaeology Security Pressure Advisory Reset"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		attributes "deep"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: deep archaeology security pressure" <= 1
+		has "world: deep archaeology security pressure advisory seen"
+	on offer
+		clear "world: deep archaeology security pressure advisory seen"
+		fail
