@@ -1,0 +1,84 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Southern Rim Arrival Slot Archive"
+	minor
+	invisible
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: southern rim transit congestion" >= 2
+		random < 1
+	on offer
+		conversation
+			`A port-history display reproduces arrival boards from several generations of Southern Rim traffic surges. The oldest entries are handwritten promises between controllers and captains: wait until the ore hauler clears, hold two ships outside the lane, give the medical transport the next berth.`
+			`\tAs traffic increased, ports began recording arrival slots, missed clearances, emergency exceptions, and the reason each exception had been granted. The archive emphasizes that the important innovation was not the timetable itself, but the ability to explain later why one ship moved while another waited.`
+			`\tModern controllers use far more sophisticated systems, yet the old boards still look familiar. Congestion made scheduling into an institution because a queue that cannot explain its own order quickly becomes a political dispute as well as a navigational problem.`
+				decline
+
+
+mission "Southern Rim Overflow Berth Compact Archive"
+	minor
+	invisible
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: southern rim transit congestion" >= 3
+		random < 1
+	on offer
+		conversation
+			`A municipal archive has opened a case of old agreements between neighboring Southern Rim ports. Each compact lists spare berths, tug capacity, repair crews, fuel reserves, and the conditions under which one port could redirect arrivals to another.`
+			`\tThe explanatory notes say overflow routing began as improvisation during unusually busy weeks. It became durable only after ports started recording which diversions actually reduced pressure and which merely shifted a queue somewhere less visible. Fuel cost, medical access, repair capability, and the ability to receive damaged ships all became part of the decision.`
+			`\tThe compact never created a single traffic authority over the Rim. Instead, it gave independent ports a common way to lend capacity without pretending that every berth, route, or local priority was interchangeable.`
+				decline
+
+
+mission "Southern Rim Emergency Corridor Covenant Archive"
+	minor
+	invisible
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: southern rim transit congestion" >= 4
+		random < 1
+	on offer
+		conversation
+			`Beside the current arrival display hangs a copy of an old emergency-routing covenant. It reserves approach capacity for ships reporting loss of thrust, medical emergencies, rescue towing, or other failures that could become fatal if they waited in an ordinary commercial queue.`
+			`\tThe curators note that early versions were repeatedly abused by captains who discovered that declaring an emergency was an excellent way to skip a delay. Later compacts required the reason for each priority clearance to be recorded and reviewed, while still allowing controllers to act before every fact was known.`
+			`\tThe surviving rule is less a promise that emergency traffic never waits than a recognition that congestion and rescue capacity are different problems. A port can clear its commercial queue while still failing the ship that cannot safely remain in it.`
+				decline
+
+
+mission "Southern Rim Queue Recovery Baseline Archive"
+	minor
+	invisible
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: southern rim transit congestion" >= 4
+		random < 1
+	on offer
+		conversation
+			`A small operations museum preserves daily traffic summaries from several historical Southern Rim disruptions. The most useful pages, according to the exhibit, are the ones written after new arrivals had slowed but before the accumulated queue had actually disappeared.`
+			`\tOlder reports often declared a crisis over as soon as the triggering surge ended. Later controllers began recording a separate recovery baseline: ships still waiting, crews beyond duty limits, delayed cargo, deferred maintenance, exhausted tugs, and secondary ports that had accepted more traffic than normal.`
+			`\tThe archive describes the distinction as mundane but important. Stopping a queue from growing is not the same thing as clearing it, and a system that forgets the remaining obligations is likely to begin the next surge with less capacity than its records claim.`
+				decline
