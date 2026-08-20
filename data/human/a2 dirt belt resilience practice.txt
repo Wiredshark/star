@@ -1,0 +1,73 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+
+mission "A2 Dirt Belt Resilience Practice"
+	minor
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	"offer precedence" 4
+	to offer
+		has "Dirt Belt Resilience Practice: available"
+		not "A2 Dirt Belt Resilience Practice: decided"
+	on offer
+		conversation
+			`A cooperative clerk has laid four old records side by side: a water-share ledger, a machinery pool register, a drought-routing manifest, and a mutual-maintenance book. None describes abundance. Each describes a way to keep scarcity from becoming invisible until the next emergency.`
+			`\tThe clerk asks what lesson you would actually carry away from them. "Not what the Dirt Belt commands anyone else to do. Just what you would remember when another shortage turns up somewhere different."`
+			choice
+				`Keep obligations visible: emergency help should record what was borrowed, what remains owed, and what capacity is actually available.`
+					goto obligations
+				`Track usable capacity, not merely promised supply: delivery is incomplete until people can receive, move, store, and use it.`
+					goto capacity
+				`Preserve redundancy: shared seed, machinery, specialists, and parts are valuable because one failure need not erase the whole productive base.`
+					goto redundancy
+				`Keep the Dirt Belt lesson local. These arrangements grew from particular settlements and shortages.`
+					goto local
+			label obligations
+			`You decide that mutual aid stays honest when the record includes unfinished obligations as carefully as successful rescues. The clerk nods. "A favor can be generous and still have a cost worth remembering."`
+				accept
+			label capacity
+			`You decide that logistics should be judged by usable capacity rather than the moment cargo crosses a port boundary. The clerk taps the old routing ledger. "That distinction saved more harvests than the manifest totals ever showed."`
+				accept
+			label redundancy
+			`You decide that resilience comes from preserving alternatives before a single failure becomes catastrophic. The clerk gestures toward the cooperative inventories. "Redundancy looks wasteful right up until the only pump breaks."`
+				accept
+			label local
+			`You decline to turn local history into a portable doctrine. The clerk accepts that without argument. "Context is part of the record too."`
+				accept
+	on accept
+		"A2 Dirt Belt Resilience Practice: decided" = 1
+		"A2 Dirt Belt Resilience Practice: reflection pending" = 1
+
+
+mission "A2 Dirt Belt Resilience Practice Reflection"
+	minor
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	"offer precedence" 4
+	to offer
+		has "A2 Dirt Belt Resilience Practice: reflection pending"
+		not "A2 Dirt Belt Resilience Practice: reflection seen"
+	on offer
+		conversation
+			`On a later visit, the cooperative clerk shows you a routine shortage review. The interesting part is not whether the old Dirt Belt institutions were universally correct, but whether the habit of keeping capacity, obligations, and alternatives visible makes the present disagreement easier to inspect.`
+			`\tThe record remains local evidence rather than Republic doctrine. Nobody treats your earlier interpretation as an office, credential, or authority to speak for the settlements that created it.`
+				accept
+	on accept
+		"A2 Dirt Belt Resilience Practice: reflection pending" = 0
+		"A2 Dirt Belt Resilience Practice: reflection seen" = 1
