@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native simulation/story/style and production build/save-load validation.
+READY for A3 review/integration.
 
 ## Scope
 
@@ -11,13 +11,14 @@ This B2 slice is a sequel to the integrated `B2 Bunrodea Freight Petition Compac
 ## Authority and base
 
 - Repository: `Wiredshark/star`
-- Authoritative base at slice creation: `27b5ddc9cbb084c4751ef52d185f13f62e825c27`
+- Authoritative base at slice creation and final recheck: `27b5ddc9cbb084c4751ef52d185f13f62e825c27`
 - Isolated branch: `agent/b2-bunrodea-review-queue-20260820-1828`
 - Production commit: `265240c8cfa42a46d43c1bdc0e9a365b7017bb0b`
 - Focused-validator commit: `3a62fe9df93d4cc81b3136e66a3285950d9ba801`
-- Current handoff head: this commit
+- Exact fully validated candidate: `aea4e9c6291e9eb8a9d093e51004c84c98270dd4`
+- Final READY handoff head: this commit
 
-B2 must remain isolated for A3 integration authority.
+B2 remains isolated and unmerged for A3 integration authority.
 
 ## Character/dynamic-content behavior
 
@@ -93,17 +94,32 @@ The focused validator checks:
 - local `goto`/`label` integrity;
 - queue/deferral/reconciliation continuity concepts.
 
-## Validation status
+## Validation evidence
 
-At handoff creation, repository-native validation is still required. Do not promote to READY until the exact candidate head has passed the normal fork acceptance surface, including:
+Exact validated candidate: `aea4e9c6291e9eb8a9d093e51004c84c98270dd4`.
 
-1. focused B2 validator;
-2. repository focused story/simulation validation and changed-content style;
-3. A1 state-ownership/regression contracts;
-4. production Endless Sky configure/build;
-5. stock save/load smoke.
+Repository-native workflows on that exact candidate are terminal green:
 
-No PASS should be inferred from code review alone.
+- **Fork simulation and story validation** run `32424621130` / #269 — **SUCCESS**
+  - changed fork content style — SUCCESS
+  - compile focused Python validation code — SUCCESS
+  - run all focused story validators — SUCCESS
+  - run A1 simulation contract tests — SUCCESS
+- **Fork save-load integration smoke** run `32424621169` / #254 — **SUCCESS**
+  - production configure/build — SUCCESS
+  - stock save-load smoke — SUCCESS
+
+The final READY commit changes only this durable handoff document; production content and validator behavior are unchanged from the fully validated candidate.
+
+## Isolation evidence
+
+Compared with base `27b5ddc9cbb084c4751ef52d185f13f62e825c27`, the validated candidate is exactly 3 commits ahead / 0 behind and adds only:
+
+- `data/bunrodea/b2 bunrodea review queue compact.txt`
+- `tools/story/validate_b2_bunrodea_review_queue_compact.py`
+- `story/B2_BUNRODEA_REVIEW_QUEUE_COMPACT_HANDOFF_20260820.md`
+
+No unrelated files were modified or deleted.
 
 ## A3 / B3 integration notes
 
