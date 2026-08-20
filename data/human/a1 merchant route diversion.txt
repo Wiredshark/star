@@ -1,0 +1,114 @@
+# Copyright (c) 2026 by Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Merchant route-diversion pressure.
+#
+# This cross-system signal reads the existing Merchant rescue workload and
+# Southern Rim transit-congestion authorities without mutating either one.
+# Elevated rescue demand or congestion pushes carriers onto secondary routes;
+# simultaneous pressure contributes twice as much. Each accepted contribution
+# schedules an equal six-day decay, keeping the state bounded and reversible.
+# When both upstream pressures have receded, dispatchers can clear two units of
+# accumulated diversion pressure, providing explicit recovery hysteresis.
+
+
+event "ES A1: Merchant Route Diversion Decay 1"
+	"world: merchant route diversion pressure" -= 1
+	"world: merchant route diversion pressure" >?= 0
+	clear "world: merchant route diversion notice seen"
+
+
+event "ES A1: Merchant Route Diversion Decay 2"
+	"world: merchant route diversion pressure" -= 2
+	"world: merchant route diversion pressure" >?= 0
+	clear "world: merchant route diversion notice seen"
+
+
+event "ES A1: Merchant Route Diversion Recovery Ends"
+	clear "world: merchant route diversion recovery"
+
+
+mission "ES A1: Merchant Route Diversion Moderate"
+	invisible
+	entering
+	non-blocking
+	repeat
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		or
+			"world: merchant rescue load" >= 3
+			"world: southern rim transit congestion" >= 3
+		not
+			and
+				"world: merchant rescue load" >= 3
+				"world: southern rim transit congestion" >= 3
+		"world: merchant route diversion pressure" < 6
+	on offer
+		"world: merchant route diversion pressure" += 1
+		"world: merchant route diversion pressure" <?= 6
+		event "ES A1: Merchant Route Diversion Decay 1" 6 6
+		fail
+
+
+mission "ES A1: Merchant Route Diversion Severe"
+	invisible
+	entering
+	non-blocking
+	repeat
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: merchant rescue load" >= 3
+		"world: southern rim transit congestion" >= 3
+		"world: merchant route diversion pressure" < 5
+	on offer
+		"world: merchant route diversion pressure" += 2
+		"world: merchant route diversion pressure" <?= 6
+		event "ES A1: Merchant Route Diversion Decay 2" 6 6
+		fail
+
+
+mission "ES A1: Merchant Route Diversion Recovery"
+	invisible
+	entering
+	non-blocking
+	repeat
+	destination "Earth"
+	to offer
+		"world: merchant rescue load" <= 1
+		"world: southern rim transit congestion" <= 1
+		"world: merchant route diversion pressure" >= 4
+		not "world: merchant route diversion recovery"
+	on offer
+		set "world: merchant route diversion recovery"
+		"world: merchant route diversion pressure" -= 2
+		"world: merchant route diversion pressure" >?= 0
+		event "ES A1: Merchant Route Diversion Recovery Ends" 4 4
+		fail
+
+
+mission "ES A1: Merchant Route Diversion Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	destination "Earth"
+	to offer
+		"world: merchant route diversion pressure" >= 3
+		not "world: merchant route diversion notice seen"
+	on offer
+		message
+			text "Merchant dispatch networks are diverting traffic onto secondary corridors while rescue workloads and Southern Rim delays remain elevated. Longer routing is expected until the network clears."
+		set "world: merchant route diversion notice seen"
+		fail
