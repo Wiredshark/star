@@ -1,0 +1,85 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+
+mission "A2 Lunarium Network Practice: briefing"
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "joined the lunarium"
+		not "joined the heliarchs"
+		not "A2 Lunarium Network Practice: decided"
+		random < 15
+	on offer
+		conversation
+			`Chiree asks to speak aboard your ship. She has been reviewing how relief workers, couriers, and safe contacts keep the Lunarium moving without turning every civilian institution into an arm of the resistance.`
+			`"Useful, our cover networks are," she says. "But real obligations, the charity has. And safer, people are, when every helper does not know every other helper. A practice for your own work, choose you should."`
+			choice
+				`"Keep civilian aid obligations independent of covert convenience."`
+					goto aid
+				`"Use compartmented handoffs: disclose only what each participant needs."`
+					goto compartment
+				`"Preserve provenance and corrections before acting on allegations."`
+					goto evidence
+				`"I will not adopt a standing rule from this."`
+					goto refuse
+			label aid
+			action
+				set "A2 Lunarium Network Practice: aid boundary"
+				set "A2 Lunarium Network Practice: decided"
+			`Chiree clicks softly. "Good. A charity shipment stays a charity obligation even when its routes also help us. People receiving aid should not become expendable cover."`
+				decline
+			label compartment
+			action
+				set "A2 Lunarium Network Practice: compartmented"
+				set "A2 Lunarium Network Practice: decided"
+			`"Then know only what needed is, each person should," Chiree says. "A broken contact should not expose every other contact."`
+				decline
+			label evidence
+			action
+				set "A2 Lunarium Network Practice: evidence discipline"
+				set "A2 Lunarium Network Practice: decided"
+			`"Yes. Against Heliarchs, angry we may be, but repetition is not corroboration. Keep source, correction, and uncertainty attached."`
+				decline
+			label refuse
+			action
+				set "A2 Lunarium Network Practice: refused"
+				set "A2 Lunarium Network Practice: decided"
+			`Chiree accepts the boundary. "Then no doctrine on your behalf, make I will."`
+				decline
+
+mission "A2 Lunarium Network Practice: reflection"
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "A2 Lunarium Network Practice: decided"
+		not "A2 Lunarium Network Practice: reflected"
+		not "A2 Lunarium Network Practice: refused"
+		random < 20
+	on offer
+		conversation
+			branch aid
+				has "A2 Lunarium Network Practice: aid boundary"
+			branch compartment
+				has "A2 Lunarium Network Practice: compartmented"
+			branch evidence
+				has "A2 Lunarium Network Practice: evidence discipline"
+			label aid
+			`A relief coordinator declines a covert reroute because it would leave promised winter supplies late. The resistance finds another courier. The inconvenience is real, but the charity's public obligation remains credible precisely because covert need did not automatically override it.`
+				goto done
+			label compartment
+			`A courier contact disappears after a Heliarch inspection. The loss closes one route, but the courier never possessed the names or schedules of unrelated cells. The network bends instead of unraveling.`
+				goto done
+			label evidence
+			`Two reports accuse the same official of exposing a safehouse. Their wording is nearly identical; tracing provenance reveals that one copied the other. A third, independent record contradicts part of the timeline. The allegation remains serious, but the network avoids manufacturing certainty from repetition.`
+			label done
+			action
+				set "A2 Lunarium Network Practice: reflected"
+			`The result does not make the Lunarium infallible. It gives you a remembered practice for handling a resistance network whose survival depends on both trust and limits.`
+				decline
