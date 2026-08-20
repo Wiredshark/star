@@ -1,0 +1,94 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "A2 Republic Civic Capacity Practice"
+	minor
+	source
+		government "Republic"
+	destination "Earth"
+	"offer precedence" 4
+	to offer
+		"world: republic civic strain" >= 2
+		not "A2 Republic Civic Capacity Practice: decided"
+	on offer
+		conversation
+			`Administrator Jo Ren has three queue reports open at once: temporary housing, travel documentation, and secondary review. "The same families keep crossing all three desks. When the system is strained, a local optimization can simply move the wait somewhere else."`
+			`\tRen asks what operating rule you would preserve while the combined civic workload remains elevated.`
+			choice
+				`Preserve case continuity: one visible record should follow a person across offices so repeated intake does not manufacture new delay.`
+					goto continuity
+				`Publish capacity and queue age: route cases according to real staffing and delay instead of nominal office boundaries.`
+					goto capacity
+				`Protect urgent exceptions, but require each exception to leave a reason and a later review trail.`
+					goto exceptions
+				`Refuse to establish a standing rule from one overloaded period.`
+					goto refuse
+			label continuity
+			`You choose continuity. Ren marks the principle beside the overlapping case lists. "Then transfer is not a restart. The next desk inherits the record and the time already spent waiting."`
+			action
+				"A2 Republic Civic Capacity Practice: decided" = 1
+				"A2 Republic Civic Capacity Practice: continuity" = 1
+				decline
+			label capacity
+			`You choose transparent capacity. Ren nods. "A shorter queue is only useful if the office can actually finish the work."`
+			action
+				"A2 Republic Civic Capacity Practice: decided" = 1
+				"A2 Republic Civic Capacity Practice: capacity" = 1
+				decline
+			label exceptions
+			`You protect urgent exceptions but insist that urgency remain reviewable. Ren writes down reason, scope, and review as separate fields. "Emergency access without invisible privilege."`
+			action
+				"A2 Republic Civic Capacity Practice: decided" = 1
+				"A2 Republic Civic Capacity Practice: exceptions" = 1
+				decline
+			label refuse
+			`You decline to turn an emergency workload into standing administrative doctrine. Ren accepts the boundary. "Then the overload stays evidence, not authority."`
+			action
+				"A2 Republic Civic Capacity Practice: decided" = 1
+				"A2 Republic Civic Capacity Practice: refused" = 1
+				decline
+
+
+mission "A2 Republic Civic Capacity Practice Recovery"
+	minor
+	source
+		government "Republic"
+	destination "Earth"
+	"offer precedence" 4
+	to offer
+		has "A2 Republic Civic Capacity Practice: decided"
+		not "A2 Republic Civic Capacity Practice: recovery seen"
+		"world: republic civic strain" <= 1
+	on offer
+		conversation
+			branch continuity
+				has "A2 Republic Civic Capacity Practice: continuity"
+			branch capacity
+				has "A2 Republic Civic Capacity Practice: capacity"
+			branch exceptions
+				has "A2 Republic Civic Capacity Practice: exceptions"
+			`Ren remembers that you refused a standing rule. The queues are shorter now, and the temporary measures are being retired rather than quietly becoming permanent procedure.`
+				goto finish
+			label continuity
+			`With the acute strain eased, Ren shows you a transferred housing case whose original intake date survived three office moves. The queue is shorter, but the important change is that recovery did not erase the person's accumulated wait.`
+				goto finish
+			label capacity
+			`The public queue board now shows both delay and available staff. One office has a longer line but enough capacity to clear it; another has fewer cases and almost no trained reviewers. Routing follows the real constraint instead of appearances.`
+				goto finish
+			label exceptions
+			`Ren closes an emergency-priority register. Every accelerated case still carries its reason and review note, allowing ordinary processing to resume without pretending the exceptions never happened.`
+			label finish
+			action
+				"A2 Republic Civic Capacity Practice: recovery seen" = 1
+				decline
