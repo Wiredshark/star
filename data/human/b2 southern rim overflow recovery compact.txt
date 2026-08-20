@@ -1,0 +1,163 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Southern Rim Overflow Recovery Compact production slice.
+#
+# This content consumes the B1 Southern Rim overflow/recovery history, the
+# existing A2 Rhea Solano traffic-coordination aftermath, and A1's authoritative
+# `world: southern rim transit congestion`. It focuses on a later recurrence:
+# clearing a primary queue must not erase the berth, tug, repair, fuel, crew, or
+# maintenance obligations displaced onto secondary ports. B2 reads upstream
+# state but never writes it.
+
+
+mission "B2 Southern Rim Overflow Recovery Compact: Offer"
+	minor
+	name `The Queue Moved Somewhere`
+	description `Rhea Solano and overflow-port yardmaster Jo Kessler disagree over how Southern Rim ports should account for capacity borrowed during another traffic surge.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "Southern Rim Overflow Berth Compact Archive: offered"
+		has "A2 Southern Rim Traffic Coordination: followup seen"
+		"world: southern rim transit congestion" >= 4
+		not "B2 Southern Rim Overflow Recovery Compact: introduced"
+		not "B2 Southern Rim Overflow Recovery Compact: declined"
+	on offer
+		conversation
+			`Rhea Solano recognizes you from the earlier traffic surge, but this time the person beside her is not another central-lane controller. Jo Kessler runs a yard at one of the smaller ports that has been accepting diverted traffic whenever the major approaches overflow.`
+			`Kessler points to a maintenance board full of yellow marks. "The main queue looks better every time somebody sends three damaged freighters, two fuel-hungry haulers, and a rescue tug somewhere else. Then our berths are full, our mechanics are on overtime, and the central report says congestion fell."`
+			`Solano does not dispute the numbers. "Overflow routing keeps the Rim moving. The old berth compacts worked because ports shared spare capacity instead of waiting for one hub to fail. But Jo is right about the accounting. A diversion can solve today's queue and still borrow tomorrow's tug, repair slot, fuel reserve, or crew rest."`
+			`Kessler folds his arms. "I do not want a central office deciding what my yard owes. I want the next routing summary to stop treating borrowed capacity as if it were free."`
+			choice
+				`\tBack Kessler: every diverted ship should leave a visible capacity debt for the berth, tug, repair crew, fuel, or maintenance it displaced.`
+					goto obligation
+				`\tBack Solano: keep overflow routing flexible, but require a responsible port and a restoration deadline whenever borrowed capacity creates a downstream deficit.`
+					goto restoration
+				`\tPair both: every diversion should carry its routing result together with the receiving port's capacity used, deferred work, and closure evidence.`
+					goto paired
+				`\tTell them each independent port should settle its own overflow obligations without your vote.`
+					goto decline
+			label obligation
+			`You tell Solano that moving a ship out of one queue should create a visible obligation wherever the work actually lands. Kessler starts listing berth-hours, tug calls, emergency repair slots, fuel draw, crew overtime, and deferred maintenance. Solano says, "Then the record also needs to say which obligations were expected consequences and which ones became actual deficits."`
+			action
+				"B2 Southern Rim Overflow Recovery Compact: introduced" = 1
+				"B2 Southern Rim Overflow Recovery Compact: route obligation" = 1
+				"B2 Southern Rim Overflow Recovery Compact: kessler trusts player" = 1
+			accept
+			label restoration
+			`You tell Kessler that emergency routing cannot wait for a perfect cost ledger, but every borrowed resource needs an owner and a point at which somebody checks whether it was restored. Solano begins adding restoration dates beside the diversion orders. Kessler says, "Good. A deadline is at least harder to hide than a promise to catch up later."`
+			action
+				"B2 Southern Rim Overflow Recovery Compact: introduced" = 1
+				"B2 Southern Rim Overflow Recovery Compact: route restoration" = 1
+				"B2 Southern Rim Overflow Recovery Compact: solano trusts player" = 1
+			accept
+			label paired
+			`You propose a paired record. The traffic side can say why a ship was diverted and whether the route worked; the receiving side can record berth use, tug time, repairs, fuel, crew load, deferred maintenance, and what remains unresolved. Solano nods. Kessler says, "That lets both records stay honest without pretending every port has the same priorities."`
+			action
+				"B2 Southern Rim Overflow Recovery Compact: introduced" = 1
+				"B2 Southern Rim Overflow Recovery Compact: route paired" = 1
+				"B2 Southern Rim Overflow Recovery Compact: solano trusts player" = 1
+				"B2 Southern Rim Overflow Recovery Compact: kessler trusts player" = 1
+			accept
+			label decline
+			`You decline to turn one overflow dispute into a Southern Rim rule. Solano accepts the boundary. Kessler says, "Fair. Shared records are useful only if they do not become a quiet way for somebody else to run the port."`
+			action
+				"B2 Southern Rim Overflow Recovery Compact: declined" = 1
+			decline
+
+
+mission "B2 Southern Rim Overflow Recovery Compact: Review"
+	minor
+	name `After the Main Queue Clears`
+	description `Return after Southern Rim congestion recovers and see whether overflow ports can distinguish cleared traffic from restored borrowed capacity.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "B2 Southern Rim Overflow Recovery Compact: introduced"
+		"world: southern rim transit congestion" <= 1
+		not "B2 Southern Rim Overflow Recovery Compact: reviewed"
+	on offer
+		conversation
+			branch obligation
+				has "B2 Southern Rim Overflow Recovery Compact: route obligation"
+			branch restoration
+				has "B2 Southern Rim Overflow Recovery Compact: route restoration"
+			`Kessler's paired records show the central queue back near normal. The receiving ports are less tidy. One still has a tug inspection overdue after repeated rescue tows; another cleared the diverted freighters but is short two repair shifts; a third replaced its fuel draw by borrowing from a neighboring reserve.`
+			`Solano says, "The network summary calls the surge recovered because ships are moving normally again. Jo's ledger says several ports are still carrying the cost of making that true."`
+			`Kessler adds, "The paired record survived locally. Copies did not. One port kept the diversion result and dropped the deferred maintenance. Another copied the deficit but lost who was responsible for closing it."`
+			choice
+				`\tCreate a portable borrowed-capacity packet: origin, capacity used, deferred obligation, restoration owner, review point, and closure evidence travel together.`
+					goto packet
+				`\tKeep local capacity ledgers separate, but require a reconciliation cycle before the network can call overflow capacity restored.`
+					goto reconcile
+			label obligation
+			`Kessler's capacity-debt list kept downstream costs visible, but some entries became permanent warnings even after the borrowed berth, tug, or repair slot had actually been restored. Solano says, "A debt that never records closure is not accountability. It is just another stale alert."`
+			choice
+				`\tMake every copied obligation carry both its origin and the evidence that can close it.`
+					goto packet
+				`\tUse a recurring reconciliation so unresolved deficits stay visible without turning resolved ones into permanent warnings.`
+					goto reconcile
+			label restoration
+			`Solano's deadlines made responsibility clearer, but Kessler found several ports marking an obligation closed when a date arrived rather than when physical capacity was actually restored. "A promised replacement tug is not a working tug," he says. "A scheduled maintenance shift is not completed maintenance."`
+			choice
+				`\tRequire portable closure evidence alongside the deadline and responsible owner.`
+					goto packet
+				`\tKeep deadlines local, but reconcile them against actual berth, tug, repair, fuel, crew, and maintenance state before closure.`
+					goto reconcile
+			label packet
+			`You recommend a portable borrowed-capacity packet. It records why the diversion occurred, which receiving capacity was used, what local work or reserve was displaced, who owns restoration, when it should be reviewed, and what evidence proves closure. Solano likes that a routing summary can no longer preserve only the successful diversion. Kessler likes that a resolved obligation can stop following a port forever.`
+			action
+				"B2 Southern Rim Overflow Recovery Compact: reviewed" = 1
+				"B2 Southern Rim Overflow Recovery Compact: settlement portable capacity packet" = 1
+				"B2 Southern Rim Overflow Recovery Compact: solano trusts player" = 1
+				"B2 Southern Rim Overflow Recovery Compact: kessler trusts player" = 1
+			accept
+			label reconcile
+			`You recommend keeping berth, tug, repair, fuel, crew, and maintenance records under local control, while adding a periodic reconciliation pass across ports that participated in overflow routing. The network can say traffic recovered when ships move normally again, but it cannot say borrowed capacity was restored until the participating ports agree that the remaining deficits have actually closed.`
+			action
+				"B2 Southern Rim Overflow Recovery Compact: reviewed" = 1
+				"B2 Southern Rim Overflow Recovery Compact: settlement reconciliation cycle" = 1
+				"B2 Southern Rim Overflow Recovery Compact: solano trusts player" = 1
+				"B2 Southern Rim Overflow Recovery Compact: kessler trusts player" = 1
+			accept
+
+
+mission "B2 Southern Rim Overflow Recovery Compact: Kessler Remembers"
+	minor
+	name `Kessler Remembers`
+	description `Jo Kessler remembers whether Southern Rim overflow routing learned to distinguish a cleared queue from restored receiving capacity.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	to offer
+		not "B2 Southern Rim Overflow Recovery Compact: aftermath seen"
+		or
+			has "B2 Southern Rim Overflow Recovery Compact: settlement portable capacity packet"
+			has "B2 Southern Rim Overflow Recovery Compact: settlement reconciliation cycle"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Southern Rim Overflow Recovery Compact: settlement reconciliation cycle"
+			`Kessler catches you near a traffic board and points out a diversion record from another busy week. "The packet worked. The receiving port took three extra ships and borrowed a tug crew. The main queue cleared first, but the packet stayed open until the crew was relieved and the tug inspection was done. Then it closed instead of becoming a permanent stain on the port."`
+				goto record
+			label reconcile
+			`Kessler shows you a short reconciliation report. "Nobody surrendered local authority. We just stopped letting the central traffic number answer a different question. The queue can be clear while a port is still recovering its tugs, crews, fuel, or maintenance margin. Now both facts can be true at once."`
+			label record
+			action
+				"B2 Southern Rim Overflow Recovery Compact: aftermath seen" = 1
+			accept
