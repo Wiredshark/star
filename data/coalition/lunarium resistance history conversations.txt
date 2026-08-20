@@ -1,0 +1,84 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Lunarium Cover Network Archive"
+	minor
+	source
+		government "Coalition"
+		not government "Heliarch"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "joined the lunarium"
+		not "joined the heliarchs"
+	on offer
+		conversation
+			`A Lunarium safehouse contains a compact archive about the movement's civilian cover networks. The oldest entries are not lists of agents, but ordinary charity manifests: winter clothing, medicines, communications equipment, food, and replacement parts routed toward communities that were already receiving legitimate aid.`
+			`\tThe notes explain why this mattered. A resistance network could not simply invent a transport system whenever it needed to move people or equipment. Organizers learned to work through real civic institutions with real beneficiaries, preserving legitimate deliveries even when a route also carried covert material. Records distinguish charitable cargo from concealed transfers so that later members can tell which obligations existed independently of the resistance.`
+			`\tA final annotation warns against treating the cover as disposable. If clandestine work hollowed out the charity it depended on, the network would lose both public trust and a functioning logistics system. The archive presents that lesson as one of the Lunarium's most practical institutional constraints: secrecy was useful only while the visible institution remained real.`
+				decline
+
+
+mission "Lunarium Compartment Ledger"
+	minor
+	source
+		government "Coalition"
+		not government "Heliarch"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "joined the lunarium"
+		not "joined the heliarchs"
+	on offer
+		conversation
+			`A training terminal displays a heavily redacted history of Lunarium courier cells. Names are absent even from records old enough to be archival; what remains are diagrams showing which kinds of information different roles were expected to know.`
+			`\tEarly organizers apparently discovered that secrecy based only on personal trust did not scale. Couriers, relief workers, technicians, recruiters, and coordinators began keeping separate operational records, with handoff procedures that allowed one cell to complete a task without learning every person or destination behind it. The archive is careful to distinguish compartmentation from isolation: cells still needed authenticated ways to request help, report failure, and preserve continuity when a contact disappeared.`
+			`\tThe diagrams grow more formal over time, adding replacement contacts, dead-drop retirement rules, and procedures for invalidating information after an arrest or compromised route. The lesson attached to the display is blunt: a network survives not because nobody knows anything, but because no single failure automatically reveals everything.`
+				decline
+
+
+mission "Lunarium Testimony Provenance Archive"
+	minor
+	source
+		government "Coalition"
+		not government "Heliarch"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "joined the lunarium"
+		not "joined the heliarchs"
+	on offer
+		conversation
+			`One Lunarium archive is devoted to testimony about Heliarch searches, detentions, taxes, confiscations, and local abuses. The display preserves contradictory accounts side by side, each tagged with where it came from, what the witness directly observed, what was heard secondhand, and which details were later corroborated.`
+			`\tAn accompanying note says the distinction became important very early. Resistance movements had strong incentives to believe damaging stories about their opponents, while frightened witnesses often mixed direct observation with rumor or interpretation. Organizers therefore developed review habits intended to preserve accusations without silently converting them into established fact.`
+			`\tThe archive does not claim that this made Lunarium records neutral. It instead treats provenance as a discipline: preserve the original testimony, preserve corrections, identify independent corroboration, and keep uncertainty visible. Later political arguments could still be fierce, but they would at least have a record of what evidence those arguments were built on.`
+				decline
+
+
+mission "Lunarium Safehouse Continuity Register"
+	minor
+	source
+		government "Coalition"
+		not government "Heliarch"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "joined the lunarium"
+		not "joined the heliarchs"
+	on offer
+		conversation
+			`A maintenance register in this safehouse looks almost disappointingly mundane. It lists spare filters, medical kits, encrypted communicators, emergency food, berth capacity, repair tools, alternate power supplies, and the dates on which each item was last checked.`
+			`\tHistorical notes explain that early safehouses often failed for ordinary reasons rather than dramatic betrayal. A hidden room was useless if its air system failed, a fallback transmitter had a dead battery, or an evacuation site could shelter five people when twelve arrived. Over time, the Lunarium began treating refuge capacity as infrastructure: inspected, replenished, and assigned explicit limits rather than assumed to exist because someone had once offered a basement or warehouse.`
+			`\tThe register also tracks closures and retired sites instead of quietly deleting them. Organizers wanted future members to know whether a location had been exposed, abandoned for logistical reasons, or simply replaced by something better. The institution's purpose was continuity under disruption: preserve enough mundane knowledge that losing one person, ship, or safehouse did not force the next cell to rediscover the same constraints from scratch.`
+				decline
