@@ -1,0 +1,156 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Syndicate Qualification Compact.
+#
+# Consumes the B1 Syndicate dockyard-labor history and A1's authoritative labor
+# strain / rotation state. B2 never writes A1 world state. The compact is a
+# practical agreement among participating yards and contractors, not a universal
+# Syndicate labor law or a centralized personnel authority.
+
+
+mission "B2 Syndicate Qualification Compact: Offer"
+	minor
+	name `The Crew That Fits`
+	description `Dock supervisor Mara Venn and contract technician Ilias Rook disagree over whether strained yards should move qualified crews quickly or preserve local sign-off authority.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		"world: syndicate labor strain" >= 2
+		has "world: syndicate labor rotation active"
+		not "B2 Syndicate Qualification Compact: introduced"
+		not "B2 Syndicate Qualification Compact: declined"
+	on offer
+		conversation
+			`A dockside staffing board is full of names from three different yards. Several crews are technically available, but only a handful are cleared for the reactor family on the ship occupying the priority berth.`
+			`Mara Venn, a dock supervisor responsible for keeping the current rotation safe, points to the qualifications column. "Headcount is not capacity. If I borrow six people and spend the shift teaching four of them the system, I have moved the shortage instead of solving it."`
+			`Ilias Rook, a contract technician who has worked in more yards than he can easily count, folds his arms. "And if every yard treats its own sign-off as sacred, experienced crews spend half a crisis proving the same competence again. Rotation only works if some qualifications travel."`
+			`Venn replies, "Then we need a way to carry evidence without pretending every berth, ship family, and local hazard is identical."`
+			choice
+				`\tBack Venn: preserve local sign-off, but make prior qualification evidence easy to inspect.`
+					goto local
+				`\tBack Rook: allow verified qualifications to transfer unless a yard documents a specific local exception.`
+					goto portable
+				`\tPair both: portable core qualifications plus a narrow supervised local endorsement for unfamiliar systems.`
+					goto paired
+				`\tTell them staffing policy should remain entirely between each yard and its contractors.`
+					goto decline
+			label local
+			`You tell Rook that a history of competent work should arrive with him, but Venn should still be able to require local sign-off for hazards the old record never covered. Venn nods. "Evidence first, authority second." Rook answers, "As long as 'local' does not mean starting from zero every time."`
+			action
+				"B2 Syndicate Qualification Compact: introduced" = 1
+				"B2 Syndicate Qualification Compact: route local" = 1
+				"B2 Syndicate Qualification Compact: venn trusts player" = 1
+			accept
+			label portable
+			`You tell Venn that repeated emergency rotations are exactly when a verified qualification record should have value beyond its home yard. Rook says, "Let the record travel. If a local exception matters, write the exception." Venn agrees, but insists that transferred qualification must say what equipment, date, supervision level, and limits it actually covered.`
+			action
+				"B2 Syndicate Qualification Compact: introduced" = 1
+				"B2 Syndicate Qualification Compact: route portable" = 1
+				"B2 Syndicate Qualification Compact: rook trusts player" = 1
+			accept
+			label paired
+			`You suggest splitting the problem. Core qualification evidence travels between participating yards; local endorsement is reserved for the systems, hazards, or procedures that genuinely differ. Rook says, "Then an experienced technician arrives as experienced." Venn adds, "And nobody mistakes familiarity with one reactor family for blanket clearance everywhere."`
+			action
+				"B2 Syndicate Qualification Compact: introduced" = 1
+				"B2 Syndicate Qualification Compact: route paired" = 1
+				"B2 Syndicate Qualification Compact: venn trusts player" = 1
+				"B2 Syndicate Qualification Compact: rook trusts player" = 1
+			accept
+			label decline
+			`You tell them an outsider should not turn a strained shift board into a universal labor rule. Venn accepts that immediately. Rook shrugs. "Fair. But the next borrowed crew will still arrive with a stack of records somebody has to interpret."`
+			action
+				"B2 Syndicate Qualification Compact: declined" = 1
+			decline
+
+
+mission "B2 Syndicate Qualification Compact: Review"
+	minor
+	name `After the Rotation`
+	description `Return after labor strain recedes and see which qualification-transfer rule survived normal dockyard work.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		has "B2 Syndicate Qualification Compact: introduced"
+		"world: syndicate labor strain" <= 1
+		not "world: syndicate labor rotation active"
+		not "B2 Syndicate Qualification Compact: reviewed"
+	on offer
+		conversation
+			branch local
+				has "B2 Syndicate Qualification Compact: route local"
+			branch portable
+				has "B2 Syndicate Qualification Compact: route portable"
+			`The emergency rotation has ended, but Venn and Rook are still comparing qualification records from the crews who passed through. The paired approach worked well during the surge. The problem appeared afterward, when some copied summaries preserved the word "qualified" but dropped the exact equipment family, supervision level, and temporary local endorsement that made the statement true.`
+			`Rook says, "The record survived. The meaning got thinner every time somebody condensed it." Venn replies, "Then portability needs provenance, not just a badge."`
+			choice
+				`\tAdopt a portable qualification packet that carries scope, evidence, supervision level, limits, and local endorsements together.`
+					goto packet
+				`\tAdopt an expiry-and-renewal model where transferred evidence remains visible but local endorsements must be renewed when their context changes.`
+					goto renewal
+			label local
+			`The local-sign-off approach avoided unsafe assumptions, but several experienced crews lost hours repeating demonstrations that duplicated evidence already present in their prior records. Rook says, "The yard protected its authority by discarding useful information." Venn answers, "Then local review should begin from the carried evidence, not erase it."`
+			choice
+				`\tCarry prior evidence and the resulting local endorsement as one portable qualification packet.`
+					goto packet
+				`\tKeep local authority, but make every endorsement state its context and expiry so repeat review is limited to what actually changed.`
+					goto renewal
+			label portable
+			`The portable-qualification approach moved crews quickly, but two yards treated a broad qualification label as if it covered local modifications that were never part of the original evidence. Venn says, "The transfer was correct. The inference was too broad." Rook nods. "Then the record has to carry its boundaries as aggressively as it carries the clearance."`
+			choice
+				`\tMake qualification scope, source evidence, exclusions, and later local endorsements travel together.`
+					goto packet
+				`\tAllow portable evidence, but require explicit renewal whenever the equipment family or local hazard context changes.`
+					goto renewal
+			label packet
+			`You recommend a portable qualification packet. A participating yard may still decide whether a worker is cleared for a specific job, but the packet preserves what was observed, which systems were covered, whether work was supervised, what limits applied, and which later endorsements changed that scope. Venn says, "That keeps authority local without making memory local." Rook smiles. "And it makes 'qualified' mean more than a checkbox."`
+			action
+				"B2 Syndicate Qualification Compact: reviewed" = 1
+				"B2 Syndicate Qualification Compact: settlement packet" = 1
+				"B2 Syndicate Qualification Compact: venn trusts player" = 1
+			accept
+			label renewal
+			`You recommend an expiry-and-renewal model. Prior qualification evidence remains visible and reusable, but local endorsements say exactly which equipment, hazard context, and supervision assumptions they cover, and they expire when those assumptions materially change. Rook says, "No starting from zero." Venn adds, "And no clearance that quietly becomes permanent because nobody remembers why it was issued."`
+			action
+				"B2 Syndicate Qualification Compact: reviewed" = 1
+				"B2 Syndicate Qualification Compact: settlement renewal" = 1
+				"B2 Syndicate Qualification Compact: rook trusts player" = 1
+			accept
+
+
+mission "B2 Syndicate Qualification Compact: Venn Remembers"
+	minor
+	name `Venn Remembers`
+	description `Mara Venn remembers how the labor rotation changed the way participating Syndicate yards interpret transferable qualification records.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		not "B2 Syndicate Qualification Compact: aftermath seen"
+		or
+			has "B2 Syndicate Qualification Compact: settlement packet"
+			has "B2 Syndicate Qualification Compact: settlement renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Syndicate Qualification Compact: settlement renewal"
+			`Venn shows you a technician's qualification packet from another yard. It lists the reactor family, the supervised jobs that established competence, an explicit exclusion for a newer shielding revision, and the local endorsement added here after one observed shift. "I still decide whether this person works my berth," she says. "I no longer have to pretend their history began when they arrived."`
+			goto record
+			label renewal
+			`Venn is reviewing a transferred qualification record. The worker's core evidence remains valid, but a local endorsement is flagged for renewal because the berth has been refitted with a different actuator-control revision. "The old work still counts," she says. "The changed context is the part we are actually reviewing."`
+			label record
+			action
+				"B2 Syndicate Qualification Compact: aftermath seen" = 1
+			accept
