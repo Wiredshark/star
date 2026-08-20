@@ -13,8 +13,8 @@
 
 # Headless actual-game acceptance for the Republic Border Testimony Practice.
 # These tests drive the production mission through the normal spaceport UI,
-# persist the selected practice through a save/reload, and then exercise the
-# later authoritative A1 pressure recurrence.
+# exercise state-dependent labeled responses, persist the selected practice
+# through save/reload, and then exercise the later authoritative A1 recurrence.
 
 
 test "A2 Republic Border Testimony Prepare"
@@ -28,9 +28,12 @@ test "A2 Republic Border Testimony Prepare"
 			"Intro [0]: declined" = 1
 			"A2 Career Review: seen" = 1
 			"B2 Republic Border Testimony Compact: aftermath seen" = 1
+			"B2 Republic Border Testimony Compact: rook trusts player" = 1
+			"B2 Republic Border Testimony Compact: verran trusts player" = 1
 			"world: republic border pressure" = 0
 		assert
 			"B2 Republic Border Testimony Compact: aftermath seen" == 1
+			"B2 Republic Border Testimony Compact: verran trusts player" == 1
 			"world: republic border pressure" == 0
 
 
@@ -38,7 +41,6 @@ test "A2 Republic Border Testimony Persist And Recur"
 	status partial
 	description "Persist the chosen route through save/reload and exercise the production recurrence mission."
 	sequence
-		# Return from the spaceport to the landing panel before saving.
 		input
 			key l
 		call "Save To Default Snapshot"
@@ -51,10 +53,16 @@ test "A2 Republic Border Testimony Persist And Recur"
 			"world: republic border pressure" = 4
 		input
 			key p
-		# Advance the route-specific recurrence text. The mission then records
-		# the one-shot consequence and declines without becoming active.
 		input
 			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: recurrence seen" == 1
+			"A2 Republic Border Testimony Practice: Recurrence: active" == 0
+		# The one-shot gate must remain closed on another spaceport visit.
+		input
+			key l
+		input
+			key p
 		assert
 			"A2 Republic Border Testimony Practice: recurrence seen" == 1
 			"A2 Republic Border Testimony Practice: Recurrence: active" == 0
@@ -62,9 +70,11 @@ test "A2 Republic Border Testimony Persist And Recur"
 
 test "A2 Republic Border Testimony Lineage"
 	status active
-	description "Exercise source-lineage selection, persistence, and later recurrence in the production game UI."
+	description "Exercise the provenance-packet labeled response, persistence, and later recurrence."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
 		input
 			key p
 		input
@@ -76,6 +86,7 @@ test "A2 Republic Border Testimony Lineage"
 		assert
 			"A2 Republic Border Testimony Practice: decided" == 1
 			"A2 Republic Border Testimony Practice: lineage" == 1
+			"A2 Republic Border Testimony Practice: closure" == 0
 			"A2 Republic Border Testimony Practice: Briefing: active" == 0
 		call "A2 Republic Border Testimony Persist And Recur"
 		assert
@@ -84,9 +95,11 @@ test "A2 Republic Border Testimony Lineage"
 
 test "A2 Republic Border Testimony Independence"
 	status active
-	description "Exercise independent-corroboration selection, persistence, and later recurrence in the production game UI."
+	description "Exercise the Verran-trust labeled response, persistence, and later recurrence."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
 		input
 			key p
 		input
@@ -108,15 +121,17 @@ test "A2 Republic Border Testimony Independence"
 
 test "A2 Republic Border Testimony Closure"
 	status active
-	description "Exercise closure-renewal selection, persistence, and later recurrence in the production game UI."
+	description "Exercise the expiry-and-renewal labeled response while the packet-only response is hidden."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement expiry and renewal" = 1
 		input
 			key p
 		input
 			key "Return"
-		input
-			key "Down"
+		# The packet-only lineage option is hidden. Independence is first and
+		# expiry/renewal is therefore the second selectable response.
 		input
 			key "Down"
 		input
@@ -126,6 +141,7 @@ test "A2 Republic Border Testimony Closure"
 		assert
 			"A2 Republic Border Testimony Practice: decided" == 1
 			"A2 Republic Border Testimony Practice: closure" == 1
+			"A2 Republic Border Testimony Practice: lineage" == 0
 			"A2 Republic Border Testimony Practice: Briefing: active" == 0
 		call "A2 Republic Border Testimony Persist And Recur"
 		assert
@@ -134,15 +150,15 @@ test "A2 Republic Border Testimony Closure"
 
 test "A2 Republic Border Testimony Local"
 	status active
-	description "Exercise local-only selection, persistence, and later recurrence in the production game UI."
+	description "Exercise the always-valid local/context route alongside two available persistent-state responses."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
 		input
 			key p
 		input
 			key "Return"
-		input
-			key "Down"
 		input
 			key "Down"
 		input
@@ -162,15 +178,15 @@ test "A2 Republic Border Testimony Local"
 
 test "A2 Republic Border Testimony Refusal"
 	status active
-	description "Exercise explicit refusal and verify that it persists without arming the recurrence."
+	description "Exercise explicit refusal and verify that it persists without arming recurrence."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
 		input
 			key p
 		input
 			key "Return"
-		input
-			key "Down"
 		input
 			key "Down"
 		input
