@@ -1,0 +1,114 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 Merchant Recovery Margin Practice.
+# Consumes the resolved B2 compact and live A1 Merchant repair state read-only.
+
+mission "A2 Merchant Recovery Margin Practice: Briefing"
+	minor
+	name `What Recovery Means`
+	description `Imani Vale asks how the recovery-margin compact should guide decisions when Merchant repair pressure returns.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		has "B2 Merchant Recovery Margin Compact: aftermath seen"
+		not "A2 Merchant Recovery Margin Practice: introduced"
+		not "A2 Merchant Recovery Margin Practice: declined"
+	on offer
+		conversation
+			`Imani Vale has two capacity reports open side by side. One uses the compact's portable margin packet; the other records a reconciliation cycle. "Both can tell us whether yesterday's reserve obligation is still open," she says. "Neither decides what a captain should infer when pressure rises again."`
+			branch packet
+				has "B2 Merchant Recovery Margin Compact: settlement margin packet"
+			`Vale taps the portable packet. "This one travels well. The danger is treating a complete record as if it automatically tells us which berth to protect next."`
+			goto choose
+			label packet
+			`Vale taps the reconciliation summary. "This one forces old obligations back into view. The danger is mistaking a clean reconciliation for proof that tomorrow's capacity is safe."`
+			label choose
+			choice
+				`\tUse the compact as a continuity rule: preserve unresolved reserve obligations before calling capacity recovered.`
+					goto continuity
+				`\tUse it as a challenge rule: current physical capacity must be checked again before old records guide a new emergency.`
+					goto challenge
+				`\tKeep the compact local to participating yards instead of turning it into a general Merchant doctrine.`
+					goto local
+				`\tDecline to establish a standing interpretation.`
+					goto decline
+			label continuity
+			`You tell Vale that the most useful memory is the unresolved obligation itself. A berth, crew, or tug borrowed from emergency margin should remain visible until equivalent capacity is actually restored; a cleared queue is not enough.`
+			action
+				"A2 Merchant Recovery Margin Practice: introduced" = 1
+				"A2 Merchant Recovery Margin Practice: continuity" = 1
+			accept
+			label challenge
+			`You tell Vale that records should constrain memory, not replace observation. When pressure returns, dispatchers should verify what capacity physically exists now before treating an old packet or reconciliation as operational truth.`
+			action
+				"A2 Merchant Recovery Margin Practice: introduced" = 1
+				"A2 Merchant Recovery Margin Practice: challenge" = 1
+			accept
+			label local
+			`You tell Vale the compact earned its meaning from specific participating yards. Other ports can learn from it, but they should not inherit an obligation merely because the paperwork travels well.`
+			action
+				"A2 Merchant Recovery Margin Practice: introduced" = 1
+				"A2 Merchant Recovery Margin Practice: local" = 1
+			accept
+			label decline
+			`You tell Vale that choosing a standing interpretation would turn a voluntary coordination tool into something closer to doctrine. She closes the reports. "Then we leave the compact where it is: useful records, no borrowed authority."`
+			action
+				"A2 Merchant Recovery Margin Practice: declined" = 1
+			decline
+
+
+mission "A2 Merchant Recovery Margin Practice: Pressure Test"
+	minor
+	name `The Margin Under Load`
+	description `A later Merchant repair surge tests what the player chose to remember from the recovery-margin compact.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		has "A2 Merchant Recovery Margin Practice: introduced"
+		"world: merchant repair backlog" >= 3
+		not "A2 Merchant Recovery Margin Practice: pressure test seen"
+	on offer
+		conversation
+			branch challenge
+				has "A2 Merchant Recovery Margin Practice: challenge"
+			branch local
+				has "A2 Merchant Recovery Margin Practice: local"
+			branch continuity surge
+				has "world: merchant repair surge"
+			`Vale shows you the new queue beside the old margin obligations. Because you kept unresolved reserve debt visible, one apparently open berth is immediately recognized as capacity still owed back to emergency service. The backlog looks slightly worse on paper, but nobody mistakes borrowed margin for recovered capacity.`
+			goto done
+			label continuity surge
+			`Vale shows you the new queue beside the old margin obligations. Your continuity rule exposes which capacity is still owed back, while the active pooled-capacity surge shows that some of that obligation is already being rebuilt. "At least we can distinguish recovery work from capacity we merely wish we had," she says.`
+			goto done
+			label challenge
+			branch challenge surge
+				has "world: merchant repair surge"
+			`Before dispatchers reuse the previous capacity report, they verify berths, standby crews, and tug availability. One old assumption is no longer true, so the new plan changes before a ship is routed against capacity that exists only in the record.`
+			goto done
+			label challenge surge
+			`With pooled recovery capacity active, your challenge rule still requires a physical check. The surge is real, but so are two unavailable berths hidden by aggregate numbers. Vale revises the routing plan instead of treating the surge flag as proof that every listed slot can be used.`
+			goto done
+			label local
+			branch local surge
+				has "world: merchant repair surge"
+			`A neighboring yard asks for the compact as a template. Vale sends the record format but not the standing rule you declined to universalize. The yard maps its own obligations instead of inheriting another port's reserve assumptions.`
+			goto done
+			label local surge
+			`A neighboring yard asks whether the active recovery surge means it should adopt the same reserve rule. Vale shares the evidence format and the participating yards' experience, but leaves the policy decision local. The lesson travels without becoming centralized Merchant authority.`
+			label done
+			action
+				"A2 Merchant Recovery Margin Practice: pressure test seen" = 1
+			accept
