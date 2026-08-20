@@ -3,8 +3,8 @@
 ## Stage / verdict
 
 - Stage: B2 STORY CHARACTERS + DYNAMIC CONTENT
-- Verdict: PARTIAL pending exact-head repository-native workflows
-- Integration authority: A3 only; this branch must remain isolated/unmerged
+- Verdict: READY for A3 review/integration
+- Integration authority: A3 only; this branch remains isolated/unmerged
 
 ## Repository authority
 
@@ -13,6 +13,7 @@
 - Isolated branch: `agent/b2-gegno-long-baseline-compact-20260820-1125`
 - Production commit: `4edace914f301251aa318cb2e3cde7742feeaf0c`
 - Focused-validator commit: `4d5da1d3942a8f5a9acbe929c6b1656b8698f4b5`
+- Exact fully validated production/validator/handoff candidate: `5aaf77a80b9d5e85c4416cfab6afd4cc5ccc7895`
 
 ## B1 dependency
 
@@ -61,13 +62,26 @@ Terminal settlements:
 - Old-instrument measurements remain evidence even when ownership is uncertain.
 - Practical cross-faction evidence records do not imply Vi/Scin political unification.
 
-## Validation surface
+## Validation evidence
 
-Focused validator added:
+Focused validator:
 
 `python3 tools/story/validate_b2_gegno_long_baseline_compact.py`
 
-It checks:
+On exact candidate `5aaf77a80b9d5e85c4416cfab6afd4cc5ccc7895`:
+
+- Fork simulation and story validation run `32386386054` / #233: SUCCESS;
+- focused story suite: 43 discovered, 43 passed, 0 failed;
+- `validate_b2_gegno_long_baseline_compact.py`: PASS;
+- repository-wide story/state-ownership contracts: PASS;
+- A1 regression suite: 103 passed;
+- changed-content style: SUCCESS;
+- Fork save-load integration smoke run `32386386151` / #222: SUCCESS;
+- production configure: SUCCESS;
+- production build: SUCCESS;
+- stock save-load smoke cases: SUCCESS.
+
+The focused validator checks:
 
 - exact 3-mission graph + delayed Review event;
 - B1 environmental continuity concepts;
@@ -80,13 +94,9 @@ It checks:
 - absence of material/reputation mutations;
 - preservation of observation/context/inference boundaries.
 
-Required before READY:
+## Process / host boundary
 
-- exact-head Fork simulation and story validation: SUCCESS;
-- exact-head changed-content style: SUCCESS;
-- focused validator discovery/execution: SUCCESS;
-- exact-head Fork save-load integration smoke: SUCCESS;
-- production configure/build + stock save/load smoke: SUCCESS.
+The private execution service process inventory reported four pre-existing service-owned orphan processes. They were preserved; no process was killed or modified. Repository-native GitHub Actions supplied the authoritative Endless Sky validation evidence.
 
 ## A3 / B3 integration notes
 
