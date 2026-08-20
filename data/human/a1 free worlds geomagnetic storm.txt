@@ -1,0 +1,127 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Free Worlds geomagnetic-storm navigation pressure.
+#
+# A qualifying Free Worlds system entry can begin a three-day regional disturbance
+# when no fourteen-day onset cooldown is active. Entries during the active storm
+# accumulate bounded navigation-service strain; every contribution has its own
+# two-day recovery obligation. Takeoff does not count as a new exposure/entry.
+
+
+event "ES A1: Free Worlds Geomagnetic Storm Ends"
+	clear "world: free worlds geomagnetic storm active"
+	clear "world: free worlds geomagnetic storm advisory seen"
+
+
+event "ES A1: Free Worlds Geomagnetic Storm Cooldown Ends"
+	clear "world: free worlds geomagnetic storm cooldown"
+
+
+event "ES A1: Free Worlds Navigation Strain Recovery"
+	"world: free worlds geomagnetic navigation strain" -= 1
+	"world: free worlds geomagnetic navigation strain" >?= 0
+
+
+mission "ES A1: Free Worlds Geomagnetic Storm Cycle"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		not "world: free worlds geomagnetic storm active"
+		not "world: free worlds geomagnetic storm cooldown"
+	on offer
+		set "world: free worlds geomagnetic storm active"
+		set "world: free worlds geomagnetic storm cooldown"
+		event "ES A1: Free Worlds Geomagnetic Storm Ends" 3 3
+		event "ES A1: Free Worlds Geomagnetic Storm Cooldown Ends" 14 14
+		fail
+
+
+mission "ES A1: Free Worlds Geomagnetic Storm Pressure"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "world: free worlds geomagnetic storm active"
+		"world: free worlds geomagnetic navigation strain" < 6
+	on offer
+		"world: free worlds geomagnetic navigation strain" += 1
+		"world: free worlds geomagnetic navigation strain" <?= 6
+		event "ES A1: Free Worlds Navigation Strain Recovery" 2 2
+		fail
+
+
+mission "ES A1: Free Worlds Geomagnetic Storm Advisory"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "world: free worlds geomagnetic storm active"
+		not "world: free worlds geomagnetic storm advisory seen"
+	on offer
+		message
+			text "Free Worlds navigation beacons report a regional geomagnetic storm. Pilots are advised to expect intermittent sensor noise and routing delays until the disturbance passes."
+		set "world: free worlds geomagnetic storm advisory seen"
+		fail
+
+
+mission "ES A1: Free Worlds Navigation Strain Advisory"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds geomagnetic navigation strain" >= 3
+		not "world: free worlds geomagnetic strain advisory seen"
+	on offer
+		message
+			text "Repeated storm disruptions are straining Free Worlds navigation services. Traffic control is prioritizing beacon recalibration and route verification while conditions recover."
+		set "world: free worlds geomagnetic strain advisory seen"
+		fail
+
+
+mission "ES A1: Free Worlds Navigation Strain Advisory Reset"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds geomagnetic navigation strain" <= 1
+		has "world: free worlds geomagnetic strain advisory seen"
+	on offer
+		clear "world: free worlds geomagnetic strain advisory seen"
+		fail
