@@ -1,0 +1,147 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Acheron Observation Provenance.
+#
+# Builds on the Acheron/Vyrmeid natural-history archives. The arc keeps direct
+# observation, ship-induced stimulus, biological hazard, and later interpretation
+# as separate evidence layers so copied field reports do not turn uncertainty into
+# motive or a temporary reaction into a species-wide claim.
+
+
+mission "B2 Acheron Observation Provenance: Offer"
+	minor
+	name `The Observation That Changed`
+	description `Field observer Nira Sol and survey pilot Tomas Pell disagree over how Vyrmeid observations should record ship-induced changes without confusing response with intent.`
+	source "Vinci"
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		not "B2 Acheron Observation Provenance: introduced"
+		not "B2 Acheron Observation Provenance: declined"
+	on offer
+		conversation
+			`Nira Sol, a field observer reviewing Vyrmeid sightings, has two versions of the same report open side by side. In the first, a cloud of small Vyrmeid drifts close to a bright star. In the second, the creatures change direction moments after a survey ship increases power and alters course.`
+			`"Both observations are real," Sol says. "The problem begins when the second copy drops the ship's maneuver and leaves only 'the swarm changed course.' A reader can turn that into coordinated behavior or intent without noticing what the humans changed first."`
+			`Tomas Pell, the survey pilot who flew the pass, folds his arms. "And if every report waits for a perfect baseline, crews will stop recording useful reactions. Sometimes the response to a ship is exactly what matters operationally."`
+			choice
+				`\tBack Sol: preserve a passive baseline before using ship-induced reactions to characterize behavior.`
+					goto baseline
+				`\tBack Pell: record controlled stimulus trials, but label the exact human action, timing, and distance.`
+					goto stimulus
+				`\tPair both: keep baseline observation and stimulus response as linked but distinct evidence layers.`
+					goto paired
+				`\tTell them individual crews should keep their own notes rather than create another shared method.`
+					goto decline
+			label baseline
+			`You side with Sol. A passive observation gives later researchers something to compare against before they attribute a course change, rotation, or retreat to the animal itself. Pell agrees, provided a useful reaction is not discarded merely because a pristine baseline was brief.`
+			action
+				"B2 Acheron Observation Provenance: introduced" = 1
+				"B2 Acheron Observation Provenance: route baseline" = 1
+				"B2 Acheron Observation Provenance: sol trusts player" = 1
+			accept
+			label stimulus
+			`You side with Pell. Controlled changes in light, course, or power can produce useful field evidence, but the report must state exactly what the ship did before the animals responded. Sol adds that a reaction still does not establish hostility, communication, or motive.`
+			action
+				"B2 Acheron Observation Provenance: introduced" = 1
+				"B2 Acheron Observation Provenance: route stimulus" = 1
+				"B2 Acheron Observation Provenance: pell trusts player" = 1
+			accept
+			label paired
+			`You recommend paired evidence. One layer preserves what the animals did before interference; the second preserves the ship's exact maneuver, timing, distance, and the subsequent response. Sol says, "Then a later summary can compare them without silently merging them." Pell nods. "And pilots still get the reaction data they need."`
+			action
+				"B2 Acheron Observation Provenance: introduced" = 1
+				"B2 Acheron Observation Provenance: route paired" = 1
+				"B2 Acheron Observation Provenance: sol trusts player" = 1
+				"B2 Acheron Observation Provenance: pell trusts player" = 1
+			accept
+			label decline
+			`You decline to turn the dispute into a shared compact. Sol accepts the boundary. Pell says the reports will still circulate, and copied summaries will still lose context unless individual crews are unusually careful.`
+			action
+				"B2 Acheron Observation Provenance: declined" = 1
+			decline
+
+
+mission "B2 Acheron Observation Provenance: Review"
+	minor
+	name `When the Stimulus Disappears`
+	description `Review copied Acheron field reports and decide what evidence must travel with downstream biological summaries.`
+	source "Midgard"
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		has "B2 Acheron Observation Provenance: introduced"
+		not "B2 Acheron Observation Provenance: reviewed"
+	on offer
+		conversation
+			branch baseline
+				has "B2 Acheron Observation Provenance: route baseline"
+			branch stimulus
+				has "B2 Acheron Observation Provenance: route stimulus"
+			`Sol and Pell have collected copied versions of several Vyrmeid reports. The paired method preserved more context than either expected, but one shortened summary still describes an animal as "aggressively rotating" even though the original record only documented rotation during repeated debris impacts.`
+			`Sol says, "The observation survived. The circumstances did not." Pell points to another copy where five ships repeat the same warning from one original source. "And repetition is starting to look like independent confirmation."`
+			choice
+				`\tAdopt a provenance packet that keeps baseline, human stimulus, environment, source lineage, and uncertainty attached to every summary.`
+					goto packet
+				`\tAdopt an evidence ladder that ranks direct observation, controlled response, relayed report, inference, and later contradiction separately.`
+					goto ladder
+			label baseline
+			`The baseline-first reports avoided several false claims, but some copied summaries kept the passive observation and omitted the later ship-induced response entirely. Pell says, "That is cleaner, but less useful than what actually happened." Sol agrees that context should constrain interpretation rather than erase a real reaction.`
+			choice
+				`\tUse a portable provenance packet so both baseline and later stimulus remain linked with environment, timing, source, and uncertainty.`
+					goto packet
+				`\tUse an evidence ladder so passive observation and controlled response remain separate but comparable evidence classes.`
+					goto ladder
+			label stimulus
+			`The stimulus-first reports captured useful reactions quickly, but copied versions sometimes kept the animal's response while losing the exact maneuver that preceded it. Sol says, "A reaction without the stimulus can become a story about motive." Pell replies, "Then the maneuver has to travel with the observation."`
+			choice
+				`\tUse a portable provenance packet that carries stimulus, timing, environment, source lineage, and uncertainty with the result.`
+					goto packet
+				`\tUse an evidence ladder that keeps direct observation, elicited response, relayed report, inference, and contradiction visibly distinct.`
+					goto ladder
+			label packet
+			`You recommend a provenance packet. A copied biological summary must retain the passive baseline if one exists, any human stimulus, distance and timing, environmental conditions, original source, later copies, and unresolved uncertainty. Sol says, "Then dangerous is not the same as hostile, and responsive is not the same as intentional." Pell adds, "And a pilot still knows what changed after the ship acted."`
+			action
+				"B2 Acheron Observation Provenance: reviewed" = 1
+				"B2 Acheron Observation Provenance: settlement packet" = 1
+				"B2 Acheron Observation Provenance: sol trusts player" = 1
+			accept
+			label ladder
+			`You recommend an evidence ladder. Passive observation, controlled stimulus response, relayed report, operational inference, and later contradiction remain distinct even when a short summary is copied downstream. Pell says, "Five repeats no longer become five sightings." Sol replies, "And an interpretation can change without rewriting what was actually observed."`
+			action
+				"B2 Acheron Observation Provenance: reviewed" = 1
+				"B2 Acheron Observation Provenance: settlement ladder" = 1
+				"B2 Acheron Observation Provenance: pell trusts player" = 1
+			accept
+
+
+mission "B2 Acheron Observation Provenance: Sol Remembers"
+	minor
+	name `Sol Remembers`
+	description `Nira Sol remembers how Acheron field reports learned to preserve observed behavior without hardening uncertainty into motive.`
+	source "Mirrorlake"
+	to offer
+		not "B2 Acheron Observation Provenance: aftermath seen"
+		or
+			has "B2 Acheron Observation Provenance: settlement packet"
+			has "B2 Acheron Observation Provenance: settlement ladder"
+	on offer
+		conversation
+			branch ladder
+				has "B2 Acheron Observation Provenance: settlement ladder"
+			`Sol shows you a copied report of a stellar-hazard Vyrmeid. The summary still says the damaged animal ruptured dangerously, but the attached packet preserves the damage source, distance, nearby traffic, escape path, and the fact that no attack was observed before the rupture. "Hazard survived the copy," she says. "Hostile motive did not get invented along the way."`
+			goto record
+			label ladder
+			`Sol shows you two reports describing the same course change. One is a direct observation after a measured ship maneuver; the other is a chain of repeated retellings from that same source. The archive gives them different evidentiary weight and leaves the motive field unresolved. "The behavior is still useful," she says. "The uncertainty is useful too."`
+			label record
+			action
+				"B2 Acheron Observation Provenance: aftermath seen" = 1
+			accept
