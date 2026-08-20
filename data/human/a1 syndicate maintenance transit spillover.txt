@@ -1,0 +1,47 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Syndicate maintenance backlog -> Southern Rim transit spillover.
+#
+# This bridge consumes the existing Syndicate maintenance backlog as read-only
+# upstream state. Severe backlog can add one temporary unit of Southern Rim
+# congestion when the player next enters a qualifying Free Worlds border system.
+# A six-day latch prevents repeated crossings from turning one maintenance episode
+# into runaway congestion. The accepted three-day congestion decay owns recovery.
+
+
+event "ES A1: Syndicate Maintenance Transit Spillover Latch Ends"
+	clear "world: syndicate maintenance transit spillover active"
+
+
+mission "ES A1: Syndicate Maintenance Transit Spillover"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+		neighbor government "Republic" "Neutral" "Independent"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: syndicate maintenance backlog" >= 4
+		"world: southern rim transit congestion" < 6
+		not "world: syndicate maintenance transit spillover active"
+	on offer
+		set "world: syndicate maintenance transit spillover active"
+		"world: southern rim transit congestion" += 1
+		"world: southern rim transit congestion" <?= 6
+		event "ES A1: Southern Rim Transit Congestion Decay" 3 3
+		event "ES A1: Syndicate Maintenance Transit Spillover Latch Ends" 6 6
+		fail

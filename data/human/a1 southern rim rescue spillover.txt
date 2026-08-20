@@ -1,0 +1,45 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Southern Rim congestion -> Merchant rescue spillover.
+#
+# Severe Southern Rim congestion creates a bounded secondary rescue burden for
+# Merchant response crews. This bridge reads the accepted congestion state and
+# contributes at most one rescue-load point per latch window. The accepted rescue
+# recovery event owns decay, while congestion remains strictly read-only here.
+
+
+event "ES A1: Southern Rim Rescue Spillover Latch Ends"
+	clear "world: southern rim rescue spillover active"
+
+
+mission "ES A1: Southern Rim Congestion Rescue Spillover"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: southern rim transit congestion" >= 4
+		"world: merchant rescue load" < 5
+		not "world: southern rim rescue spillover active"
+	on offer
+		set "world: southern rim rescue spillover active"
+		"world: merchant rescue load" += 1
+		"world: merchant rescue load" <?= 5
+		event "ES A1: Merchant Rescue Load Recovery" 5 5
+		event "ES A1: Southern Rim Rescue Spillover Latch Ends" 6 6
+		fail

@@ -1,0 +1,93 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# A1 world simulation: Free Worlds repair-capacity backlog.
+#
+# This feedback loop connects the existing Free Worlds defense-strain and patrol-
+# surge authorities to a bounded repair backlog. Ordinary high defense strain adds
+# one unit of repair demand; an active patrol surge adds two because mobilized ships
+# return through maintenance channels faster than local capacity can absorb them.
+# Each accepted contribution schedules an equal recovery contribution, preserving
+# exact recovery without allowing the backlog to underflow or exceed 6.
+
+
+event "ES A1: Free Worlds Repair Backlog Recovery 1"
+	"world: free worlds repair backlog" -= 1
+	"world: free worlds repair backlog" >?= 0
+	clear "world: free worlds repair backlog notice seen"
+
+
+event "ES A1: Free Worlds Repair Backlog Recovery 2"
+	"world: free worlds repair backlog" -= 2
+	"world: free worlds repair backlog" >?= 0
+	clear "world: free worlds repair backlog notice seen"
+
+
+mission "ES A1: Free Worlds Repair Backlog Strained Intake"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds defense strain" >= 3
+		not "world: free worlds patrol surge"
+		"world: free worlds repair backlog" < 6
+	on offer
+		"world: free worlds repair backlog" += 1
+		"world: free worlds repair backlog" <?= 6
+		event "ES A1: Free Worlds Repair Backlog Recovery 1" 7 7
+		fail
+
+
+mission "ES A1: Free Worlds Repair Backlog Mobilized Intake"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "world: free worlds patrol surge"
+		"world: free worlds defense strain" >= 1
+		"world: free worlds repair backlog" < 5
+	on offer
+		"world: free worlds repair backlog" += 2
+		"world: free worlds repair backlog" <?= 6
+		event "ES A1: Free Worlds Repair Backlog Recovery 2" 7 7
+		fail
+
+
+mission "ES A1: Free Worlds Repair Backlog Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds repair backlog" >= 3
+		not "world: free worlds repair backlog notice seen"
+	on offer
+		message
+			text "Free Worlds maintenance channels report a growing repair queue as strained defense units and mobilized patrol ships cycle back through local yards. Crews are prioritizing flight-critical work while the backlog clears."
+		set "world: free worlds repair backlog notice seen"
+		fail
