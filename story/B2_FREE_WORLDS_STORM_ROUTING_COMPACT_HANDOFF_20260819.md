@@ -3,7 +3,7 @@
 ## Stage and verdict
 
 - Stage: **B2 STORY CHARACTERS + DYNAMIC CONTENT**
-- Initial verdict: **PARTIAL pending exact-head repository-native validation**
+- Verdict: **READY for A3 review/integration**
 - Do not self-integrate. A3 retains integration authority.
 
 ## Authority and ancestry
@@ -13,11 +13,17 @@
 - Isolated branch: `agent/b2-free-worlds-storm-routing-compact-20260819-2225`
 - Production commit: `022e7e1aa2b2ad0525548beeed429eceed7676d5`
 - Production + focused-validator commit: `62b232af00c75ae6e5d8656b448b74083f786bc1`
+- Exact fully validated production/validator/handoff head: `c4f760cdfc7e4d4b7643d15c546d0b404da81444`
 
 The B1 parent was rechecked before B2 authoring. Its exact-head repository-native workflows are both terminal green:
 
-- `Fork simulation and story validation` #161 / `32324387566`: SUCCESS
-- `Fork save-load integration smoke` #150 / `32324387618`: SUCCESS
+- `Fork simulation and story validation` #161 / `32324387566`: **SUCCESS**
+- `Fork save-load integration smoke` #150 / `32324387618`: **SUCCESS**
+
+The exact B2 candidate head `c4f760cdfc7e4d4b7643d15c546d0b404da81444` is also terminal green:
+
+- `Fork simulation and story validation` #162 / `32324784559`: **SUCCESS**
+- `Fork save-load integration smoke` #151 / `32324784412`: **SUCCESS**
 
 A3 should integrate B1 first if it is not already authoritative, then re-read current `main` before considering this B2 branch.
 
@@ -95,6 +101,8 @@ The focused validator checks:
 - distributed-authority continuity;
 - one-shot aftermath consumption.
 
+Repository-native exact-head validation confirms the focused validator, changed-content style gate, wider story/simulation contracts, production build, and stock save-load smoke all passed on `c4f760cdfc7e4d4b7643d15c546d0b404da81444`.
+
 ## Execution-host boundary
 
 The exposed private execution host was inspected before repository work. Its `repository-workspace` remote is `Wiredshark/fallout-test`, not `Wiredshark/star`, and the workspace was already dirty. Five pre-existing service-owned processes were reported and left untouched. No Endless Sky runtime result is claimed from that unrelated host.
@@ -104,9 +112,8 @@ The exposed private execution host was inspected before repository work. Its `re
 Before integration:
 
 1. verify branch ancestry against current authoritative `main` and integrate/reconcile B1 dependency first;
-2. require terminal-green exact-head `Fork simulation and story validation`;
-3. require terminal-green exact-head `Fork save-load integration smoke`;
-4. when practical, actual-game proof of:
+2. confirm the exact validated candidate `c4f760cdfc7e4d4b7643d15c546d0b404da81444` remains semantically unchanged except for this READY handoff update;
+3. when practical, actual-game proof of:
    - Offer only during active storm with strain >= 3;
    - all three substantive routes and refusal;
    - Review only after storm ends and strain <= 1;
