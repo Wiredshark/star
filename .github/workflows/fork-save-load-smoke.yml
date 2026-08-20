@@ -62,7 +62,7 @@ jobs:
       - name: Build production executable
         run: cmake --build build/fork-save-load --config Release --target EndlessSky --parallel 2
 
-      - name: Run stock save-load smoke cases
+      - name: Run stock save-load and A2 runtime acceptance cases
         shell: bash
         run: |
           set -euo pipefail
@@ -77,7 +77,7 @@ jobs:
             local config_dir
             config_dir="$(mktemp -d)"
             cp -a tests/integration/config/. "$config_dir/"
-            echo "Running stock integration test: $test_name"
+            echo "Running integration test: $test_name"
             xvfb-run -a "$GAME" \
               --resources "$GITHUB_WORKSPACE" \
               --config "$config_dir" \
@@ -87,3 +87,11 @@ jobs:
           run_case "Saving during conversation"
           run_case "Loading and Reloading"
           run_case "Loading and Saving"
+
+          # Production A2 actual-game coverage. Each case starts from a fresh
+          # config/save so route state cannot leak between scenarios.
+          run_case "A2 Republic Border Testimony Lineage"
+          run_case "A2 Republic Border Testimony Independence"
+          run_case "A2 Republic Border Testimony Closure"
+          run_case "A2 Republic Border Testimony Local"
+          run_case "A2 Republic Border Testimony Refusal"

@@ -1,0 +1,213 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# Headless actual-game acceptance for the Republic Border Testimony Practice.
+# These tests drive the production mission through the normal spaceport UI,
+# exercise state-dependent labeled responses, persist the selected practice
+# through save/reload, and then exercise the later authoritative A1 recurrence.
+
+
+test "A2 Republic Border Testimony Prepare"
+	status partial
+	description "Load a quiet Republic save and arm the integrated B2 aftermath with recovered A1 border pressure."
+	sequence
+		inject "Three Earthly Barges Save"
+		call "Load First Savegame"
+		apply
+			"Intro [0]: offered" = 1
+			"Intro [0]: declined" = 1
+			"A2 Career Review: seen" = 1
+			"B2 Republic Border Testimony Compact: aftermath seen" = 1
+			"B2 Republic Border Testimony Compact: rook trusts player" = 1
+			"B2 Republic Border Testimony Compact: verran trusts player" = 1
+			"world: republic border pressure" = 0
+		assert
+			"B2 Republic Border Testimony Compact: aftermath seen" == 1
+			"B2 Republic Border Testimony Compact: verran trusts player" == 1
+			"world: republic border pressure" == 0
+
+
+test "A2 Republic Border Testimony Persist And Recur"
+	status partial
+	description "Persist the chosen route through save/reload and exercise the production recurrence mission."
+	sequence
+		input
+			key l
+		call "Save To Default Snapshot"
+		call "Open Menu"
+		call "Load First Savegame"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: recurrence seen" == 0
+		apply
+			"world: republic border pressure" = 4
+		input
+			key p
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: recurrence seen" == 1
+			"A2 Republic Border Testimony Practice: Recurrence: active" == 0
+		# The one-shot gate must remain closed on another spaceport visit.
+		input
+			key l
+		input
+			key p
+		assert
+			"A2 Republic Border Testimony Practice: recurrence seen" == 1
+			"A2 Republic Border Testimony Practice: Recurrence: active" == 0
+
+
+test "A2 Republic Border Testimony Lineage"
+	status active
+	description "Exercise the provenance-packet labeled response, persistence, and later recurrence."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
+		input
+			key p
+		input
+			key "Return"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: lineage" == 1
+			"A2 Republic Border Testimony Practice: closure" == 0
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+		assert
+			"A2 Republic Border Testimony Practice: lineage" == 1
+
+
+test "A2 Republic Border Testimony Independence"
+	status active
+	description "Exercise the Verran-trust labeled response, persistence, and later recurrence."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
+		input
+			key p
+		input
+			key "Return"
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: independence" == 1
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+		assert
+			"A2 Republic Border Testimony Practice: independence" == 1
+
+
+test "A2 Republic Border Testimony Closure"
+	status active
+	description "Exercise the expiry-and-renewal labeled response while the packet-only response is hidden."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement expiry and renewal" = 1
+		input
+			key p
+		input
+			key "Return"
+		# The packet-only lineage option is hidden. Independence is first and
+		# expiry/renewal is therefore the second selectable response.
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: closure" == 1
+			"A2 Republic Border Testimony Practice: lineage" == 0
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+		assert
+			"A2 Republic Border Testimony Practice: closure" == 1
+
+
+test "A2 Republic Border Testimony Local"
+	status active
+	description "Exercise the always-valid local/context route alongside two available persistent-state responses."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
+		input
+			key p
+		input
+			key "Return"
+		input
+			key "Down"
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: local" == 1
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+		assert
+			"A2 Republic Border Testimony Practice: local" == 1
+
+
+test "A2 Republic Border Testimony Refusal"
+	status active
+	description "Exercise explicit refusal and verify that it persists without arming recurrence."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
+		input
+			key p
+		input
+			key "Return"
+		input
+			key "Down"
+		input
+			key "Down"
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: refused" == 1
+			"A2 Republic Border Testimony Practice: decided" == 0
+			"A2 Republic Border Testimony Practice: recurrence seen" == 0
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		input
+			key l
+		call "Save To Default Snapshot"
+		call "Open Menu"
+		call "Load First Savegame"
+		assert
+			"A2 Republic Border Testimony Practice: refused" == 1
+			"A2 Republic Border Testimony Practice: decided" == 0
+			"A2 Republic Border Testimony Practice: recurrence seen" == 0
