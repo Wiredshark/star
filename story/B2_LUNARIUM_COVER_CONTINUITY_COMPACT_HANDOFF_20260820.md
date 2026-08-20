@@ -2,7 +2,7 @@
 
 **Stage:** B2 STORY CHARACTERS + DYNAMIC CONTENT
 
-**Verdict:** PARTIAL — required B1 dependency is fully green; B2 production and focused validator are complete, including one validator-only CI repair, and the final B2 exact-head repository-native workflows remain to be observed.
+**Verdict:** READY for A3 review/integration. Required B1 dependency and the exact B2 production/validator candidate are fully green on repository-native simulation/story/style and production build/save-load workflows.
 
 **Authoritative `main` observed at selection:** `fdaf94f18aaa02abd4e7269196375572cd0fdf9b`
 
@@ -16,7 +16,9 @@
 
 **Initial focused validator:** `a700fedf4d7202db32f54e7a7d4781be7b9a771b`
 
-**Validator repair / exact production+validator candidate:** `cac59ac09812271498cce8c01ffb4261f3e7e056`
+**First validator repair:** `cac59ac09812271498cce8c01ffb4261f3e7e056`
+
+**Exact fully validated production/validator candidate:** `b1b40d1bd7608af011b849add4905eefc7f74bfb`
 
 ## Scope
 
@@ -67,17 +69,28 @@ Before branching, live `main`, recent commits, open B2 PRs, and the current B1 c
 
 This B2 branch is based directly on the B1 Lunarium candidate so A3 must integrate/accept B1 first if it is still outstanding.
 
-## Focused validator / CI repair
+## Focused validator / repairs
 
 `tools/story/validate_b2_lunarium_cover_continuity_compact.py` checks the exact mission graph, characters, gates, routes, settlements, one-shot aftermath, write ownership, no material/reputation mutation, goto/label integrity, and genuine-aid/compartmentation continuity rules.
 
-The first B2 simulation/story workflow discovered the validator correctly but failed one brittle prose assertion because the required phrase crossed a source line break. Production content was not the failing behavior. Commit `cac59ac09812271498cce8c01ffb4261f3e7e056` repairs that validator assertion to tolerate whitespace while preserving the same continuity requirement.
+The first two simulation/story runs found validator-only failures in a prose continuity assertion because the expected phrase crossed a source comment line boundary. Production content and changed-content style were not failing. The final repair `b1b40d1bd7608af011b849add4905eefc7f74bfb` checks the two semantic fragments independently while preserving the same rule.
 
-## Required validation gate
+## Exact validation evidence
 
-Before promotion to READY or A3 integration:
-1. final exact-head `Fork simulation and story validation` must be terminal green;
-2. final exact-head `Fork save-load integration smoke` must be terminal green;
-3. A3 must re-read current authoritative `main`, verify ancestry/conflicts, and preserve the continuity/state-ownership boundaries above.
+On exact candidate `b1b40d1bd7608af011b849add4905eefc7f74bfb`:
+- `Fork simulation and story validation` run `32369503127` / #216: **SUCCESS**.
+- focused story validators, including the Lunarium focused validator: **SUCCESS**.
+- changed-content style: **SUCCESS**.
+- A1/fork state-ownership contracts: **SUCCESS**.
+- `Fork save-load integration smoke` run `32369503193` / #205: **SUCCESS**.
+- production configure/build and stock save-load smoke are therefore green on the exact candidate.
+
+## A3 integration guidance
+
+1. Accept/integrate B1 Lunarium resistance institutional history first if it is not already authoritative.
+2. Re-read current `main` and verify ancestry/conflicts before integrating B2.
+3. Preserve the distinction between genuine civilian aid obligations and clandestine capacity use.
+4. Preserve compartmentation: public charity records may prove an obligation was displaced/restored without revealing covert cargo, identities, routes, or destinations.
+5. Do not reinterpret this compact as a centralized Lunarium logistics bureaucracy.
 
 Do not self-integrate. A3 retains integration authority.
