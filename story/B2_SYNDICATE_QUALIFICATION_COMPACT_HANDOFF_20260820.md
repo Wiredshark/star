@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native exact-head workflow validation. Do not integrate until required simulation/story/style and production save-load gates are terminal green.
+READY for A3 review/integration. Exact production/validator/handoff candidate `1495674acbac1f75eb925558e7f3ea4eb1277914` passed both repository-native validation workflows.
 
 ## Authority / base
 
@@ -15,7 +15,8 @@ PARTIAL pending repository-native exact-head workflow validation. Do not integra
 
 - Production: `bfcb2bacfad05249be6eb53dbfb577471a730a81`
 - Focused validator: `c2d5f8bdd302a5917c1cee351d93cda1e10260eb`
-- This handoff commit becomes the current candidate head.
+- Exact fully validated candidate before this READY wording update: `1495674acbac1f75eb925558e7f3ea4eb1277914`
+- This handoff-only READY update becomes the final branch head; production content and validator are unchanged from the fully validated candidate.
 
 ## Scope
 
@@ -64,22 +65,33 @@ A one-shot character consequence reader that consumes either terminal settlement
 - `tools/story/validate_b2_syndicate_qualification_compact.py`
 - `story/B2_SYNDICATE_QUALIFICATION_COMPACT_HANDOFF_20260820.md`
 
-## Required validation
+## Validation evidence
 
-1. Focused validator:
-   - `python3 tools/story/validate_b2_syndicate_qualification_compact.py`
-2. Repository story/simulation validator suite, including state-ownership contracts.
-3. Changed-content style gate.
-4. Production Endless Sky configure/build.
-5. Stock save/load smoke (`Saving during conversation`, `Loading and Reloading`, `Loading and Saving`).
-6. Actual-game acceptance should observe:
-   - Offer only during active high labor strain + rotation;
-   - all three routes plus refusal;
-   - Review only after A1 recovers strain and rotation ends;
-   - both terminal settlements;
-   - save/reload persistence;
-   - no unexpected overlap/regression with the Tessa Marr maintenance-triage arc.
+Exact candidate `1495674acbac1f75eb925558e7f3ea4eb1277914`:
+
+- `Fork simulation and story validation` run `32335531241` / #179: **SUCCESS**.
+  - Includes automatic focused story validator discovery (including `validate_b2_syndicate_qualification_compact.py`).
+  - Includes repository story/simulation/state-ownership contracts.
+  - Includes changed-content style validation.
+- `Fork save-load integration smoke` run `32335531243` / #168: **SUCCESS**.
+  - Production configuration/build completed successfully.
+  - Stock save/load smoke completed successfully.
+
+The final READY handoff commit changes documentation only; production content and validator remain byte-for-byte the validated candidate versions.
+
+## Remaining observational acceptance
+
+Repository-native validation is green. A3/B3 may still perform actual-game observation of:
+
+- Offer only during active high labor strain + rotation;
+- all three routes plus refusal;
+- Review only after A1 recovers strain and rotation ends;
+- both terminal settlements;
+- save/reload persistence;
+- no undesirable presentation overlap with the Tessa Marr maintenance-triage arc.
+
+These are integration/observation checks, not blockers to the B2 READY verdict after the repository-native production/save-load gates passed.
 
 ## A3 / B3 integration note
 
-If exact-head validation is green, A3 may integrate this isolated branch after confirming current main still contains the B1 Syndicate dockyard-labor history. B3 should preserve the distinction between qualification evidence, local endorsement authority, labor headcount, and actual job-specific competence.
+A3 may integrate this isolated branch after confirming current main still contains the B1 Syndicate dockyard-labor history. B3 should preserve the distinction between qualification evidence, local endorsement authority, labor headcount, and actual job-specific competence.
