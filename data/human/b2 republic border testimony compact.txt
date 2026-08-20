@@ -1,0 +1,158 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Republic Border Testimony Compact production slice.
+#
+# This content consumes the authoritative A1
+# `world: republic border pressure` signal read-only. It focuses on a different
+# layer from the existing customs-review arcs: how patrol observations, civilian
+# witness reports, repeated summaries, and later dispositions should travel while
+# heightened border pressure is active and after it subsides.
+#
+# Talia Rook is a Republic border-records officer. Jace Verran is an independent
+# courier whose route has crossed the pirate frontier often enough to be repeatedly
+# interviewed. Their disagreement is institutional rather than adversarial: Rook
+# wants a durable evidence trail, while Verran wants copied reports to stop turning
+# old suspicion into apparently independent fresh evidence.
+
+
+mission "B2 Republic Border Testimony Compact: Offer"
+	minor
+	name `The Fourth Copy`
+	description `A Republic records officer and an independent courier disagree over how repeated border reports should count while security pressure is elevated.`
+	source
+		government "Republic"
+	to offer
+		"world: republic border pressure" >= 4
+		not "B2 Republic Border Testimony Compact: introduced"
+		not "B2 Republic Border Testimony Compact: declined"
+	on offer
+		conversation
+			`Talia Rook, a Republic border-records officer, has four summaries open on the same screen. Three quote the fourth. Across the desk, courier Jace Verran looks exhausted rather than angry.`
+			`Rook says, "The patrols are under pressure. If the same ship appears in several reports, I cannot simply throw the reports away."`
+			`Verran taps the oldest file. "Then do not count the copies as four witnesses. One patrol saw me. Two clerks summarized that patrol, and a third summary copied both clerks. By the time I reached this port, the paperwork made one observation look like a pattern."`
+			choice
+				`\tBack Rook: preserve every report, but make source lineage and direct observation explicit.`
+					goto lineage
+				`\tBack Verran: operational summaries should carry only independently verified observations, with copied claims linked but not recounted as new evidence.`
+					goto independent
+				`\tUse paired records: keep the complete historical chain while maintaining a separate current-evidence view for decisions.`
+					goto paired
+				`\tRefuse to turn one interview dispute into a general Republic procedure.`
+					goto decline
+			label lineage
+			`You tell Rook to keep the whole record, but mark which entry is a direct patrol observation, which is a civilian statement, which is a clerk's summary, and which is merely a later copy. Verran agrees that history may remain visible if duplication cannot manufacture independent corroboration.`
+			action
+				"B2 Republic Border Testimony Compact: introduced" = 1
+				"B2 Republic Border Testimony Compact: route lineage" = 1
+				"B2 Republic Border Testimony Compact: rook trusts player" = 1
+			accept
+			label independent
+			`You tell them that an operational decision should distinguish independent observations from repeated summaries. Rook keeps the older material as provenance rather than deleting it. Verran accepts that a real earlier observation remains part of the history, but not a fresh witness each time it is copied.`
+			action
+				"B2 Republic Border Testimony Compact: introduced" = 1
+				"B2 Republic Border Testimony Compact: route independent" = 1
+				"B2 Republic Border Testimony Compact: verran trusts player" = 1
+			accept
+			label paired
+			`You separate the problem into two views. The evidence history preserves every source, summary, correction, and contradiction. The current-evidence view shows which observations are independent, how old they are, and whether they have been verified or challenged. Rook and Verran both agree that neither view should silently rewrite the other.`
+			action
+				"B2 Republic Border Testimony Compact: introduced" = 1
+				"B2 Republic Border Testimony Compact: route paired" = 1
+				"B2 Republic Border Testimony Compact: rook trusts player" = 1
+				"B2 Republic Border Testimony Compact: verran trusts player" = 1
+			accept
+			label decline
+			`You decline to establish a standing procedure from one case. Rook records that no general rule was adopted. Verran leaves without entering a later review chain.`
+			action
+				"B2 Republic Border Testimony Compact: declined" = 1
+			decline
+
+
+mission "B2 Republic Border Testimony Compact: Review"
+	minor
+	name `When the Alert Falls`
+	description `Return after Republic border pressure has eased and decide how copied observations, corrections, and dispositions should survive in later records.`
+	source
+		government "Republic"
+	to offer
+		has "B2 Republic Border Testimony Compact: introduced"
+		"world: republic border pressure" <= 2
+		not "B2 Republic Border Testimony Compact: reviewed"
+	on offer
+		conversation
+			branch lineage
+				has "B2 Republic Border Testimony Compact: route lineage"
+			branch independent
+				has "B2 Republic Border Testimony Compact: route independent"
+			`The border alert has eased, but Rook has found a quieter failure. A copied warning can retain the suspicious conclusion while losing the source that produced it, the correction that narrowed it, or the disposition that closed it. Verran says, "Then the pressure falls, but the paperwork never does."`
+			choice
+				`\tUse a portable provenance packet: source type, observation date, independence, corrections, contradictions, current disposition, and open/closed status travel together.`
+					goto packet
+				`\tUse an expiry-and-renewal rule: historical reports remain searchable, but resolved warnings stop propagating as active evidence unless a genuinely new observation reopens them.`
+					goto expiry
+			label lineage
+			`Rook's full lineage preserved the source history, but downstream summaries sometimes copied only the conclusion. One port received "repeated suspicious crossings" without the note that three entries derived from the same patrol observation. Verran says, "History survived. Its shape did not."`
+			choice
+				`\tMake every downstream warning carry the source lineage, corrections, contradictions, and disposition that define what the record actually means.`
+					goto packet
+				`\tLet resolved warnings expire from active circulation unless fresh independent evidence renews them.`
+					goto expiry
+			label independent
+			`Verran's current-evidence view prevented copied reports from becoming independent corroboration, but one port discarded the link to the older record entirely. Rook says, "A correction without provenance can be as misleading as an accusation without provenance."`
+			choice
+				`\tCarry current evidence and its historical provenance together in a portable packet.`
+					goto packet
+				`\tKeep history searchable, but require fresh independent evidence before a closed warning can become active again.`
+					goto expiry
+			label packet
+			`You recommend a portable provenance packet. Every copied border-warning record carries source type, direct-versus-derived status, observation date, independence, corrections, contradictions, current disposition, and whether the warning remains open. Repetition can preserve history without manufacturing corroboration.`
+			action
+				"B2 Republic Border Testimony Compact: reviewed" = 1
+				"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
+				"B2 Republic Border Testimony Compact: rook trusts player" = 1
+				"B2 Republic Border Testimony Compact: verran trusts player" = 1
+			accept
+			label expiry
+			`You recommend an expiry-and-renewal rule. Resolved reports remain in the historical record, but they stop circulating as active warnings. Only a genuinely new observation can reopen the warning, and the reopened record must link back to the old disposition rather than pretending the history never existed.`
+			action
+				"B2 Republic Border Testimony Compact: reviewed" = 1
+				"B2 Republic Border Testimony Compact: settlement expiry and renewal" = 1
+				"B2 Republic Border Testimony Compact: rook trusts player" = 1
+				"B2 Republic Border Testimony Compact: verran trusts player" = 1
+			accept
+
+
+mission "B2 Republic Border Testimony Compact: Rook Remembers"
+	minor
+	name `Rook Remembers`
+	description `A Republic records officer remembers whether repeated border reports remained evidence rather than becoming self-reinforcing suspicion.`
+	source
+		government "Republic"
+	to offer
+		not "B2 Republic Border Testimony Compact: aftermath seen"
+		or
+			has "B2 Republic Border Testimony Compact: settlement portable provenance packet"
+			has "B2 Republic Border Testimony Compact: settlement expiry and renewal"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Republic Border Testimony Compact: settlement expiry and renewal"
+			`Rook shows you a copied warning from another Republic port. "One patrol observation became three summaries, but the packet still identifies one direct source. A correction narrowed the concern, and the final disposition traveled with it. The history stayed intact without multiplying the evidence."`
+			goto record
+			label expiry
+			`Rook closes a warning on her screen. "The old report is still searchable. It simply stopped behaving like a current accusation when the evidence was resolved. If a new patrol sees something new, that will be a new observation, not a resurrection by photocopy."`
+			label record
+			action
+				"B2 Republic Border Testimony Compact: aftermath seen" = 1
+			accept
