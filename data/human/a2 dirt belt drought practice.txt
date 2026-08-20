@@ -1,0 +1,91 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# A2 Dirt Belt Drought Resource Practice.
++# Consumes authoritative A1 drought and irrigation strain read-only.
+
+mission "A2 Dirt Belt Drought Practice: Briefing"
+	landing
+	minor
+	invisible
+	source
+		government "Republic"
+		attributes "dirt belt"
+		attributes "farming"
+	to offer
+		"world: dirt belt drought pressure" >= 3
+		"world: dirt belt irrigation reserve strain" >= 2
+		not "A2 Dirt Belt Drought Practice: introduced"
+		not "A2 Dirt Belt Drought Practice: declined"
+		random < 24
+	on offer
+		conversation
+			`A cooperative water clerk named Mara Dene catches you beside a pump-allocation board. Relief shipments are still arriving, but repeated drought calls have drawn down stored water, pump time, maintenance windows, and the margin that lets neighboring farms help one another.`
+			`\t"A delivered tank closes one need," she says. "It does not rewind pump wear or refill every reserve behind it. If we carry a rule forward, it needs to remember that difference."`
+			choice
+				`\tProtect a minimum irrigation reserve before discretionary transfers. Immediate relief should not silently consume the capacity needed for the next failure.`
+					goto reserve
+				`\tTrack borrowed water, pump time, and maintenance as obligations that remain open until the lending capacity is actually restored.`
+					goto obligations
+				`\tUse current field conditions and receiving capacity rather than treating an old drought label as permanent priority.`
+					goto current
+				`\tRefuse to establish a standing allocation practice.`
+					goto refuse
+			label reserve
+			`You choose a reserve-floor practice. Emergency transfers can cross the floor when lives or crops are immediately at risk, but the exception stays visible and creates a restoration obligation instead of becoming the new normal.`
+			action
+				"A2 Dirt Belt Drought Practice: introduced" = 1
+				"A2 Dirt Belt Drought Practice: reserve floor" = 1
+			accept
+			label obligations
+			`You choose obligation tracking. A successful delivery records what was borrowed to make it possible, so the receiving farm's relief does not erase the donor's depleted storage, deferred pump service, or lost contingency margin.`
+			action
+				"A2 Dirt Belt Drought Practice: introduced" = 1
+				"A2 Dirt Belt Drought Practice: restoration obligations" = 1
+			accept
+			label current
+			`You choose current-condition review. Historical drought records remain evidence, but present soil, storage, pump availability, and receiving capacity decide whether yesterday's priority still fits today's need.`
+			action
+				"A2 Dirt Belt Drought Practice: introduced" = 1
+				"A2 Dirt Belt Drought Practice: current conditions" = 1
+			accept
+			label refuse
+			`You decline to turn this drought episode into a standing rule. Mara records no policy in your name and does not treat refusal as consent.`
+			action
+				"A2 Dirt Belt Drought Practice: declined" = 1
+			decline
+
+mission "A2 Dirt Belt Drought Practice: Recovery Review"
+	landing
+	minor
+	invisible
+	source
+		government "Republic"
+		attributes "dirt belt"
+		attributes "farming"
+	to offer
+		has "A2 Dirt Belt Drought Practice: introduced"
+		not "A2 Dirt Belt Drought Practice: recovery seen"
+		"world: dirt belt drought pressure" <= 1
+		"world: dirt belt irrigation reserve strain" <= 1
+		random < 30
+	on offer
+		conversation
+			branch obligations
+				has "A2 Dirt Belt Drought Practice: restoration obligations"
+			branch current
+				has "A2 Dirt Belt Drought Practice: current conditions"
+			`Mara shows you the post-drought reserve board. The visible emergency has eased, but one district is still rebuilding pump margin. Because the reserve floor stayed explicit, routine transfers resume only above that floor while the remaining exception is still marked for restoration. Recovery is treated as capacity returning, not merely the absence of a fresh emergency call.`
+			goto done
+			label obligations
+			`Mara closes several transfer lines, but not all of them. The crops were saved weeks ago; only now have replacement pump hours and stored-water contributions restored what neighboring farms lent. The ledger lets the relief outcome and the restoration outcome close on different dates.`
+			goto done
+			label current
+			`A farm that dominated the old drought board now has usable storage again, while a smaller neighbor has a new pump outage. Current-condition review moves scarce maintenance capacity without pretending the old drought never happened. History remains evidence, but it is not a permanent queue position.`
+			label done
+			action
+				"A2 Dirt Belt Drought Practice: recovery seen" = 1
+			accept
