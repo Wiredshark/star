@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Iije History: First Observation Ledger"
+	minor
+	invisible
+	source "Vinci"
+	to offer
+		has "Rulei: You Are (Not) Alone: L-6181: offered"
+		random < 4
+	on offer
+		conversation
+			`A natural-history archive has begun preserving the earliest shipboard records from the Umbral Reach that describe the creatures now catalogued as Iije. The first useful entry is notably cautious: scanners initially classified the small organism in L-6181 as little more than a collection of matter, while the crew's direct observation recorded unmistakable movement and behavior.`
+			`\tAn archivist says that contradiction became part of the record rather than something to be edited away. Later observers can compare instrument limits, visual reports, stellar conditions, and the creature's response to nearby light without pretending the first encounter explained what kind of life it was.`
+			`\tThe ledger's value is historical as much as biological. It preserves the moment explorers learned that apparent emptiness in the Umbral Reach did not mean lifelessness, while keeping the difference between what was seen and what was inferred visible to anyone who studies the record later.`
+				decline
+
+
+mission "Iije History: Growth Record"
+	minor
+	invisible
+	source "Midgard"
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		random < 4
+	on offer
+		conversation
+			`A xenobiology office displays comparison sheets for the small Jje and the much larger Ayym encountered deeper in the Umbral Reach. Current field classification treats them as adolescent and adult forms of the same broader Iije life cycle, but the annotations are careful about how much of that cycle has actually been witnessed.`
+			`\tThe smaller form is associated with consumption of stellar dust, matter, and energy and is often drawn toward light. The larger form can survive on a far greater scale and appears capable of gathering matter over immense spans of time. Those observations fit a growth sequence, but no human expedition has watched one organism transform from one form into the other.`
+			`\tResearchers therefore preserve both the working model and its evidentiary limits. A useful natural history can accumulate over generations without turning a plausible life-cycle reconstruction into an event someone falsely claims to have observed.`
+				decline
+
+
+mission "Iije History: Grouping and Transport Archive"
+	minor
+	invisible
+	source "Mirrorlake"
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		random < 4
+	on offer
+		conversation
+			`A behavioral archive contains route sketches from captains who encountered groups of Jje and the rarer Ayym. Several independent reports describe the larger creatures carrying smaller Jje through the Reach, sometimes more than one at a time, but the archive refuses to label the behavior as parenting, migration, protection, or feeding.`
+			`\tA curator explains that this restraint is deliberate. Repeated transport behavior is an observation; its social purpose is an interpretation. The Iije are mute to human instruments and have never supplied a convenient explanation of their own behavior.`
+			`\tInstead, each sighting records group size, stellar conditions, relative motion, nearby light sources, and whether the smaller creatures remained with the adult afterward. Over time, the institution hopes patterns will narrow the possibilities without erasing the uncertainty that made the original encounters scientifically valuable.`
+				decline
+
+
+mission "Iije History: Stellar Feeding Survey"
+	minor
+	invisible
+	source "Earth"
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		random < 4
+	on offer
+		conversation
+			`A survey office has assembled a sparse map of Iije sightings against stellar brightness, dust concentration, and local debris fields. The records support the long-standing observation that the smaller creatures gather stellar matter and energy and are often attracted to light, while the much larger form appears adapted to collecting material on a scale no short expedition can meaningfully follow.`
+			`\tThe practical notes are almost as important as the biology. Bright work lights can change the movement of nearby Jje, and a creature harmless at a distance may still cross a ship's path if a crew mistakes attraction for deliberate approach.`
+			`\tThe archive therefore treats navigation practice and natural history as parts of the same record: observe without provoking, note the conditions that may have influenced the encounter, and do not convert an animal's response to energy or light into evidence of hostility, curiosity, or intent that the observation itself cannot support.`
+				decline
