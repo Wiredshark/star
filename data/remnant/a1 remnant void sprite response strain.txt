@@ -1,0 +1,116 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Remnant void-sprite conservation/security response strain.
+#
+# The stock Cognizance campaign establishes confirmed Korath hunting of void
+# sprites, a Remnant defense response, and a later organized task-force phase.
+# This slice models the temporary research, security, salvage, maintenance, and
+# surveillance capacity consumed during that documented response. Cognizance
+# campaign conditions remain authoritative read-only inputs.
+
+
+event "ES A1: Remnant Void Sprite Response Recovery"
+	"world: remnant void sprite response strain" -= 1
+	"world: remnant void sprite response strain" >?= 0
+
+
+event "ES A1: Remnant Void Sprite Response Observation Ends"
+	clear "world: remnant void sprite response observation"
+
+
+event "ES A1: Remnant Void Sprite Response Stabilization Ends"
+	clear "world: remnant void sprite response stabilization"
+
+
+mission "ES A1: Remnant Void Sprite Response Pressure"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Remnant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "Remnant: Cognizance 2: done"
+		not "Remnant: Cognizance 5: done"
+		not "world: remnant void sprite response observation"
+		"world: remnant void sprite response strain" < 6
+	on offer
+		set "world: remnant void sprite response observation"
+		"world: remnant void sprite response strain" += 1
+		"world: remnant void sprite response strain" <?= 6
+		event "ES A1: Remnant Void Sprite Response Recovery" 8 8
+		event "ES A1: Remnant Void Sprite Response Observation Ends" 3 3
+		fail
+
+
+# Cognizance 5 represents the organized hunter-fleet response returning to Remnant
+# space. It does not erase every outstanding obligation, but it permits accelerated
+# normalization of the temporary response load.
+mission "ES A1: Remnant Void Sprite Response Stabilization"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Remnant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "Remnant: Cognizance 5: done"
+		"world: remnant void sprite response strain" >= 2
+		not "world: remnant void sprite response stabilization"
+	on offer
+		set "world: remnant void sprite response stabilization"
+		"world: remnant void sprite response strain" -= 2
+		"world: remnant void sprite response strain" >?= 0
+		event "ES A1: Remnant Void Sprite Response Stabilization Ends" 5 5
+		fail
+
+
+mission "ES A1: Remnant Void Sprite Response Advisory"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Remnant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: remnant void sprite response strain" >= 3
+		not "world: remnant void sprite response advisory seen"
+	on offer
+		message
+			text "Remnant channels report sustained demand on surveillance, xenobiology, salvage, maintenance, and defensive readiness around the void-sprite response. The immediate hunter threat and the capacity needed to investigate, protect, and recover are being tracked separately."
+		set "world: remnant void sprite response advisory seen"
+		fail
+
+
+mission "ES A1: Remnant Void Sprite Response Advisory Reset"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Remnant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: remnant void sprite response strain" <= 1
+		has "world: remnant void sprite response advisory seen"
+	on offer
+		clear "world: remnant void sprite response advisory seen"
+		fail

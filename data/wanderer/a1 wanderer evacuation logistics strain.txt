@@ -1,0 +1,117 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Wanderer wartime evacuation-logistics strain.
+#
+# The stock Wanderer campaign already establishes an Unfettered invasion, refugee
+# transports, successive civilian evacuations, and a later point where the major
+# front-line civilian withdrawal is complete. This slice turns that existing
+# campaign truth into bounded reception/transport/support-capacity pressure. It
+# never writes the campaign conditions that trigger or end the episode.
+
+
+event "ES A1: Wanderer Evacuation Strain Recovery"
+	"world: wanderer evacuation logistics strain" -= 1
+	"world: wanderer evacuation logistics strain" >?= 0
+
+
+event "ES A1: Wanderer Evacuation Observation Ends"
+	clear "world: wanderer evacuation logistics observation"
+
+
+event "ES A1: Wanderer Evacuation Stabilization Ends"
+	clear "world: wanderer evacuation logistics stabilization"
+
+
+mission "ES A1: Wanderer Evacuation Logistics Pressure"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Wanderer"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "event: wanderers: unfettered invasion starts"
+		not "Wanderers Invaded 3: done"
+		not "world: wanderer evacuation logistics observation"
+		"world: wanderer evacuation logistics strain" < 6
+	on offer
+		set "world: wanderer evacuation logistics observation"
+		"world: wanderer evacuation logistics strain" += 1
+		"world: wanderer evacuation logistics strain" <?= 6
+		event "ES A1: Wanderer Evacuation Strain Recovery" 7 7
+		event "ES A1: Wanderer Evacuation Observation Ends" 3 3
+		fail
+
+
+# Once the major civilian withdrawal represented by Wanderers Invaded 3 is done,
+# the same transport and reception network can begin unwinding extraordinary load.
+# This accelerates recovery without erasing the already-scheduled contribution
+# recoveries; the numeric state remains clamped at zero.
+mission "ES A1: Wanderer Evacuation Logistics Stabilization"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Wanderer"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "Wanderers Invaded 3: done"
+		"world: wanderer evacuation logistics strain" >= 2
+		not "world: wanderer evacuation logistics stabilization"
+	on offer
+		set "world: wanderer evacuation logistics stabilization"
+		"world: wanderer evacuation logistics strain" -= 2
+		"world: wanderer evacuation logistics strain" >?= 0
+		event "ES A1: Wanderer Evacuation Stabilization Ends" 5 5
+		fail
+
+
+mission "ES A1: Wanderer Evacuation Logistics Advisory"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Wanderer"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: wanderer evacuation logistics strain" >= 3
+		not "world: wanderer evacuation logistics advisory seen"
+	on offer
+		message
+			text "Wanderer ports are stretching refugee transports, reception berths, shelter space, and support crews across the retreat corridor. Local coordinators warn that arriving safely does not mean the borrowed capacity has already recovered."
+		set "world: wanderer evacuation logistics advisory seen"
+		fail
+
+
+mission "ES A1: Wanderer Evacuation Logistics Advisory Reset"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Wanderer"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: wanderer evacuation logistics strain" <= 1
+		has "world: wanderer evacuation logistics advisory seen"
+	on offer
+		clear "world: wanderer evacuation logistics advisory seen"
+		fail
