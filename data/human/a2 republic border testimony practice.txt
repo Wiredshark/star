@@ -35,7 +35,7 @@ mission "A2 Republic Border Testimony Practice: Briefing"
 						has "B2 Republic Border Testimony Compact: settlement portable provenance packet"
 					goto lineage
 				`\t[Verran trusts your evidence judgment] Preserve independence: repeated copies may preserve history, but only genuinely independent observations increase corroboration.`
-					to display
+					to activate
 						has "B2 Republic Border Testimony Compact: verran trusts player"
 					goto independence
 				`\t[Settlement: Expiry and renewal] Preserve closure: resolved warnings remain searchable history but need genuinely new evidence before becoming active again.`
