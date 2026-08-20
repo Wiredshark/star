@@ -5,7 +5,7 @@
 # Foundation, either version 3 of the License, or (at your option) any later version.
 #
 # A2 Dirt Belt Drought Resource Practice.
-+# Consumes authoritative A1 drought and irrigation strain read-only.
+# Consumes authoritative A1 drought and irrigation strain read-only.
 
 mission "A2 Dirt Belt Drought Practice: Briefing"
 	landing
