@@ -1,0 +1,87 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Syndicate dockyard labor strain.
+#
+# Existing maintenance backlog is read-only input. Persistent backlog consumes
+# available repair labor; high strain triggers a bounded crew-rotation response.
+# This file owns only the labor-strain and rotation state below.
+
+
+event "ES A1: Syndicate Labor Strain Recovery"
+	"world: syndicate labor strain" -= 1
+	"world: syndicate labor strain" >?= 0
+
+
+event "ES A1: Syndicate Labor Rotation Ends"
+	clear "world: syndicate labor rotation active"
+	clear "world: syndicate labor rotation notice seen"
+
+
+mission "ES A1: Syndicate Labor Strain Accumulation"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Syndicate"
+	destination "Earth"
+	to offer
+		"world: syndicate maintenance backlog" >= 3
+		not "world: syndicate labor rotation active"
+		"world: syndicate labor strain" < 6
+	on offer
+		"world: syndicate labor strain" += 1
+		"world: syndicate labor strain" <?= 6
+		event "ES A1: Syndicate Labor Strain Recovery" 8 8
+		fail
+
+
+# At severe strain, rotate crews before exhaustion becomes self-reinforcing.
+# The response consumes exactly two units of this file's own accumulated signal
+# and locks further accumulation for five days; existing backlog is never edited.
+mission "ES A1: Syndicate Labor Rotation"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Syndicate"
+	destination "Earth"
+	to offer
+		"world: syndicate labor strain" >= 5
+		not "world: syndicate labor rotation active"
+	on offer
+		set "world: syndicate labor rotation active"
+		"world: syndicate labor strain" -= 2
+		"world: syndicate labor strain" >?= 0
+		event "ES A1: Syndicate Labor Rotation Ends" 5 5
+		fail
+
+
+mission "ES A1: Syndicate Labor Rotation Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Syndicate"
+	destination "Earth"
+	to offer
+		has "world: syndicate labor rotation active"
+		not "world: syndicate labor rotation notice seen"
+	on offer
+		message
+			text "Syndicate dockyards are rotating repair crews off strained shifts while maintenance demand remains elevated. Dispatch boards warn of temporarily reduced labor availability until replacement teams cycle in."
+		set "world: syndicate labor rotation notice seen"
+		fail
