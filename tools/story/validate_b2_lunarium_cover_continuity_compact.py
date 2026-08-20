@@ -86,7 +86,10 @@ for phrase in (
 
 # Guard against collapsing the charity into a fake front or exposing covert details.
 assert "charity remains a real civic institution" in low
-assert "civilian manifests must not become a disguised record of clandestine operations" in low
+assert re.search(
+    r"civilian manifests must not become a\s+disguised record of clandestine operations",
+    low,
+), "civilian/covert record separation wording disappeared"
 assert "keep the cover real" in low
 assert "keep the secret secret" in low
 assert "contains no description of the covert cargo" in low
