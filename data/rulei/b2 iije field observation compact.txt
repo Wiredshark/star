@@ -1,0 +1,150 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Iije Field Observation Compact.
+# Consumes B1 Iije natural-history records and preserves the difference between
+# spontaneous behavior and behavior elicited by human light, motion, or sensors.
+# Observer and Pilot are the player's private shorthand, not formal titles.
+
+
+event "B2 Iije Field Observation Compact: Review Ready"
+	"B2 Iije Field Observation Compact: review ready" = 1
+
+
+mission "B2 Iije Field Observation Compact: Offer"
+	minor
+	name `The Light Changes the Answer`
+	description `Two researchers disagree over whether deliberate light exposure is useful Iije field science or a distortion that must remain separate from natural observation.`
+	source "Midgard"
+	"offer precedence" 8
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		has "Iije History: Stellar Feeding Survey: offered"
+		not "B2 Iije Field Observation Compact: introduced"
+		not "B2 Iije Field Observation Compact: declined"
+	on offer
+		conversation
+			`A xenobiology team has returned from the Umbral Reach with two reports that appear to contradict each other. One crew watched several Jje drift slowly around a dim debris field. Another recorded the same kind of creature crossing a ship's path within minutes of a work light being switched on. The disagreement is not over what happened, but over whether the second observation belongs in the same behavioral record as the first.`
+			`\tTwo people have become familiar enough that you have private shorthand for them. You think of the careful field biologist as the Observer and the expedition pilot as the Pilot. Neither has introduced those words as a title. The Observer wants a clean record of unprovoked behavior. The Pilot argues that controlled light exposure is valuable because crews need to know how Jje react to conditions human ships actually create.`
+			choice
+				`\tPrioritize passive observation. Record natural behavior first, with artificial light minimized whenever safety allows.`
+					goto passive
+				`\tAllow controlled light trials, but label every observed response as stimulus-elicited rather than spontaneous behavior.`
+					goto stimulus
+				`\tKeep paired records: a baseline observation and a linked stimulus trial using measured light, distance, and duration.`
+					goto paired
+				`\tDecline to set a field protocol for a species whose behavior is still poorly understood.`
+					goto decline
+			label passive
+			`You side with the Observer on sequence rather than certainty. The team will first document local brightness, dust, nearby matter, group size, and movement before changing the scene. If a light must be used for safety, that intervention becomes a boundary in the record. The Pilot accepts the rule as long as the archive does not pretend unprovoked behavior is the only behavior crews need to understand.`
+			action
+				"B2 Iije Field Observation Compact: introduced" = 1
+				"B2 Iije Field Observation Compact: route passive" = 1
+				"B2 Iije Field Observation Compact: observer trusts player" = 1
+				event "B2 Iije Field Observation Compact: Review Ready" 7 11
+				accept
+			label stimulus
+			`You agree with the Pilot that a controlled stimulus can answer a practical question, but only if the question remains visible. The team writes the light output, range, exposure time, stellar conditions, and exact point at which the Jje changes course. The resulting report can say how the creature responded to that stimulus; it cannot quietly turn the response into evidence of how Jje move when humans are absent.`
+			action
+				"B2 Iije Field Observation Compact: introduced" = 1
+				"B2 Iije Field Observation Compact: route stimulus" = 1
+				"B2 Iije Field Observation Compact: pilot trusts player" = 1
+				event "B2 Iije Field Observation Compact: Review Ready" 7 11
+				accept
+			label paired
+			`You suggest treating baseline and stimulus work as different layers of the same field record. The Observer freezes the pre-intervention conditions. The Pilot adds a second record for the measured light trial, including exactly what the ship changed. Later researchers can compare the two without losing which behavior preceded human interference and which followed it.`
+			action
+				"B2 Iije Field Observation Compact: introduced" = 1
+				"B2 Iije Field Observation Compact: route paired" = 1
+				"B2 Iije Field Observation Compact: observer trusts player" = 1
+				"B2 Iije Field Observation Compact: pilot trusts player" = 1
+				event "B2 Iije Field Observation Compact: Review Ready" 7 11
+				accept
+			label decline
+			`You tell them the archive should not acquire a protocol merely because an outsider happened to be present for the argument. The Observer keeps the passive record separate. The Pilot keeps the trial notes. Their disagreement remains visible, and no later report can honestly claim that you settled it.`
+			action
+				"B2 Iije Field Observation Compact: declined" = 1
+				decline
+
+
+mission "B2 Iije Field Observation Compact: Review"
+	minor
+	name `A Reaction Without Its Cause`
+	description `The Observer and Pilot return after copied Iije reports begin losing the conditions that distinguish spontaneous movement from stimulus-elicited response.`
+	source "Midgard"
+	"offer precedence" 8
+	to offer
+		has "B2 Iije Field Observation Compact: introduced"
+		has "B2 Iije Field Observation Compact: review ready"
+		not "B2 Iije Field Observation Compact: reviewed"
+	on offer
+		conversation
+			branch passive
+				has "B2 Iije Field Observation Compact: route passive"
+			branch stimulus
+				has "B2 Iije Field Observation Compact: route stimulus"
+			`The Observer and Pilot show you several route advisories derived from the paired field records. The original archive still marks baseline observations and controlled light trials separately. Downstream copies do not. One advisory now says that Jje "approach bright ships" without preserving whether the observed creature was already nearby, how bright the light was, or what other stellar matter surrounded it.`
+				goto settle
+			label passive
+			`The passive-first records remained careful, but later crews added their own encounter notes without marking where safety lighting or sensor pulses changed the scene. The archive can still reconstruct the boundary by comparing timestamps, but the exported summaries make spontaneous and elicited behavior look like one continuous category.`
+				goto settle
+			label stimulus
+			`The controlled trials produced useful navigation data, but copied safety notes preserve the reaction while dropping the stimulus parameters. A response measured under a strong work light is now being quoted as though any illuminated ship should expect the same behavior. The Pilot admits that a useful experiment becomes misleading when its cause is stripped away.`
+			label settle
+			choice
+				`\tAttach a stimulus provenance packet to every behavioral observation: ambient conditions, human intervention, instrument limits, timing, and unresolved uncertainty.`
+					goto packet
+				`\tRequire reversible field models: every summary or prediction must link back to separable baseline observations and stimulus trials so later analysts can revise the interpretation without rewriting the evidence.`
+					goto reversible
+			label packet
+			`You recommend making the circumstances travel with the behavior. A downstream record cannot simply say that a Jje approached a light; it must retain the ambient brightness, distance, duration, nearby matter, the exact human stimulus, and what the instruments could not resolve. The Observer says the packet preserves natural history. The Pilot says it also makes navigation advice easier to compare across ships because crews can see whether two encounters were actually similar.`
+			action
+				"B2 Iije Field Observation Compact: reviewed" = 1
+				"B2 Iije Field Observation Compact: settlement stimulus provenance packet" = 1
+				"B2 Iije Field Observation Compact: observer trusts player" = 1
+				"B2 Iije Field Observation Compact: pilot trusts player" = 1
+				accept
+			label reversible
+			`You suggest that behavioral models should be treated as replaceable interpretations over fixed evidence layers. The baseline record, stimulus record, sensor limits, and environmental context remain individually accessible. A later researcher can change a prediction about Iije movement without changing what the expedition actually observed. The Observer calls that scientific memory. The Pilot calls it a way to improve route guidance without pretending yesterday's model was a fact.`
+			action
+				"B2 Iije Field Observation Compact: reviewed" = 1
+				"B2 Iije Field Observation Compact: settlement reversible field model" = 1
+				"B2 Iije Field Observation Compact: observer trusts player" = 1
+				"B2 Iije Field Observation Compact: pilot trusts player" = 1
+				accept
+
+
+mission "B2 Iije Field Observation Compact: Pilot Remembers"
+	minor
+	name `The Pilot Remembers`
+	description `The Pilot shows how the field protocol now keeps useful navigation advice tied to the conditions that produced it.`
+	source "Mirrorlake"
+	"offer precedence" 8
+	to offer
+		not "B2 Iije Field Observation Compact: aftermath seen"
+		or
+			has "B2 Iije Field Observation Compact: settlement stimulus provenance packet"
+			has "B2 Iije Field Observation Compact: settlement reversible field model"
+	on offer
+		conversation
+			branch reversible
+				has "B2 Iije Field Observation Compact: settlement reversible field model"
+			`The Pilot recognizes you beside a navigation display. A recent Jje encounter is summarized in a few useful lines, but the full provenance packet travels with it: ambient stellar brightness, local debris, ship lighting, range, exposure duration, sensor limits, and an explicit note that the observed response does not establish intent. Another crew can compare conditions instead of copying only the conclusion.`
+				goto finish
+			label reversible
+			`The Pilot recognizes you and opens a route model that has recently changed. The prediction is newer, but the baseline sightings and controlled stimulus trials beneath it are still intact and separately labeled. The Observer has revised one interpretation without erasing the old field record. The Pilot says that is the first time the archive has become more useful without becoming more certain than the evidence allows.`
+			label finish
+			action
+				"B2 Iije Field Observation Compact: aftermath seen" = 1
+				accept
