@@ -4,17 +4,20 @@
 
 B2 STORY CHARACTERS + DYNAMIC CONTENT
 
-## Current verdict
+## Verdict
 
-PARTIAL pending exact-head repository-native simulation/story/style and production save-load/build validation.
+READY for A3 review/integration.
 
 ## Repository authority
 
-- Authoritative `main` observed at slice selection: `2f497a46d4787d6081bd4a59c6d7800a3d06c8f2`.
+- Authoritative `main` observed at slice selection and final pre-handoff recheck: `2f497a46d4787d6081bd4a59c6d7800a3d06c8f2`.
 - Required B1 parent: `0bba94eea1dfe9daa7588e23ece87ec527aa575e` (`B1: Kor Efret resettlement institutional history`).
+- B1 dependency repository-native validation: simulation/story #225 / `32379693666` SUCCESS; save-load #214 / `32379693797` SUCCESS.
 - Isolated branch: `agent/b2-kor-efret-resettlement-compact-20260820-1027`.
 - Production commit: `0b91871af14a5065c9408d22f3e9ae7ad6afd377`.
-- Focused-validator commit: `62c5a14570ab393b69c1376e0c737275fd14590b`.
+- Initial focused-validator commit: `62c5a14570ab393b69c1376e0c737275fd14590b`.
+- Validator case-sensitivity repair: `a4622393a01c1f51354b8814561d39304ef5b26f`.
+- Exact fully validated production/validator candidate: `5f9db581605db8f12e5f51d1c98238d8e1d32c32`.
 
 ## Scope
 
@@ -52,7 +55,7 @@ The Review resolves into exactly one of two persistent settlements:
 
 ## B1 dependency and non-overlap
 
-This slice consumes the new B1 Kor Efret resettlement institutions:
+This slice consumes the B1 Kor Efret resettlement institutions:
 
 - Family Reunification Register;
 - Passage Contribution Ledger;
@@ -73,9 +76,9 @@ This is deliberately distinct from the already integrated `B2 Kor Efret Reconstr
 - Low-fare/shared passage does not imply a centralized subsidy or a universal Kor Efret transport authority.
 - The slice introduces no mandatory return policy, named founder, hard chronology, or universal translation claim.
 
-## Validation implemented
+## Validation and repair history
 
-Focused validator checks:
+The focused validator checks:
 
 - exact three-mission graph;
 - Tracker/Passage Keeper private-shorthand continuity;
@@ -89,19 +92,36 @@ Focused validator checks:
 - preservation of safety/contact/preference/resettlement distinctions;
 - explicit voluntary-resettlement safeguards.
 
-## Remaining acceptance gates
+The first two simulation/story attempts exposed validator-only wording brittleness, not production-content/style failures. The final validator was aligned to the actual production semantic invariant rather than requiring the stronger literal phrase `physically safe`.
 
-Before promotion to READY or A3 integration, require exact-head:
+On exact candidate `5f9db581605db8f12e5f51d1c98238d8e1d32c32`:
 
-1. `Fork simulation and story validation` SUCCESS, including changed-content style, focused validator discovery/execution, and state-ownership contracts.
-2. `Fork save-load integration smoke` SUCCESS, including production configure/build and stock save/load smoke.
-3. Recheck current `main` and B1 dependency ancestry/conflict state immediately before integration.
+- `Fork simulation and story validation` #228 / `32380890906`: **SUCCESS**.
+- Changed-content style: **SUCCESS**.
+- Focused story validators, including `validate_b2_kor_efret_passage_continuity_compact.py`: **SUCCESS**.
+- Fork story/state-ownership contracts: **SUCCESS**.
+- A1 simulation contract tests: **SUCCESS**.
+- `Fork save-load integration smoke` #217 / `32380890866`: **SUCCESS**.
+- Production configure/build: **SUCCESS**.
+- Stock save-load smoke: **SUCCESS**.
+
+## Isolation evidence
+
+Exact B1-parent-to-validated-candidate comparison:
+
+- 5 commits ahead / 0 behind;
+- exactly 3 changed files;
+- `data/korath/b2 kor efret passage continuity compact.txt`: added;
+- `tools/story/validate_b2_kor_efret_passage_continuity_compact.py`: added;
+- `story/B2_KOR_EFRET_PASSAGE_CONTINUITY_COMPACT_HANDOFF_20260820.md`: added.
+
+The extra commits beyond the three files are validator/handoff repair commits; production scope did not expand.
 
 ## A2 / B3 / A3 consumption notes
 
 - **A2** may consume the difference between safety, contact, destination preference, reunion, and voluntary resettlement for later player practice/consequence content.
 - **B3** should reject continuity that treats arrival as automatic settlement, family tracing as compulsory return, or old destination preference as permanent consent.
-- **A3** should integrate/accept the B1 Kor Efret resettlement-history dependency first, then this B2 slice only if exact-head validation is green and current-main reconciliation remains clean.
+- **A3** should integrate/accept the B1 Kor Efret resettlement-history dependency first, then this B2 slice after re-reading current `main` and confirming ancestry/continuity remain clean.
 
 ## Host/process boundary
 
