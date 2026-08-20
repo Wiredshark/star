@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Remnant Field Authority Compact.
+#
+# Consumes B1's Remnant qualification/authority history and the authority model
+# already explained by Plume in the Cognizance arc. A specialist may identify a
+# danger inside a qualified field, but that designation does not automatically
+# decide tactics, resource priority, quarantine scale, or cross-discipline action.
+
+
+event "B2 Remnant Field Authority Compact: Review Ready"
+	"B2 Remnant Field Authority Compact: review ready" = 1
+
+
+mission "B2 Remnant Field Authority Compact: Offer"
+	minor
+	name `A Threat Is Not an Order`
+	description `Plume and Prefect Chilia disagree over how a specialist threat designation should travel when the practical response crosses several fields of Remnant authority.`
+	source
+		government "Remnant"
+	"offer precedence" 8
+	to offer
+		has "Remnant: Cognizance 4: done"
+		has "Remnant Qualification Ledger Archive: offered"
+		not "B2 Remnant Field Authority Compact: introduced"
+		not "B2 Remnant Field Authority Compact: declined"
+	on offer
+		conversation
+			`You find Plume and Prefect Chilia studying the same field report from opposite ends of a display. A survey team has documented a biological hazard inside a research corridor used by patrol craft, civilian couriers, and several laboratory shuttles. Plume has formally designated the hazard a threat to Remnant research. Chilia agrees that the designation must be taken seriously, but objects to a copied summary that now reads as though Plume ordered the corridor closed.`
+			`Plume signs with visible irritation. "I did not order a military closure. I identified a danger inside my field and said it cannot be ignored." Chilia answers, "And three offices copied the word 'threat' without copying whose authority ended where. One patrol commander now believes your designation settled the routing decision."`
+			`The old qualification ledgers preserved this distinction: competence could create authority inside a field without turning that authority into a universal chain of command. Plume and Chilia ask how the present-day record should keep that boundary visible when a problem crosses xenobiology, navigation, logistics, and defense.`
+			choice
+				`\tRequire an authority map: every designation should identify the specialist field, the decision it can bind, the decisions it cannot bind, and the next authority required for cross-discipline action.`
+					goto map
+				`\tUse prefect escalation: preserve each specialist recommendation separately, then make the cross-discipline priority decision explicit as a distinct adjudication rather than an implied extension of the first designation.`
+					goto adjudication
+				`\tPair both: carry the specialist's bounded designation together with a separate response record naming who owns routing, force, logistics, and review.`
+					goto paired
+				`\tRefuse to turn one disputed report into a standing procedure for every Remnant specialty.`
+					goto decline
+			label map
+			`You recommend an authority map. Plume's biological designation can bind the scientific record inside xenobiology: the hazard is real enough to require consideration. It cannot silently decide patrol tactics, traffic closure, fuel allocation, or engineering work. Those decisions name their own qualified authority. Chilia approves of the boundary because it lets a warning remain strong without pretending expertise is transferable.`
+			action
+				"B2 Remnant Field Authority Compact: introduced" = 1
+				"B2 Remnant Field Authority Compact: route authority map" = 1
+				"B2 Remnant Field Authority Compact: plume trusts player" = 1
+				event "B2 Remnant Field Authority Compact: Review Ready" 7 11
+				accept
+			label adjudication
+			`You recommend preserving the recommendations separately and making the cross-discipline judgment a new decision. A xenobiologist may identify the biological risk; a navigator may identify route alternatives; a defense specialist may judge tactical exposure; a prefect may compare those demands without rewriting any specialist's evidence. Plume says the distinction keeps his warning from being diluted. Chilia says it also keeps the warning from becoming an accidental order.`
+			action
+				"B2 Remnant Field Authority Compact: introduced" = 1
+				"B2 Remnant Field Authority Compact: route adjudication" = 1
+				"B2 Remnant Field Authority Compact: chilia trusts player" = 1
+				event "B2 Remnant Field Authority Compact: Review Ready" 7 11
+				accept
+			label paired
+			`You suggest a paired record. The specialist designation travels unchanged with its evidence, scope, and limits. A separate response record identifies who decided routing, tactics, logistics, engineering, and later review, including any specialist objection that remained unresolved. Chilia says, "Then nobody can inherit authority merely by copying somebody else's conclusion." Plume adds, "And nobody can erase the conclusion merely because they own the response."`
+			action
+				"B2 Remnant Field Authority Compact: introduced" = 1
+				"B2 Remnant Field Authority Compact: route paired" = 1
+				"B2 Remnant Field Authority Compact: plume trusts player" = 1
+				"B2 Remnant Field Authority Compact: chilia trusts player" = 1
+				event "B2 Remnant Field Authority Compact: Review Ready" 7 11
+				accept
+			label decline
+			`You tell them that the Remnant already rely on judgment precisely because competence changes from problem to problem. Plume accepts that a universal form could become another substitute for expertise. Chilia agrees, but asks both offices to preserve the present disagreement in full so no later copy can claim that the threat designation itself authorized a closure.`
+			action
+				"B2 Remnant Field Authority Compact: declined" = 1
+				decline
+
+
+mission "B2 Remnant Field Authority Compact: Review"
+	minor
+	name `When the Warning Becomes the Order`
+	description `Plume and Chilia return after copied Remnant records begin collapsing specialist findings, response authority, and prefect adjudication into a single inherited decision.`
+	source
+		government "Remnant"
+	"offer precedence" 8
+	to offer
+		has "B2 Remnant Field Authority Compact: introduced"
+		has "B2 Remnant Field Authority Compact: review ready"
+		not "B2 Remnant Field Authority Compact: reviewed"
+	on offer
+		conversation
+			branch map
+				has "B2 Remnant Field Authority Compact: route authority map"
+			branch adjudication
+				has "B2 Remnant Field Authority Compact: route adjudication"
+			`The paired records worked until abbreviated copies began circulating. The original still distinguishes Plume's biological designation from Chilia's response decisions. Several downstream summaries do not. One treats a temporary routing restriction as though it were part of the scientific finding. Another quotes the threat designation as justification for a resource priority that Plume never considered.`
+				goto settle
+			label map
+			`The authority map preserved where each specialist's competence ended, but some copied reports dropped the map and retained only the strongest sentence. A bounded warning has become an apparently universal instruction because the scope metadata was treated as optional context.`
+				goto settle
+			label adjudication
+			`The adjudication route preserved the prefect's cross-discipline decision, but several summaries now cite that decision as though it altered the underlying specialist evidence. Chilia points to one record where a temporary traffic compromise is being quoted as proof that the biological risk itself was minor. Plume signs sharply: "A response can balance my evidence. It cannot rewrite it."`
+			label settle
+			choice
+				`\tAdopt a portable authority packet: every copied conclusion carries its evidence owner, qualified domain, binding scope, excluded decisions, response owner, review point, and unresolved objections.`
+					goto packet
+				`\tAdopt a two-layer decision ledger: specialist findings remain immutable evidence records, while cross-discipline responses remain separately revisable decisions that must cite rather than absorb those findings.`
+					goto layers
+			label packet
+			`You recommend making authority travel with the conclusion. A copied threat designation must carry who was qualified to make it, which decisions it can bind, which decisions require another specialty, who owns the current response, when that response should be reviewed, and what objections remain open. Plume says the packet protects the strength of expertise. Chilia says it protects everyone else from inheriting authority they never earned.`
+			action
+				"B2 Remnant Field Authority Compact: reviewed" = 1
+				"B2 Remnant Field Authority Compact: settlement authority packet" = 1
+				"B2 Remnant Field Authority Compact: plume trusts player" = 1
+				"B2 Remnant Field Authority Compact: chilia trusts player" = 1
+				accept
+			label layers
+			`You recommend two durable layers. Specialist findings remain fixed records of evidence, confidence, scope, and qualified judgment. Responses remain separate decisions about routing, force, logistics, timing, and resource tradeoffs, each with its own decision owner and review history. A prefect may reconcile priorities without converting the reconciliation into new scientific evidence. Chilia calls that honest command. Plume calls it honest research.`
+			action
+				"B2 Remnant Field Authority Compact: reviewed" = 1
+				"B2 Remnant Field Authority Compact: settlement layered ledger" = 1
+				"B2 Remnant Field Authority Compact: plume trusts player" = 1
+				"B2 Remnant Field Authority Compact: chilia trusts player" = 1
+				accept
+
+
+mission "B2 Remnant Field Authority Compact: Plume Remembers"
+	minor
+	name `Plume Remembers`
+	description `Plume shows how the Remnant now keep specialist evidence, bounded authority, and cross-discipline response from collapsing into the same claim.`
+	source "Aventine"
+	"offer precedence" 8
+	to offer
+		not "B2 Remnant Field Authority Compact: aftermath seen"
+		or
+			has "B2 Remnant Field Authority Compact: settlement authority packet"
+			has "B2 Remnant Field Authority Compact: settlement layered ledger"
+	on offer
+		conversation
+			branch layers
+				has "B2 Remnant Field Authority Compact: settlement layered ledger"
+			`Plume recognizes you beside a public archive display. A recent specialist warning is short enough to read at a glance, but the authority packet travels with it: evidence owner, field, scope, excluded decisions, current response owner, review point, and one unresolved engineering objection. "The warning is still a warning," he signs. "It simply no longer pretends to answer questions that belong to somebody else's expertise."`
+				goto finish
+			label layers
+			`Plume recognizes you and opens two linked records from a recent incident. The first is a specialist finding, preserved exactly as filed. The second is a later response decision that balanced navigation, engineering, logistics, and safety priorities. The response has already been revised once; the evidence has not. "A prefect can change what we do," Plume signs. "That does not mean the prefect changes what we observed."`
+			label finish
+			action
+				"B2 Remnant Field Authority Compact: aftermath seen" = 1
+				accept
