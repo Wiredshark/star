@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Bunrodea Freight Review History: Cross-Border Docket Archive"
+	minor
+	source
+		government "Bunrodea"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: bunrodea freight review backlog" >= 1
+	on offer
+		conversation
+			`A port archive has opened an exhibit of cross-border arrival dockets, from handwritten cargo tallies to modern standardized forms. The oldest records mix together the ship's arrival, the cargo's condition, the receiving household, and any dispute over who was authorized to accept it.`
+			`\tAs Bunrodea freight traffic expanded, clerks gradually separated those questions. Arrival time, route, seal condition, quantity, and custodian became one layer of the record; estate authority, missing countersignatures, and liability petitions remained another. The change did not eliminate disputes, but it made it harder for a dispute over authority to erase facts the port had already observed.`
+			`\tA note at the end says the distinction mattered most during busy periods. When petition queues grew, a clear arrival docket let later reviewers reconstruct what actually entered Bunrodea jurisdiction without asking each crew to recreate the entire shipment from memory.`
+				decline
+
+
+mission "Bunrodea Freight Review History: Authority Crosswalk Register"
+	minor
+	source
+		government "Bunrodea"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: bunrodea freight review backlog" >= 2
+	on offer
+		conversation
+			`A clerk's museum displays generations of authority crosswalks: tables linking ports, estates, municipal offices, recognized agents, cargo classes, and the kinds of signatures each could accept or challenge. The earliest examples are little more than private notes kept by experienced freight clerks.`
+			`\tLater versions became shared references because the same shipment might pass through several Bunrodea jurisdictions before reaching its final recipient. The archive emphasizes that the crosswalk did not decide whether an estate's claim was valid. It recorded which authority was responsible for answering which question, and which earlier decisions another office could rely on without starting the review from zero.`
+			`\tSeveral editions are covered in corrections where estates changed agents or local rules. A curator's annotation calls that revision history the real value of the register: authority could change, but the record of who was considered responsible at a particular time remained reviewable.`
+				decline
+
+
+mission "Bunrodea Freight Review History: Queue Age Ledger"
+	minor
+	source
+		government "Bunrodea"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: bunrodea freight review backlog" >= 3
+	on offer
+		conversation
+			`A public terminal shows samples from old petition-queue ledgers. Instead of listing only whether a freight review was open or closed, the ledgers record when it entered the queue, which evidence was still missing, which office held the next responsibility, and why a case had stopped moving.`
+			`\tThe surrounding history explains that this practice emerged after overloaded clerks discovered that age alone was a poor measure of suspicion. A petition could remain open because of a missing seal, a damaged translation, an absent estate factor, a duplicated inspection request, or a genuine conflict over authority. Without the reason, later offices tended to treat delay itself as evidence that something must be wrong.`
+			`\tModern queue displays still preserve those categories. The exhibit's final caption says the goal was never to make every petition fast. It was to make waiting legible enough that an old delay would not silently acquire a new meaning every time the file changed hands.`
+				decline
+
+
+mission "Bunrodea Freight Review History: Priority Petition Archive"
+	minor
+	source
+		government "Bunrodea"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: bunrodea freight review backlog" >= 4
+	on offer
+		conversation
+			`An administrative-history display preserves old priority markers once attached to freight petitions: medical cargo, perishable food, emergency machinery, stranded crews, blocked repair yards, and a long list of categories that appeared briefly during particular shortages or disasters.`
+			`\tThe archive says Bunrodea clerks repeatedly had to relearn the same distinction. Priority changed which file was examined first; it was not supposed to change the facts inside the file, excuse a missing authority record, or make an urgent claimant automatically correct. Periods that blurred those ideas produced fast decisions that later courts and estate offices spent years untangling.`
+			`\tLater procedures therefore recorded both the reason for priority and the ordinary review questions that still remained open. Looking at the current freight board, where a growing queue is forcing clerks to triage petitions again, the old warning feels less ceremonial than the rest of the exhibit.`
+				decline
