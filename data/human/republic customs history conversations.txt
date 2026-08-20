@@ -1,0 +1,80 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+
+mission "Republic Manifest Provenance Archive"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A customs-history display near the freight concourse shows generations of cargo manifests layered with corrections, transfer stamps, inspection notes, and declarations from successive ports. The oldest examples are messy enough that several exhibits need arrows just to show which amendment belongs to which shipment.`
+			`\tThe accompanying history says Republic customs offices gradually learned that a declaration was only useful if later inspectors could tell who supplied each fact, when it changed, and which office had actually verified it. Common amendment formats and provenance notes grew out of disputes where copied errors had traveled farther than the cargo that caused them.`
+			`\tModern manifests still carry that institutional memory. A corrected record is not treated as if it had always been correct, and an inherited declaration is not automatically promoted into verified evidence merely because several ports have repeated it.`
+				decline
+
+
+
+mission "Republic Secondary Review Basis Register"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`An archive terminal displays examples of old secondary-inspection forms. Early versions contain little more than a box marked "suspicious." Later forms separate the route or cargo indicator that triggered review from the facts an examiner actually confirmed.`
+			`\tA curator's note describes repeated arguments between ports that inherited one another's review flags. Without a written basis, an administrative warning could acquire more weight every time it was copied, until a captain appeared to have a long record of evidence when the record really contained one unresolved pattern repeated by several offices.`
+			`\tThe resulting practice was intentionally bureaucratic: record the trigger, the confirmed facts, the inferences, and the questions that remain open. The exhibit notes that the system does not prevent heightened scrutiny; it prevents the existence of scrutiny from silently becoming proof of the thing being investigated.`
+				decline
+
+
+
+mission "Republic Customs Challenge Ledger"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A port-rights exhibit contains anonymized copies of old customs challenges: requests for written reasons, corrections to cargo histories, objections to interviews that exceeded the stated inspection scope, and appeals asking a second office to distinguish inherited suspicion from new evidence.`
+			`\tThe exhibit explains that challenge procedures did not begin as a single Republic-wide reform. Different ports adopted them after local disputes exposed the same problem: a merchant could answer one office's questions yet still have no reliable way to learn what conclusion had been recorded for the next port.`
+			`\tOver time, written reasons and reviewable records became useful to examiners as well as travelers. An office could uphold a serious inspection when the evidence justified it, correct a bad assumption when it did not, and hand the next port a record that showed both the decision and its limits.`
+				decline
+
+
+
+mission "Republic Repeat Review Interval Archive"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A customs training archive preserves old scheduling ledgers from ports that once repeated secondary inspections whenever the same vessel appeared on another watch list. Some captains were questioned several times in quick succession even though no new cargo, route change, or contradictory record had appeared between reviews.`
+			`\tThe accompanying history says those repetitions created two problems at once. Inspectors spent time rediscovering the same facts, while the number of reviews itself began to look like additional evidence. Ports gradually adopted waiting periods and reset rules so an elevated review would not immediately reproduce itself unless new information justified another examination.`
+			`\tThe archive stresses that spacing a repeat review was never meant to erase the underlying record or prevent action on fresh evidence. Its purpose was narrower: make each new inspection answer a current question instead of treating yesterday's decision to investigate as today's reason to investigate again.`
+				decline
