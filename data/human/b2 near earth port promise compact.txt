@@ -21,6 +21,10 @@
 # crews, compatible substitutes, or responsible people.
 
 
+event "B2 Near Earth Port Promise Compact: Review Ready"
+	"B2 Near Earth Port Promise Compact: review ready" = 1
+
+
 mission "B2 Near Earth Port Promise Compact: Offer"
 	minor
 	name `The Repair That Moved Ports`
@@ -52,14 +56,16 @@ mission "B2 Near Earth Port Promise Compact: Offer"
 				"B2 Near Earth Port Promise Compact: introduced" = 1
 				"B2 Near Earth Port Promise Compact: route promise follows ship" = 1
 				"B2 Near Earth Port Promise Compact: mira trusts player" = 1
-			accept
+				event "B2 Near Earth Port Promise Compact: Review Ready" 7 11
+				accept
 			label substitute
 			`You argue that a repair system should recognize useful work rather than preserve obsolete paperwork forever. The receiving yard may close the old obligation when the captain accepts an equivalent repair, but the record must identify the substitute, why it was considered compatible, and who accepted it as satisfying the earlier promise. Jonas approves. Mira says that prevents a convenient substitution from becoming an undocumented rewrite.`
 			action
 				"B2 Near Earth Port Promise Compact: introduced" = 1
 				"B2 Near Earth Port Promise Compact: route accepted substitute" = 1
 				"B2 Near Earth Port Promise Compact: jonas trusts player" = 1
-			accept
+				event "B2 Near Earth Port Promise Compact: Review Ready" 7 11
+				accept
 			label paired
 			`You separate the two questions. One record says what was originally promised and by whom. The other says what the ship currently has, what was repaired, what substitute was installed, and whether the captain accepted it. The records remain linked until someone explicitly reconciles them. Mira and Jonas both begin revising the service form.`
 			action
@@ -67,12 +73,13 @@ mission "B2 Near Earth Port Promise Compact: Offer"
 				"B2 Near Earth Port Promise Compact: route paired records" = 1
 				"B2 Near Earth Port Promise Compact: mira trusts player" = 1
 				"B2 Near Earth Port Promise Compact: jonas trusts player" = 1
-			accept
+				event "B2 Near Earth Port Promise Compact: Review Ready" 7 11
+				accept
 			label decline
 			`You tell them that the captain needs a working radiator, not a constitutional convention. Mira accepts the point. Jonas says each yard can keep handling transfers case by case unless enough failures prove a general rule is necessary.`
 			action
 				"B2 Near Earth Port Promise Compact: declined" = 1
-			decline
+				decline
 
 
 mission "B2 Near Earth Port Promise Compact: Review"
@@ -85,9 +92,8 @@ mission "B2 Near Earth Port Promise Compact: Review"
 		not attributes "station"
 	to offer
 		has "B2 Near Earth Port Promise Compact: introduced"
+		has "B2 Near Earth Port Promise Compact: review ready"
 		not "B2 Near Earth Port Promise Compact: reviewed"
-	event "B2 Near Earth Port Promise Compact: Review Available"
-		days 7 11
 	on offer
 		conversation
 			branch promise
@@ -121,7 +127,7 @@ mission "B2 Near Earth Port Promise Compact: Review"
 				"B2 Near Earth Port Promise Compact: settlement portable obligation packet" = 1
 				"B2 Near Earth Port Promise Compact: mira trusts player" = 1
 				"B2 Near Earth Port Promise Compact: jonas trusts player" = 1
-			accept
+				accept
 			label reconcile
 			`You recommend keeping the original obligation and the current repair state as separate linked records. A later reconciliation must explicitly say whether the old promise was fulfilled, transferred, replaced by an accepted equivalent, forgiven, or reopened after the substitute failed. Compatible work can keep a ship moving without automatically rewriting the history of who still owes what.`
 			action
@@ -129,7 +135,7 @@ mission "B2 Near Earth Port Promise Compact: Review"
 				"B2 Near Earth Port Promise Compact: settlement reconciliation rule" = 1
 				"B2 Near Earth Port Promise Compact: mira trusts player" = 1
 				"B2 Near Earth Port Promise Compact: jonas trusts player" = 1
-			accept
+				accept
 
 
 mission "B2 Near Earth Port Promise Compact: Jonas Remembers"
@@ -156,4 +162,4 @@ mission "B2 Near Earth Port Promise Compact: Jonas Remembers"
 			label record
 			action
 				"B2 Near Earth Port Promise Compact: aftermath seen" = 1
-			accept
+				accept
