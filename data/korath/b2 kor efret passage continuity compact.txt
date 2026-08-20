@@ -1,0 +1,154 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Kor Efret Passage Continuity Compact production slice.
+# Consumes B1 family-reunification, shared-passage, and resettlement history without
+# inventing a centralized refugee authority or mandatory repatriation policy.
+# The player privately thinks of two recurring Kor Efreti as the Tracker and the
+# Passage Keeper. Neither term is presented as a Korath title or canonical name.
+
+mission "B2 Kor Efret Passage Continuity Compact: Offer"
+	landing
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		has "Kor Efret History: Family Reunification Register: offered"
+		has "Kor Efret History: Passage Contribution Ledger: offered"
+		not "B2 Kor Efret Passage Continuity Compact: introduced"
+		not "B2 Kor Efret Passage Continuity Compact: declined"
+		random < 18
+	on offer
+		conversation
+			`Two Kor Efreti wave you over beside a passenger board covered with family marks, route sketches, and contribution notes. You have seen both around the port before. One is usually tracing family symbols between old settlements and new refuges, so in your own head you have started calling this one the Tracker. The other spends more time matching passengers to spare berths, workshop contributions, and low-fare passages; you privately think of that one as the Passage Keeper. Neither label has been offered to you as a Korath name or title.`
+			`\tA family mark appears twice on the board. One relative is already safe on a Quarg ringworld. Another can leave a damaged settlement now, but the only available passage goes somewhere else. The Tracker points insistently to the separated family marks. The Passage Keeper points to the ship that actually has room. A safe departure, a family reunion, and a person's preferred destination are not necessarily the same event.`
+			choice
+				`\tKeep reunion continuity primary. If the available passage does not reach the family, preserve that as an unfinished obligation rather than calling the case settled.`
+					goto reunion
+				`\tUse the passage that exists now, but record exactly what family contact or onward travel remains unresolved.`
+					goto passage
+				`\tTrack safety, family contact, and destination preference separately so one success cannot silently close the others.`
+					goto paired
+				`\tDecline to turn one family's circumstances into a general rule.`
+					goto decline
+			label reunion
+			`You point first to the separated family marks, then to the available ship, and finally leave the family connection visibly open on the board. The Tracker responds with immediate approval. The Passage Keeper accepts the choice more cautiously and adds a note beside the current berth: useful passage, but not final reunion. The person can still travel if they choose; the record will not pretend that safety elsewhere is the same as reaching the relative they were trying to find.`
+			action
+				"B2 Kor Efret Passage Continuity Compact: introduced" = 1
+				"B2 Kor Efret Passage Continuity Compact: route reunion" = 1
+				"B2 Kor Efret Passage Continuity Compact: tracker trusts player" = 1
+			accept
+			label passage
+			`You point to the ship that has room now, then draw a second mark from the passenger's destination toward the still-separated family symbol. The Passage Keeper answers with a rapid series of gestures and adds a continuation mark to the passenger record. The immediate evacuation can proceed, but the unmatched family contact and onward-travel question remain explicit rather than disappearing behind the word "arrived."`
+			action
+				"B2 Kor Efret Passage Continuity Compact: introduced" = 1
+				"B2 Kor Efret Passage Continuity Compact: route passage" = 1
+				"B2 Kor Efret Passage Continuity Compact: passage keeper trusts player" = 1
+			accept
+			label paired
+			`You separate the problem into three marks: safe location, family contact, and preferred destination. The Tracker adds the known relatives. The Passage Keeper adds the available berth and the contributions making it possible. A fourth mark records whether the traveler still wants onward passage after reaching safety. The resulting record is more complicated, but it does not force one kind of recovery to stand in for all the others.`
+			action
+				"B2 Kor Efret Passage Continuity Compact: introduced" = 1
+				"B2 Kor Efret Passage Continuity Compact: route paired" = 1
+				"B2 Kor Efret Passage Continuity Compact: tracker trusts player" = 1
+				"B2 Kor Efret Passage Continuity Compact: passage keeper trusts player" = 1
+			accept
+			label decline
+			`You hold up both hands and step back. The Tracker and Passage Keeper continue working through the family's choices without treating your silence as approval of either approach. Before you leave, one of them marks the case as unresolved rather than forcing it into a completed category.`
+			action
+				"B2 Kor Efret Passage Continuity Compact: declined" = 1
+			decline
+
+mission "B2 Kor Efret Passage Continuity Compact: Review"
+	landing
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		has "B2 Kor Efret Passage Continuity Compact: introduced"
+		not "B2 Kor Efret Passage Continuity Compact: reviewed"
+		random < 24
+	on offer
+		conversation
+			branch reunion
+				has "B2 Kor Efret Passage Continuity Compact: route reunion"
+			branch passage
+				has "B2 Kor Efret Passage Continuity Compact: route passage"
+			`The Tracker and Passage Keeper find you again beside a larger public board. The traveler from the earlier dispute is safe, and contact with the separated relative has finally been restored. The board also shows something less tidy: several other travelers accepted temporary destinations, changed their preferred destination after finding work or relatives elsewhere, or reached a family member who no longer intended to return to the old settlement.`
+			`\tThe new problem is not whether people can be moved. It is whether copied records keep the difference between current safety, family contact, personal preference, and an unfinished passage obligation. A simple mark for "resettled" can hide as much as it reveals.`
+			choice
+				`\tUse a portable family-contact packet that carries safe location, consent to share it, intended relatives, contact status, travel preference, and any unfinished passage need together.`
+					goto packet
+				`\tUse a two-stage settlement ledger: physical safety and voluntary reunion or resettlement remain separate conditions, and neither closes the other automatically.`
+					goto ledger
+			label reunion
+			`Your earlier choice kept the family connection open even after a safe berth became available. That preserved the unfinished reunion, but the Tracker now shows you a different problem: some people later chose not to continue toward their original relative or settlement. A record can preserve an old obligation so faithfully that it stops noticing when the person themselves has changed the desired outcome.`
+			choice
+				`\tCarry current consent and preference with the family-contact record so old reunion goals do not become permanent commands.`
+					goto packet
+				`\tSeparate safety from voluntary reunion or resettlement, and require each to be closed on its own evidence.`
+					goto ledger
+			label passage
+			`Your earlier choice moved people using the passage capacity that actually existed and preserved the unfinished family or onward-travel question. The Passage Keeper now shows you several copied records where the destination survived but the continuation mark did not. Downstream clerks can see where a traveler arrived but not whether that arrival was temporary, chosen, or merely the first safe place with an open berth.`
+			choice
+				`\tMake the traveler's current preference and unfinished family contact portable with every copied passage record.`
+					goto packet
+				`\tKeep arrival and voluntary settlement as different closure states so downstream copies cannot confuse them.`
+					goto ledger
+			label packet
+			`You recommend a portable family-contact packet. It travels with the case and records the person's current safe location, whether that location may be shared, the relatives or households they are trying to contact, whether contact has actually been restored, their present destination preference, and any passage still needed. If the person changes their mind, the new preference is recorded without erasing the earlier history. A family register becomes a continuity tool rather than a command to return.`
+			action
+				"B2 Kor Efret Passage Continuity Compact: reviewed" = 1
+				"B2 Kor Efret Passage Continuity Compact: settlement family packet" = 1
+				"B2 Kor Efret Passage Continuity Compact: tracker trusts player" = 1
+				"B2 Kor Efret Passage Continuity Compact: passage keeper trusts player" = 1
+			accept
+			label ledger
+			`You recommend a two-stage settlement ledger. One record answers whether the person is physically safe and has workable shelter and passage. The other answers whether family contact, onward travel, return, or a new resettlement choice has been voluntarily resolved. A person can be safe without being reunited, reunited without choosing to return, or settled somewhere new without invalidating the history of how they got there. Neither stage silently closes the other.`
+			action
+				"B2 Kor Efret Passage Continuity Compact: reviewed" = 1
+				"B2 Kor Efret Passage Continuity Compact: settlement two stage" = 1
+				"B2 Kor Efret Passage Continuity Compact: tracker trusts player" = 1
+				"B2 Kor Efret Passage Continuity Compact: passage keeper trusts player" = 1
+			accept
+
+mission "B2 Kor Efret Passage Continuity Compact: Tracker Remembers"
+	landing
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		not "B2 Kor Efret Passage Continuity Compact: aftermath seen"
+		or
+			has "B2 Kor Efret Passage Continuity Compact: settlement family packet"
+			has "B2 Kor Efret Passage Continuity Compact: settlement two stage"
+		random < 28
+	on offer
+		conversation
+			branch ledger
+				has "B2 Kor Efret Passage Continuity Compact: settlement two stage"
+			`The Tracker waves you over to a passenger board. One family line now crosses three worlds: an old home, a temporary refuge, and a new settlement near relatives. Beside the line are small marks for current contact permission and an onward-passage request that has been formally closed after the traveler chose to remain. The Passage Keeper adds a new berth elsewhere without disturbing the old history. The record remembers the path without treating the first destination as destiny.`
+			goto record
+			label ledger
+			`The Tracker waves you over to a board where safety and settlement are shown in separate columns. One household is physically safe but still searching for a relative. Another has restored family contact but chosen not to return. A third has formally closed both records after settling near a reopened workshop. The Passage Keeper points from those entries to a waiting transport list. The categories are slower to maintain, but nobody disappears merely because one part of recovery succeeded.`
+			label record
+			action
+				"B2 Kor Efret Passage Continuity Compact: aftermath seen" = 1
+			accept
