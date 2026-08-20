@@ -1,0 +1,154 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Avgi Wandering Fleet Transfer Compact.
+# Consumes B1 Wandering Fleet load/reserve, refit-provenance, rendezvous, and
+# repair-dependency history. The recurring role labels below are the player's
+# private shorthand, not canonical Avgi offices or evidence of centralized rule.
+
+mission "B2 Avgi Wandering Fleet Transfer Compact: Offer"
+	minor
+	name `The Part That Leaves a Hole`
+	description `Two Wandering Fleet specialists disagree over whether an urgent transfer can be called successful while the donor ship remains below its own repair reserve.`
+	source
+		government "Avgi (Consonance)"
+	to offer
+		has "language: Avgi (Written)"
+		has "avgi: wandering fleet refit 1"
+		not "avgi: lost in twilight"
+		has "Avgi Wandering Fleet Load and Reserve Ledger: offered"
+		not "B2 Avgi Wandering Fleet Transfer Compact: introduced"
+		not "B2 Avgi Wandering Fleet Transfer Compact: declined"
+	on offer
+		conversation
+			`A cargo platform has been turned into a temporary repair desk. One Avgi keeps shifting colored markers between silhouettes of tankers, transports, escorts, and support craft. Another has laid out a worn power regulator beside three generations of interface adapters. You privately think of them as the Loadkeeper and the Fitter; neither offers a title that sounds quite so simple.`
+			`The Loadkeeper taps an escort silhouette whose reserve column has fallen almost to its minimum. "Objection. This regulator can restore a transport today, but removing it leaves the escort without its planned replacement. The old fleet ledgers called that a transfer, not a repair. The debt still existed somewhere else."`
+			`The Fitter turns the regulator over to show a series of etched service marks. "Counterpoint. The transport cannot hold formation with an unstable converter. The part fits, its provenance is known, and the escort is presently functional. Refusing a reversible transfer because the ideal replacement has not yet been found turns documentation into paralysis."`
+			choice
+				`\tBack the Loadkeeper: no transfer should push a donor below a declared minimum reserve without an explicit restoration owner.`
+					goto reserve
+				`\tBack the Fitter: allow urgent transfers when compatibility and provenance are documented, even if the donor temporarily accepts the risk.`
+					goto repair
+				`\tPropose a linked transfer-debt record that travels with both the repaired ship and the donor deficit.`
+					goto paired
+				`\tDecline to turn one fleet repair dispute into a general rule.`
+					goto decline
+			label reserve
+			`You tell the Fitter that a transfer becomes misleading when the receiving ship looks repaired but the fleet's total resilience has merely moved elsewhere. If a donor drops below its planned reserve, someone should be named to restore that reserve and the deficit should remain open until the part or an equivalent replacement actually exists. The Loadkeeper gives a rapid nod. The Fitter answers, "Acceptable if emergency work can still proceed. I object only to pretending waiting is safer than movement."`
+			action
+				"B2 Avgi Wandering Fleet Transfer Compact: introduced" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: route reserve" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: loadkeeper trusts player" = 1
+			accept
+			label repair
+			`You tell the Loadkeeper that documented compatibility and known provenance are enough to justify an urgent reversible transfer when a ship would otherwise become a hazard to the fleet. The donor's lost reserve should remain visible, but not function as a veto. The Fitter clicks their beak. The Loadkeeper answers, "Concession. Then the transfer record must survive the repaired ship. A successful recipient cannot be allowed to erase the donor's new weakness."`
+			action
+				"B2 Avgi Wandering Fleet Transfer Compact: introduced" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: route repair" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: fitter trusts player" = 1
+			accept
+			label paired
+			`You suggest treating the transfer as two linked facts rather than one completed repair. The receiving ship records the component's provenance, compatibility assumptions, and any interface changes. The donor records the reserve it lost, the resulting dependency, the responsible replacement plan, and the condition that will actually close the deficit. The Loadkeeper begins drawing a line between the two ship silhouettes. The Fitter adds a second line for the regulator's service history. "Assessment," the Fitter says. "A part can travel without its limits disappearing."`
+			action
+				"B2 Avgi Wandering Fleet Transfer Compact: introduced" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: route paired" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: loadkeeper trusts player" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: fitter trusts player" = 1
+			accept
+			label decline
+			`You tell them that a human captain should not turn one urgent transfer into permanent Wandering Fleet procedure. The Loadkeeper answers, "Reasonable boundary." The Fitter adds, "And the regulator still needs moving." They return to the argument without asking you to settle it.`
+			action
+				"B2 Avgi Wandering Fleet Transfer Compact: declined" = 1
+			decline
+
+mission "B2 Avgi Wandering Fleet Transfer Compact: Review"
+	minor
+	name `The Fleet Still Owes Itself`
+	description `Return after the Wandering Fleet has tested the transfer practice you helped shape.`
+	source
+		government "Avgi (Consonance)"
+	to offer
+		has "language: Avgi (Written)"
+		has "avgi: wandering fleet refit 1"
+		not "avgi: lost in twilight"
+		has "B2 Avgi Wandering Fleet Transfer Compact: introduced"
+		not "B2 Avgi Wandering Fleet Transfer Compact: reviewed"
+	on offer
+		conversation
+			branch reserve
+				has "B2 Avgi Wandering Fleet Transfer Compact: route reserve"
+			branch repair
+				has "B2 Avgi Wandering Fleet Transfer Compact: route repair"
+			`The Loadkeeper and the Fitter have covered the repair desk with copies of the same transfer record. The receiving transport is flying normally. The donor escort is also still flying, but its replacement reserve has not been restored. The original record shows the deficit clearly; two later maintenance summaries mention only that the transport repair was completed.`
+			`The Loadkeeper says, "Failure mode. Every individual copy is locally useful. Together they create a false fleet state." The Fitter points to the completed transport entry. "And deleting that success would be equally false. We need a record that can survive compression without turning a borrowed reserve into a free part."`
+			choice
+				`\tCreate a portable transfer-debt packet that must travel with both recipient success and donor deficit until closure.`
+					goto packet
+				`\tKeep ship records separate, but require a periodic dependency reconciliation before any borrowed reserve can be marked closed.`
+					goto reconcile
+			label reserve
+			`The Loadkeeper shows you a later transfer that was refused because its donor would have crossed the declared reserve floor. A different compatible component was eventually found aboard a support vessel, but the delay nearly forced the recipient out of formation. The Fitter says, "Your rule preserved the reserve and nearly lost the schedule." The Loadkeeper answers, "Then the reserve threshold needs exception logic. The deficit still cannot vanish just because an exception was justified."`
+			choice
+				`\tUse a portable transfer-debt packet so an exception can proceed while its displaced reserve remains attached to the fleet state.`
+					goto packet
+				`\tUse periodic dependency reconciliation so emergency exceptions remain local but every open reserve deficit is compared against actual replacements.`
+					goto reconcile
+			label repair
+			`The Fitter shows you a successful chain of three emergency substitutions. Each recipient remained operational, and every individual compatibility judgment was defensible. But one donor ship now lacks two original spares and depends on an adapter that was itself borrowed from another hull. The Loadkeeper says, "Nothing here is a failed repair. The fleet is nevertheless more fragile than before." The Fitter gives a slow nod. "Then repair success and restored resilience require different closing conditions."`
+			choice
+				`\tCarry a transfer-debt packet with every derivative record until the donor reserve and compatibility obligations are actually closed.`
+					goto packet
+				`\tKeep local repair records lightweight, but require recurring dependency reconciliation across the whole fleet.`
+					goto reconcile
+			label packet
+			`You recommend a portable transfer-debt packet. It records the moved component, provenance, compatibility assumptions, recipient result, donor reserve lost, any downstream dependency created, the responsible restoration owner, and the evidence required to close the obligation. A short maintenance summary may omit detail, but it must carry the open-debt marker and a reference to the packet. The Loadkeeper calls it a way to stop a fleet from becoming healthier on paper than in metal. The Fitter calls it permission to improvise without laundering the cost.`
+			action
+				"B2 Avgi Wandering Fleet Transfer Compact: reviewed" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: settlement portable transfer debt" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: loadkeeper trusts player" = 1
+			accept
+			label reconcile
+			`You recommend keeping each ship's repair record focused on what its crew actually did, while adding a fleet-wide reconciliation cycle. At each review, borrowed components, missing reserves, temporary adapters, deferred inspections, and replacement promises are compared against the current physical fleet. An obligation closes only when the missing capacity has actually been restored or a documented equivalent has replaced it. The Fitter keeps local repair authority. The Loadkeeper gets a recurring test against hidden dependency debt.`
+			action
+				"B2 Avgi Wandering Fleet Transfer Compact: reviewed" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: settlement dependency reconciliation" = 1
+				"B2 Avgi Wandering Fleet Transfer Compact: fitter trusts player" = 1
+			accept
+
+mission "B2 Avgi Wandering Fleet Transfer Compact: Loadkeeper Remembers"
+	minor
+	name `Loadkeeper Remembers`
+	description `The Loadkeeper remembers what the transfer dispute changed in Wandering Fleet repair practice.`
+	source
+		government "Avgi (Consonance)"
+	to offer
+		has "language: Avgi (Written)"
+		has "avgi: wandering fleet refit 1"
+		not "avgi: lost in twilight"
+		not "B2 Avgi Wandering Fleet Transfer Compact: aftermath seen"
+		or
+			has "B2 Avgi Wandering Fleet Transfer Compact: settlement portable transfer debt"
+			has "B2 Avgi Wandering Fleet Transfer Compact: settlement dependency reconciliation"
+	on offer
+		conversation
+			branch reconciliation
+				has "B2 Avgi Wandering Fleet Transfer Compact: settlement dependency reconciliation"
+			`The Loadkeeper notices you beside a maintenance display. A repair entry is marked complete, but a small linked symbol still identifies an open donor-reserve obligation. "Improvement," they say. "The transport is repaired. The fleet is not yet restored. The record is now capable of saying both things at once." The Fitter, working nearby, adds, "And I am still allowed to move the part."`
+			goto record
+			label reconciliation
+			`The Loadkeeper shows you the latest fleet reconciliation sheet. Several emergency repairs remain closed at the ship level, while two reserve deficits and one temporary adapter remain open at the fleet level. "Useful disagreement," they say. "The Fitter can truthfully say the repairs succeeded. I can truthfully say we still owe ourselves capacity. Neither statement deletes the other."`
+			label record
+			action
+				"B2 Avgi Wandering Fleet Transfer Compact: aftermath seen" = 1
+			accept
