@@ -1,0 +1,75 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+
+mission "A2 Republic Customs History Practice"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 6
+	to offer
+		has "A2 Republic Customs Review: later reader seen"
+		not "A2 Republic Customs History Practice: chosen"
+	on offer
+		conversation
+			`A customs archivist recognizes the review record you helped produce. She does not ask you to reopen it. Instead, she points to older Republic exhibits: amended manifests, written review bases, challenge ledgers, and waiting periods between repeated inspections.`
+			`\t"Those practices survived because they separate different questions," she says. "Where did a claim come from? What actually triggered review? What was confirmed? What remains inference? And when does an old decision stop being a sufficient reason for a new one?"`
+			`\tShe asks what lesson, if any, you would carry into future disputes. The answer is not a Republic credential or a rule for customs officers; it is your own working practice.`
+			choice
+				`Keep provenance and amendments visible whenever a record changes.`
+					goto provenance
+				`Separate review triggers, confirmed facts, inferences, and unresolved questions.`
+					goto basis
+				`Require a current reason before repeating an old review.`
+					goto interval
+				`Keep this case local instead of turning it into a standing practice.`
+					goto local
+		label provenance
+			`You decide that a corrected record should retain the path by which it became corrected. The archivist calls that useful precisely because it does not make later information retroactively erase earlier uncertainty.`
+				accept
+		label basis
+			`You decide to keep triggers, evidence, inference, and open questions distinct. The archivist notes that this can justify serious scrutiny when evidence supports it while making unsupported escalation easier to detect.`
+				accept
+		label interval
+			`You decide that repeating a review should require a current reason rather than the mere fact that a review happened before. The archivist stresses that fresh evidence still counts; repetition itself does not become evidence.`
+				accept
+		label local
+			`You keep the customs history as context for this case rather than a portable rule. The archivist accepts the boundary without treating refusal to generalize as refusal to remember.`
+				accept
+	on accept
+		set "A2 Republic Customs History Practice: chosen"
+		set "A2 Republic Customs History Practice: reflection pending"
+		conversation
+			`The archivist files no endorsement in your name. What persists is only the distinction you chose to remember.`
+
+
+
+mission "A2 Republic Customs History Practice Reflection"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 6
+	to offer
+		has "A2 Republic Customs History Practice: reflection pending"
+		not "A2 Republic Customs History Practice: reflection seen"
+	on offer
+		conversation
+			`At another Republic port, you watch a routine records dispute resolve without anyone needing to pretend that procedure guarantees correctness. A clerk traces an amendment back to its source, states why a review was opened, and distinguishes the facts confirmed today from an older unresolved suspicion.`
+			`\tThe scene is mundane, which is part of the point. Institutional memory is useful when it keeps evidence inspectable and decisions revisable, not when it turns past procedure into automatic proof.`
+				accept
+	on accept
+		clear "A2 Republic Customs History Practice: reflection pending"
+		set "A2 Republic Customs History Practice: reflection seen"
