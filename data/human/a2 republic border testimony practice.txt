@@ -20,6 +20,7 @@ mission "A2 Republic Border Testimony Practice: Briefing"
 	description `Talia Rook asks what evidence discipline should survive the last border-alert review.`
 	source
 		government "Republic"
+	"offer precedence" 8
 	to offer
 		has "B2 Republic Border Testimony Compact: aftermath seen"
 		"world: republic border pressure" <= 2
@@ -76,6 +77,7 @@ mission "A2 Republic Border Testimony Practice: Recurrence"
 	description `A later Republic border alert tests the evidence practice you chose after the testimony compact.`
 	source
 		government "Republic"
+	"offer precedence" 8
 	to offer
 		has "A2 Republic Border Testimony Practice: decided"
 		"world: republic border pressure" >= 4
