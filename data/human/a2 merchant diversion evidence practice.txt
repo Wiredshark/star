@@ -1,0 +1,115 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 Merchant Diversion Evidence Practice.
+# Consumes the resolved B2 Merchant Diversion Compact and later A1 route-diversion
+# pressure read-only. It does not create a centralized Merchant routing authority.
+
+mission "A2 Merchant Diversion Evidence Practice: Briefing"
+	minor
+	name `What a Detour Remembers`
+	description `Nessa Ward asks what part of the diversion compact should guide future route warnings once today's detours are already history.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		has "B2 Merchant Diversion Compact: aftermath seen"
+		not "A2 Merchant Diversion Evidence Practice: introduced"
+		not "A2 Merchant Diversion Evidence Practice: declined"
+	on offer
+		conversation
+			`Nessa Ward has archived notices from the last diversion wave spread across a dispatch table. The routes themselves have reopened, but the records still disagree about what deserves to travel into the next emergency.`
+			branch ladder
+				has "B2 Merchant Diversion Compact: settlement ladder"
+			`Ward points to the evidence ladder. "This kept repeated copies from pretending to be independent observations. But a future dispatcher still has to decide what deserves to survive as a working habit."`
+			goto choose
+			label ladder
+			`Ward points to the portable docket. "This kept expired advice visible without leaving it active forever. But a future dispatcher still has to decide which parts of the record should constrain a new warning."`
+			label choose
+			choice
+				`\tCarry expiry with the advice: every copied detour must preserve what condition ends or renews it.`
+					goto expiry
+				`\tCarry source lineage with the advice: repeated copies never count as new observations unless the evidence really is independent.`
+					goto lineage
+				`\tCarry contradictions with the advice: later evidence that weakens a warning must travel as visibly as the original warning.`
+					goto contradiction
+				`\tDecline to establish a standing evidence practice for independent Merchant dispatchers.`
+					goto decline
+			label expiry
+			`You tell Ward that a warning should never travel farther than its own review boundary. If new evidence supports the detour, renew it explicitly; otherwise preserve it as history rather than current advice.`
+			action
+				"A2 Merchant Diversion Evidence Practice: introduced" = 1
+				"A2 Merchant Diversion Evidence Practice: expiry" = 1
+			accept
+			label lineage
+			`You tell Ward that the most dangerous inflation happens when one observation becomes ten copied messages. A route warning may spread quickly, but its source tree must remain inspectable so repetition cannot manufacture confidence.`
+			action
+				"A2 Merchant Diversion Evidence Practice: introduced" = 1
+				"A2 Merchant Diversion Evidence Practice: lineage" = 1
+			accept
+			label contradiction
+			`You tell Ward that a dispatch network should propagate disconfirming evidence as aggressively as the original warning. A contradiction does not erase history, but it must lower confidence before habit hardens into assumed fact.`
+			action
+				"A2 Merchant Diversion Evidence Practice: introduced" = 1
+				"A2 Merchant Diversion Evidence Practice: contradiction" = 1
+			accept
+			label decline
+			`You tell Ward that independent carriers can borrow the compact's record formats without turning your preference into a standing Merchant rule. She nods. "Then the lesson stays available without becoming authority."`
+			action
+				"A2 Merchant Diversion Evidence Practice: declined" = 1
+			decline
+
+
+mission "A2 Merchant Diversion Evidence Practice: Recurrence"
+	minor
+	name `Another Road Around`
+	description `A later Merchant diversion wave tests the evidence practice the player chose after the previous detours cleared.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		has "A2 Merchant Diversion Evidence Practice: introduced"
+		"world: merchant route diversion pressure" >= 3
+		not "A2 Merchant Diversion Evidence Practice: recurrence seen"
+	on offer
+		conversation
+			branch lineage
+				has "A2 Merchant Diversion Evidence Practice: lineage"
+			branch contradiction
+				has "A2 Merchant Diversion Evidence Practice: contradiction"
+			branch expiry severe
+				"world: merchant route diversion pressure" >= 5
+			`Ward shows you a fresh secondary-route warning. Your expiry rule forces the notice to carry the exact congestion condition that justifies the detour and a review point. The network is strained, but dispatchers can already see what would make the recommendation stop being current.`
+			goto done
+			label expiry severe
+			`Diversion pressure is severe enough that several secondary routes are in use at once. Because your expiry rule travels with every notice, dispatchers renew the routes that still have current evidence and leave the rest visible only as history instead of letting an emergency map become permanent by inertia.`
+			goto done
+			label lineage
+			branch lineage severe
+				"world: merchant route diversion pressure" >= 5
+			`A warning arrives through four relays, but the source tree shows that three copies descend from the same captain's report. Ward keeps the warning active without calling it four confirmations, and requests an independent observation before raising confidence further.`
+			goto done
+			label lineage severe
+			`Under severe diversion pressure, copied warnings multiply quickly. Your lineage rule exposes which messages share an origin and which came from genuinely independent ships, preventing network volume from masquerading as evidentiary strength while still allowing urgent routing changes.`
+			goto done
+			label contradiction
+			branch contradiction severe
+				"world: merchant route diversion pressure" >= 5
+			`A returning carrier reports that one secondary corridor is already clearing. Because your contradiction rule travels with the original warning, dispatch boards lower confidence immediately instead of waiting for the stale detour to expire by habit.`
+			goto done
+			label contradiction severe
+			`The diversion network is under heavy pressure, and two fresh reports contradict an earlier blockage notice. Your rule keeps both the original evidence and the contradiction visible; dispatchers reroute cautiously without pretending either side has become certain merely because the stakes are high.`
+			label done
+			action
+				"A2 Merchant Diversion Evidence Practice: recurrence seen" = 1
+			accept
