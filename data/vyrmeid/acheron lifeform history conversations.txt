@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Acheron Lifeform History: Vyrmeid Feeding Ledger"
+	minor
+	invisible
+	source "Vinci"
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		random < 4
+	on offer
+		conversation
+			`A natural-history ledger has begun collecting sightings of the smallest Vyrmeid encountered around the stars of the Umbral Reach. Early crews often described whole clouds of the creatures moving together, but the archive keeps that repeated grouping separate from any claim that the animals coordinate socially.`
+			`\tThe strongest recurring observation is simpler: the creatures remain close to stellar energy, are exceptionally docile unless physically threatened, and appear to store the energy they gather in paired organs near the front of the body. Field reports also note that solitary individuals are uncommon, though no surviving record explains why.`
+			`\tArchivists preserve star type, local brightness, group size, nearby traffic, and any change in movement after ships alter course or power output. The institution grew from a practical lesson of early exploration: a swarm can be biologically important without being a fleet, and repeated proximity is evidence of behavior rather than proof of intention.`
+				decline
+
+
+mission "Acheron Lifeform History: Rotary Defense Register"
+	minor
+	invisible
+	source "Midgard"
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		random < 4
+	on offer
+		conversation
+			`A xenobiology office displays old route notes concerning the broad, boomerang-shaped Vyrmeid. Captains initially disagreed over whether their constant rotation was locomotion, display, or aggression. Later close observation showed that the motion instead helps the otherwise harmless creature survive impacts from small debris and projectiles.`
+			`\tThe resulting register records relative velocity, debris density, collision angle, and whether a vessel had fired or merely passed nearby. Reports that lacked those circumstances were deliberately kept out of later behavioral summaries, because the same spinning motion could be misread very differently by crews who did not know what had preceded it.`
+			`\tOver time, that record became a small case study in contact discipline: an unfamiliar defensive adaptation can look hostile when viewed through a ship's tactical instruments, while the animal itself may be doing nothing more than surviving the environment it evolved in.`
+				decline
+
+
+mission "Acheron Lifeform History: Stellar Hazard Archive"
+	minor
+	invisible
+	source "Mirrorlake"
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		random < 4
+	on offer
+		conversation
+			`A safety archive concerns the rarer cephalopod-like Vyrmeid found around hotter stars. The creatures appear to feed on stellar energy and hold extraordinary internal heat and pressure in several luminous organs. They are normally timid and nonaggressive, but damaged individuals can rupture with enough force to endanger ships that approached carelessly.`
+			`\tThe earliest useful reports therefore separate two facts that frightened crews sometimes blurred together: the animal does not need to attack a vessel to be dangerous, and danger after death is not evidence that the animal intended to use itself as a weapon.`
+			`\tModern entries preserve temperature, distance, damage source, nearby traffic, and whether the creature had a clear path away. The archive's historical value lies in how quickly explorers learned to treat biological hazard and hostile motive as different questions, especially in a region where unfamiliar life is easy to mistake for an enemy.`
+				decline
+
+
+mission "Acheron Lifeform History: Cetacean Transit Record"
+	minor
+	invisible
+	source "Earth"
+	to offer
+		has "Rulei: Umbral Reach: offered"
+		random < 4
+	on offer
+		conversation
+			`A deep-space observation archive contains only a handful of reliable reports of the immense organism humans have nicknamed the Astral Cetacean. Unlike the more localized Vyrmeid, this creature is capable of traversing distances and routes that ordinary biological life would make seem impossible, and sightings are rare enough that every well-documented encounter matters.`
+			`\tThe archive records stellar environment, apparent heading, nearby matter, and the time between observations while resisting the temptation to draw a migration map from too little evidence. Its ability to move through the depths of space is established by direct observation; where it goes, how often it returns, and whether repeated routes have any social or ecological purpose remain open questions.`
+			`\tResearchers keep failed sightings as carefully as successful ones. For a creature encountered only occasionally, absence is part of the history too: it prevents a few memorable meetings from hardening into a confident story about a life cycle or range that explorers have not actually observed.`
+				decline
