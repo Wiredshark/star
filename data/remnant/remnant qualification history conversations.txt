@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Remnant Qualification Ledger Archive"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		has "Remnant: Cognizance 2: done"
+		random < 1
+	on offer
+		conversation
+			`A public archive displays old qualification ledgers beside records of research, repairs, patrols, and emergency responses. The earliest entries are narrow lists of proven skills. Later ones record who was trusted to judge a problem, who could direct specialists in that field, and where that authority stopped.`
+			`\tA signed note explains that the Remnant's hierarchy grew around demonstrated competence rather than a permanent division between civilian and military institutions. A xenobiologist could set priorities inside xenobiology; a combat specialist could overrule the same person about tactics; a shipwright could direct repairs while still deferring to someone else about navigation or medicine. Over time the ledgers became a record not only of expertise, but of its boundaries.`
+				decline
+
+
+mission "Remnant Threat Designation Archive"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		has "Remnant: Cognizance 2: done"
+		random < 1
+	on offer
+		conversation
+			`A security display preserves old threat designations from laboratories, settlements, patrol crews, and salvage teams. Some describe hostile ships. Others concern contaminated equipment, unstable machinery, dangerous wildlife, or a route that could no longer be used safely.`
+			`\tThe archive stresses a distinction that became important as the Remnant expanded: identifying a threat did not automatically decide the response. A qualified specialist could document danger to a project or to the Remnant as a whole, but the scale, tactics, and opportunity cost of any response still had to be judged by people qualified in those fields. The designation created an obligation to consider the danger, not a blank authorization for force.`
+				decline
+
+
+mission "Remnant Prefect Adjudication Archive"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		has "Remnant: Cognizance 2: done"
+		random < 1
+	on offer
+		conversation
+			`A civic exhibit contains anonymized adjudication records in which several specialists disagreed about the same limited pool of ships, technicians, fuel, or time. The records preserve each recommendation separately before showing the final priority decision.`
+			`\tAn explanatory panel says that this is one reason prefects emerged as a distinct part of Remnant administration. Excellence in one specialty was not enough. Prefects were expected to understand several fields well enough to compare unlike demands, recognize where their own knowledge was weaker than another specialist's, and keep a disputed task connected to the Remnant's wider obligations. The archive presents that humility as a practical qualification rather than a ceremonial virtue.`
+				decline
+
+
+mission "Remnant Cross-Discipline Resource Register"
+	minor
+	source
+		government "Remnant"
+	"offer precedence" 5
+	to offer
+		has "Remnant: Cognizance 2: done"
+		random < 1
+	on offer
+		conversation
+			`A logistics register lists historical cases in which one task crossed several specialties at once: researchers requiring escorts, patrol ships requiring experimental repairs, settlements borrowing medical transports, or engineers working inside a hazardous survey zone. Each entry identifies which specialist controlled which decision and which unresolved demands were passed upward for adjudication.`
+			`\tThe accompanying history says that the Remnant's merged social structure made such records necessary. Keeping research, defense, engineering, logistics, and civil support inside one hierarchy avoided a hard civilian-military split, but it also meant that no single chain of command could answer every question. Cross-discipline registers became a way to preserve responsibility without pretending that authority in one field automatically transferred into another.`
+				decline
