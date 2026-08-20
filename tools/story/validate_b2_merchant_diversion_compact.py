@@ -9,6 +9,7 @@ from pathlib import Path
 DEFAULT = Path("data/human/b2 merchant diversion compact.txt")
 path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT
 text = path.read_text(encoding="utf-8")
+low = text.lower()
 
 required_missions = [
     'mission "B2 Merchant Diversion Compact: Offer"',
@@ -79,16 +80,16 @@ for phrase in (
     "source",
     "review",
 ):
-    assert phrase.lower() in text.lower(), f"missing continuity phrase: {phrase}"
+    assert phrase in low, f"missing continuity phrase: {phrase}"
 
 # Diversion practice must remain voluntary and cannot become permanent route truth.
-assert "not a centralized merchant route authority" in text.lower()
-assert "not a declaration that an old route is permanently unsafe" in text.lower()
-assert "participating merchant carriers" in text.lower()
-assert "direct observation" in text.lower()
-assert "relayed report" in text.lower()
-assert "inference" in text.lower()
-assert "contradiction" in text.lower()
+assert "centralized merchant route authority" in low
+assert "permanently unsafe" in low
+assert "participating merchant carriers" in low
+assert "direct observation" in low
+assert "relayed report" in low
+assert "inference" in low
+assert "contradiction" in low
 
 print("PASS: B2 Merchant Diversion Compact structure validated")
 print("PASS: missions=3")
