@@ -1,0 +1,197 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# Headless actual-game acceptance for the Republic Border Testimony Practice.
+# These tests drive the production mission through the normal spaceport UI,
+# persist the selected practice through a save/reload, and then exercise the
+# later authoritative A1 pressure recurrence.
+
+
+test "A2 Republic Border Testimony Prepare"
+	status partial
+	description "Load a quiet Republic save and arm the integrated B2 aftermath with recovered A1 border pressure."
+	sequence
+		inject "Three Earthly Barges Save"
+		call "Load First Savegame"
+		apply
+			"Intro [0]: offered" = 1
+			"Intro [0]: declined" = 1
+			"A2 Career Review: seen" = 1
+			"B2 Republic Border Testimony Compact: aftermath seen" = 1
+			"world: republic border pressure" = 0
+		assert
+			"B2 Republic Border Testimony Compact: aftermath seen" == 1
+			"world: republic border pressure" == 0
+
+
+test "A2 Republic Border Testimony Persist And Recur"
+	status partial
+	description "Persist the chosen route through save/reload and exercise the production recurrence mission."
+	sequence
+		# Return from the spaceport to the landing panel before saving.
+		input
+			key l
+		call "Save To Default Snapshot"
+		call "Open Menu"
+		call "Load First Savegame"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: recurrence seen" == 0
+		apply
+			"world: republic border pressure" = 4
+		input
+			key p
+		# Advance the route-specific recurrence text. The mission then records
+		# the one-shot consequence and declines without becoming active.
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: recurrence seen" == 1
+			"A2 Republic Border Testimony Practice: Recurrence: active" == 0
+
+
+test "A2 Republic Border Testimony Lineage"
+	status active
+	description "Exercise source-lineage selection, persistence, and later recurrence in the production game UI."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		input
+			key p
+		input
+			key "Return"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: lineage" == 1
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+		assert
+			"A2 Republic Border Testimony Practice: lineage" == 1
+
+
+test "A2 Republic Border Testimony Independence"
+	status active
+	description "Exercise independent-corroboration selection, persistence, and later recurrence in the production game UI."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		input
+			key p
+		input
+			key "Return"
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: independence" == 1
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+		assert
+			"A2 Republic Border Testimony Practice: independence" == 1
+
+
+test "A2 Republic Border Testimony Closure"
+	status active
+	description "Exercise closure-renewal selection, persistence, and later recurrence in the production game UI."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		input
+			key p
+		input
+			key "Return"
+		input
+			key "Down"
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: closure" == 1
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+		assert
+			"A2 Republic Border Testimony Practice: closure" == 1
+
+
+test "A2 Republic Border Testimony Local"
+	status active
+	description "Exercise local-only selection, persistence, and later recurrence in the production game UI."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		input
+			key p
+		input
+			key "Return"
+		input
+			key "Down"
+		input
+			key "Down"
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: local" == 1
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+		assert
+			"A2 Republic Border Testimony Practice: local" == 1
+
+
+test "A2 Republic Border Testimony Refusal"
+	status active
+	description "Exercise explicit refusal and verify that it persists without arming the recurrence."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		input
+			key p
+		input
+			key "Return"
+		input
+			key "Down"
+		input
+			key "Down"
+		input
+			key "Down"
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: refused" == 1
+			"A2 Republic Border Testimony Practice: decided" == 0
+			"A2 Republic Border Testimony Practice: recurrence seen" == 0
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		input
+			key l
+		call "Save To Default Snapshot"
+		call "Open Menu"
+		call "Load First Savegame"
+		assert
+			"A2 Republic Border Testimony Practice: refused" == 1
+			"A2 Republic Border Testimony Practice: decided" == 0
+			"A2 Republic Border Testimony Practice: recurrence seen" == 0
