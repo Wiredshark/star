@@ -30,11 +30,17 @@ mission "A2 Republic Border Testimony Practice: Briefing"
 		conversation
 			`Talia Rook has closed the last review, but not the question behind it. "The compact fixed one chain of records. What do you want people to remember when the next alert arrives?"`
 			choice
-				`\tPreserve source lineage: every operational claim should retain whether it is direct, derived, corrected, contradicted, open, or resolved.`
+				`\t[Evidence: Portable provenance packet] Preserve source lineage: every operational claim should retain whether it is direct, derived, corrected, contradicted, open, or resolved.`
+					to display
+						has "B2 Republic Border Testimony Compact: settlement portable provenance packet"
 					goto lineage
-				`\tPreserve independence: repeated copies may preserve history, but only genuinely independent observations increase corroboration.`
+				`\t[Verran trusts your evidence judgment] Preserve independence: repeated copies may preserve history, but only genuinely independent observations increase corroboration.`
+					to display
+						has "B2 Republic Border Testimony Compact: verran trusts player"
 					goto independence
-				`\tPreserve closure: resolved warnings remain searchable history but need genuinely new evidence before becoming active again.`
+				`\t[Settlement: Expiry and renewal] Preserve closure: resolved warnings remain searchable history but need genuinely new evidence before becoming active again.`
+					to display
+						has "B2 Republic Border Testimony Compact: settlement expiry and renewal"
 					goto closure
 				`\tKeep the compact local. Do not turn one border-record settlement into a standing personal doctrine.`
 					goto local
