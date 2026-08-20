@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native simulation/story/style and production build/save-load validation.
+READY for A3 review/integration.
 
 ## Repository authority
 
@@ -11,6 +11,7 @@ PARTIAL pending exact-head repository-native simulation/story/style and producti
 - Isolated branch: `agent/b2-near-earth-port-promise-compact-20260820-1924`
 - Production commit: `1f46940d8d9519436288e7d258cd2632dd1383a5`
 - Focused validator commit: `575caa385116f8e084f50c19ad443bd628b80ca3`
+- Exact fully validated production/validator/handoff candidate: `b77fe18dee04d636e255b2cd7430e499cf880624`
 
 ## Scope
 
@@ -72,23 +73,28 @@ The private execution service reported four pre-existing service-owned processes
 - `tools/story/validate_b2_near_earth_port_promise_compact.py`
 - `story/B2_NEAR_EARTH_PORT_PROMISE_COMPACT_HANDOFF_20260820.md`
 
-## Validation intended / required
+## Exact validation evidence
 
-Focused validator:
+On exact candidate `b77fe18dee04d636e255b2cd7430e499cf880624`:
+
+- `Fork simulation and story validation` #281 / run `32428794221`: **SUCCESS**.
+- Changed fork content style: **SUCCESS**.
+- Focused simulation and story contracts: **SUCCESS**.
+- All focused story validators, including `validate_b2_near_earth_port_promise_compact.py`: **SUCCESS**.
+- A1 simulation contract tests: **SUCCESS**.
+- `Fork save-load integration smoke` #266 / run `32428794209`: **SUCCESS**.
+- Production configure: **SUCCESS**.
+- Production build: **SUCCESS**.
+- Stock save-load smoke: **SUCCESS**.
+
+The focused validator command is:
 
 ```text
 python3 tools/story/validate_b2_near_earth_port_promise_compact.py
 ```
 
-Repository-native required gates:
-
-1. `Fork simulation and story validation` on the exact candidate head, including changed-content style and automatic focused-validator discovery.
-2. `Fork save-load integration smoke` on the exact candidate head, including production configure/build and stock save-load smoke.
-
-Do not promote this handoff to READY or integrate if either exact-head gate fails.
-
 ## A3 / B3 guidance
 
-A3 should re-read current `main`, verify ancestry/conflicts, and integrate only after exact-head validation is terminal green.
+A3 should re-read current `main`, verify ancestry/conflicts, and integrate only if the validated candidate remains semantically clean against the then-current integration state. The final handoff-only commit does not change production content or validator behavior.
 
 B3 should preserve the distinction among the original obligation, current repair state, substitute provenance, technical compatibility assumptions, acceptance, transferred responsibility, and explicit closure evidence. A useful local repair must not silently rewrite what another port originally promised.
