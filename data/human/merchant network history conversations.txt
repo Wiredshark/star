@@ -1,0 +1,80 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Merchant Rescue Compact Archive"
+	minor
+	source
+		government "Merchant"
+		not attributes "automaton"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: merchant rescue reserve strain" >= 2
+	on offer
+		conversation
+			`A dispatch terminal beside the concourse has been converted into a small historical display. The oldest entries are handwritten promises between captains: if one ship went dark, the others would divert, tow survivors, share medical stores, or carry messages to the next port.`
+			`\tLater records are much more formal. Merchant associations began keeping common distress codes, standby-crew lists, tug availability, medical capacity, and rules for deciding which calls took priority when several ships needed help at once. The archive notes that these systems were built after periods when rescue crews were exhausted faster than ports could replace them.`
+			`\tThe modern dispatch board nearby still shows reserve crews and towing capacity as separate resources. The exhibit makes the current strain look less like an exceptional crisis than the latest version of an old commercial problem: a network survives only if enough people remain available to save the ships that keep it running.`
+				decline
+
+
+mission "Merchant Salvage Provenance Ledger"
+	minor
+	source
+		government "Merchant"
+		not attributes "automaton"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: merchant salvage demand" >= 2
+	on offer
+		conversation
+			`A freight-office display shows pages from old salvage ledgers. Each recovered drive coil, hull plate, cargo container, and damaged reactor component is tied to a location, a ship, a claimant, and a note describing how it was recovered.`
+			`\tThe accompanying text explains that early salvage markets were notorious for duplicate claims, stripped identification plates, and components whose repair history vanished as soon as they changed hands. Merchant ports gradually adopted provenance records so insurers, mechanics, owners, and courts could tell the difference between legitimate recovery, abandoned property, and theft.`
+			`\tModern salvage demand can still overwhelm those procedures. A curator has highlighted several historical periods when ports relaxed documentation just to keep damaged ships supplied, only to spend years afterward sorting out ownership disputes and defective parts. The lesson printed at the end is blunt: scarcity makes records slower, but it also makes them more important.`
+				decline
+
+
+mission "Merchant Diversion Dispatch Archive"
+	minor
+	source
+		government "Merchant"
+		not attributes "automaton"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: merchant route diversion pressure" >= 2
+	on offer
+		conversation
+			`One wall of the port authority office is covered with old route maps marked in different inks. The earliest annotations record improvised detours around piracy, damaged stations, traffic jams, rescue zones, and systems where a reliable repair yard had temporarily stopped taking new work.`
+			`\tOver time, dispatch cooperatives began preserving these detours instead of treating each one as a private captain's trick. They recorded why a route changed, how long the change remained useful, what fuel and repair margins it required, and whether reports came from independent sources or from ships repeating the same warning.`
+			`\tThe archive stresses that a diversion was never considered proof that the original route was permanently unsafe. It was a temporary operating decision with an expiration, a reason, and a cost. Looking at the modern traffic board, where carriers are once again being pushed onto secondary corridors, that distinction seems unusually current.`
+				decline
+
+
+mission "Merchant Recovery Margin Ledger"
+	minor
+	source
+		government "Merchant"
+		not attributes "automaton"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: merchant rescue load" >= 3
+	on offer
+		conversation
+			`A trade association has opened part of its historical accounting archive to the public. Instead of listing profits, the featured ledgers track spare crews, tug hours, emergency berths, loaned parts, temporary repair teams, and the days required to restore each reserve after a surge of distress traffic.`
+			`\tThe notes explain that merchants eventually learned to distinguish between clearing today's emergencies and rebuilding tomorrow's capacity. A convoy could be rescued, a damaged freighter towed in, and a route reopened while the network remained fragile because every standby crew and repair slot was already committed.`
+			`\tLater associations began treating recovery margin as something worth recording in its own right. The ledger does not prescribe a single rule for every port; it simply shows generations of dispatchers discovering the same fact repeatedly: a network that uses every reserve during a crisis needs time, parts, and people before it is truly ready for the next one.`
+				decline
