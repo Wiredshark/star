@@ -1,0 +1,72 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Gegno Seasonal Ecology Archive"
+	minor
+	source "Tschyss"
+	"offer precedence" 5
+	to offer
+		has "Gegno Asteroid Mining Prologue: done"
+		random < 1
+	on offer
+		conversation
+			`A translated natural-history display compares observations of Ghneoe across many of its long dry seasons and brief wet cycles. Early entries are little more than notes about when dormant vegetation appeared to revive. Later records distinguish rainfall, soil moisture, migration, flowering, burrowing activity, and the delay between the return of water and the return of visible life.`
+			`\tThe archive emphasizes that a short visit can make the world look either dead or impossibly fertile depending on the season. Gegno observers gradually learned to keep records long enough to distinguish a temporary burst of activity from a lasting change in the ecosystem.`
+			`\tThe final placard is cautious about cause. Warfare, climate, and the difficulty of settlement all appear in older commentary, but the archive preserves those as separate hypotheses instead of treating the absence of colonies as proof of any one explanation.`
+				decline
+
+
+mission "Gegno Cyife Crystal Survey Archive"
+	minor
+	source "Tschyss"
+	"offer precedence" 5
+	to offer
+		has "Gegno Asteroid Mining Prologue: done"
+		random < 1
+	on offer
+		conversation
+			`A compact survey archive contains diagrams of strange crystalline patches found in the ice of Cyife. The oldest records describe only reflected light and unusual surface readings. Later entries add sample locations, temperatures, fracture patterns, failed extraction attempts, and notes about which observations could not be reproduced on a return visit.`
+			`\tA translated annotation says the most useful habit was preserving negative results. If a later team failed to find the same reflection or material at the same site, that absence stayed in the record rather than being discarded as an inconvenience.`
+			`\tThe archive never claims the crystals are artificial or that any particular Gegno expedition understood their origin. Its value lies in keeping location, observation, and interpretation separate enough that future researchers can revise the explanation without losing the evidence that came before it.`
+				decline
+
+
+mission "Gegno Sand-Beast Field Register"
+	minor
+	source "Tschyss"
+	"offer precedence" 5
+	to offer
+		has "First Contact: Gegno Vi: offered"
+		random < 1
+	on offer
+		conversation
+			`An illustrated field register documents the enormous burrowing creatures encountered on several Gegno desert worlds. The earliest pages focus on obvious survival details: surface vibrations, fresh sand breaks, feeding scars, and the distance at which a disturbed animal might erupt from below.`
+			`\tLater entries separate the animals' observed behavior from stories told about them. Hunters record where a beast surfaced, how it reacted to movement, whether it returned underground, and what injuries it survived, while leaving questions of territory, intelligence, or ritual importance to separate commentary.`
+			`\tA curator notes that this distinction became important because the creatures are dangerous enough to invite dramatic explanations. The field register instead treats fear as a reason to improve observation: a warning is more useful when the next traveler knows exactly what was seen and what was merely inferred.`
+				decline
+
+
+mission "Gegno Old Instrument Register"
+	minor
+	source "Tschyss"
+	"offer precedence" 5
+	to offer
+		has "First Contact: Gegno Scin: offered"
+		random < 1
+	on offer
+		conversation
+			`A museum case holds replicas of old recording instruments recovered from lightly inhabited Gegno worlds. Some were found standing alone for years at a time, their housings weathered but their storage cores still carrying fragments of temperature, vibration, radiation, or atmospheric data.`
+			`\tThe translated history says the instruments were useful precisely because they did not require a permanent settlement nearby. Sparse observations from many years could reveal seasonal cycles, geological changes, or unusual events that a short expedition would otherwise miss.`
+			`\tMany records are incomplete, and the archive refuses to assign every device to a known faction or research program. Instead it preserves age estimates, recovery sites, surviving measurements, and uncertainty about ownership. The result is an institutional memory built from evidence that outlasted the people who first placed the instruments.`
+				decline
