@@ -1,0 +1,143 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Pirate Repair Credit Compact production slice.
+# Consumes the integrated B1 Pirate Repair Debt Archive and keeps the convention
+# local, transactional, and reputation-based rather than inventing a pirate bank
+# or universal legal code.
+
+mission "B2 Pirate Repair Credit Compact: Offer"
+	minor
+	name `A Marker With Two Owners`
+	description `A pirate mechanic and a courier disagree over whether an old repair debt can be transferred without changing what was originally promised.`
+	source
+		government "Pirate"
+	to offer
+		not "B2 Pirate Repair Credit Compact: introduced"
+		not "B2 Pirate Repair Credit Compact: declined"
+	on offer
+		conversation
+			`Mara Quell, a dock mechanic, turns a stamped repair marker over in one grease-blackened hand. Courier Venn Daro says the captain who signed it is dead, but the crew still uses the repaired ship and another yard has offered to accept the debt.`
+			`Quell says, "I fixed a drive for a promise of parts and labor. I did not sell a number on a plate." Daro answers, "And if every debt dies with one captain, no yard can trust a crew long enough to keep it flying."`
+			choice
+				`\tPreserve the original obligation: any transfer must carry what was promised, what has already been repaid, and who now accepts responsibility.`
+					goto provenance
+				`\tAllow practical transfer by current value, but require the new holder to state what changed from the original bargain.`
+					goto current
+				`\tKeep both views: original repair obligation plus a separate current settlement record linked to it.`
+					goto paired
+				`\tRefuse to turn one pirate debt into a general rule.`
+					goto decline
+			label provenance
+			`You tell them the marker can travel only if its history travels too: original repair, promised parts or labor, payments already made, substitutions, disputes, and the person or crew now accepting the remainder. Quell agrees that a debt can move without becoming a different debt by accident.`
+			action
+				"B2 Pirate Repair Credit Compact: introduced" = 1
+				"B2 Pirate Repair Credit Compact: route provenance" = 1
+				"B2 Pirate Repair Credit Compact: quell trusts player" = 1
+			accept
+			label current
+			`You allow the marker to be traded at a current settlement value, provided the transfer records what changed from the original bargain and does not pretend a new price was the old promise. Daro likes the flexibility; Quell insists the old terms remain visible.`
+			action
+				"B2 Pirate Repair Credit Compact: introduced" = 1
+				"B2 Pirate Repair Credit Compact: route current" = 1
+				"B2 Pirate Repair Credit Compact: daro trusts player" = 1
+			accept
+			label paired
+			`You split the problem. The original repair obligation remains an immutable provenance record. A separate current settlement record can change hands, value, or repayment method, but every copy links back to the bargain that created it.`
+			action
+				"B2 Pirate Repair Credit Compact: introduced" = 1
+				"B2 Pirate Repair Credit Compact: route paired" = 1
+				"B2 Pirate Repair Credit Compact: quell trusts player" = 1
+				"B2 Pirate Repair Credit Compact: daro trusts player" = 1
+			accept
+			label decline
+			`You leave the dispute to the yard and crew. No standing procedure is adopted, and the case does not enter the later review chain.`
+			action
+				"B2 Pirate Repair Credit Compact: declined" = 1
+			decline
+
+mission "B2 Pirate Repair Credit Compact: Review"
+	minor
+	name `When Reputation Changes Hands`
+	description `Return after the transferred marker has circulated and decide how repair obligations, substitutions, and closure should survive downstream copies.`
+	source
+		government "Pirate"
+	to offer
+		has "B2 Pirate Repair Credit Compact: introduced"
+		not "B2 Pirate Repair Credit Compact: reviewed"
+	on offer
+		conversation
+			branch provenance
+				has "B2 Pirate Repair Credit Compact: route provenance"
+			branch current
+				has "B2 Pirate Repair Credit Compact: route current"
+			`The marker has passed through two yards and a fence. Every holder can show a valid copy, but one copy says "settled" because a shipment of substitute parts changed hands while another still lists the original labor promise as open.`
+			choice
+				`\tUse a portable obligation packet: original promise, substitutions, partial repayment, current holder, disputes, and explicit closure evidence travel together.`
+					goto packet
+				`\tUse a reconciliation rule: local settlement records may differ, but a debt closes only when the original obligation and current settlement record agree on what was actually satisfied.`
+					goto reconcile
+			label provenance
+			`Quell's provenance record survived, but one downstream yard copied only the remaining balance and lost the reason a substitute part had been accepted. "The history is there," she says. "The copy lost the part that explains it."`
+			choice
+				`\tMake the obligation packet portable enough that substitutions and closure evidence cannot be separated from the copied balance.`
+					goto packet
+				`\tRequire periodic reconciliation between the original obligation and each current settlement record.`
+					goto reconcile
+			label current
+			`Daro's current-value approach kept repairs moving, but one holder treated a discounted transfer price as proof that the mechanic had accepted less. Quell had never agreed to that. Daro admits that market value and obligation value are not the same thing.`
+			choice
+				`\tCarry original promise, transfer history, current holder, and closure evidence in one portable packet.`
+					goto packet
+				`\tKeep flexible local settlement, but reconcile it against the original obligation before declaring the debt closed.`
+					goto reconcile
+			label packet
+			`You recommend a portable obligation packet. Every transfer carries the original repair promise, substitutions, partial repayments, current responsible holder, unresolved disputes, and explicit evidence for closure. A traded marker can change hands without erasing what created it.`
+			action
+				"B2 Pirate Repair Credit Compact: reviewed" = 1
+				"B2 Pirate Repair Credit Compact: settlement portable obligation packet" = 1
+				"B2 Pirate Repair Credit Compact: quell trusts player" = 1
+				"B2 Pirate Repair Credit Compact: daro trusts player" = 1
+			accept
+			label reconcile
+			`You recommend reconciliation. Yards and crews may keep their own local settlement records, but no copy may close the obligation until the original promise and the current settlement record agree on what was actually delivered, substituted, forgiven, or still owed.`
+			action
+				"B2 Pirate Repair Credit Compact: reviewed" = 1
+				"B2 Pirate Repair Credit Compact: settlement reconciliation" = 1
+				"B2 Pirate Repair Credit Compact: quell trusts player" = 1
+				"B2 Pirate Repair Credit Compact: daro trusts player" = 1
+			accept
+
+mission "B2 Pirate Repair Credit Compact: Quell Remembers"
+	minor
+	name `Quell Remembers`
+	description `A pirate mechanic remembers whether a transferable repair debt remained an obligation rather than becoming an unsupported reputation claim.`
+	source
+		government "Pirate"
+	to offer
+		not "B2 Pirate Repair Credit Compact: aftermath seen"
+		or
+			has "B2 Pirate Repair Credit Compact: settlement portable obligation packet"
+			has "B2 Pirate Repair Credit Compact: settlement reconciliation"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Pirate Repair Credit Compact: settlement reconciliation"
+			`Quell shows you a marker now held by a yard you have never visited. The packet still names the original drive repair, a substituted part, two partial repayments, and the crew that accepted the remainder. "It traveled farther than I expected," she says, "but at least it did not grow a new history on the way."`
+			goto record
+			label reconcile
+			`Quell has two records open side by side. A fence marked the debt settled; the original yard still showed an unpaid labor obligation. The reconciliation check forced both sides to document the substitute work that actually closed it. "Better than a rumor becoming a balance sheet," she says.`
+			label record
+			action
+				"B2 Pirate Repair Credit Compact: aftermath seen" = 1
+			accept
