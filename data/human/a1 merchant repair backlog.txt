@@ -1,0 +1,115 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Merchant repair backlog.
+#
+# Sustained rescue pressure creates a bounded repair queue without duplicating
+# distress truth. Existing Merchant rescue load is strictly read-only. Once rescue
+# load has materially recovered, a bounded yard-capacity surge can accelerate repair
+# backlog reduction. Every entering transition ignores planetary takeoff.
+
+
+event "ES A1: Merchant Repair Backlog Recovery"
+	"world: merchant repair backlog" -= 1
+	"world: merchant repair backlog" >?= 0
+	clear "world: merchant repair backlog notice seen"
+
+
+event "ES A1: Merchant Repair Pressure Window Ends"
+	clear "world: merchant repair pressure active"
+
+
+event "ES A1: Merchant Repair Surge Ends"
+	clear "world: merchant repair surge"
+	clear "world: merchant repair surge notice seen"
+
+
+mission "ES A1: Merchant Repair Backlog Escalation"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: merchant rescue load" >= 3
+		not "world: merchant repair pressure active"
+		"world: merchant repair backlog" < 6
+	on offer
+		set "world: merchant repair pressure active"
+		"world: merchant repair backlog" += 2
+		"world: merchant repair backlog" <?= 6
+		event "ES A1: Merchant Repair Backlog Recovery" 6 6
+		event "ES A1: Merchant Repair Pressure Window Ends" 3 3
+		fail
+
+
+mission "ES A1: Merchant Repair Surge"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: merchant repair backlog" >= 4
+		"world: merchant rescue load" <= 1
+		not "world: merchant repair surge"
+	on offer
+		set "world: merchant repair surge"
+		"world: merchant repair backlog" -= 2
+		"world: merchant repair backlog" >?= 0
+		event "ES A1: Merchant Repair Surge Ends" 5 5
+		fail
+
+
+mission "ES A1: Merchant Repair Backlog Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: merchant repair backlog" >= 3
+		not "world: merchant repair backlog notice seen"
+	on offer
+		message
+			text "Merchant service channels report a growing repair queue behind recent rescue operations. Tug crews are clearing disabled ships faster than civilian yards can return them to service, increasing demand for parts, salvage, and dock capacity."
+		set "world: merchant repair backlog notice seen"
+		fail
+
+
+mission "ES A1: Merchant Repair Surge Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "world: merchant repair surge"
+		not "world: merchant repair surge notice seen"
+	on offer
+		message
+			text "Merchant yards are temporarily pooling spare berths, salvage teams, and component stock to cut a lingering repair queue now that rescue traffic has eased."
+		set "world: merchant repair surge notice seen"
+		fail
