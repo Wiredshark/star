@@ -1,0 +1,127 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Dirt Belt drought and irrigation-resource strain.
+#
+# The stock repeatable Drought Relief job is the authoritative observation that a
+# Dirt Belt farming world is presently experiencing drought. While that job is
+# active, qualifying Dirt Belt farming-world entries can accumulate bounded
+# regional drought pressure. Severe observed pressure can in turn consume a
+# separate bounded irrigation-reserve margin. Neither state writes the stock job,
+# and the downstream reserve state never writes back into drought pressure.
+
+
+event "ES A1: Dirt Belt Drought Pressure Recovery"
+	"world: dirt belt drought pressure" -= 1
+	"world: dirt belt drought pressure" >?= 0
+
+
+event "ES A1: Dirt Belt Drought Observation Ends"
+	clear "world: dirt belt drought observation"
+
+
+event "ES A1: Dirt Belt Irrigation Reserve Recovery"
+	"world: dirt belt irrigation reserve strain" -= 1
+	"world: dirt belt irrigation reserve strain" >?= 0
+
+
+event "ES A1: Dirt Belt Irrigation Observation Ends"
+	clear "world: dirt belt irrigation observation"
+
+
+mission "ES A1: Dirt Belt Drought Pressure Observation"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+		attributes "dirt belt"
+		attributes "farming"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "Drought Relief: active"
+		not "world: dirt belt drought observation"
+		"world: dirt belt drought pressure" < 6
+	on offer
+		set "world: dirt belt drought observation"
+		"world: dirt belt drought pressure" += 1
+		"world: dirt belt drought pressure" <?= 6
+		event "ES A1: Dirt Belt Drought Pressure Recovery" 10 10
+		event "ES A1: Dirt Belt Drought Observation Ends" 4 4
+		fail
+
+
+mission "ES A1: Dirt Belt Irrigation Reserve Strain"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+		attributes "dirt belt"
+		attributes "farming"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: dirt belt drought pressure" >= 3
+		not "world: dirt belt irrigation observation"
+		"world: dirt belt irrigation reserve strain" < 4
+	on offer
+		set "world: dirt belt irrigation observation"
+		"world: dirt belt irrigation reserve strain" += 1
+		"world: dirt belt irrigation reserve strain" <?= 4
+		event "ES A1: Dirt Belt Irrigation Reserve Recovery" 12 12
+		event "ES A1: Dirt Belt Irrigation Observation Ends" 6 6
+		fail
+
+
+mission "ES A1: Dirt Belt Drought Resource Advisory"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+		attributes "dirt belt"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: dirt belt drought pressure" >= 3
+		"world: dirt belt irrigation reserve strain" >= 2
+		not "world: dirt belt drought resource advisory seen"
+	on offer
+		message
+			text "Dirt Belt agricultural networks report that repeated drought calls are drawing down irrigation reserves, pump time, stored water, and shared maintenance capacity. Relief deliveries can reduce immediate need without instantly restoring those reserves."
+		set "world: dirt belt drought resource advisory seen"
+		fail
+
+
+mission "ES A1: Dirt Belt Drought Resource Advisory Reset"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Republic"
+		attributes "dirt belt"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: dirt belt drought pressure" <= 1
+		"world: dirt belt irrigation reserve strain" <= 1
+		has "world: dirt belt drought resource advisory seen"
+	on offer
+		clear "world: dirt belt drought resource advisory seen"
+		fail
