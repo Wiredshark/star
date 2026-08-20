@@ -1,0 +1,84 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+
+mission "Deep Research Materials Custody Archive"
+	minor
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`One wall of the terminal archive is covered by old cargo labels, transfer receipts, and photographs of sealed research crates. The accompanying text explains that Deep laboratories often depended on materials gathered far outside the region, and that scientific value could be lost if the history of a sample became uncertain.`
+			`	Over time, laboratories, freight crews, and Deep Security began preserving a common chain of custody: where a shipment originated, which seals had been broken, what storage conditions it experienced, which substitutions were made, and who accepted responsibility at each transfer.`
+			`	The archive emphasizes that a signed receipt was never treated as proof that the contents were what a researcher hoped they were. Custody records preserved the path of the evidence; verification still belonged to the laboratory.`
+				decline
+
+
+
+mission "Deep Research Convoy Reserve Ledger"
+	minor
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A display case holds a faded convoy roster beside photographs of freighters traveling under escort. The notes describe periods when Deep Security had more urgent demands than available ships, even while laboratories still depended on time-sensitive deliveries from distant suppliers.`
+			`	The resulting reserve ledgers tracked not only which escorts were available, but what other patrol, rescue, inspection, or maintenance work had been deferred to make a convoy possible. Civilian captains sometimes filled the gap, but their use was recorded as borrowed capacity rather than free reinforcement.`
+			`	A later annotation reads, "An escorted shipment may arrive on time while the cost of escorting it is still being paid elsewhere." The sentence has been underlined by several generations of archive visitors.`
+				decline
+
+
+
+mission "Deep Route Threat Provenance Archive"
+	minor
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`The local history exhibit includes a series of old route advisories. Some list pirate sightings, others report missing ships, damaged beacons, or warnings copied from neighboring ports. Beside each warning is a column identifying who reported it and whether later traffic confirmed the danger.`
+			`	The curator explains that Deep convoy planners gradually learned to separate a route warning from the reason for believing it. A report from a surviving crew, three repeated copies of the same rumor, and a pattern inferred from disappearances could all justify caution, but they were not the same kind of evidence.`
+			`	The archive kept both accurate warnings and embarrassing false alarms. Removing the latter, the curator says, would make the historical record look more certain than the people making the decisions ever were.`
+				decline
+
+
+
+mission "Deep Experimental Supply Standards Archive"
+	minor
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A compact museum display shows several generations of laboratory shipping containers: insulated boxes, vibration-isolated racks, radiation shielding, pressure vessels, and ordinary freight crates covered with increasingly specific handling marks.`
+			`	An accompanying timeline describes how Deep research centers, manufacturers, and carriers developed shared descriptions for storage limits, contamination risk, orientation, temperature, shock exposure, and replacement materials. The standards did not make every experiment compatible, but they reduced the number of failures caused by the shipment itself.`
+			`	One surviving committee note warns against confusing compatibility with equivalence. A substitute part or material might fit the same container and survive the same journey while still changing the experiment. The archive presents that warning as one of the more durable lessons of the Deep's research economy.`
+				decline
