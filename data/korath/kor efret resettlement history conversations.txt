@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Kor Efret History: Family Reunification Register"
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A public terminal near the port shows rows of family symbols linked to old route markers, settlement names, and status marks. Some entries have been crossed out and replaced several times, while others end with a symbol that appears beside sketches of the Quarg ringworlds.`
+			`\tA Kor Efret clerk notices your interest and points from one family mark to another, then to a cluster of transport records. The meaning is clear even without the language: relatives separated by damaged worlds, failed routes, or migration are tracked until their location is known or contact is restored.`
+			`\tThe register seems less like a census than a continuity tool. In a population scattered by war, environmental decline, and repeated movement between damaged settlements and safer refuges, recording who has reached safety can matter as much as recording who still needs passage.`
+				decline
+
+
+mission "Kor Efret History: Passage Contribution Ledger"
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A shipping office is displaying old passenger accounts beside diagrams of small freighters. Many payments are strikingly uneven: one family contributes cargo, another a few credits, another workshop time or replacement parts. Several journeys appear to have cost far more than the passengers themselves could provide.`
+			`\tThe records suggest that low-fare passage became practical through shared contributions rather than a single subsidy. Workshops, relatives, traders, and sympathetic carriers each covered part of a trip, especially when a family needed to reach a safer settlement or reunite with relatives already living under Quarg protection.`
+			`\tThe ledger preserves the imbalance instead of pretending every journey was an ordinary commercial fare. Transport could be charity, debt, reciprocal help, or paid work all at once, and the exact obligation depended on who had enough capacity to help at that moment.`
+				decline
+
+
+mission "Kor Efret History: Translation Mediation Archive"
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`Inside a civic building, old Korath records are paired with short Quarg inscriptions and newer pictographic notes. Several entries concern travel, family relationships, medical needs, cargo ownership, and the kinds of misunderstandings that can become serious when neither side shares a fluent language.`
+			`\tA nearby display shows Kor Efreti, Quarg, and visiting crews repeating the same gestures and phrases until everyone agrees on what was meant. Over time, recurring translations appear to have been preserved as practical precedents rather than treated as perfect dictionaries.`
+			`\tThe archive is careful about ambiguity. A successful translation is recorded with the situation in which it worked, because a phrase that settled a passenger request or family reunion once may not carry exactly the same meaning in a different dispute. Mediation became durable by remembering context, not by pretending imperfect translation had disappeared.`
+				decline
+
+
+mission "Kor Efret History: Return and Resettlement Ledger"
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		random < 4
+	on offer
+		conversation
+			`A wall display compares damaged districts with lists of households that left, returned, remained elsewhere, or have not made a final decision. Repair status appears beside air-quality marks, workshop capacity, food production, transport availability, and symbols for family members living on other worlds.`
+			`\tThe pattern makes one thing obvious: rebuilding a place and resettling it are not the same task. A building can be habitable while employment is missing; a workshop can reopen while a family chooses to stay near relatives elsewhere; a transport route can return while environmental damage still makes permanent return uncertain.`
+			`\tThe ledger treats those outcomes separately. Recovery is measured not by forcing every displaced Kor Efret back to an old address, but by keeping a truthful record of what has become possible, what remains unsafe or impractical, and which people have chosen a different future.`
+				decline
