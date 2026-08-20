@@ -1,0 +1,165 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Successor Interface Provenance Compact production slice.
+#
+# This consumes B1's Morphic Interface Registry and Transaction and Dispute Ledger
+# as institutional history. The Successors' morphic hardware can rapidly reproduce
+# connector shapes, but safe reuse still depends on pressure, electrical behavior,
+# control conventions, material limits, prior repairs, and the circumstances under
+# which a configuration was actually tested.
+#
+# "Archivist" and "Fitter" are the player's private shorthand for two recurring
+# Successor technicians. They are not canonical titles, House offices, or evidence
+# of centralized Successor engineering authority.
+
+
+event "B2 Successor Interface Provenance Compact: Review Ready"
+	"B2 Successor Interface Provenance Compact: review ready" = 1
+
+
+mission "B2 Successor Interface Provenance Compact: Offer"
+	minor
+	name `The Shape That Fit`
+	description `Two Successor technicians disagree over whether a successful morphic-metal connector record proves the same configuration is safe in a new installation.`
+	source
+		attributes "successor"
+		not attributes "crime" "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "language: Successor"
+		not "B2 Successor Interface Provenance Compact: introduced"
+		not "B2 Successor Interface Provenance Compact: declined"
+	on offer
+		conversation
+			`A Successor technician you privately think of as the Fitter is holding a morphic-metal coupler against a damaged coolant manifold. Across the worktable, another technician you think of as the Archivist has opened three interface-registry entries whose diagrams all look almost identical.`
+			`\tThe Fitter points to one record. "This shape passed inspection on a House freighter last year. The coupler can become it again in moments. We need not leave this berth idle while the exact replacement is fabricated."`
+			`\tThe Archivist enlarges the old record. "The shape passed. The coolant, pressure cycle, control signal, material temperature, and neighboring seals belonged to another installation. A copied geometry can preserve an answer while losing the question that made the answer safe."`
+			choice
+				`\tBack the Archivist: reuse only when the original test conditions and limits travel with the configuration.`
+					goto provenance
+				`\tBack the Fitter: field crews may reuse a proven configuration quickly, but must record the new operating conditions and any deviation from the earlier test.`
+					goto field
+				`\tUse paired records: preserve an immutable tested-interface record and a separate installation-specific qualification record for each reuse.`
+					goto paired
+				`\tRefuse to turn one damaged manifold into a general rule for every Successor port.`
+					goto decline
+			label provenance
+			`You tell them that a successful shape should travel with the conditions that made it safe: medium, pressure, electrical behavior, control convention, temperature, material limits, and known repairs. The Fitter can still reuse it, but only after comparing the new installation against the original qualification envelope.`
+			action
+				"B2 Successor Interface Provenance Compact: introduced" = 1
+				"B2 Successor Interface Provenance Compact: route provenance" = 1
+				"B2 Successor Interface Provenance Compact: archivist trusts player" = 1
+				event "B2 Successor Interface Provenance Compact: Review Ready" 7 11
+				accept
+			label field
+			`You tell the Fitter that the registry should remain useful under pressure. A crew may start from a previously successful configuration, but the new record must say which conditions were directly checked, which were assumed equivalent, and which changed. The Archivist agrees so long as a copied success never becomes evidence that two installations were identical.`
+			action
+				"B2 Successor Interface Provenance Compact: introduced" = 1
+				"B2 Successor Interface Provenance Compact: route field" = 1
+				"B2 Successor Interface Provenance Compact: fitter trusts player" = 1
+				event "B2 Successor Interface Provenance Compact: Review Ready" 7 11
+				accept
+			label paired
+			`You split the record in two. The tested-interface record preserves what was actually proven and under which conditions. The installation record says where the shape was reused, what was measured locally, what differed, and whether the reuse passed inspection. Neither layer silently rewrites the other.`
+			action
+				"B2 Successor Interface Provenance Compact: introduced" = 1
+				"B2 Successor Interface Provenance Compact: route paired" = 1
+				"B2 Successor Interface Provenance Compact: archivist trusts player" = 1
+				"B2 Successor Interface Provenance Compact: fitter trusts player" = 1
+				event "B2 Successor Interface Provenance Compact: Review Ready" 7 11
+				accept
+			label decline
+			`You decline to establish a standing procedure from one repair. The Fitter uses a conventional replacement instead, and the Archivist records that no general interface rule was adopted from the incident.`
+			action
+				"B2 Successor Interface Provenance Compact: declined" = 1
+				decline
+
+
+mission "B2 Successor Interface Provenance Compact: Review"
+	minor
+	name `When the Conditions Fell Away`
+	description `Return after a copied interface record kept the successful geometry but lost the operating conditions and qualification limits that made it meaningful.`
+	source
+		attributes "successor"
+		not attributes "crime" "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "language: Successor"
+		has "B2 Successor Interface Provenance Compact: introduced"
+		has "B2 Successor Interface Provenance Compact: review ready"
+		not "B2 Successor Interface Provenance Compact: reviewed"
+	on offer
+		conversation
+			branch provenance
+				has "B2 Successor Interface Provenance Compact: route provenance"
+			branch field
+				has "B2 Successor Interface Provenance Compact: route field"
+			`The Archivist and Fitter have found the failure they were arguing about. A downstream registry copied the successful connector geometry but condensed away the working fluid, temperature range, pressure cycle, electrical isolation, and the note that one seal had been replaced before the original test. The shape remained correct; its qualification did not survive the copy.`
+				goto settle
+			label provenance
+			`The full qualification envelope prevented one unsafe reuse, but another port copied only the final "approved" configuration into a quick-reference table. The Fitter says, "They preserved the conclusion and discarded the measurements that gave it meaning." The Archivist answers that provenance is useless if it can be detached by ordinary copying.`
+				goto settle
+			label field
+			`The field-first rule kept repairs moving, but one installation record said only that a prior configuration had "worked before." The new crew recorded its own successful pressure test yet omitted that the earlier case used a different control convention. Two valid local observations became a false claim of full compatibility when their context was merged.`
+			label settle
+			choice
+				`\tCreate a portable qualification packet: geometry, medium, pressure, electrical behavior, control convention, temperature, material limits, repairs, test date, and unresolved deviations travel together.`
+					goto packet
+				`\tCreate an expiry-and-revalidation rule: successful shapes remain reusable starting points, but assumptions expire when operating context changes and must be explicitly requalified.`
+					goto revalidate
+			label packet
+			`You recommend a portable qualification packet. A morphic configuration may be copied freely, but every copy carries the conditions under which it was tested, later repairs, known deviations, and whether the present installation actually matches those assumptions. Geometry becomes one part of the evidence rather than the whole conclusion.`
+			action
+				"B2 Successor Interface Provenance Compact: reviewed" = 1
+				"B2 Successor Interface Provenance Compact: settlement portable qualification packet" = 1
+				"B2 Successor Interface Provenance Compact: archivist trusts player" = 1
+				"B2 Successor Interface Provenance Compact: fitter trusts player" = 1
+				accept
+			label revalidate
+			`You recommend expiry and revalidation. The registry keeps successful geometry and its history, but changes in pressure, medium, electrical behavior, control convention, temperature, neighboring seals, or material state invalidate only the assumptions they affect. Crews may reuse prior work without pretending an old approval is permanent proof.`
+			action
+				"B2 Successor Interface Provenance Compact: reviewed" = 1
+				"B2 Successor Interface Provenance Compact: settlement expiry and revalidation" = 1
+				"B2 Successor Interface Provenance Compact: archivist trusts player" = 1
+				"B2 Successor Interface Provenance Compact: fitter trusts player" = 1
+				accept
+
+
+mission "B2 Successor Interface Provenance Compact: Fitter Remembers"
+	minor
+	name `Fitter Remembers`
+	description `The Fitter remembers whether a reusable morphic configuration kept the qualification evidence that made it safe.`
+	source
+		attributes "successor"
+		not attributes "crime" "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "language: Successor"
+		not "B2 Successor Interface Provenance Compact: aftermath seen"
+		or
+			has "B2 Successor Interface Provenance Compact: settlement portable qualification packet"
+			has "B2 Successor Interface Provenance Compact: settlement expiry and revalidation"
+	on offer
+		conversation
+			branch revalidate
+				has "B2 Successor Interface Provenance Compact: settlement expiry and revalidation"
+			`The Fitter recognizes you beside a morphic coupler already changing shape. The registry packet beside it lists the geometry, working fluid, pressure cycle, control convention, temperature, repaired seals, and the tests performed on this installation. "The shape traveled," they say, "but so did the reasons we trusted it."`
+				goto finish
+			label revalidate
+			`The Fitter recognizes you while rejecting an old quick-reference approval. The geometry is still useful, but a new control convention means one assumption has expired. The crew keeps the old successful test as history and requalifies only the affected behavior. "We did not forget the answer," the Fitter says. "We remembered which question it answered."`
+			label finish
+			action
+				"B2 Successor Interface Provenance Compact: aftermath seen" = 1
+				accept
