@@ -20,12 +20,21 @@ required = [
 missing = [item for item in required if item not in text]
 if missing:
     raise SystemExit("missing required contracts: " + ", ".join(missing))
+
 for line in text.splitlines():
     stripped = line.strip()
     if stripped.startswith('"world:') and (' = ' in stripped or ' += ' in stripped or ' -= ' in stripped):
         raise SystemExit("A2 must not write world state: " + stripped)
     if stripped.startswith('"B2 Republic Border Testimony Compact:') and (' = ' in stripped or ' += ' in stripped or ' -= ' in stripped):
         raise SystemExit("A2 must not write B2 state: " + stripped)
+
 if text.count('mission "A2 Republic Border Testimony Practice:') != 2:
     raise SystemExit("expected exactly two A2 missions")
+if text.count('\t"offer precedence" 8') != 2:
+    raise SystemExit("both production missions must outrank ambient history with offer precedence 8")
+if '\n\t\t\taccept\n' in text:
+    raise SystemExit("dialogue-only A2 missions must decline after recording state, not remain active via accept")
+if text.count('\n\t\t\tdecline\n') < 6:
+    raise SystemExit("expected four positive routes, refusal, and recurrence to close as dialogue-only missions")
+
 print("PASS: Republic border testimony practice contracts")
