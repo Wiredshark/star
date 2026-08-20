@@ -1,0 +1,80 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Republic Border Watch Archive"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: republic border pressure" >= 2
+		random < 1
+	on offer
+		conversation
+			`A border-security exhibit shows generations of route plots layered with patrol sightings, distress calls, customs notes, and reports from civilian captains arriving from pirate-held systems. The oldest records often disagree about what a ship was doing, but they are meticulous about where each observation came from.`
+			`\tThe accompanying history says Republic border offices gradually learned to preserve the distinction between an inbound route and evidence of wrongdoing. A vessel's point of origin could justify attention without proving that its captain, passengers, or cargo were part of the threat that made the route dangerous.`
+			`\tLater watch records therefore kept source, time, route, and corroboration together. The archive notes that this did not make the border less guarded; it made repeated warnings easier to compare without allowing the map itself to become a verdict.`
+				decline
+
+
+mission "Republic Patrol Rotation Ledger"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: republic border pressure" >= 4
+		random < 1
+	on offer
+		conversation
+			`A naval-history display contains patrol rosters from several periods of elevated border tension. Ships were concentrated on threatened approaches, but each ledger also records the sectors left thinner, the crews due for relief, and the neighboring commands asked to cover routine duties.`
+			`\tThe display explains that repeated emergencies exposed a predictable failure mode: a patrol concentration could protect one route while quietly exhausting crews or stripping another region of ordinary coverage. Rotation agreements and relief schedules grew out of attempts to prevent a temporary security posture from consuming the capacity needed to sustain it.`
+			`\tThe surviving ledgers treat concentration and recovery as parts of the same operation. A surge that could not later release ships, restore maintenance windows, and return borrowed coverage was considered incomplete even if the immediate alert had ended.`
+				decline
+
+
+mission "Republic Border Alert Review Register"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: republic border pressure" >= 4
+		random < 1
+	on offer
+		conversation
+			`A legal-administration archive displays old border-alert orders beside the review notes that followed them. Early examples are broad and open-ended. Later ones record the incident that raised the alert, the routes affected, the measures authorized, and the date or evidence threshold for reconsidering them.`
+			`\tThe notes describe a recurring institutional problem: an emergency order could outlive the evidence that justified it simply because no office had been assigned to say when the emergency was over. Review intervals and sunset procedures emerged to force a fresh decision instead of allowing yesterday's heightened posture to become today's default by inertia.`
+			`\tThe archive emphasizes that review did not guarantee relaxation. New incidents could renew or expand an alert. The procedural change was narrower: continued restrictions had to be supported by current conditions rather than by the mere fact that restrictions were already in place.`
+				decline
+
+
+mission "Republic Civilian Transit Continuity Archive"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: republic border pressure" >= 2
+		random < 1
+	on offer
+		conversation
+			`A port museum preserves traffic-control records from earlier border crises. Alongside patrol deployments are lists of medical transports, passenger liners, relief cargoes, repair ships, and ordinary freighters whose schedules had to be revised while security inspections and route closures were in effect.`
+			`\tThe historical commentary says border administrators learned that civilian continuity was itself part of security. If legitimate traffic had no documented way through an alert, delays accumulated into shortages, stranded crews, missed medical transfers, and pressure on neighboring ports.`
+			`\tLater procedures therefore recorded emergency exceptions, alternate routes, delayed clearances, and the reason each restriction remained necessary. The goal was not uninterrupted commerce at any cost, but a visible distinction between traffic that had to stop, traffic that could move under safeguards, and obligations that would still need to be cleared after the alert receded.`
+				decline
