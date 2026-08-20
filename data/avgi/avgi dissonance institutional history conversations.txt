@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Avgi History: Dissonance Protest Chronicle"
+	minor
+	invisible
+	source
+		government "Avgi (Dissonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`A community archive near the spaceport has devoted an entire wall to old Dissonance banners, handbills, recordings, and photographs. The oldest material is unevenly dated and sometimes contradictory, but the recurring complaints are recognizable: Consonance taxes, inherited mineral privileges, and the burden of sending ordinary Avgi into dangerous service while distant administrators set policy.`
+			`A volunteer explains that the chronicle deliberately preserves changes in the slogans instead of reducing generations of protest to a single manifesto. Some campaigns demanded lower taxes, others challenged particular concessions or deployments, and later organizers often reinterpreted older grievances for new circumstances. The archive's purpose is to show how opposition developed, not to pretend that every Dissonance movement always agreed with every other one.`
+				decline
+
+
+mission "Avgi History: Dissonance Tax Challenge Ledger"
+	minor
+	invisible
+	source
+		government "Avgi (Dissonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`A public reading room is lined with copies of old tax notices, receipts, exemption requests, and written objections gathered from Dissonance communities. Marginal notes compare how similar households or workshops were assessed on different worlds and whether later reviews changed the amount that was collected.`
+			`The clerk maintaining the collection is careful to call it a challenge ledger rather than an alternative tax code. Dissonance organizers used the records to find inconsistent treatment and to support public arguments against Consonance policy, but the documents also preserve cases where an assessment was corrected or where a complaint turned out to be based on incomplete information. Keeping both outcomes, the clerk says, made the archive more useful than a collection containing only successful grievances.`
+				decline
+
+
+mission "Avgi History: Dissonance Tenure Grievance Register"
+	minor
+	invisible
+	source
+		government "Avgi (Dissonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`A cramped records office stores copied claim maps beside maintenance agreements, inheritance documents, production reports, and testimony from miners and neighboring settlements. Many entries concern the same old extraction concessions that Dissonance speakers condemn as mineral feudalism, but the files focus less on slogans than on the obligations attached to each disputed holding.`
+			`An archivist explains that the register grew because an inherited concession could be politically offensive without every accusation against its holder being true. Organizers began keeping the underlying records so they could distinguish a broken maintenance promise, an unequal privilege, a disputed boundary, and a grievance that had already been answered. Over time, preserving that distinction became part of the Dissonance case against the concession system itself.`
+				decline
+
+
+mission "Avgi History: Dissonance Service Burden Archive"
+	minor
+	invisible
+	source
+		government "Avgi (Dissonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`A memorial archive contains copied deployment notices, letters from families, work-roster gaps, and testimony from Avgi who returned from dangerous assignments. The records do not form a complete military history, but they make the old protest slogan "stop sending us to die" feel less abstract: every deployment also left a workshop, farm, household, or local service trying to cover for someone who was gone.`
+			`The curator says the archive was assembled by several generations of Dissonance organizers who disagreed about what policy should replace the existing system. They therefore kept the evidence of local burden separate from later arguments about blame or reform. Missing records, disputed accounts, and people who returned safely are preserved alongside the harsher stories, so that political memory does not turn uncertainty into a casualty total that no surviving source can actually support.`
+				decline
