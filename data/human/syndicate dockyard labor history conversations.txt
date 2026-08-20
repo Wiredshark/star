@@ -1,0 +1,80 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Syndicate Shift Rotation Archive"
+	minor
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "world: syndicate labor rotation active"
+	on offer
+		conversation
+			`A dockyard personnel office has opened a small historical display beside the shift board. The oldest records are not heroic memorials but ordinary rotation lists: welders, reactor technicians, tug crews, inspectors, and machinists moved between yards when one facility could no longer sustain the same pace without errors or exhaustion.`
+			`\tThe accompanying notes explain that early corporate yards often treated labor shortages as a local scheduling problem. Over time, repeated maintenance surges forced neighboring facilities and contractors to preserve qualification records, rest intervals, substitute-crew availability, and temporary reassignment agreements so one overworked yard could borrow capacity without quietly erasing who was trained for what.`
+			`\tThe modern board nearby is once again cycling repair crews away from strained shifts. The archive does not present rotation as proof that the backlog is solved; it presents it as a way to keep a temporary shortage from becoming a longer-lived loss of skilled labor.`
+				decline
+
+
+mission "Syndicate Qualification Ledger"
+	minor
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: syndicate labor strain" >= 2
+	on offer
+		conversation
+			`A wall-mounted terminal shows generations of dockyard qualification ledgers. Entries list hull classes, pressure systems, reactor families, drive assemblies, inspection licenses, and the dates when particular crews were cleared to work on them without supervision.`
+			`\tA caption explains that the ledgers became more important during periods of labor strain. Moving more bodies onto a repair line could make the schedule look healthier while actually slowing work if experienced crews spent every shift correcting unfamiliar procedures. Syndicate yards therefore began tracking transferable skills separately from simple headcount.`
+			`\tThe current labor board uses much newer software, but it still makes the same distinction. Several crews are marked available yet unsuitable for the highest-priority jobs. The display's final note calls qualification memory a form of infrastructure: invisible when capacity is abundant, decisive when it is not.`
+				decline
+
+
+mission "Syndicate Replacement Stock Provenance Archive"
+	minor
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: syndicate parts scarcity" >= 2
+	on offer
+		conversation
+			`A procurement archive displays old replacement-stock cards for pumps, couplings, reactor shielding, actuator assemblies, and dozens of components whose names have changed since the records were written. Each card records the supplier, compatible systems, prior repairs, substitutions, and the yard that consumed the part.`
+			`\tThe archive notes that emergency maintenance once encouraged yards to treat any compatible component as interchangeable inventory. That worked until revised parts, improvised substitutes, and repaired assemblies began circulating without enough history to tell mechanics what limits they carried. Procurement offices gradually added provenance and substitution records so scarcity would not turn uncertainty into standard practice.`
+			`\tA modern notice beside the exhibit warns that current maintenance mobilizations are again drawing down replacement stocks. The old cards make the warning sound familiar: shortages are measured not only in how many parts remain, but in how much trustworthy information remains attached to them.`
+				decline
+
+
+mission "Syndicate Deferred Work Register"
+	minor
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: syndicate maintenance backlog" >= 3
+	on offer
+		conversation
+			`A public-facing maintenance display has been assembled from old yard ledgers. Instead of celebrating completed refits, it highlights work that was postponed: corrosion checks deferred during emergency repairs, noncritical actuators carried another cycle, berth machinery operated under temporary limits, and inspections rescheduled so damaged ships could return to service first.`
+			`\tThe explanatory text says Syndicate yards learned to record deferred work as its own obligation rather than letting it disappear when the immediate emergency ended. A ship could leave the dock operational while the yard still owed future labor, parts, inspection time, and berth capacity to the work that had been pushed aside.`
+			`\tThe lesson is written in unusually plain language for a corporate exhibit: clearing the visible queue is not the same thing as restoring the yard. The maintenance board beside it is currently carrying a substantial backlog, and several entries are tagged with exactly the sort of deferred obligations described in the archive.`
+				decline
