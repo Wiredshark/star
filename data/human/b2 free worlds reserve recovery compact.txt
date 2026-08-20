@@ -1,0 +1,154 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Free Worlds Reserve Recovery Compact production slice.
+#
+# This content consumes the B1 relief-reserve history and the authoritative A1
+# `world: free worlds relief reserve strain` signal. It focuses on the recovery
+# phase after mutual aid: restoring reserve capacity without erasing the service,
+# stock, staffing, and equipment obligations displaced by the emergency. B2 reads
+# A1 state but never writes it.
+
+
+mission "B2 Free Worlds Reserve Recovery Compact: Offer"
+	minor
+	name `The Empty Shelf Is Not the End`
+	description `Relief depot manager Rina Sol and volunteer coordinator Cal Brenner disagree over how quickly the Free Worlds should rebuild depleted emergency reserves.`
+	source
+		government "Free Worlds"
+	to offer
+		"world: free worlds relief reserve strain" >= 3
+		not "B2 Free Worlds Reserve Recovery Compact: introduced"
+		not "B2 Free Worlds Reserve Recovery Compact: declined"
+	on offer
+		conversation
+			`A relief depot is operating with half its normal reserve racks empty. Rina Sol, the depot manager, has marked missing fuel cells, medical kits, shelter modules, and field generators in red. Cal Brenner, who coordinates volunteer crews between several neighboring worlds, has covered the same board with notes about exhausted drivers, technicians, warehouse staff, and borrowed equipment.`
+			`Sol says, "The emergency shipments left on time. That part worked. Now every port wants to report that its reserve is recovering because new cargo is arriving."`
+			`Brenner shakes his head. "Cargo is the easy number. One shelter module without staff, transport, maintenance, or a place to power it is not restored capacity. And half of those crews have been covering somebody else's shifts for weeks."`
+			`Sol taps the oldest stock-rotation entries. "The Free Worlds learned a long time ago that a reserve has to be maintained, rotated, and replenished. What we never agreed on is when a reserve counts as rebuilt after several systems were borrowed at once."`
+			choice
+				`\tBack Sol: publish a restoration target for each depleted reserve category and do not close the recovery phase until those targets are met.`
+					goto target
+				`\tBack Brenner: rebuild people and support capacity first, even if the visible stock numbers recover more slowly.`
+					goto support
+				`\tTrack both: every replenished item should remain linked to the staff, transport, maintenance, and replacement obligations needed to make it usable reserve capacity.`
+					goto paired
+				`\tTell them each Free World should decide its own recovery practice without your vote.`
+					goto decline
+			label target
+			`You tell Brenner that a recovery plan needs explicit margins rather than a vague promise to "build back." Sol starts listing minimum stock, fuel, shelter, and transport targets by category. Brenner replies, "Fine. Just do not let a full shelf hide an empty shift roster."`
+			action
+				"B2 Free Worlds Reserve Recovery Compact: introduced" = 1
+				"B2 Free Worlds Reserve Recovery Compact: route target" = 1
+				"B2 Free Worlds Reserve Recovery Compact: sol trusts player" = 1
+			accept
+			label support
+			`You tell Sol that contingency capacity is operated by people, not counted by crates. Brenner begins drafting rest rotations, replacement crews, maintenance windows, and limits on repeated emergency borrowing. Sol says, "Then the support ledger has to say when the physical reserve is still short, too. I will not call an exhausted crew a substitute for missing equipment."`
+			action
+				"B2 Free Worlds Reserve Recovery Compact: introduced" = 1
+				"B2 Free Worlds Reserve Recovery Compact: route support" = 1
+				"B2 Free Worlds Reserve Recovery Compact: brenner trusts player" = 1
+			accept
+			label paired
+			`You propose treating reserve recovery as a linked set of obligations. Replaced cargo, restored fuel, returned borrowed equipment, rested crews, repaired generators, and reopened shelter capacity can be recorded separately, but none of them should silently stand in for the others. Sol draws connecting lines across the board. Brenner says, "That would at least show which part of the promise is still missing."`
+			action
+				"B2 Free Worlds Reserve Recovery Compact: introduced" = 1
+				"B2 Free Worlds Reserve Recovery Compact: route paired" = 1
+				"B2 Free Worlds Reserve Recovery Compact: sol trusts player" = 1
+				"B2 Free Worlds Reserve Recovery Compact: brenner trusts player" = 1
+			accept
+			label decline
+			`You decline to turn one depot's argument into a regional rule. Sol nods. Brenner says, "Fair. Independent worlds are allowed to learn the same lesson differently."`
+			action
+				"B2 Free Worlds Reserve Recovery Compact: declined" = 1
+			decline
+
+
+mission "B2 Free Worlds Reserve Recovery Compact: Review"
+	minor
+	name `When the Reserve Looks Full Again`
+	description `Return after regional relief-reserve strain has eased and see whether the Free Worlds can distinguish visible replenishment from genuinely restored contingency capacity.`
+	source
+		government "Free Worlds"
+	to offer
+		has "B2 Free Worlds Reserve Recovery Compact: introduced"
+		"world: free worlds relief reserve strain" <= 1
+		not "B2 Free Worlds Reserve Recovery Compact: reviewed"
+	on offer
+		conversation
+			branch target
+				has "B2 Free Worlds Reserve Recovery Compact: route target"
+			branch support
+				has "B2 Free Worlds Reserve Recovery Compact: route support"
+			`The reserve board is mostly green again, but Sol has circled several entries where the stock returned before the crews, transport, or maintenance capacity did. Brenner has circled the opposite problem: rested volunteers and reopened warehouse shifts waiting on replacement generators or shelter modules.`
+			`Sol says, "The paired record worked, but copied summaries keep collapsing it back into one word: restored. A neighboring port copied our total reserve percentage and lost the fact that two categories were still running on borrowed maintenance teams."`
+			choice
+				`\tCreate a portable reserve-status packet: each category carries stock, support capacity, borrowed resources, responsible owner, and closure evidence.`
+					goto packet
+				`\tKeep separate stock and support ledgers, but require a reconciliation pass before any reserve category can be declared restored.`
+					goto reconcile
+			label target
+			`Sol's explicit stock targets made shortages visible, but some ports reached their numbers by borrowing staff and maintenance capacity from neighbors. Brenner says, "The target was honest. The copied headline was not. They wrote 'reserve restored' and left out whose crews were still carrying it."`
+			choice
+				`\tMake every restoration claim carry both the physical reserve and the support obligations behind it.`
+					goto packet
+				`\tRequire a periodic reconciliation before a local target can be treated as regionally restored capacity.`
+					goto reconcile
+			label support
+			`Brenner's recovery plan brought exhausted crews home and reopened maintenance windows, but some worlds began counting rested staff as available contingency capacity before the missing stock and equipment were replaced. Sol says, "The people are recovered. That does not mean the reserve they operate exists yet."`
+			choice
+				`\tPublish a portable packet that keeps staff recovery and physical reserve restoration visible as separate fields.`
+					goto packet
+				`\tUse a reconciliation cycle so neither support nor stock can close the other category by itself.`
+					goto reconcile
+			label packet
+			`You recommend that every reserve category carry a portable status packet: physical stock, trained staff, transport, maintenance state, borrowed resources, replacement owner, review date, and the evidence used to close each obligation. Sol likes that a downstream summary cannot preserve only the most flattering number. Brenner likes that a crew loan remains visible until the crew is actually returned or replaced.`
+			action
+				"B2 Free Worlds Reserve Recovery Compact: reviewed" = 1
+				"B2 Free Worlds Reserve Recovery Compact: settlement portable reserve packet" = 1
+				"B2 Free Worlds Reserve Recovery Compact: sol trusts player" = 1
+				"B2 Free Worlds Reserve Recovery Compact: brenner trusts player" = 1
+			accept
+			label reconcile
+			`You recommend keeping stock, staffing, transport, shelter, fuel, and maintenance records lightweight and locally owned, but requiring a reconciliation pass before a reserve is declared restored. Each world can choose its own operating margin, yet an unresolved borrowed crew, missing generator, deferred repair, or depleted fuel store prevents the regional record from treating that category as closed.`
+			action
+				"B2 Free Worlds Reserve Recovery Compact: reviewed" = 1
+				"B2 Free Worlds Reserve Recovery Compact: settlement reconciliation cycle" = 1
+				"B2 Free Worlds Reserve Recovery Compact: sol trusts player" = 1
+				"B2 Free Worlds Reserve Recovery Compact: brenner trusts player" = 1
+			accept
+
+
+mission "B2 Free Worlds Reserve Recovery Compact: Brenner Remembers"
+	minor
+	name `Brenner Remembers`
+	description `Cal Brenner remembers whether the relief network learned to distinguish a refilled shelf from restored emergency capacity.`
+	source
+		government "Free Worlds"
+	to offer
+		not "B2 Free Worlds Reserve Recovery Compact: aftermath seen"
+		or
+			has "B2 Free Worlds Reserve Recovery Compact: settlement portable reserve packet"
+			has "B2 Free Worlds Reserve Recovery Compact: settlement reconciliation cycle"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Free Worlds Reserve Recovery Compact: settlement reconciliation cycle"
+			`Brenner finds you beside a relief-board kiosk. "The packet survived its first real test. One port had full medical stock but no rested transport crews, another had staff but two borrowed generators overdue for return. The summary still said the network was recovering, but it stopped calling either category restored until the missing obligation actually closed."`
+			goto record
+			label reconcile
+			`Brenner shows you a compact regional status sheet. "Nobody had to surrender local control. We just stopped letting one good number erase another bad one. A reserve can be locally usable and still owe staff, equipment, fuel, or maintenance back to the network. Now the reconciliation pass keeps that debt visible."`
+			label record
+			action
+				"B2 Free Worlds Reserve Recovery Compact: aftermath seen" = 1
+			accept
