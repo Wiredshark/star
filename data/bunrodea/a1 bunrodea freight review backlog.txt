@@ -1,0 +1,61 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Bunrodea freight-review backlog.
+#
+# Cross-border arrivals into Bunrodea jurisdiction create persistent petition-review
+# load. Each qualifying arrival contributes +1 backlog, capped at 6, and schedules
+# its own exact four-day recovery. Same-jurisdiction movement and planetary takeoff
+# do not count as new review intake.
+
+
+event "ES A1: Bunrodea Freight Review Backlog Decay"
+	"world: bunrodea freight review backlog" -= 1
+	"world: bunrodea freight review backlog" >?= 0
+	clear "world: bunrodea freight review notice seen"
+
+
+mission "ES A1: Bunrodea Freight Review Intake"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Bunrodea"
+	to offer
+		not "entered system by: takeoff"
+		not "previous system government: Bunrodea"
+		"world: bunrodea freight review backlog" < 6
+	on offer
+		"world: bunrodea freight review backlog" += 1
+		"world: bunrodea freight review backlog" <?= 6
+		event "ES A1: Bunrodea Freight Review Backlog Decay" 4 4
+		fail
+
+
+mission "ES A1: Bunrodea Freight Review Backlog Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Bunrodea"
+	to offer
+		not "entered system by: takeoff"
+		"world: bunrodea freight review backlog" >= 4
+		not "world: bunrodea freight review notice seen"
+	on offer
+		message
+			text "Bunrodea freight channels report a growing petition-review backlog. Cross-border manifests are being held longer while clerks reconcile transport facts with estate authority records."
+		set "world: bunrodea freight review notice seen"
+		fail
