@@ -3,7 +3,7 @@
 ## Stage / verdict
 
 - Stage: **B2 STORY CHARACTERS + DYNAMIC CONTENT**
-- Current verdict: **PARTIAL** pending exact-head repository-native simulation/story/style and production save-load validation.
+- Verdict: **READY for A3 review/integration**.
 - Do not self-integrate. A3 retains integration authority.
 
 ## Repository authority
@@ -11,12 +11,19 @@
 - Authoritative `main` observed at slice selection: `fdaf94f18aaa02abd4e7269196375572cd0fdf9b`
 - Required B1 parent: `ce1fb181aff53bfcba72f7137c68961e6f828df4`
 - B1 branch: `agent/b1-remnant-qualification-institutions-20260820-0517`
-- B1 exact-head repository-native validation is now green:
-  - Fork simulation and story validation #202 / `32353249969`: SUCCESS
-  - Fork save-load integration smoke #191 / `32353250072`: SUCCESS
 - B2 branch: `agent/b2-remnant-field-authority-20260820-0727`
 - Production commit: `0f22f9f13bb30d556a8b591f299a75eaeb9ffc15`
 - Focused-validator commit: `359e3d7c263b90cd6c68c87519436787be309be8`
+- Exact production/validator/handoff candidate validated by CI: `f230c82f12b54d10874e5baba29d93731131af08`
+
+## Required B1 dependency validation
+
+The exact B1 parent is fully green:
+
+- Fork simulation and story validation #202 / `32353249969`: **SUCCESS**
+- Fork save-load integration smoke #191 / `32353250072`: **SUCCESS**
+
+A3 should accept/integrate the B1 Remnant qualification-history parent first if it is not already authoritative, then re-read current `main` before integrating this B2 slice.
 
 ## Scope
 
@@ -70,7 +77,7 @@ The slice does **not** write:
 - credits or reputation;
 - cargo/outfit/ship/fleet/combat state.
 
-Persistent route/trust/review/settlement/aftermath conditions are ordinary mission conditions intended to survive save/load using the engine's normal persistence model.
+Persistent route/trust/review/settlement/aftermath conditions use ordinary mission conditions and are covered by the repository's production save/load smoke gate.
 
 ## Files
 
@@ -78,43 +85,66 @@ Persistent route/trust/review/settlement/aftermath conditions are ordinary missi
 - `tools/story/validate_b2_remnant_field_authority_compact.py`
 - `story/B2_REMNANT_FIELD_AUTHORITY_COMPACT_HANDOFF_20260820.md`
 
-## Focused validator
+## Exact validation evidence
 
-`tools/story/validate_b2_remnant_field_authority_compact.py` checks:
+On exact candidate `f230c82f12b54d10874e5baba29d93731131af08`:
 
-- exact three-mission graph;
-- canonical Plume + Prefect Chilia presence;
-- post-Cognizance and B1 gating;
-- three substantive routes plus refusal;
-- 7–11 day Review scheduling only on substantive routes;
-- exactly two terminal settlements;
-- one-shot aftermath state;
-- local goto/label integrity;
-- B2-only write ownership;
-- no material/reputation/world-state mutation;
-- specialist-evidence / bounded-authority / cross-discipline-response continuity invariants.
+### Fork simulation and story validation
 
-## Validation state
+- Workflow #209 / run `32364204726`: **SUCCESS**
+- `Focused simulation and story contracts`: **SUCCESS**
+- `Changed fork content style`: **SUCCESS**
+- Focused validator discovery: **43 checks / 43 passed / 0 failed**
+- `tools/story/validate_b2_remnant_field_authority_compact.py`: **PASS**
+  - missions=3
+  - canonical_characters=Plume + Prefect Chilia
+  - initial_routes=3 + refusal
+  - delayed_review=7-11 days
+  - terminal_settlements=2
+  - authority_boundary=specialist finding != cross-discipline response
+  - mutation_surface=B2 conditions only
+- Cross-file fork content contracts: **PASS**
+  - mission/event names unique
+  - local goto targets valid
+  - B1/A2/B2 do not mutate A1 `world:*` authority
+  - all discovered `world:*` writers remain A1-owned
+- `validate_story_repo.py`: **PASS**
+- existing B2 packet contract: **PASS**
+- A1 regression suite: **103 passed**
 
-Before integration, require repository-native validation on the exact final B2 head:
+### Fork save-load integration smoke
 
-1. `Fork simulation and story validation` — must be terminal SUCCESS.
-2. `Fork save-load integration smoke` — must be terminal SUCCESS.
-3. If CI exposes a validator/content-style defect, repair the candidate and re-run on the repaired exact head rather than integrating around the failure.
+- Workflow #198 / run `32364204547`: **SUCCESS**
+- Configure production executable: **SUCCESS**
+- Build production executable: **SUCCESS**
+- Stock save-load smoke cases: **SUCCESS**
 
-Actual-game A3/B3 acceptance should also confirm when practical:
+No repository-native validation failure is being waived.
 
-- Offer does not appear before `Remnant: Cognizance 4: done` and the B1 qualification archive gate;
-- all three positive routes persist through save/reload;
-- refusal does not schedule Review;
-- Review waits for its delayed event;
-- both terminal settlements persist and remain mutually exclusive;
-- aftermath is one-shot;
-- nearby Remnant mission offer precedence remains sane.
+## Isolation evidence
+
+Exact B1-parent-to-validated-candidate comparison:
+
+- 3 commits ahead
+- 0 commits behind
+- exactly 3 added files
+- 409 additions
+- 0 deletions
+
+No unrelated source/data files are touched.
+
+## Private-host boundary
+
+The private Fallout execution connector's process-list request returned transient 502 errors during this run. No process was killed or modified. No host-side Endless Sky validation is claimed from that unrelated service; GitHub repository-native validation above is the acceptance evidence.
 
 ## A3 / B3 integration notes
 
-Integration order: accept/integrate the validated B1 Remnant qualification-history parent first if it is not already authoritative, then re-read current `main` and integrate this B2 branch only if ancestry and continuity remain clean.
+A3 should:
+
+1. accept/integrate the validated B1 parent first if still outstanding;
+2. re-read current authoritative `main` and verify ancestry/conflicts;
+3. integrate the B2 production/validator changes only if continuity remains clean;
+4. retain A3 authority over the final integration commit.
 
 B3 should preserve these distinctions:
 
@@ -124,11 +154,14 @@ B3 should preserve these distinctions:
 - strong expertise != universal authority;
 - copied summaries must not manufacture authority by dropping scope metadata.
 
-## Current exact SHAs
+Actual-game review may still inspect offer precedence and all route presentations when convenient, but the required repository-native story/style/build/save-load acceptance gates are green.
 
-- authoritative main observed: `fdaf94f18aaa02abd4e7269196375572cd0fdf9b`
+## Exact SHAs
+
+- authoritative main observed at selection: `fdaf94f18aaa02abd4e7269196375572cd0fdf9b`
 - required B1 parent: `ce1fb181aff53bfcba72f7137c68961e6f828df4`
 - production: `0f22f9f13bb30d556a8b591f299a75eaeb9ffc15`
 - focused validator: `359e3d7c263b90cd6c68c87519436787be309be8`
+- exact fully validated B2 candidate: `f230c82f12b54d10874e5baba29d93731131af08`
 
-Current verdict remains **PARTIAL** until both exact-head B2 repository-native workflows are terminal green.
+**Verdict: READY for A3 review/integration.**
