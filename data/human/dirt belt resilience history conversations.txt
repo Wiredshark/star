@@ -1,0 +1,84 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+
+mission "Dirt Belt Water Share Archive"
+	minor
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A local agricultural archive has put several generations of water-allocation ledgers on display. The oldest are little more than handwritten pump schedules and arguments over whose irrigation line opened first. Later records track reservoir levels, well failures, emergency restrictions, and transfers between neighboring settlements.`
+			`\tThe accompanying history says repeated droughts taught the early Dirt Belt colonies that ownership of a well or canal did not make water shortages stop at a property line. Local agreements gradually grew to distinguish ordinary use, emergency minimums, temporary transfers, and the maintenance work required before anyone could claim another settlement's spare capacity.`
+			`\tA curator points out that the system never eliminated disputes. What changed was that a shortage could be argued from a shared record instead of from whoever reached the pump controls first. The modern ledgers still preserve that distinction between having a claim and having enough water to honor every claim at once.`
+				decline
+
+
+
+mission "Dirt Belt Seed and Machinery Cooperative Archive"
+	minor
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A cooperative hall beside the spaceport displays old seed inventories next to photographs of tractors, harvesters, and irrigation equipment whose replacement parts have not been manufactured for generations. Many entries are marked with the names of several settlements rather than a single owner.`
+			`\tThe exhibit explains that crop failures and equipment breakdowns rarely happened on convenient schedules. Communities began preserving seed stock in several locations and pooling expensive machinery so one bad season or one failed pump would not force a settlement to rebuild its entire productive base alone.`
+			`\tThose arrangements created their own arguments over wear, transport costs, replacement parts, and whose harvest had priority. The surviving bylaws are full of repair obligations and borrowing limits. Their importance, the exhibit notes, was not that cooperation made resources abundant, but that scarcity became something communities could plan around together.`
+				decline
+
+
+
+mission "Dirt Belt Drought Relief Routing Ledger"
+	minor
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`An emergency-logistics display shows old drought-relief manifests from farming worlds across the Dirt Belt. Beside each cargo entry are notes about unloading capacity, road access, warehouse space, spoiled shipments, late arrivals, and settlements whose original requests changed before the supplies reached them.`
+			`\tThe archive says early relief efforts often treated delivery as the whole problem. Experience taught local coordinators that a shipment could arrive on time and still fail if there were too few workers to unload it, no dry storage, no transport from the port, or no current information about which community had become most desperate.`
+			`\tLater routing ledgers therefore recorded not only what was requested, but what could actually be received, moved, and used. The practice did not remove the need for outside aid; it made the difference between a successful delivery and a merely completed freight contract easier to see.`
+				decline
+
+
+
+mission "Dirt Belt Mutual Maintenance Register"
+	minor
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A maintenance office has preserved a register of old inter-settlement repair calls. Entries cover failed pumps, cracked pressure lines, grounded cargo vehicles, power faults, greenhouse damage, and machine shops asking neighboring worlds for a specialist or a compatible part.`
+			`\tThe historical notes explain that early settlements could not each afford every kind of technician, tool, or spare. Mutual-aid rosters emerged instead: a machinist might travel one direction this month while a pump assembly or electrical crew came back the other way later.`
+			`\tThe register carefully records unfinished obligations as well as successful repairs. A settlement that borrowed a crew still owed replacement stock, labor, transport, or future assistance after the emergency ended. The archivist calls that accounting one of the unglamorous institutions that let poor worlds keep helping one another without pretending help was free.`
+				decline
