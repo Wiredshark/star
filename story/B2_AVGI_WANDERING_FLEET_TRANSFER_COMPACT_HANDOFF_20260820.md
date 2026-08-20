@@ -2,7 +2,7 @@
 
 ## Stage / verdict
 - Stage: B2 STORY CHARACTERS + DYNAMIC CONTENT
-- Current verdict: PARTIAL pending exact-head repository-native validation
+- Current verdict: **READY for A3 review/integration**
 - Do not self-integrate; A3 retains integration authority.
 
 ## Authority / ancestry
@@ -15,7 +15,8 @@
 ## Exact B2 commits
 - Production: `cdaa576bfd0e4584a71c0fb5925657b478fea9d8`
 - Focused validator: `48a0bd5f083d47e6aa0f747ab9e5f7abc5ab892b`
-- Current handoff head: this commit.
+- Exact fully validated production/validator/handoff candidate: `dcc5d6fa79145221077eca766e09466c39884975`
+- Final READY-handoff-only head: this commit.
 
 ## Scope
 Adds one three-mission recurring-character arc consuming B1 Wandering Fleet load/reserve, refit-provenance, and repair-dependency history.
@@ -52,21 +53,23 @@ One-shot aftermath demonstrates the selected distinction between a completed shi
 Before authoring, live `main`, recent commits, and the open B2 inventory were inspected. Existing Avgi B2 work covers Consonance/Twilight emergency power allocation and Dissonance tax appeals; no B2 slice covered Wandering Fleet component transfers, distributed reserves, or repair-dependency debt. The active A2 inventory was also reviewed; no current candidate owns this exact surface.
 
 ## Isolation evidence
-Exact B1-parent to validator-head comparison (`411cf259...` -> `48a0bd5...`):
-- 2 commits ahead / 0 behind
-- 2 added files
-- production: 154 additions
-- validator: 130 additions
-- 0 deletions
+Exact B1-parent to validated candidate comparison:
+- 3 commits ahead / 0 behind
+- exactly 3 added files
+- production + validator + durable handoff only
+- no unrelated deletions or modifications
 
-## Validation status
-Required before READY:
-1. focused validator `tools/story/validate_b2_avgi_wandering_fleet_transfer_compact.py` passes on exact candidate;
-2. repository-native `Fork simulation and story validation` passes, including changed-content style and state-ownership contracts;
-3. repository-native `Fork save-load integration smoke` passes, including production configure/build and stock save/load smoke;
-4. exact branch remains isolated/mergeable against the required B1 dependency and then-current A3 integration state.
+## Exact validation
+On exact candidate `dcc5d6fa79145221077eca766e09466c39884975`:
+- `Fork simulation and story validation` run #220 / `32374767303`: **SUCCESS**.
+- `Changed fork content style`: **SUCCESS**.
+- `Focused simulation and story contracts`: **SUCCESS**.
+- focused story validator discovery/execution, including `validate_b2_avgi_wandering_fleet_transfer_compact.py`: **SUCCESS**.
+- A1 simulation/state-ownership contract tests: **SUCCESS**.
+- `Fork save-load integration smoke` run #209 / `32374767406`: **SUCCESS**.
+- production configure/build and stock save-load smoke: **SUCCESS**.
 
-No CI/build/save-load success is claimed until those exact-head workflows actually complete.
+The final commit only changes this durable handoff from PARTIAL to READY; production content and validator behavior are unchanged from the fully validated candidate.
 
 ## A3 / B3 guidance
 A3 should integrate/accept the B1 Wandering Fleet institutional-history dependency first if it remains outstanding, re-read current `main`, then integrate this B2 slice only if ancestry and continuity are still clean.
