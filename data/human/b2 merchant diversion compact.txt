@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Merchant Diversion Compact.
+#
+# Consumes B1's Merchant Diversion Dispatch Archive and A1's authoritative
+# route-diversion pressure. B2 never writes world state. The compact remains a
+# voluntary dispatch practice among participating Merchant carriers, not a
+# centralized Merchant route authority or a declaration that an old route is
+# permanently unsafe.
+
+
+mission "B2 Merchant Diversion Compact: Offer"
+	minor
+	name `The Detour That Stayed`
+	description `Dispatcher Nessa Ward and carrier captain Cal Harker disagree over how temporary Merchant route diversions should travel between ports without hardening into permanent assumptions.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		"world: merchant route diversion pressure" >= 3
+		not "B2 Merchant Diversion Compact: introduced"
+		not "B2 Merchant Diversion Compact: declined"
+	on offer
+		conversation
+			`A dispatch board is crowded with secondary-route notices. Several were written for yesterday's rescue traffic, but copied versions are already appearing in ports that never saw the original congestion report.`
+			`Nessa Ward, a dispatcher coordinating Merchant traffic, taps one of the copied notices. "A diversion should say why it exists, when the evidence was gathered, and when somebody must review it again. Otherwise temporary becomes traditional by accident."`
+			`Cal Harker, an independent carrier captain, points to a different warning. "And if every ship waits for a clerk to renew a notice, captains will fly straight into delays everybody in the field already knows about. Current reports need room to outrun paperwork."`
+			`Ward answers, "Then the report needs enough context to move quickly without becoming more certain each time it is copied."`
+			choice
+				`\tBack Ward: every diversion should carry a reason, source, review time, and explicit expiry.`
+					goto expiry
+				`\tBack Harker: let fresh field reports move immediately, but mark who observed the condition and when.`
+					goto field
+				`\tPair both: fast field reports plus a portable diversion record that keeps evidence, cost, and expiry together.`
+					goto paired
+				`\tTell them route choice should remain a captain's judgment rather than become another standing compact.`
+					goto decline
+			label expiry
+			`You side with Ward. A useful detour should not outlive the condition that justified it merely because copying is easy. Harker accepts the expiry, provided a captain can renew the warning with fresh evidence instead of waiting for the original dispatcher.`
+			action
+				"B2 Merchant Diversion Compact: introduced" = 1
+				"B2 Merchant Diversion Compact: route expiry" = 1
+				"B2 Merchant Diversion Compact: ward trusts player" = 1
+			accept
+			label field
+			`You side with Harker. A ship that has just crossed a blocked corridor may know more than a distant office. Ward agrees, but insists that the report say whether the captain saw the obstruction directly, heard it from another ship, or inferred it from traffic behavior.`
+			action
+				"B2 Merchant Diversion Compact: introduced" = 1
+				"B2 Merchant Diversion Compact: route field" = 1
+				"B2 Merchant Diversion Compact: harker trusts player" = 1
+			accept
+			label paired
+			`You recommend a paired model. Field reports move immediately, while a compact record preserves the reason for diversion, observation time, source independence, extra fuel or repair margin, and an explicit review point. Ward says, "Fast enough to matter." Harker adds, "Specific enough to stop being gospel when the road clears."`
+			action
+				"B2 Merchant Diversion Compact: introduced" = 1
+				"B2 Merchant Diversion Compact: route paired" = 1
+				"B2 Merchant Diversion Compact: ward trusts player" = 1
+				"B2 Merchant Diversion Compact: harker trusts player" = 1
+			accept
+			label decline
+			`You tell them a standing compact risks turning practical dispatch advice into authority it was never meant to have. Ward nods. Harker says, "Fair. But copied warnings will still travel farther than the captains who wrote them."`
+			action
+				"B2 Merchant Diversion Compact: declined" = 1
+			decline
+
+
+mission "B2 Merchant Diversion Compact: Review"
+	minor
+	name `When the Main Route Clears`
+	description `Return after route-diversion pressure recedes and see what information survived the detour network.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		has "B2 Merchant Diversion Compact: introduced"
+		"world: merchant route diversion pressure" <= 1
+		not "B2 Merchant Diversion Compact: reviewed"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Merchant Diversion Compact: route expiry"
+			branch field
+				has "B2 Merchant Diversion Compact: route field"
+			`Most Merchant traffic has returned to the primary corridors, but Ward and Harker are comparing archived diversion notices. The paired approach mostly worked. The new problem is visible in copied summaries: the route recommendation survived, while fuel-margin assumptions, source independence, and the condition that should have ended the detour disappeared.`
+			`Harker says, "The advice stayed useful long enough to become dangerous." Ward replies, "Then a diversion record needs to preserve not just a route, but what would falsify it."`
+			choice
+				`\tAdopt an expiry docket that carries trigger, source, cost, review point, and closure status with every copied diversion.`
+					goto docket
+				`\tAdopt an evidence ladder that separates direct observation, repeated report, inference, and later contradiction.`
+					goto ladder
+			label expiry
+			`The expiry-first approach prevented several stale warnings from lingering, but some useful detours vanished from dispatch boards before replacement evidence arrived. Harker says, "The clock knew less than the captains." Ward answers, "Then expiry should force review, not erase the underlying observations."`
+			choice
+				`\tUse a portable expiry docket: expired recommendations remain visible as history, but no longer count as current routing advice without fresh evidence.`
+					goto docket
+				`\tUse an evidence ladder so old observations remain inspectable while their operational conclusion can lose confidence or be contradicted.`
+					goto ladder
+			label field
+			`The field-first approach moved warnings quickly, but repeated reports sometimes looked like independent confirmation even when every captain was repeating the same original message. Ward says, "Five copies are not five observations." Harker nods. "Then the record has to remember where the chain began."`
+			choice
+				`\tCarry source lineage, operating cost, review point, and closure status in a portable diversion docket.`
+					goto docket
+				`\tRank direct observation, relayed report, inference, and contradiction separately so repeated copies do not manufacture confidence.`
+					goto ladder
+			label docket
+			`You recommend a portable expiry docket. A copied detour keeps the condition that triggered it, the original and confirming sources, observation dates, extra fuel or repair margin, the next review point, and whether the primary route has been restored. Ward says, "The route can expire without the evidence disappearing." Harker adds, "And a captain can still renew it with something new."`
+			action
+				"B2 Merchant Diversion Compact: reviewed" = 1
+				"B2 Merchant Diversion Compact: settlement docket" = 1
+				"B2 Merchant Diversion Compact: ward trusts player" = 1
+			accept
+			label ladder
+			`You recommend an evidence ladder. Direct observations, independent confirmations, relayed reports, operational inference, and later contradiction remain distinct even when a short route recommendation is copied downstream. Harker says, "That lets dispatch move fast without pretending hearsay became eyesight." Ward replies, "And it gives us a reason to lower confidence before a bad habit becomes a permanent route."`
+			action
+				"B2 Merchant Diversion Compact: reviewed" = 1
+				"B2 Merchant Diversion Compact: settlement ladder" = 1
+				"B2 Merchant Diversion Compact: harker trusts player" = 1
+			accept
+
+
+mission "B2 Merchant Diversion Compact: Ward Remembers"
+	minor
+	name `Ward Remembers`
+	description `Nessa Ward remembers how the diversion network learned to preserve temporary routing evidence without turning it into permanent truth.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		not "B2 Merchant Diversion Compact: aftermath seen"
+		or
+			has "B2 Merchant Diversion Compact: settlement docket"
+			has "B2 Merchant Diversion Compact: settlement ladder"
+	on offer
+		conversation
+			branch ladder
+				has "B2 Merchant Diversion Compact: settlement ladder"
+			`Ward shows you a diversion docket for a corridor that reopened two days ago. The operational recommendation is closed, but the old congestion report, two independent confirmations, the extra fuel margin, and the date the route cleared are still attached. "Expired is not erased," she says. "It is simply no longer current advice."`
+			goto record
+			label ladder
+			`Ward shows you two nearly identical route warnings. One rests on a captain's direct observation; the other is a chain of repeated reports from the same source. The display assigns them different confidence and flags a later contradiction. "The short message can still say 'divert,'" she says. "The evidence underneath tells us how loudly."`
+			label record
+			action
+				"B2 Merchant Diversion Compact: aftermath seen" = 1
+			accept
