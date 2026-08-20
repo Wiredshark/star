@@ -1,0 +1,89 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Merchant rescue reserve strain.
+#
+# Heavy rescue demand consumes standby crews and tugs even after an immediate
+# distress call is resolved. Existing rescue load is read-only upstream authority.
+# Elevated and critical loads contribute bounded reserve strain, with each accepted
+# contribution paired to an equal exact ten-day recovery obligation.
+
+
+event "ES A1: Merchant Rescue Reserve Recovery 1"
+	"world: merchant rescue reserve strain" -= 1
+	"world: merchant rescue reserve strain" >?= 0
+	clear "world: merchant rescue reserve strain notice seen"
+
+
+event "ES A1: Merchant Rescue Reserve Recovery 2"
+	"world: merchant rescue reserve strain" -= 2
+	"world: merchant rescue reserve strain" >?= 0
+	clear "world: merchant rescue reserve strain notice seen"
+
+
+mission "ES A1: Merchant Rescue Reserve Elevated Load"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: merchant rescue load" >= 3
+		"world: merchant rescue load" < 5
+		"world: merchant rescue reserve strain" < 4
+	on offer
+		"world: merchant rescue reserve strain" += 1
+		"world: merchant rescue reserve strain" <?= 4
+		event "ES A1: Merchant Rescue Reserve Recovery 1" 10 10
+		fail
+
+
+mission "ES A1: Merchant Rescue Reserve Critical Load"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: merchant rescue load" >= 5
+		"world: merchant rescue reserve strain" < 3
+	on offer
+		"world: merchant rescue reserve strain" += 2
+		"world: merchant rescue reserve strain" <?= 4
+		event "ES A1: Merchant Rescue Reserve Recovery 2" 10 10
+		fail
+
+
+mission "ES A1: Merchant Rescue Reserve Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Merchant"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: merchant rescue reserve strain" >= 3
+		not "world: merchant rescue reserve strain notice seen"
+	on offer
+		message
+			text "Merchant dispatch boards are drawing down standby rescue crews and towing reserves to cover sustained distress traffic. Controllers expect slower recovery margins until the backlog clears."
+		set "world: merchant rescue reserve strain notice seen"
+		fail

@@ -1,0 +1,62 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Free Worlds relief-reserve strain.
+#
+# Sustained severe humanitarian demand consumes reserve shelter, fuel, transport,
+# and staff capacity. Relief demand remains read-only upstream authority. Each
+# accepted reserve-strain contribution is bounded and paired with exact recovery.
+
+
+event "ES A1: Free Worlds Relief Reserve Recovery"
+	"world: free worlds relief reserve strain" -= 1
+	"world: free worlds relief reserve strain" >?= 0
+	clear "world: free worlds relief reserve notice seen"
+
+
+mission "ES A1: Free Worlds Relief Reserve Strain"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds relief demand" >= 4
+		"world: free worlds relief reserve strain" < 4
+	on offer
+		"world: free worlds relief reserve strain" += 1
+		"world: free worlds relief reserve strain" <?= 4
+		event "ES A1: Free Worlds Relief Reserve Recovery" 6 6
+		fail
+
+
+mission "ES A1: Free Worlds Relief Reserve Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: free worlds relief reserve strain" >= 3
+		not "world: free worlds relief reserve notice seen"
+	on offer
+		message
+			text "Free Worlds relief coordinators report that reserve shelter, fuel, and transport capacity is running thin after sustained emergency demand. Regional crews are rotating stock and staff to rebuild contingency margins."
+		set "world: free worlds relief reserve notice seen"
+		fail

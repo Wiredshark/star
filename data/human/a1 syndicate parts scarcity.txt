@@ -1,0 +1,90 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A1 world simulation: Syndicate replacement-parts scarcity.
+#
+# Existing maintenance mobilization is strictly read-only input. One emergency
+# mobilization can consume up to two units of replacement-stock margin, protected
+# by a six-day latch so repeated system entries during the same surge cannot stack
+# scarcity. Each unit has its own scheduled recovery; local assistance can relieve
+# one additional unit at a time without mutating maintenance backlog or surge state.
+
+
+event "ES A1: Syndicate Parts Scarcity Recovery"
+	"world: syndicate parts scarcity" -= 1
+	"world: syndicate parts scarcity" >?= 0
+	clear "world: syndicate parts scarcity notice seen"
+
+
+event "ES A1: Syndicate Parts Scarcity Latch Ends"
+	clear "world: syndicate parts scarcity surge counted"
+
+
+mission "ES A1: Syndicate Mobilization Parts Scarcity"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Syndicate"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		has "world: syndicate maintenance surge"
+		not "world: syndicate parts scarcity surge counted"
+		"world: syndicate parts scarcity" < 5
+	on offer
+		set "world: syndicate parts scarcity surge counted"
+		"world: syndicate parts scarcity" += 2
+		"world: syndicate parts scarcity" <?= 6
+		event "ES A1: Syndicate Parts Scarcity Recovery" 4 4
+		event "ES A1: Syndicate Parts Scarcity Recovery" 8 8
+		event "ES A1: Syndicate Parts Scarcity Latch Ends" 6 6
+		fail
+
+
+mission "ES A1: Syndicate Parts Relief"
+	assisting
+	invisible
+	repeat
+	minor
+	to offer
+		"world: syndicate parts scarcity" >= 1
+	source
+		government "Syndicate"
+		not category "Fighter" "Drone"
+		not attributes "automaton"
+	on offer
+		"world: syndicate parts scarcity" -= 1
+		"world: syndicate parts scarcity" >?= 0
+		decline
+	destination "Earth"
+
+
+mission "ES A1: Syndicate Parts Scarcity Notice"
+	invisible
+	entering
+	non-blocking
+	repeat
+	source
+		government "Syndicate"
+	destination "Earth"
+	to offer
+		not "entered system by: takeoff"
+		"world: syndicate parts scarcity" >= 3
+		not "world: syndicate parts scarcity notice seen"
+	on offer
+		message
+			text "Syndicate logistics channels report that emergency maintenance mobilizations are drawing down replacement-component reserves. Dispatchers are prioritizing scarce parts while local deliveries rebuild stock."
+		set "world: syndicate parts scarcity notice seen"
+		fail
