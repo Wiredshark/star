@@ -1,0 +1,154 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Gegno Long-Baseline Compact character slice.
+#
+# This consumes B1's seasonal-ecology, crystal-survey, sand-beast field, and old
+# instrument archives and turns their evidence discipline into a present-day
+# dispute about how short expeditions should update long-lived environmental
+# records. The two recurring specialists are described through player-private
+# shorthand rather than invented Gegno offices. All writable state is B2-prefixed.
+
+
+event "B2 Gegno Long-Baseline Compact: Review Ready"
+	"B2 Gegno Long-Baseline Compact: review ready" = 1
+
+
+mission "B2 Gegno Long-Baseline Compact: Offer"
+	minor
+	name `One Season Is Not a Climate`
+	description `Two Gegno specialists disagree about how much a short field survey should be allowed to rewrite a long environmental record.`
+	source "Tschyss"
+	"offer precedence" 8
+	to offer
+		has "Gegno Asteroid Mining Prologue: done"
+		not "B2 Gegno Long-Baseline Compact: introduced"
+		not "B2 Gegno Long-Baseline Compact: declined"
+	on offer
+		conversation
+			`A Gegno archivist and a field surveyor are comparing two records beside a bank of translated environmental displays. You privately think of them as the Archive Keeper and the Pathfinder; neither term appears to be a formal Gegno title.`
+			`The Archive Keeper points to a long seasonal series from Ghneoe. "A survey team saw standing water where the older record expected dry ground. They want to replace the old route warning."`
+			`The Pathfinder answers, "The old warning may already be wrong. A record that never yields to fresh observation becomes a ritual, not a tool."`
+			`Both agree on the underlying problem. A short visit can capture a real change, but it can also catch an unusual week inside a much longer cycle. The same difficulty appears in Cyife crystal surveys, sand-beast field notes, and readings from old instruments whose ownership is uncertain even when their measurements remain useful.`
+			choice
+				`\tRequire long-baseline continuity: preserve the older series as the reference and add the new observation as an exception until repeated measurements confirm a lasting change.`
+					goto baseline
+				`\tPrioritize current field conditions: let crews update the operational warning immediately, but attach observation date, method, and confidence so later teams know exactly what changed.`
+					goto current
+				`\tKeep paired records: one long-baseline environmental series and one current operational layer, with every contradiction explicitly linked instead of allowing either record to overwrite the other.`
+					goto paired
+				`\tDecline to tell Gegno researchers how much weight one expedition should have over another.`
+					goto decline
+			label baseline
+			`You favor the long series. The newest observation is real evidence, but not yet proof that the underlying cycle has changed. The Archive Keeper approves. The Pathfinder objects until you add that the exception must remain visible and reviewable rather than being buried beneath the older pattern.`
+			action
+				"B2 Gegno Long-Baseline Compact: introduced" = 1
+				"B2 Gegno Long-Baseline Compact: route baseline first" = 1
+				"B2 Gegno Long-Baseline Compact: keeper trusts player" = 1
+				event "B2 Gegno Long-Baseline Compact: Review Ready" 6 9
+				accept
+			label current
+			`You favor current operational truth. If a crew can see that a route is flooded or a burrowing animal has changed its range, the next traveler should not wait years for the archive to catch up. The Pathfinder agrees, while the Archive Keeper insists that the new warning carry its date, method, and uncertainty instead of silently replacing the older record.`
+			action
+				"B2 Gegno Long-Baseline Compact: introduced" = 1
+				"B2 Gegno Long-Baseline Compact: route current layer" = 1
+				"B2 Gegno Long-Baseline Compact: pathfinder trusts player" = 1
+				event "B2 Gegno Long-Baseline Compact: Review Ready" 6 9
+				accept
+			label paired
+			`You suggest treating long-term pattern and present field condition as different products. A current hazard map may change quickly, while the historical series changes only when enough evidence supports a revised pattern. Contradictions remain linked so later researchers can see where the operational layer and long baseline disagree.`
+			`The Archive Keeper likes that old measurements cannot erase a new hazard. The Pathfinder likes that one dramatic expedition cannot rewrite decades of observation by itself.`
+			action
+				"B2 Gegno Long-Baseline Compact: introduced" = 1
+				"B2 Gegno Long-Baseline Compact: route paired layers" = 1
+				"B2 Gegno Long-Baseline Compact: keeper trusts player" = 1
+				"B2 Gegno Long-Baseline Compact: pathfinder trusts player" = 1
+				event "B2 Gegno Long-Baseline Compact: Review Ready" 6 9
+				accept
+			label decline
+			`You tell them that a visiting human should not decide how Gegno field evidence changes Gegno archives. The Archive Keeper returns to the old series. The Pathfinder marks the fresh observation for another crew to inspect.`
+			action
+				"B2 Gegno Long-Baseline Compact: declined" = 1
+				decline
+
+
+mission "B2 Gegno Long-Baseline Compact: Review"
+	minor
+	name `The Missing Context`
+	description `The Archive Keeper and Pathfinder return after copied environmental warnings begin losing the context that made them trustworthy.`
+	source "Tschyss"
+	"offer precedence" 8
+	to offer
+		has "B2 Gegno Long-Baseline Compact: introduced"
+		has "B2 Gegno Long-Baseline Compact: review ready"
+		not "B2 Gegno Long-Baseline Compact: reviewed"
+	on offer
+		conversation
+			branch baseline
+				has "B2 Gegno Long-Baseline Compact: route baseline first"
+			branch current
+				has "B2 Gegno Long-Baseline Compact: route current layer"
+			`The paired-layer approach worked until copied summaries began dropping the links between them. One downstream route map preserved the current warning but lost the older seasonal pattern; another copied the historical chart without the contradiction that triggered a field recheck.`
+				goto settle
+			label baseline
+			`The long-baseline rule prevented one unusual wet period from rewriting the archive, but a copied summary later omitted the exception entirely. The Archive Keeper says the old pattern remained statistically careful while becoming operationally misleading.`
+				goto settle
+			label current
+			`The field-first rule kept travelers away from a real hazard, but copies of the warning gradually lost the observation date and survey method. The Pathfinder says a temporary condition began to look like permanent environmental truth.`
+			label settle
+			`They agree that the problem is no longer whether old or new evidence should win. It is whether a copied conclusion can remain useful after its temporal and evidentiary context has been stripped away.`
+			choice
+				`\tAdopt a portable observation packet: every operational warning carries observation date, method, source lineage, baseline it modifies, uncertainty, and the condition that should trigger review.`
+					goto packet
+				`\tAdopt an expiry-and-contradiction register: temporary operational conclusions expire unless renewed, while unresolved conflicts between field observations and the long baseline remain visible until explicitly reconciled.`
+					goto expiry
+			label packet
+			`You recommend making context travel with the conclusion. A route warning may remain concise, but it cannot be copied without the date, method, evidence source, historical baseline, uncertainty, and review trigger that justify it. The Pathfinder says crews can still act quickly. The Archive Keeper says later researchers can finally tell what the warning was allowed to mean.`
+			action
+				"B2 Gegno Long-Baseline Compact: reviewed" = 1
+				"B2 Gegno Long-Baseline Compact: settlement observation packet" = 1
+				"B2 Gegno Long-Baseline Compact: keeper trusts player" = 1
+				"B2 Gegno Long-Baseline Compact: pathfinder trusts player" = 1
+				accept
+			label expiry
+			`You recommend expiry for operational conclusions and permanence for contradictions. A hazard warning can be renewed when fresh evidence supports it; an old warning can lapse without erasing the observations that created it. If current and historical records still disagree, the disagreement itself remains part of the archive until a later survey resolves it.`
+			action
+				"B2 Gegno Long-Baseline Compact: reviewed" = 1
+				"B2 Gegno Long-Baseline Compact: settlement expiry register" = 1
+				"B2 Gegno Long-Baseline Compact: pathfinder trusts player" = 1
+				accept
+
+
+mission "B2 Gegno Long-Baseline Compact: Keeper Remembers"
+	minor
+	name `The Archive Keeper Remembers`
+	description `The Archive Keeper shows you how Gegno crews now preserve short-term warnings without turning them into permanent environmental truth.`
+	source "Tschyss"
+	"offer precedence" 8
+	to offer
+		not "B2 Gegno Long-Baseline Compact: aftermath seen"
+		or
+			has "B2 Gegno Long-Baseline Compact: settlement observation packet"
+			has "B2 Gegno Long-Baseline Compact: settlement expiry register"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Gegno Long-Baseline Compact: settlement expiry register"
+			`The Archive Keeper recognizes you beside a set of newer field summaries. "The packets travel farther than the full archives, but the date and uncertainty travel with them. A crew can act on a warning without pretending one season settled the climate, or one animal encounter settled its behavior."`
+				goto finish
+			label expiry
+			`The Archive Keeper points to a warning that has expired from the current route map but remains visible in the historical register. "It stopped being an instruction without becoming a false memory. The contradiction that created it is still there for the next survey." The Pathfinder gives a brief gesture of agreement from another display.`
+			label finish
+			action
+				"B2 Gegno Long-Baseline Compact: aftermath seen" = 1
+				accept
