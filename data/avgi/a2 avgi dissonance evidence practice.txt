@@ -1,0 +1,69 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "A2 Avgi Dissonance Evidence Practice"
+	minor
+	invisible
+	source
+		government "Avgi (Dissonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		not "A2 Avgi Dissonance Evidence Practice: decided"
+	on offer
+		conversation
+			`After several visits to Dissonance archives, a volunteer asks what lesson you actually intend to carry away. The protest chronicle, tax ledger, tenure register, and service-burden archive all preserve disagreements inside Dissonance as carefully as they preserve grievances against Consonance.`
+			`You can treat those records as a method without pretending that one archive speaks for every Dissonance community. Which habit should guide you when political claims and documentary evidence collide elsewhere?`
+			choice
+				`Preserve the underlying record, including evidence that weakens the claim you expected to make.`
+					set "A2 Avgi Dissonance Evidence Practice: full record"
+					goto accept
+				`Separate the documented burden from later arguments about blame, motive, and reform.`
+					set "A2 Avgi Dissonance Evidence Practice: burden separate"
+					goto accept
+				`Keep the lesson local. Dissonance history should not become borrowed authority elsewhere.`
+					set "A2 Avgi Dissonance Evidence Practice: local only"
+					goto accept
+				`Do not turn these archives into a standing practice for me.`
+					set "A2 Avgi Dissonance Evidence Practice: refused"
+					goto accept
+			label accept
+			`The volunteer nods. "Then write down the boundary too. A method can travel farther than a slogan, but neither gives you the right to speak for us."`
+				accept
+	on accept
+		set "A2 Avgi Dissonance Evidence Practice: decided"
+
+
+mission "A2 Avgi Dissonance Evidence Practice: Reflection"
+	minor
+	invisible
+	source
+		government "Avgi (Dissonance)"
+	to offer
+		has "A2 Avgi Dissonance Evidence Practice: decided"
+		not "A2 Avgi Dissonance Evidence Practice: reflection seen"
+	on offer
+		conversation
+			`A later dispute in the reading room gives your chosen practice a mundane test.`
+			branch "A2 Avgi Dissonance Evidence Practice: full record"
+				`Two advocates cite the same old assessment. Because the archive kept the correction beside the original complaint, neither can quietly present the first document as the whole record. The disagreement remains political, but its factual history stays inspectable.`
+			branch "A2 Avgi Dissonance Evidence Practice: burden separate"
+				`A service roster supports a family's account of lost labor, but says nothing about why the deployment was ordered. Keeping burden separate from motive lets the documented cost remain visible without converting it into an inference the record cannot support.`
+			branch "A2 Avgi Dissonance Evidence Practice: local only"
+				`Someone proposes using an old Dissonance concession dispute as a template for an unrelated quarrel. You decline the analogy. The archive remains useful context without becoming a portable verdict.`
+			branch "A2 Avgi Dissonance Evidence Practice: refused"
+				`You leave the dispute to the people maintaining the archive. Your refusal is treated as a boundary, not as silent agreement with any faction.`
+				decline
+	on decline
+		set "A2 Avgi Dissonance Evidence Practice: reflection seen"
