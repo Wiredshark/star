@@ -45,25 +45,25 @@ mission "A2 Republic Border Testimony Practice: Briefing"
 			action
 				"A2 Republic Border Testimony Practice: decided" = 1
 				"A2 Republic Border Testimony Practice: lineage" = 1
-			accept
+			decline
 			label independence
 			`You choose independence. Rook records that ten summaries of one patrol sighting remain one underlying observation, not ten witnesses.`
 			action
 				"A2 Republic Border Testimony Practice: decided" = 1
 				"A2 Republic Border Testimony Practice: independence" = 1
-			accept
+			decline
 			label closure
 			`You choose closure. Rook records that searchable history should not behave like an active accusation after its evidence has been resolved.`
 			action
 				"A2 Republic Border Testimony Practice: decided" = 1
 				"A2 Republic Border Testimony Practice: closure" = 1
-			accept
+			decline
 			label local
 			`You keep the lesson local. The compact remains useful context, not borrowed authority for every later dispute.`
 			action
 				"A2 Republic Border Testimony Practice: decided" = 1
 				"A2 Republic Border Testimony Practice: local" = 1
-			accept
+			decline
 			label refuse
 			`You refuse to establish a standing practice. Rook records the boundary and does not schedule a later review.`
 			action
@@ -103,4 +103,4 @@ mission "A2 Republic Border Testimony Practice: Recurrence"
 			label record
 			action
 				"A2 Republic Border Testimony Practice: recurrence seen" = 1
-			accept
+			decline
