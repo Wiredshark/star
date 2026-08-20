@@ -117,7 +117,7 @@ mission "A2 Free Worlds Reserve Practice: Recurrence"
 			`Brenner says, "The lesson travelled. The jurisdiction did not."`
 			goto record
 			label localReconcile
-			`A smaller port declines to copy the old reconciliation cycle verbatim. Instead it uses the same principle—separate stock, staffing, transport, maintenance, and borrowed obligations—on a shorter local review cadence. Sol accepts the result because the evidence is inspectable even though the procedure differs.`
+			`A smaller port declines to copy the old reconciliation cycle verbatim. Instead it uses the same principle: separate stock, staffing, transport, maintenance, and borrowed obligations on a shorter local review cadence. Sol accepts the result because the evidence is inspectable even though the procedure differs.`
 			`Brenner says, "Context survived without becoming borrowed authority."`
 			label record
 			action
