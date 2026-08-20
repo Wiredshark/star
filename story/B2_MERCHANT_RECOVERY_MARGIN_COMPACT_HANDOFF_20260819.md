@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native exact-head validation and completion of the required B1 save-load gate.
+READY for A3 review/integration. Required B1 dependency and exact B2 candidate both passed repository-native simulation/story/style and production save-load validation.
 
 ## Authority / ancestry
 
@@ -12,6 +12,7 @@ PARTIAL pending repository-native exact-head validation and completion of the re
 - Branch: `agent/b2-merchant-recovery-margin-20260819-2324`
 - Production commit: `738a3b736e27bfbac19882826476c8d87d962908`
 - Focused-validator commit: `a89ef93741c7dda9269803524a519b65f7003ab9`
+- Exact fully validated B2 candidate: `d38a1b96dd7e224e5f950455b7a90e7826e52cd7`
 
 ## Scope
 
@@ -57,23 +58,31 @@ B2 does not write or clear `world:*`, credits, reputation, cargo, outfits, ships
 - `tools/story/validate_b2_merchant_recovery_margin_compact.py`
 - `story/B2_MERCHANT_RECOVERY_MARGIN_COMPACT_HANDOFF_20260819.md`
 
-## Validation completed so far
+## Validation evidence
 
-- Current authoritative main/recent commits/open B2 PRs were inspected before selecting scope.
+Selection / isolation:
+- Current authoritative main, recent commits, and open B2 PRs were inspected before selecting scope.
 - No existing Merchant-network B2 slice was found; the existing South Convoy B2 is southern-frontier convoy rescue policy rather than cross-network Merchant repair/recovery-margin accounting.
 - B1 Merchant exact head was inspected and its exact state names/continuity claims were consumed rather than re-invented.
 - Current A1 Merchant repair-backlog implementation was inspected. B2 treats `world: merchant repair backlog` as strictly read-only and uses `>= 3` for the initial dispute and `<= 1` for recovery Review.
-- A focused validator was added for mission graph, named characters, routes/refusal, terminal outcomes, label integrity, B2-only writes, A1 read-only ownership, and no material/reputation mutation.
-- B1 exact-head `Fork simulation and story validation` run #166: SUCCESS.
-- B1 exact-head `Fork save-load integration smoke` run #155: still IN PROGRESS at latest check.
+- Exact B1-parent-to-B2-candidate compare is 3 commits ahead / 0 behind with exactly 3 added files / 336 additions / 0 deletions.
 
-## Required remaining gates
+Required B1 dependency `549691aa16ad4ac4f83736a40f1c752e7b829003`:
+- `Fork simulation and story validation` run #166 / `32328060553`: SUCCESS.
+- `Fork save-load integration smoke` run #155 / `32328060549`: SUCCESS.
 
-Before READY / A3 integration:
-1. B1 exact-head save-load workflow must be terminal green.
-2. Run/confirm exact B2-head `Fork simulation and story validation` and ensure the focused Merchant validator and changed-content style pass.
-3. Run/confirm exact B2-head `Fork save-load integration smoke` and production build/save-load cases pass.
-4. When practical, actual-game acceptance should exercise all three substantive Offer routes, refusal, save/reload before Review, Review gating after A1 backlog recovery, both settlements, one-shot aftermath behavior, and Merchant offer-precedence interactions.
+Exact B2 candidate `d38a1b96dd7e224e5f950455b7a90e7826e52cd7`:
+- `Fork simulation and story validation` run #167 / `32328323644`: SUCCESS.
+- Focused story validation discovered 40 checks: 40 passed / 0 failed.
+- `validate_b2_merchant_recovery_margin_compact.py`: PASS — missions=3, named_characters=2, initial_routes=3 + refusal, terminal_settlements=2, A1 repair backlog read-only, mutation surface B2-only.
+- Fork content contract: PASS — mission/event names unique, local goto labels valid, B1/A2/B2 do not mutate A1 `world:*`, all discovered `world:*` writers remain A1-owned.
+- A1 simulation contracts: 103 passed.
+- Changed fork content style: SUCCESS.
+- `Fork save-load integration smoke` run #156 / `32328323589`: SUCCESS, including production configure/build and stock save-load smoke.
+
+Private-host/process boundary:
+- Service process inventory was inspected and reported five pre-existing service-owned processes. They were preserved.
+- The exposed private execution host is the unrelated Fallout workspace rather than authoritative `Wiredshark/star`, so no false host-side Endless Sky runtime claim is made.
 
 ## A3 / B3 notes
 
@@ -82,3 +91,4 @@ Before READY / A3 integration:
 - Preserve A1 sole ownership of `world: merchant repair backlog`.
 - Preserve the distinction between an emergency being cleared and recovery margin actually being rebuilt.
 - Do not turn voluntary cross-port operating records into a centralized Merchant political institution.
+- Actual-game route/offer-precedence observation remains useful regression evidence when practical, but repository-native acceptance gates for this isolated candidate are green.
