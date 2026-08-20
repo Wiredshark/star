@@ -1,0 +1,84 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Avgi Wandering Fleet Load and Reserve Ledger"
+	minor
+	invisible
+	source
+		government "Avgi (Consonance)"
+	to offer
+		has "language: Avgi (Written)"
+		has "avgi: wandering fleet refit 1"
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`An archive terminal displays old Wandering Fleet load plans as bands of colored capacity spread across tankers, transports, escorts, and support craft. The surviving ledgers track fuel, food, replacement stock, emergency berths, and the reserves each ship was expected to protect rather than consume during ordinary travel.`
+			`\tThe accompanying notes explain that a fleet could appear well supplied while still being fragile if too much of one resource sat aboard a single vessel. Later plans therefore recorded not only total stores, but where those stores were carried, which ships depended on them, and what minimum reserve had to remain after a transfer.`
+			`\tThe archive does not describe the method as abundance. It describes a way of making scarcity legible enough that helping one ship did not silently strand another farther down the route.`
+				decline
+
+
+mission "Avgi Wandering Fleet Refit Provenance Archive"
+	minor
+	invisible
+	source
+		government "Avgi (Consonance)"
+	to offer
+		has "language: Avgi (Written)"
+		has "avgi: wandering fleet refit 1"
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`A technical exhibit preserves diagrams from successive Wandering Fleet refits. Each change is annotated with the component removed, the replacement installed, the interface work required, later failures, and whether the modification was meant as a permanent improvement or simply the best repair available at the time.`
+			`\tOne commentary notes that travel exposed the fleet to parts and engineering practices its original maintenance records had never anticipated. A substitute that fit physically could still behave differently under heat, vibration, power load, or repeated repair, so crews began treating every successful refit as a documented experiment rather than proof that two systems were interchangeable.`
+			`\tModern engineers still cite the archive when adapting unfamiliar equipment: compatibility is evidence that something can be made to work, not evidence that its limits are understood.`
+				decline
+
+
+mission "Avgi Wandering Fleet Rendezvous Continuity Register"
+	minor
+	invisible
+	source
+		government "Avgi (Consonance)"
+	to offer
+		has "language: Avgi (Written)"
+		has "avgi: wandering fleet refit 1"
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`A navigation archive contains a long sequence of Wandering Fleet rendezvous plans. Rather than assuming every vessel would arrive together, the records name fallback meeting points, waiting limits, alternate contacts, and the conditions under which a ship should continue onward instead of remaining exposed while searching for a straggler.`
+			`\tThe oldest entries are brief and heavily corrected. Later ones record why a vessel was delayed, whether the rest of the fleet received the warning, and which recovery plan actually worked. The emphasis is less on reconstructing one perfect route than on preserving the procedures that let a scattered group find one another again.`
+			`\tA curator remarks that this distinction mattered whenever communications, sensors, or local conditions were unreliable: losing contact with a ship was a problem, but improvising a different recovery plan on every occasion made the next loss harder to survive.`
+				decline
+
+
+mission "Avgi Wandering Fleet Repair Dependency Ledger"
+	minor
+	invisible
+	source
+		government "Avgi (Consonance)"
+	to offer
+		has "language: Avgi (Written)"
+		has "avgi: wandering fleet refit 1"
+		not "avgi: lost in twilight"
+		random < 4
+	on offer
+		conversation
+			`A maintenance register maps the Wandering Fleet as a web of repair dependencies. One vessel carries tooling another lacks; a tanker can replenish several ships but needs specialists from a different hull for major drive work; some components can be rebuilt aboard the fleet while others can only be inspected, preserved, and replaced later.`
+			`\tThe historical notes say that crews eventually began recording these dependencies before breakdowns happened. Cannibalizing a compatible part from one ship could return another to service quickly, but the ledger kept the resulting deficit visible so an emergency repair did not masquerade as a permanent solution.`
+			`\tThe resulting system reads almost like an account of debts between machines: every borrowed tool, transferred spare, deferred inspection, and temporary substitution remained attached to a future maintenance obligation until someone could actually close it.`
+				decline
