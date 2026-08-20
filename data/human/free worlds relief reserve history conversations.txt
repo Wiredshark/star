@@ -1,0 +1,77 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Free Worlds Reserve Stock Rotation Archive"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: free worlds relief reserve strain" >= 1
+	on offer
+		conversation
+			`A relief depot has opened an old stock-rotation ledger while local reserve capacity is under pressure. The earliest entries are ordinary inventories: fuel cells, portable shelters, water processors, medical kits, field generators, and spare cargo modules. What changed over time was the realization that an emergency reserve could become useless without a routine for moving old stock into ordinary service before it expired or failed.`
+			`\tPorts began recording which supplies were held back for contingency use, which were rotated out, and which neighboring worlds had compatible replacements. The practice reduced waste, but it also made the true cost of a reserve visible: keeping capacity available meant continually maintaining goods and transport that might not be needed for years.`
+			`\tThe modern ledger still reflects that compromise. Relief reserves are not a pile of untouched cargo waiting for disaster; they are a maintained system whose reliability depends on regular inspection, replacement, and movement even when no emergency is making headlines.`
+				decline
+
+
+mission "Free Worlds Surge Shelter Capacity Ledger"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: free worlds relief reserve strain" >= 2
+	on offer
+		conversation
+			`A civic office is displaying plans from older Free Worlds shelter expansions. The notes distinguish ordinary beds from surge capacity: school halls that could be converted temporarily, warehouses fitted with emergency sanitation, dockside modules kept empty, and agreements that allowed neighboring communities to accept evacuees when one world's public facilities were overwhelmed.`
+			`\tThe records show why raw bed counts were never enough. Every temporary shelter consumed staff, power, food, transport, medical support, and time from people who normally performed other work. Planners therefore began tracking the supporting services alongside the physical space, so an apparently available building was not treated as useful capacity unless the rest of the system could sustain it.`
+			`\tA recent annotation calls this the difference between an empty room and a real reserve. The Free Worlds learned through repeated crises that contingency capacity is measured by what can be operated safely, not merely by what can be unlocked.`
+				decline
+
+
+mission "Free Worlds Relief Replenishment Register"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: free worlds relief reserve strain" >= 3
+	on offer
+		conversation
+			`Near the freight office is a historical replenishment register used after major relief operations. Each page begins only after the urgent deliveries were already made. It lists depleted fuel stores, exhausted transport crews, borrowed medical stock, damaged field equipment, and the worlds that had taken on unusually large shares of the emergency burden.`
+			`\tThe accompanying notes explain that early relief networks often treated the end of an immediate crisis as the end of the obligation. That left the most generous ports less prepared for the next emergency. Later agreements added explicit replenishment stages: repay borrowed stock, rotate crews home, repair shared equipment, restore emergency fuel, and document which reserves had quietly fallen below their intended margin.`
+			`\tThe register is a reminder that mutual aid has a recovery phase of its own. A region can finish helping one world and still remain unusually fragile until the capacity spent on that help has been rebuilt.`
+				decline
+
+
+mission "Free Worlds Contingency Margin Archive"
+	minor
+	source
+		government "Free Worlds"
+	"offer precedence" 5
+	to offer
+		random < 1
+		"world: free worlds relief reserve strain" >= 3
+		"world: free worlds relief demand" >= 4
+	on offer
+		conversation
+			`A public budget display is comparing current relief pressure with an archive of older contingency-margin debates. The historical entries rarely argue about whether emergency aid is worthwhile. Instead, they argue about how much shelter, fuel, transport, warehouse space, and trained staff should remain unused during normal times so that they are still available when several emergencies overlap.`
+			`\tIndependent worlds answered differently. Some preferred larger local reserves; others relied on rapid mutual-aid transfers or contracted commercial capacity. Repeated crises eventually produced a common accounting habit: distinguish what is being consumed by today's emergency from the margin that must remain available for the next one.`
+			`\tThe exhibit does not present a single ideal reserve level. Its lesson is procedural: when demand stays high, officials should say openly how much contingency margin has been consumed, what is being replenished, and which risks are being accepted until those reserves recover.`
+				decline
