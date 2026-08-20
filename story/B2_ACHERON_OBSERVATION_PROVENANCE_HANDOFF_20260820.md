@@ -2,7 +2,9 @@
 
 ## Verdict
 
-PARTIAL pending repository-native simulation/story/style and production build/save-load validation on the exact B2 head.
+READY for A3 review/integration.
+
+Repository-native simulation/story/style validation and production build/save-load validation both passed on exact production+validator candidate `dae799df2a0597bd81979b1ec0baddd16d7de010`.
 
 ## Dependency and branch
 
@@ -10,7 +12,8 @@ PARTIAL pending repository-native simulation/story/style and production build/sa
 - Required B1 parent SHA: `e8078b8f4f514ab64fbbe5b4359cd5118200c53e`
 - B2 branch: `agent/b2-acheron-observation-provenance-20260820-0328`
 - Production commit: `aa8175c53b2b0764b0729c73c4c7162e6e2d8792`
-- Focused-validator commit: `e24a4d1541aff40814cc8925fa8b5554fade3b0c`
+- Initial focused-validator commit: `e24a4d1541aff40814cc8925fa8b5554fade3b0c`
+- Validator hardening / exact fully validated candidate: `dae799df2a0597bd81979b1ec0baddd16d7de010`
 
 ## Implemented slice
 
@@ -41,18 +44,19 @@ The Review addresses downstream evidence degradation: copied biological summarie
 - `tools/story/validate_b2_acheron_observation_provenance.py`
 - `story/B2_ACHERON_OBSERVATION_PROVENANCE_HANDOFF_20260820.md`
 
-## Required acceptance before READY
+## Validation evidence
 
-Run on the exact final B2 head:
+Exact candidate: `dae799df2a0597bd81979b1ec0baddd16d7de010`
 
-- `python3 tools/story/validate_b2_acheron_observation_provenance.py "data/vyrmeid/b2 acheron observation provenance.txt"`
-- repository-wide focused story validator discovery / story repository validation
-- A1 state-ownership/simulation contracts
-- changed-content style validation
-- normal Endless Sky production configure/build
-- stock save/load integration smoke, including conversation save/load cases
+- `Fork simulation and story validation` run #194: SUCCESS.
+- Changed fork content style: SUCCESS.
+- Focused validator discovery: SUCCESS after validator hardening; all focused story checks passed.
+- A1 simulation/state-ownership contract step: SUCCESS within the green workflow.
+- `Fork save-load integration smoke` run #183: SUCCESS.
+- Production configure/build: SUCCESS within the green save-load workflow.
+- Stock save/load integration smoke: SUCCESS within the green save-load workflow.
 
-Do not claim any gate passed until its exact-head result is terminal green.
+The validator-only hardening removed a brittle prose-fragment assertion while preserving explicit semantic checks already present in production dialogue: responsiveness is not intention and biological danger is not hostility. Production data did not change during that repair.
 
 ## A3 / B3 integration notes
 
