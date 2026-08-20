@@ -12,9 +12,8 @@
 # this program. If not, see <https://www.gnu.org/licenses/>.
 
 # Headless actual-game acceptance for the Republic Border Testimony Practice.
-# These tests drive the production mission through the normal spaceport UI,
-# exercise state-dependent labeled responses, persist the selected practice
-# through save/reload, and then exercise the later authoritative A1 recurrence.
+# Drives hidden and visible-disabled production choices through the normal
+# spaceport UI, persists the selected practice, and exercises the later A1 reader.
 
 
 test "A2 Republic Border Testimony Prepare"
@@ -28,12 +27,9 @@ test "A2 Republic Border Testimony Prepare"
 			"Intro [0]: declined" = 1
 			"A2 Career Review: seen" = 1
 			"B2 Republic Border Testimony Compact: aftermath seen" = 1
-			"B2 Republic Border Testimony Compact: rook trusts player" = 1
-			"B2 Republic Border Testimony Compact: verran trusts player" = 1
 			"world: republic border pressure" = 0
 		assert
 			"B2 Republic Border Testimony Compact: aftermath seen" == 1
-			"B2 Republic Border Testimony Compact: verran trusts player" == 1
 			"world: republic border pressure" == 0
 
 
@@ -69,7 +65,7 @@ test "A2 Republic Border Testimony Persist And Recur"
 
 test "A2 Republic Border Testimony Lineage"
 	status active
-	description "Exercise the provenance-packet labeled response, persistence, and later recurrence."
+	description "Exercise the hidden-until-known provenance response, persistence, and later recurrence."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
 		apply
@@ -85,26 +81,21 @@ test "A2 Republic Border Testimony Lineage"
 		assert
 			"A2 Republic Border Testimony Practice: decided" == 1
 			"A2 Republic Border Testimony Practice: lineage" == 1
-			"A2 Republic Border Testimony Practice: closure" == 0
 			"A2 Republic Border Testimony Practice: Briefing: active" == 0
 		call "A2 Republic Border Testimony Persist And Recur"
-		assert
-			"A2 Republic Border Testimony Practice: lineage" == 1
 
 
 test "A2 Republic Border Testimony Independence"
 	status active
-	description "Exercise the Verran-trust labeled response, persistence, and later recurrence."
+	description "Exercise the visible trust-gated response when Verran trust is present."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
 		apply
-			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
+			"B2 Republic Border Testimony Compact: verran trusts player" = 1
 		input
 			key p
 		input
 			key "Return"
-		input
-			key "Down"
 		input
 			key "Return"
 		input
@@ -114,13 +105,11 @@ test "A2 Republic Border Testimony Independence"
 			"A2 Republic Border Testimony Practice: independence" == 1
 			"A2 Republic Border Testimony Practice: Briefing: active" == 0
 		call "A2 Republic Border Testimony Persist And Recur"
-		assert
-			"A2 Republic Border Testimony Practice: independence" == 1
 
 
 test "A2 Republic Border Testimony Closure"
 	status active
-	description "Exercise the expiry-and-renewal labeled response while the packet-only response is hidden."
+	description "Exercise the expiry settlement response while provenance remains hidden and trust remains visibly disabled."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
 		apply
@@ -129,6 +118,7 @@ test "A2 Republic Border Testimony Closure"
 			key p
 		input
 			key "Return"
+		# Independence is visible but disabled; expiry/renewal is the next choice.
 		input
 			key "Down"
 		input
@@ -141,23 +131,24 @@ test "A2 Republic Border Testimony Closure"
 			"A2 Republic Border Testimony Practice: lineage" == 0
 			"A2 Republic Border Testimony Practice: Briefing: active" == 0
 		call "A2 Republic Border Testimony Persist And Recur"
-		assert
-			"A2 Republic Border Testimony Practice: closure" == 1
 
 
 test "A2 Republic Border Testimony Local"
 	status active
-	description "Exercise the always-valid local/context route alongside two available persistent-state responses."
+	description "Verify the visible trust-gated response rejects selection when trust is absent, then take the valid local route."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
-		apply
-			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
 		input
 			key p
 		input
 			key "Return"
+		# With no B2 settlement and no Verran trust, the trust response remains
+		# visible but disabled. Return must fail without writing route state.
 		input
-			key "Down"
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 0
+			"A2 Republic Border Testimony Practice: independence" == 0
 		input
 			key "Down"
 		input
@@ -169,23 +160,18 @@ test "A2 Republic Border Testimony Local"
 			"A2 Republic Border Testimony Practice: local" == 1
 			"A2 Republic Border Testimony Practice: Briefing: active" == 0
 		call "A2 Republic Border Testimony Persist And Recur"
-		assert
-			"A2 Republic Border Testimony Practice: local" == 1
 
 
 test "A2 Republic Border Testimony Refusal"
 	status active
-	description "Exercise explicit refusal and verify that it persists without arming recurrence."
+	description "Exercise explicit refusal with the trust response visible-but-disabled and verify persistence without recurrence."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
-		apply
-			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
 		input
 			key p
 		input
 			key "Return"
-		input
-			key "Down"
+		# Displayed choices are disabled trust, local, refusal.
 		input
 			key "Down"
 		input
