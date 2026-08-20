@@ -1,0 +1,146 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Avgi Dissonance Tax Appeal Compact production slice.
+# Consumes B1 Dissonance tax-challenge and protest-record history.
+
+mission "B2 Avgi Dissonance Tax Appeal Compact: Offer"
+	minor
+	name `A Complaint That Can Survive Copying`
+	description `Dissonance records advocate Indigo and workshop accountant Sienna disagree over how tax challenges should travel between worlds without turning an accusation into a verdict.`
+	source
+		government "Avgi (Dissonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		not "B2 Avgi Dissonance Tax Appeal Compact: introduced"
+		not "B2 Avgi Dissonance Tax Appeal Compact: declined"
+	on offer
+		conversation
+			`A public records kiosk has been converted into a temporary appeal desk. Indigo, a Dissonance records advocate, is arranging copied tax notices beside challenge forms. Sienna, an accountant from a nearby cooperative workshop, is objecting to a summary that marks an assessment as disputed without also carrying the later correction.`
+			`Indigo taps the original challenge. "The objection must remain visible. A copied record that carries only the final amount can erase why the challenge existed." Sienna answers, "And a copied record that carries only the objection can make a corrected assessment look corrupt forever. We need memory without turning grievance into proof."`
+			choice
+				`\tBack Indigo: every copied assessment should carry the original objection and its evidence trail.`
+					goto indigo
+				`\tBack Sienna: downstream records should emphasize the current verified assessment and link back to prior challenges.`
+					goto sienna
+				`\tPropose a paired record: current assessment, challenge basis, evidence, disposition, and open-or-closed status travel together.`
+					goto paired
+				`\tDecline to referee a Dissonance tax-record dispute.`
+					goto decline
+			label indigo
+			`You argue that a challenge which disappears from later copies cannot protect anyone from repeated inconsistent treatment. Indigo agrees, but Sienna insists that the record must also show whether the challenge was upheld, corrected, rejected, or still unresolved.`
+			action
+				"B2 Avgi Dissonance Tax Appeal Compact: introduced" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: route indigo" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: indigo trusts player" = 1
+			accept
+			label sienna
+			`You argue that current operations need a current verified figure, not a permanent warning banner. Sienna approves. Indigo accepts the operational point but warns that the link to the challenge record must remain durable enough that a later dispute can reconstruct how the number changed.`
+			action
+				"B2 Avgi Dissonance Tax Appeal Compact: introduced" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: route sienna" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: sienna trusts player" = 1
+			accept
+			label paired
+			`You suggest separating the current verified assessment from the history that produced it while making the link mandatory. Each copied record would carry the assessment, the challenge basis, the evidence used, the disposition, and whether anything remains open. Indigo calls it protest memory that cannot impersonate a verdict. Sienna calls it a ledger she can actually use.`
+			action
+				"B2 Avgi Dissonance Tax Appeal Compact: introduced" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: route paired" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: indigo trusts player" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: sienna trusts player" = 1
+			accept
+			label decline
+			`You tell them that Dissonance communities should decide how their own grievance records travel. Indigo says that refusal is at least better than pretending an outsider's preference is neutral. Sienna returns to the copied assessments.`
+			action
+				"B2 Avgi Dissonance Tax Appeal Compact: declined" = 1
+			decline
+
+mission "B2 Avgi Dissonance Tax Appeal Compact: Review"
+	minor
+	name `Old Objection, New Copy`
+	description `Return after Indigo and Sienna test the tax-appeal record format across several Dissonance offices.`
+	source
+		government "Avgi (Dissonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		has "B2 Avgi Dissonance Tax Appeal Compact: introduced"
+		not "B2 Avgi Dissonance Tax Appeal Compact: reviewed"
+	on offer
+		conversation
+			branch indigo
+				has "B2 Avgi Dissonance Tax Appeal Compact: route indigo"
+			branch sienna
+				has "B2 Avgi Dissonance Tax Appeal Compact: route sienna"
+			`Indigo and Sienna show you three copies of the same old assessment. The current amount is identical on all three, but one copy has lost the reason the challenge was filed, another has lost the disposition, and the third still marks the challenge as active even though it was closed months ago.`
+			choice
+				`\tAdopt a portable disposition packet that keeps challenge basis, evidence, current assessment, disposition, and open-or-closed status together.`
+					goto packet
+				`\tAdopt an expiry-and-renewal rule: resolved challenges stop propagating as active warnings unless new evidence opens a new review.`
+					goto expiry
+			label indigo
+			`Indigo shows how preserving objections without their later disposition caused a workshop to be flagged twice for an issue that had already been corrected. "The grievance survived," Indigo says, "but the answer did not." Sienna points out that the result is politically useful to nobody if every old challenge becomes permanent suspicion.`
+			choice
+				`\tBind objection, evidence, disposition, and current assessment into one portable packet.`
+					goto packet
+				`\tClose resolved challenges operationally, but preserve them in history unless fresh evidence reopens review.`
+					goto expiry
+			label sienna
+			`Sienna shows a copied assessment that correctly carries the current amount but only a bare link to an unavailable older archive. Indigo says that a link which cannot survive transfer is not enough. Sienna agrees that the current record needs a compact explanation of why the figure changed, not merely a pointer that may later disappear.`
+			choice
+				`\tMake the compact explanation and disposition travel with every downstream copy.`
+					goto packet
+				`\tLet resolved challenges expire as active warnings, while retaining a durable historical record and a clear rule for reopening.`
+					goto expiry
+			label packet
+			`You recommend a portable disposition packet. Every copied assessment carries the challenge basis, evidence actually considered, current verified amount, disposition, and whether any question remains open. Indigo likes that a complaint can survive copying without becoming a verdict. Sienna likes that a resolved complaint cannot masquerade as an active defect.`
+			action
+				"B2 Avgi Dissonance Tax Appeal Compact: reviewed" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: settlement disposition packet" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: indigo trusts player" = 1
+			accept
+			label expiry
+			`You recommend an expiry-and-renewal rule. A resolved challenge remains in historical records but stops propagating as an active warning. Reopening requires fresh evidence or a newly identified inconsistency, not the mere existence of the old objection. Indigo calls it memory with a burden of renewal. Sienna calls it the difference between history and a permanent accusation.`
+			action
+				"B2 Avgi Dissonance Tax Appeal Compact: reviewed" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: settlement expiry renewal" = 1
+				"B2 Avgi Dissonance Tax Appeal Compact: sienna trusts player" = 1
+			accept
+
+mission "B2 Avgi Dissonance Tax Appeal Compact: Indigo Remembers"
+	minor
+	name `Indigo Remembers`
+	description `Indigo remembers how the Dissonance tax-appeal dispute changed the way grievance records travel.`
+	source
+		government "Avgi (Dissonance)"
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		not "B2 Avgi Dissonance Tax Appeal Compact: aftermath seen"
+		or
+			has "B2 Avgi Dissonance Tax Appeal Compact: settlement disposition packet"
+			has "B2 Avgi Dissonance Tax Appeal Compact: settlement expiry renewal"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Avgi Dissonance Tax Appeal Compact: settlement expiry renewal"
+			`Indigo waves you over to a records kiosk. A current assessment is displayed beside a compact challenge history: evidence, correction, disposition, and closure all travel together. "Better," Indigo says. "A future organizer can see that the complaint happened, and a future accountant can see that it was answered."`
+			goto record
+			label expiry
+			`Indigo shows you an old challenge marked closed rather than deleted. "We kept the grievance. We also stopped using it as an active accusation once the evidence was resolved." A separate field lists the conditions that would justify reopening. "Apparently history can retain its teeth without biting forever."`
+			label record
+			action
+				"B2 Avgi Dissonance Tax Appeal Compact: aftermath seen" = 1
+			accept
