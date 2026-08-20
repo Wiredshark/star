@@ -1,0 +1,164 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Lunarium Cover Continuity Compact.
+#
+# Consumes B1's Lunarium Cover Network Archive. The core continuity invariant is
+# that the charity remains a real civic institution with real beneficiaries even
+# when some routes also provide cover for Lunarium transfers. Covert use must not
+# silently erase civilian obligations, and civilian manifests must not become a
+# disguised record of clandestine operations.
+
+
+mission "B2 Lunarium Cover Continuity Compact: Offer"
+	minor
+	name `The Crate That Was Already Promised`
+	description `Chiree and Niree disagree over how a real charity can absorb covert Lunarium transfers without quietly displacing the aid that makes the cover legitimate.`
+	source
+		government "Coalition"
+		not government "Heliarch"
+	to offer
+		has "joined the lunarium"
+		not "joined the heliarchs"
+		has "Lunarium Cover Network Archive: offered"
+		not "B2 Lunarium Cover Continuity Compact: introduced"
+		not "B2 Lunarium Cover Continuity Compact: declined"
+	on offer
+		conversation
+			`Chiree meets you beside a stack of blue-uniform charity crates, but instead of greeting you with a job she gestures toward a second Kimek who is checking the manifest line by line.`
+			`"Niree, quartermaster for this route, is," Chiree explains. Niree taps a crate marked for a winter clinic. "Promised already, these supplies were. Space for another transfer, a Lunarium courier requested. Fit both, the ship cannot."`
+			`Chiree folds two legs beneath herself. "A cover that stops being charity, useful for long it will not remain. But miss a covert handoff, we also cannot simply."`
+			`Niree answers, "Then record what is displaced. Not enough, saying 'temporary' is, if nobody remembers which clinic waited."`
+			choice
+				`\tAid first: covert cargo may use spare capacity, but not capacity already promised to civilian beneficiaries.`
+					goto aid
+				`\tContinuity first: permit urgent covert transfers to displace aid only if the displaced obligation is explicitly carried forward.`
+					goto continuity
+				`\tPair both records: keep civilian aid obligations and covert capacity use separate, linked only by a temporary displacement record.`
+					goto paired
+				`\tRefuse to formalize this. The charity and resistance should settle each case locally.`
+					goto decline
+			label aid
+			`You tell Chiree that a charity stops being a credible institution if its beneficiaries are always the first people asked to wait. Niree agrees immediately. Chiree adds that true spare capacity should still remain useful to the resistance, but existing civilian promises become a hard floor rather than a convenient pool.`
+			action
+				"B2 Lunarium Cover Continuity Compact: introduced" = 1
+				"B2 Lunarium Cover Continuity Compact: route aid" = 1
+				"B2 Lunarium Cover Continuity Compact: niree trusts player" = 1
+			accept
+			label continuity
+			`You allow emergency covert displacement, but only if the original civilian promise survives as an open obligation with a replacement route, responsible coordinator, and review point. Chiree says that gives the resistance room to move under pressure without pretending the cost vanished. Niree says, "Then owed means owed, still."`
+			action
+				"B2 Lunarium Cover Continuity Compact: introduced" = 1
+				"B2 Lunarium Cover Continuity Compact: route continuity" = 1
+				"B2 Lunarium Cover Continuity Compact: chiree trusts player" = 1
+			accept
+			label paired
+			`You recommend two records. The public charity manifest tracks the real aid obligation and what was actually delivered. A separate Lunarium record tracks covert capacity use. Only a narrow displacement entry links them: how much charity capacity was borrowed, which civilian obligation remains open, and who must restore it. Neither record needs to reveal the other's protected details.`
+			`Chiree clicks approvingly. "Keep the cover real, and keep the secret secret." Niree replies, "And keep the debt visible."`
+			action
+				"B2 Lunarium Cover Continuity Compact: introduced" = 1
+				"B2 Lunarium Cover Continuity Compact: route paired" = 1
+				"B2 Lunarium Cover Continuity Compact: chiree trusts player" = 1
+				"B2 Lunarium Cover Continuity Compact: niree trusts player" = 1
+			accept
+			label decline
+			`You tell them that formal rules linking charity logistics to covert work could create records that are more dangerous than the inconsistency they solve. Chiree accepts the warning. Niree does too, though she adds that the clinic will still know whether its shipment arrived.`
+			action
+				"B2 Lunarium Cover Continuity Compact: declined" = 1
+			decline
+
+
+mission "B2 Lunarium Cover Continuity Compact: Review"
+	minor
+	name `When the Cover Still Has to Work`
+	description `Return after the new handling practice has been used and decide how the charity should preserve unmet civilian obligations without exposing covert operations.`
+	source
+		government "Coalition"
+		not government "Heliarch"
+	to offer
+		has "joined the lunarium"
+		not "joined the heliarchs"
+		has "B2 Lunarium Cover Continuity Compact: introduced"
+		not "B2 Lunarium Cover Continuity Compact: reviewed"
+	on offer
+		conversation
+			branch aid
+				has "B2 Lunarium Cover Continuity Compact: route aid"
+			branch continuity
+				has "B2 Lunarium Cover Continuity Compact: route continuity"
+			`Chiree and Niree show you several weeks of paired records. The charity manifests remained useful, and covert transfers remained compartmented. But copied summaries created a new problem: some downstream charity offices can see that capacity was borrowed without knowing whether the civilian obligation was ever restored.`
+			`Niree says, "A debt marker that never closes becomes another kind of lie." Chiree adds, "But closing it by copying covert details everywhere would be worse."`
+			choice
+				`\tUse a portable obligation receipt: only the civilian promise, amount displaced, replacement route, due point, and closure status travel with the charity record.`
+					goto receipt
+				`\tUse a two-ledger reconciliation: charity and covert records remain separate, but a trusted local check can verify that a displaced civilian obligation was restored without exposing the clandestine cargo.`
+					goto reconcile
+			label aid
+			`The aid-first rule protected existing beneficiaries, but some cells began treating any unassigned charity capacity as automatically available for clandestine work. Niree says that this risks turning future aid planning into a race to reserve cargo space before the resistance can borrow it.`
+			`Chiree replies, "Spare now does not mean owed never."`
+			choice
+				`\tAdopt a portable obligation receipt so future civilian commitments cannot disappear behind a vague claim that capacity was once spare.`
+					goto receipt
+				`\tAdopt two-ledger reconciliation so planners can verify that covert borrowing did not quietly become a standing first claim on charity capacity.`
+					goto reconcile
+			label continuity
+			`The continuity-first rule kept urgent Lunarium traffic moving, but a few replacement promises were copied without their closure status. One clinic was rescheduled twice because each coordinator believed the next handoff already owned the obligation.`
+			`Niree says, "Everybody accepted responsibility, so nobody knew who still had it." Chiree answers, "Then transfer needs an ending, not only a beginning."`
+			choice
+				`\tUse a portable obligation receipt with one current owner and an explicit closure state.`
+					goto receipt
+				`\tUse a reconciliation check that compares the civilian obligation against the protected covert-capacity record before either side marks the displacement closed.`
+					goto reconcile
+			label receipt
+			`You recommend a portable obligation receipt. The charity record carries only what legitimate aid administration needs: what civilian commitment existed, how much capacity was displaced, the replacement route or carrier, the current responsible coordinator, the review point, and whether the obligation was actually fulfilled. It contains no description of the covert cargo that caused the displacement.`
+			`Niree says, "Enough to keep faith with the clinic." Chiree adds, "Not enough to expose a courier."`
+			action
+				"B2 Lunarium Cover Continuity Compact: reviewed" = 1
+				"B2 Lunarium Cover Continuity Compact: settlement receipt" = 1
+				"B2 Lunarium Cover Continuity Compact: niree trusts player" = 1
+			accept
+			label reconcile
+			`You recommend two-ledger reconciliation. Charity manifests remain ordinary civilian records. Compartmented Lunarium logs remain protected. A narrow local checkpoint can verify that a particular borrowed unit of capacity was restored or the civilian obligation was reassigned, without copying mission details, identities, or destinations into the public record.`
+			`Chiree says, "Secrecy without forgetting." Niree answers, "And charity without pretending the missing crate was never missing."`
+			action
+				"B2 Lunarium Cover Continuity Compact: reviewed" = 1
+				"B2 Lunarium Cover Continuity Compact: settlement reconciliation" = 1
+				"B2 Lunarium Cover Continuity Compact: chiree trusts player" = 1
+			accept
+
+
+mission "B2 Lunarium Cover Continuity Compact: Niree Remembers"
+	minor
+	name `Niree Remembers`
+	description `Niree remembers how the charity learned to preserve real civilian obligations without turning its manifests into a map of Lunarium operations.`
+	source
+		government "Coalition"
+		not government "Heliarch"
+	to offer
+		has "joined the lunarium"
+		not "B2 Lunarium Cover Continuity Compact: aftermath seen"
+		or
+			has "B2 Lunarium Cover Continuity Compact: settlement receipt"
+			has "B2 Lunarium Cover Continuity Compact: settlement reconciliation"
+	on offer
+		conversation
+			branch reconciliation
+				has "B2 Lunarium Cover Continuity Compact: settlement reconciliation"
+			`Niree shows you a completed obligation receipt. A clinic shipment was displaced, reassigned to another carrier, delivered two days later, and marked closed. The receipt never says what used the missing capacity. "Clinic did not need to know," she says. "Needed to know only that forgotten, it was not."`
+			goto record
+			label reconciliation
+			`Niree shows you two screens that never reveal each other's protected contents. One shows a charity shipment restored after borrowed capacity; the other shows only that a corresponding internal displacement was reconciled. "Enough connection to remember the debt," she says. "Not enough connection to expose the route."`
+			label record
+			action
+				"B2 Lunarium Cover Continuity Compact: aftermath seen" = 1
+			accept
