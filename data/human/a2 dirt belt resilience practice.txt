@@ -21,7 +21,7 @@ mission "A2 Dirt Belt Resilience Practice"
 		not attributes "station"
 	"offer precedence" 4
 	to offer
-		has "Dirt Belt Resilience Practice: available"
+		random < 1
 		not "A2 Dirt Belt Resilience Practice: decided"
 	on offer
 		conversation
@@ -38,19 +38,32 @@ mission "A2 Dirt Belt Resilience Practice"
 					goto local
 			label obligations
 			`You decide that mutual aid stays honest when the record includes unfinished obligations as carefully as successful rescues. The clerk nods. "A favor can be generous and still have a cost worth remembering."`
-				accept
+			action
+				"A2 Dirt Belt Resilience Practice: decided" = 1
+				"A2 Dirt Belt Resilience Practice: obligations" = 1
+				"A2 Dirt Belt Resilience Practice: reflection pending" = 1
+				decline
 			label capacity
 			`You decide that logistics should be judged by usable capacity rather than the moment cargo crosses a port boundary. The clerk taps the old routing ledger. "That distinction saved more harvests than the manifest totals ever showed."`
-				accept
+			action
+				"A2 Dirt Belt Resilience Practice: decided" = 1
+				"A2 Dirt Belt Resilience Practice: capacity" = 1
+				"A2 Dirt Belt Resilience Practice: reflection pending" = 1
+				decline
 			label redundancy
 			`You decide that resilience comes from preserving alternatives before a single failure becomes catastrophic. The clerk gestures toward the cooperative inventories. "Redundancy looks wasteful right up until the only pump breaks."`
-				accept
+			action
+				"A2 Dirt Belt Resilience Practice: decided" = 1
+				"A2 Dirt Belt Resilience Practice: redundancy" = 1
+				"A2 Dirt Belt Resilience Practice: reflection pending" = 1
+				decline
 			label local
 			`You decline to turn local history into a portable doctrine. The clerk accepts that without argument. "Context is part of the record too."`
-				accept
-	on accept
-		"A2 Dirt Belt Resilience Practice: decided" = 1
-		"A2 Dirt Belt Resilience Practice: reflection pending" = 1
+			action
+				"A2 Dirt Belt Resilience Practice: decided" = 1
+				"A2 Dirt Belt Resilience Practice: local" = 1
+				"A2 Dirt Belt Resilience Practice: reflection pending" = 1
+				decline
 
 
 mission "A2 Dirt Belt Resilience Practice Reflection"
@@ -65,9 +78,24 @@ mission "A2 Dirt Belt Resilience Practice Reflection"
 		not "A2 Dirt Belt Resilience Practice: reflection seen"
 	on offer
 		conversation
-			`On a later visit, the cooperative clerk shows you a routine shortage review. The interesting part is not whether the old Dirt Belt institutions were universally correct, but whether the habit of keeping capacity, obligations, and alternatives visible makes the present disagreement easier to inspect.`
-			`\tThe record remains local evidence rather than Republic doctrine. Nobody treats your earlier interpretation as an office, credential, or authority to speak for the settlements that created it.`
-				accept
-	on accept
-		"A2 Dirt Belt Resilience Practice: reflection pending" = 0
-		"A2 Dirt Belt Resilience Practice: reflection seen" = 1
+			branch obligations
+				has "A2 Dirt Belt Resilience Practice: obligations"
+			branch capacity
+				has "A2 Dirt Belt Resilience Practice: capacity"
+			branch redundancy
+				has "A2 Dirt Belt Resilience Practice: redundancy"
+			`The clerk remembers that you kept the lesson local. A current shortage review cites the old records only as local history, not as a rule for other settlements. "Context traveled farther because nobody pretended authority traveled with it."`
+				goto finish
+			label obligations
+			`The clerk shows you a repair exchange whose emergency work is complete but whose replacement-stock obligation is still open. Because the debt stayed visible, the next request begins with a real capacity picture instead of a myth that the previous help was free.`
+				goto finish
+			label capacity
+			`A relief shipment arrived on schedule, but the receiving settlement lost warehouse space after a pump failure. The routing board changes destination before the cargo becomes a successful delivery on paper and a useless one on the ground.`
+				goto finish
+			label redundancy
+			`A cooperative harvester fails during a narrow planting window. The reserve machine is inefficient and expensive to move, but it exists. The clerk notes that redundancy bought time rather than abundance, exactly the distinction you chose to remember.`
+			label finish
+			action
+				"A2 Dirt Belt Resilience Practice: reflection pending" = 0
+				"A2 Dirt Belt Resilience Practice: reflection seen" = 1
+				decline
