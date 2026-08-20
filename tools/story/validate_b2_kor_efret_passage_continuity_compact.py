@@ -119,7 +119,8 @@ def main() -> None:
             fail(f"missing B1 resettlement continuity concept: {phrase}")
 
     # Core invariant: movement, safety, reunion, and voluntary settlement are
-    # related but not interchangeable closure conditions.
+    # related but not interchangeable closure conditions. These are semantic
+    # fragments, so compare case-insensitively rather than against capitalization.
     required_fragments = (
         "A safe departure, a family reunion, and a person's preferred destination are not necessarily the same event.",
         "safe location, family contact, and preferred destination",
@@ -130,7 +131,7 @@ def main() -> None:
         "reunited without choosing to return",
     )
     for phrase in required_fragments:
-        if phrase not in text:
+        if phrase.lower() not in lower:
             fail(f"missing passage/resettlement invariant: {phrase}")
 
     # Avoid turning practical continuity records into coercive return policy.
@@ -139,7 +140,7 @@ def main() -> None:
         "voluntarily resolved",
         "person themselves has changed the desired outcome",
     ):
-        if phrase not in text:
+        if phrase.lower() not in lower:
             fail(f"missing voluntary-resettlement safeguard: {phrase}")
 
     print("PASS: B2 Kor Efret Passage Continuity Compact structure validated")
