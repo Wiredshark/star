@@ -1,0 +1,140 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 consumes the A1 Free Worlds repair backlog read-only. The player's priority is
+# remembered across recovery, then interpreted against whether a patrol surge is
+# still active when yard capacity has recovered.
+
+
+mission "A2 Free Worlds Repair Priority: Yard Briefing"
+	minor
+	name `Free Worlds Yards: Repair Priority`
+	description `A Free Worlds yard coordinator asks how a strained repair queue should allocate scarce dock time.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		"world: free worlds repair backlog" >= 3
+		not "A2 Free Worlds Repair Priority: briefing seen"
+	on offer
+		conversation
+			`Yard coordinator Mara Venn meets you beside a board of delayed maintenance slots. "The queue is no longer just inconvenient. Every berth we give one hull is a berth another crew waits for."`
+			branch mobilized
+				has "world: free worlds patrol surge"
+			`Venn taps three priority rules. "What should survive the backlog: flight safety, patrol readiness, or predictable civilian turnaround?"`
+				goto choose
+			label mobilized
+			`A patrol surge has filled the board with additional hulls. Venn grimaces. "Mobilization makes every priority look urgent at once. That is exactly when an unwritten rule becomes favoritism."`
+			label choose
+			choice
+				`\tProtect flight-critical safety first, even if patrol and commercial schedules slip.`
+					goto safety
+				`\tProtect patrol readiness first while mobilization is stressing the yards.`
+					goto patrol
+				`\tProtect predictable civilian turnaround so freight and passenger operators can plan around the shortage.`
+					goto civilian
+				`\tI am not setting a standing repair priority for Free Worlds yards.`
+					goto refuse
+			label safety
+			`Venn marks the rule plainly: airworthy before punctual. "Then nobody gets to disguise schedule pressure as a safety judgment."`
+			action
+				"A2 Free Worlds Repair Priority: briefing seen" = 1
+				"A2 Free Worlds Repair Priority: priority safety" = 1
+				decline
+			label patrol
+			`Venn marks mobilized defense hulls for the first available qualifying slots. "Temporary readiness priority, recorded as such. We will still know what civilian work it displaced."`
+			action
+				"A2 Free Worlds Repair Priority: briefing seen" = 1
+				"A2 Free Worlds Repair Priority: priority patrol" = 1
+				decline
+			label civilian
+			`Venn reserves a predictable share of the board for civilian operators. "Not fastest for everyone, but legible. A merchant can plan around a known delay better than a queue that changes every watch."`
+			action
+				"A2 Free Worlds Repair Priority: briefing seen" = 1
+				"A2 Free Worlds Repair Priority: priority civilian" = 1
+				decline
+			label refuse
+			`Venn closes the proposal. "Understood. Your refusal is not permission for me to write your name under somebody else's rule."`
+			action
+				"A2 Free Worlds Repair Priority: briefing seen" = 1
+				"A2 Free Worlds Repair Priority: refused" = 1
+				decline
+
+
+mission "A2 Free Worlds Repair Priority: Recovery Review"
+	minor
+	name `Free Worlds Yards: After the Queue`
+	description `With the repair backlog largely cleared, Mara Venn reviews what the earlier priority actually meant.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Free Worlds Repair Priority: briefing seen"
+		"world: free worlds repair backlog" <= 1
+		not "A2 Free Worlds Repair Priority: recovery seen"
+	on offer
+		conversation
+			branch safety_surge
+				has "A2 Free Worlds Repair Priority: priority safety"
+				has "world: free worlds patrol surge"
+			branch safety_quiet
+				has "A2 Free Worlds Repair Priority: priority safety"
+			branch patrol_surge
+				has "A2 Free Worlds Repair Priority: priority patrol"
+				has "world: free worlds patrol surge"
+			branch patrol_quiet
+				has "A2 Free Worlds Repair Priority: priority patrol"
+			branch civilian_surge
+				has "A2 Free Worlds Repair Priority: priority civilian"
+				has "world: free worlds patrol surge"
+			branch civilian_quiet
+				has "A2 Free Worlds Repair Priority: priority civilian"
+			`Venn shows you a blank policy field. "You declined to set the rule. The queue cleared without anybody converting that refusal into your endorsement."`
+			action
+				"A2 Free Worlds Repair Priority: refusal respected" = 1
+				goto finish
+			label safety_surge
+			`"The backlog is down even though mobilization continues," Venn says. "Safety-first kept damaged hulls from being rushed back out, but patrol schedules absorbed most of the uncertainty."`
+			action
+				"A2 Free Worlds Repair Priority: Venn remembers safety under surge" = 1
+				goto finish
+			label safety_quiet
+			`"With mobilization quiet, safety-first mostly changed documentation," Venn says. "Crews could point to a technical threshold instead of arguing whose schedule mattered more."`
+			action
+				"A2 Free Worlds Repair Priority: Venn remembers safety after quiet" = 1
+				goto finish
+			label patrol_surge
+			`Venn points to a small reserve of open patrol slots. "The readiness rule still has a reason to exist while mobilization continues. The useful part is that its displaced civilian work stayed visible instead of vanishing from the ledger."`
+			action
+				"A2 Free Worlds Repair Priority: Venn remembers patrol under surge" = 1
+				goto finish
+			label patrol_quiet
+			`"The surge ended before the rule could become habit," Venn says. "We retired the patrol preference with the condition that justified it instead of letting emergency priority become permanent seniority."`
+			action
+				"A2 Free Worlds Repair Priority: Venn remembers patrol after quiet" = 1
+				goto finish
+			label civilian_surge
+			`"Mobilization is still active, but civilian operators kept a predictable share of the board," Venn says. "That cost some patrol flexibility, and at least the tradeoff is measurable rather than hidden in queue changes."`
+			action
+				"A2 Free Worlds Repair Priority: Venn remembers civilian under surge" = 1
+				goto finish
+			label civilian_quiet
+			`"Once mobilization eased, the civilian reservation stopped being a scarce carve-out and became a scheduling discipline," Venn says. "Operators knew when to arrive, and empty berths stopped appearing between emergencies."`
+			action
+				"A2 Free Worlds Repair Priority: Venn remembers civilian after quiet" = 1
+			label finish
+			action
+				"A2 Free Worlds Repair Priority: recovery seen" = 1
+				decline
