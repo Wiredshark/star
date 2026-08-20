@@ -1,0 +1,156 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Dirt Belt Receiving Compact.
+#
+# Consumes B1's Dirt Belt Drought Relief Routing Ledger. The compact preserves
+# the historical distinction between a freight delivery and aid that can actually
+# be received, stored, moved, and used. It remains a voluntary coordination
+# practice among poor settlements rather than evidence that scarcity has ended
+# or that the Dirt Belt has acquired a centralized relief authority.
+
+
+mission "B2 Dirt Belt Receiving Compact: Offer"
+	minor
+	name `The Shipment That Cannot Be Unloaded`
+	description `Relief coordinator Dara Ives and warehouse foreman Micah Thorne disagree over whether drought-aid priority should follow the original request or the receiving capacity that actually exists when a shipment arrives.`
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	to offer
+		not "B2 Dirt Belt Receiving Compact: introduced"
+		not "B2 Dirt Belt Receiving Compact: declined"
+	on offer
+		conversation
+			`Dara Ives, a relief coordinator working from a folding table beside the port office, has three manifests open at once. One settlement asked first, another now has the lowest reservoir level, and the third is the only one with enough dry warehouse space to receive the whole shipment without spoiling half of it.`
+			`Micah Thorne, the local warehouse foreman, points toward a line of overloaded surface haulers. "The ledger says where the aid was promised. It does not conjure forklifts, drivers, dry storage, or a road that survived last week's dust storm."`
+			`Ives answers, "And if we rewrite the destination every time the receiving side is strained, the settlements with the weakest infrastructure become the easiest ones to postpone forever."`
+			`The old Dirt Belt drought-relief records on Ives's screen distinguish requests from the capacity to receive, move, and use what was sent. The argument is over how much authority that practical distinction should have when conditions change after a shipment is already under way.`
+			choice
+				`\tBack Ives: preserve the original need claim, but record any temporary capacity limit and the unmet remainder explicitly.`
+					goto claim
+				`\tBack Thorne: route first to places that can actually unload, store, and distribute the cargo, then reopen the displaced request.`
+					goto capacity
+				`\tPair both: every diversion should carry the original need, current receiving capacity, temporary substitute destination, and an open obligation for what remains unmet.`
+					goto paired
+				`\tTell them emergency routing should remain a local judgment instead of becoming another standing compact.`
+					goto decline
+			label claim
+			`You side with Ives. A settlement's inability to receive everything today should not erase what it still needs tomorrow. Thorne agrees that any diversion must leave the unmet remainder visible instead of allowing a completed freight leg to masquerade as completed relief.`
+			action
+				"B2 Dirt Belt Receiving Compact: introduced" = 1
+				"B2 Dirt Belt Receiving Compact: route claim" = 1
+				"B2 Dirt Belt Receiving Compact: ives trusts player" = 1
+			accept
+			label capacity
+			`You side with Thorne. Relief that rots on a landing pad helps nobody. Ives accepts practical rerouting, provided the record distinguishes a temporary receiving constraint from a reduced need claim and automatically reopens whatever part of the original request was not satisfied.`
+			action
+				"B2 Dirt Belt Receiving Compact: introduced" = 1
+				"B2 Dirt Belt Receiving Compact: route capacity" = 1
+				"B2 Dirt Belt Receiving Compact: thorne trusts player" = 1
+			accept
+			label paired
+			`You recommend a paired record. The shipment keeps the original request, the latest reservoir and receiving-capacity report, the reason for any substitute destination, what quantity was actually usable there, and the remainder still owed to the original settlement. Ives says, "Need stays visible." Thorne adds, "And capacity stops being imaginary."`
+			action
+				"B2 Dirt Belt Receiving Compact: introduced" = 1
+				"B2 Dirt Belt Receiving Compact: route paired" = 1
+				"B2 Dirt Belt Receiving Compact: ives trusts player" = 1
+				"B2 Dirt Belt Receiving Compact: thorne trusts player" = 1
+			accept
+			label decline
+			`You tell them the Dirt Belt has survived because settlements can improvise, and a standing rule might become another layer of paperwork during a drought. Ives nods. Thorne says, "Fair. But if the paperwork stays informal, somebody still has to remember which 'completed' delivery left half the need behind."`
+			action
+				"B2 Dirt Belt Receiving Compact: declined" = 1
+			decline
+
+
+mission "B2 Dirt Belt Receiving Compact: Review"
+	minor
+	name `When the Warehouse Is Empty Again`
+	description `Return after the immediate relief rush and see whether the records can distinguish delivered cargo from an actually satisfied need.`
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	to offer
+		has "B2 Dirt Belt Receiving Compact: introduced"
+		not "B2 Dirt Belt Receiving Compact: reviewed"
+	on offer
+		conversation
+			branch claim
+				has "B2 Dirt Belt Receiving Compact: route claim"
+			branch capacity
+				has "B2 Dirt Belt Receiving Compact: route capacity"
+			`The immediate relief rush has passed. Ives and Thorne are comparing copied delivery records from several worlds. The paired approach worked until summaries began traveling without the fields that made them meaningful: one copy kept the original request but dropped the substitute destination; another recorded delivery tonnage but not how much could be stored or moved inland.`
+			`Ives says, "A completed shipment is an event. A satisfied need is a condition. Those are not the same thing." Thorne adds, "And 'capacity' is not one number. Dock space, storage, drivers, road access, and local labor can fail independently."`
+			choice
+				`\tUse a portable receiving packet that keeps original need, receiving constraints, delivered usable quantity, substitute destination, and unmet remainder together.`
+					goto packet
+				`\tUse a reconciliation ledger that keeps need and logistics separate, but refuses to close the relief obligation until both agree on what was actually satisfied.`
+					goto reconcile
+			label claim
+			`The claim-first approach kept unmet needs visible, but some copied records treated the original request as though nothing had been delivered at all. Thorne points to duplicate shipments dispatched because the first delivery's usable quantity never made it into the downstream summary.`
+			choice
+				`\tCarry need, usable delivery, receiving constraints, and remaining obligation together in a portable receiving packet.`
+					goto packet
+				`\tKeep need and logistics as separate records, but reconcile them before a request can be marked closed.`
+					goto reconcile
+			label capacity
+			`The capacity-first approach prevented several shipments from spoiling, but copied logistics summaries sometimes looked like evidence that a diverted settlement's need had disappeared. Ives says, "We solved the unloading problem and accidentally hid the relief problem."`
+			choice
+				`\tUse a portable receiving packet so a practical diversion carries the original need and unmet remainder downstream.`
+					goto packet
+				`\tUse a reconciliation ledger so receiving capacity can change the route without silently closing the original claim.`
+					goto reconcile
+			label packet
+			`You recommend a portable receiving packet. Every copied relief record carries the original need claim, current receiving constraints, destination changes, quantity actually usable on arrival, and the unmet remainder. Ives says, "A diversion can be successful without pretending the original need vanished." Thorne nods. "And a delivery can be partial without being called a failure."`
+			action
+				"B2 Dirt Belt Receiving Compact: reviewed" = 1
+				"B2 Dirt Belt Receiving Compact: settlement packet" = 1
+				"B2 Dirt Belt Receiving Compact: ives trusts player" = 1
+			accept
+			label reconcile
+			`You recommend a reconciliation ledger. Need records and logistics records remain separate: one says what people still require, the other says what the port, roads, storage, labor, and carriers can actually move. A relief obligation closes only when both records agree on what was satisfied and what remains open. Thorne says, "That keeps logistics honest." Ives replies, "And keeps scarcity visible."`
+			action
+				"B2 Dirt Belt Receiving Compact: reviewed" = 1
+				"B2 Dirt Belt Receiving Compact: settlement reconcile" = 1
+				"B2 Dirt Belt Receiving Compact: thorne trusts player" = 1
+			accept
+
+
+mission "B2 Dirt Belt Receiving Compact: Ives Remembers"
+	minor
+	name `Ives Remembers`
+	description `Dara Ives remembers how the receiving compact learned to keep delivered cargo, usable aid, and unmet need from collapsing into the same number.`
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	to offer
+		not "B2 Dirt Belt Receiving Compact: aftermath seen"
+		or
+			has "B2 Dirt Belt Receiving Compact: settlement packet"
+			has "B2 Dirt Belt Receiving Compact: settlement reconcile"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Dirt Belt Receiving Compact: settlement reconcile"
+			`Ives shows you a relief packet copied through four settlements. The original request is still visible beside two partial deliveries, a warehouse-capacity failure, a temporary diversion, and the exact remainder still owed. "Nothing here says the drought became easy," she says. "It only says what actually happened."`
+			goto record
+			label reconcile
+			`Ives shows you two linked records. One tracks household and reservoir need; the other tracks unloading crews, storage, road access, and delivered usable quantity. The request remains open because the logistics record can prove only that a shipment arrived, not that the settlement received enough relief. "Two honest records are better than one convenient fiction," she says.`
+			label record
+			action
+				"B2 Dirt Belt Receiving Compact: aftermath seen" = 1
+			accept
