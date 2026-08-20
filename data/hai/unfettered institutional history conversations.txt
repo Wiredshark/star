@@ -1,0 +1,76 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Unfettered Lineage Recitation Archive"
+	minor
+	source
+		attributes "unfettered"
+	"offer precedence" 5
+	to offer
+		has "First Contact: Unfettered: offered"
+		not "event: wanderers: unfettered invasion starts"
+		random < 1
+	on offer
+		conversation
+			`A gathering hall contains a wall of carefully indexed recordings. Some are formal speeches, others are family recitations spoken by elders to children, but all return to the same ancient themes: lost worlds, the Drak intervention, and the claim that the Unfettered preserve what the Hai once were.`
+			`A curator explains that the archive does not treat every retelling as identical evidence. Variations are preserved alongside the names and lineages of the speakers, and newer entries note where a claim comes from an older recitation rather than from any surviving physical record. The purpose, they insist, is not to weaken the story but to keep memory from becoming indistinguishable from invention as generations pass.`
+				decline
+
+
+mission "Unfettered Technology Acquisition Ledger"
+	minor
+	source
+		attributes "unfettered"
+	"offer precedence" 5
+	to offer
+		has "First Contact: Unfettered: offered"
+		not "event: wanderers: unfettered invasion starts"
+		random < 1
+	on offer
+		conversation
+			`A cramped engineering office keeps records for drives, weapons, control systems, and other machinery obtained from beyond the northern worlds. Each entry lists how the component was acquired, what vessel it came from, which interfaces had to be adapted, and whether later repairs confirmed or contradicted the engineers' first assumptions.`
+			`The oldest pages read like salvage notes. Later ones use shared categories for provenance, compatibility, observed failures, and replacement parts. A technician says the system became necessary because scarce foreign machinery was too valuable for each crew to relearn the same lesson independently. Even technology acquired through trade, capture, or uncertain circumstances becomes part of a common technical memory once it reaches a workshop.`
+				decline
+
+
+mission "Unfettered Historical Claim Register"
+	minor
+	source
+		attributes "unfettered"
+	"offer precedence" 5
+	to offer
+		has "First Contact: Unfettered: offered"
+		not "event: wanderers: unfettered invasion starts"
+		random < 1
+	on offer
+		conversation
+			`An austere archive displays maps covered in names for worlds far beyond the territory the Unfettered now control. Beside each map are copied oral accounts, archaeological references, later observations, and annotations showing when two traditions disagree about an old boundary or settlement.`
+			`The archivist calls it a claim register rather than a history of ownership. Some entries record places the Unfettered say their ancestors ruled; others merely preserve routes, battles, or remembered settlements. The distinction matters even here: a claim repeated for generations can shape politics and identity without proving every detail of what happened a hundred thousand years ago.`
+				decline
+
+
+mission "Unfettered Frontier Maintenance Ledger"
+	minor
+	source
+		attributes "unfettered"
+	"offer precedence" 5
+	to offer
+		has "First Contact: Unfettered: offered"
+		not "event: wanderers: unfettered invasion starts"
+		random < 1
+	on offer
+		conversation
+			`A public works office is dominated by repair boards rather than decoration. Entries track failing structures, pressure seals, power systems, agricultural machinery, replacement parts, and which settlements can spare technicians or equipment for another world. Many of the forms have been copied and amended for generations.`
+			`A clerk says that life on a small group of aging frontier worlds made maintenance a political institution as much as an engineering task. When parts are scarce, deciding which habitat, workshop, or transport system receives them first can determine which community remains viable. The ledgers evolved so those decisions, emergency substitutions, and unfinished obligations would survive changes in crews and local leaders instead of disappearing with whoever made the last repair.`
+				decline
