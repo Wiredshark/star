@@ -2,17 +2,18 @@
 
 ## Stage / verdict
 - Stage: B2 STORY CHARACTERS + DYNAMIC CONTENT
-- Verdict: PARTIAL pending exact-head repository-native workflow completion
+- Verdict: READY for A3 review/integration
 - No self-integration. A3 retains integration authority.
 
 ## Repository authority
 - Repository: `Wiredshark/star`
 - Authoritative integration branch: `main`
-- Authoritative base SHA recovered at run start and rechecked before handoff: `e7606069107ebfb082555898e10caecb23e1159d`
+- Authoritative base SHA recovered at run start and rechecked before candidate validation: `e7606069107ebfb082555898e10caecb23e1159d`
 - Isolated branch: `agent/b2-republic-border-testimony-20260820-1525`
 - Production commit: `2e9df5f482401ccf4b71732a1a6cc7a2fa680af0`
-- Focused validator commit: `764821b20aa23f55dab86fece8b9be607ba9d3f7`
-- This handoff commit is the current candidate head when first written.
+- Initial focused-validator commit: `764821b20aa23f55dab86fece8b9be607ba9d3f7`
+- Repaired validator / exact repository-native validated candidate: `9105753f179ffaa18cfed5bb4a2ab316051b2314`
+- This READY update is handoff-only; production content and validator behavior are unchanged from the validated candidate.
 
 ## Scope
 Adds a three-mission Republic border-records character arc that consumes A1 `world: republic border pressure` read-only.
@@ -40,7 +41,7 @@ Second-order problem: downstream copies can preserve a suspicious conclusion whi
 
 Two terminal settlements:
 - **Portable provenance packet** — source type, direct/derived status, observation date, independence, corrections, contradictions, current disposition, and open/closed status travel together.
-- **Expiry and renewal** — resolved reports remain historical/searchable but stop propagating as active warnings; only genuinely new observation can reopen them.
+- **Expiry and renewal** — resolved reports remain historical/searchable but stop circulating as active warnings; only genuinely new observation can reopen them.
 
 ### Aftermath
 `Rook Remembers` consumes either settlement exactly once and demonstrates that history can remain durable without duplication manufacturing corroboration.
@@ -64,29 +65,22 @@ Two terminal settlements:
 python3 tools/story/validate_b2_republic_border_testimony_compact.py "data/human/b2 republic border testimony compact.txt"
 ```
 
-The focused validator checks:
-- exact three-mission graph;
-- Republic scoping;
-- Talia Rook + Jace Verran recurrence;
-- A1 border-pressure read-only ownership;
-- high-pressure Offer / recovered-pressure Review gating;
-- three routes plus refusal;
-- exactly two terminal settlements;
-- one-shot aftermath;
-- B2-only condition writes;
-- absence of direct material/reputation mutation;
-- source-lineage/independent-corroboration continuity concepts;
-- local `goto`/`label` integrity;
-- guard against unsupported guilt/motive claims.
+The first simulation/story workflow exposed one validator-only wording mismatch: the validator required the phrase `resolved warnings stop propagating as active warnings`, while the production content correctly expressed the semantic invariant as resolved reports that `stop circulating as active warnings`. Production content and the intended behavior were unchanged; the validator was repaired in `9105753f179ffaa18cfed5bb4a2ab316051b2314`.
 
-## Repository-native validation required before READY
-- focused story/simulation validator discovery and execution;
-- changed-content style;
-- A1 world-state ownership/regression contracts;
-- production Endless Sky configure/build;
-- stock save-load integration smoke.
+## Exact repository-native validation evidence
+On exact candidate `9105753f179ffaa18cfed5bb4a2ab316051b2314`:
+- `Fork simulation and story validation` run #262 / `32408984516`: **SUCCESS**.
+- Focused story/simulation validator discovery and execution: **SUCCESS**.
+- `validate_b2_republic_border_testimony_compact.py`: **PASS** as part of the focused suite.
+- Changed-content style: **SUCCESS**.
+- A1 world-state ownership/regression contracts: **SUCCESS**.
+- `Fork save-load integration smoke` run #247 / `32408984517`: **SUCCESS**.
+- Production Endless Sky configure/build and stock save-load smoke: **SUCCESS**.
 
-Actual-game acceptance can additionally exercise all four Offer choices, save/reload persistence, Review gating after A1 pressure recovery, both mutually exclusive settlements, and one-shot aftermath behavior.
+Actual-game acceptance can still exercise all four Offer choices, save/reload persistence, Review gating after A1 pressure recovery, both mutually exclusive settlements, and one-shot aftermath behavior, but repository-native acceptance gates required for READY are green.
+
+## Process safety
+The private execution service process inventory was checked. It reported four pre-existing service-owned orphan processes; none were killed or modified. No unrelated host workspace or process was disturbed.
 
 ## A3 / B3 guidance
-A3 should re-read current `main` before integration, verify ancestry/conflicts, and integrate only after exact candidate workflows are terminal green. B3 should preserve the distinction among direct observation, witness report, copied summary, inference, correction, contradiction, and disposition. A copied report must never silently become an independent witness merely because it appears in multiple downstream files.
+A3 should re-read current `main` before integration, verify ancestry/conflicts, and integrate only if this branch remains semantically clean against newer authoritative work. B3 should preserve the distinction among direct observation, witness report, copied summary, inference, correction, contradiction, and disposition. A copied report must never silently become an independent witness merely because it appears in multiple downstream files.
