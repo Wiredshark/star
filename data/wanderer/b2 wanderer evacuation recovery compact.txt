@@ -1,0 +1,154 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Wanderer Evacuation Recovery Compact production slice.
+#
+# This content consumes the authoritative A1
+# `world: wanderer evacuation logistics strain` signal read-only. It focuses on
+# the distinction between refugees arriving safely and the transport, shelter,
+# berth, staffing, and maintenance capacity borrowed to make that arrival possible.
+# The player privately thinks of the two recurring Wanderer specialists as the
+# Harbor Keeper and Route Tender; these are descriptive shorthand, not offices.
+
+
+mission "B2 Wanderer Evacuation Recovery Compact: Offer"
+	minor
+	name `The Ships Came Home Empty`
+	description `Two Wanderer coordinators disagree over what the evacuation network still owes after refugees have reached safety.`
+	source
+		government "Wanderer"
+	to offer
+		has "event: wanderers: unfettered invasion starts"
+		"world: wanderer evacuation logistics strain" >= 3
+		not "B2 Wanderer Evacuation Recovery Compact: introduced"
+		not "B2 Wanderer Evacuation Recovery Compact: declined"
+	on offer
+		conversation
+			`A Wanderer harbor is full of ships that have returned from evacuation runs with empty holds, exhausted crews, improvised bunks, and repair tags tied to half the docking clamps. You privately think of one coordinator as the Harbor Keeper and the other as the Route Tender.`
+			`The Harbor Keeper says, "The people are ashore. That is the first obligation. But shelters are still using borrowed power modules, three berths are running on deferred maintenance, and some crews have not had a normal rest cycle since the first retreat."`
+			`The Route Tender flicks through a route board. "And if we count every borrowed berth and every exhausted crew as unfinished evacuation, we may never close the emergency. We need to know which obligations still affect safe movement now."`
+			choice
+				`\tBack the Harbor Keeper: arrival closes the journey, not the borrowed-capacity obligations that made it possible.`
+					goto obligations
+				`\tBack the Route Tender: keep only obligations that still affect present transport and shelter safety.`
+					goto current
+				`\tTrack both: separate the completed evacuation outcome from the still-open transport, shelter, berth, crew, and maintenance obligations.`
+					goto paired
+				`\tRefuse to turn one harbor's recovery practice into a general Wanderer rule.`
+					goto decline
+			label obligations
+			`You tell them a successful arrival is an event, while restored capacity is a condition. The Harbor Keeper begins a list of borrowed shelter modules, fatigued crews, deferred berth work, and replacement owners. The Route Tender agrees to keep each item reviewable instead of letting it become permanent debt.`
+			action
+				"B2 Wanderer Evacuation Recovery Compact: introduced" = 1
+				"B2 Wanderer Evacuation Recovery Compact: route obligations" = 1
+				"B2 Wanderer Evacuation Recovery Compact: harbor keeper trusts player" = 1
+			accept
+			label current
+			`You tell them an emergency record should not preserve every historical inconvenience forever. The Route Tender marks only the borrowed capacity that still constrains safe transport or shelter operation. The Harbor Keeper insists that resolved items be closed with evidence rather than silently disappearing.`
+			action
+				"B2 Wanderer Evacuation Recovery Compact: introduced" = 1
+				"B2 Wanderer Evacuation Recovery Compact: route current" = 1
+				"B2 Wanderer Evacuation Recovery Compact: route tender trusts player" = 1
+			accept
+			label paired
+			`You separate the record into two layers: who reached safety and which borrowed capacities are still open. A refugee arrival cannot be undone by a late maintenance bill, but neither can the arrival erase an exhausted crew, missing shelter module, or damaged berth. Both coordinators begin linking the records without collapsing them.`
+			action
+				"B2 Wanderer Evacuation Recovery Compact: introduced" = 1
+				"B2 Wanderer Evacuation Recovery Compact: route paired" = 1
+				"B2 Wanderer Evacuation Recovery Compact: harbor keeper trusts player" = 1
+				"B2 Wanderer Evacuation Recovery Compact: route tender trusts player" = 1
+			accept
+			label decline
+			`You decline to impose a standing rule. The Harbor Keeper says, "Then let the record show that local judgment stayed local." The Route Tender closes the discussion without creating a review chain.`
+			action
+				"B2 Wanderer Evacuation Recovery Compact: declined" = 1
+			decline
+
+
+mission "B2 Wanderer Evacuation Recovery Compact: Review"
+	minor
+	name `When the Corridor Looks Normal Again`
+	description `Return after evacuation-logistics strain has eased and decide how completed arrivals and unfinished recovery obligations should travel in later records.`
+	source
+		government "Wanderer"
+	to offer
+		has "B2 Wanderer Evacuation Recovery Compact: introduced"
+		"world: wanderer evacuation logistics strain" <= 1
+		not "B2 Wanderer Evacuation Recovery Compact: reviewed"
+	on offer
+		conversation
+			branch obligations
+				has "B2 Wanderer Evacuation Recovery Compact: route obligations"
+			branch current
+				has "B2 Wanderer Evacuation Recovery Compact: route current"
+			`Traffic has returned to a near-normal rhythm, but the paired records reveal a new problem. Some summaries say "evacuation complete" and omit the remaining berth and shelter obligations; others copy old deficits after they were already repaired, making the network look permanently damaged.`
+			choice
+				`\tUse a portable recovery packet: completed arrival, borrowed capacity, responsible owner, current status, review date, and closure evidence travel together.`
+					goto packet
+				`\tKeep arrival and recovery ledgers separate, but require a reconciliation pass before any open obligation can be retired or copied forward.`
+					goto reconcile
+			label obligations
+			`The Harbor Keeper's obligation list prevented successful arrivals from hiding deferred work, but copied summaries sometimes preserved resolved debts after the berth or shelter capacity was already restored. The Route Tender says, "Open obligations need closure evidence, or yesterday's emergency becomes tomorrow's false warning."`
+			choice
+				`\tMake every copied obligation carry its current status and the evidence used to close it.`
+					goto packet
+				`\tReconcile open and resolved obligations on a regular cycle before summaries are redistributed.`
+					goto reconcile
+			label current
+			`The Route Tender's current-risk list kept obsolete problems from lingering forever, but one harbor dropped a borrowed shelter-power obligation from its summary as soon as traffic normalized. The Harbor Keeper says, "It stopped constraining ships before it stopped being somebody's responsibility."`
+			choice
+				`\tCarry both current operational effect and unfinished restoration status in one portable packet.`
+					goto packet
+				`\tKeep them separate, then reconcile operational closure against actual restoration evidence.`
+					goto reconcile
+			label packet
+			`You recommend a portable recovery packet that keeps successful arrival, borrowed capacity, responsible owner, current operational effect, review date, and closure evidence together. The Route Tender likes that old warnings can actually expire. The Harbor Keeper likes that an obligation cannot disappear merely because traffic looks normal again.`
+			action
+				"B2 Wanderer Evacuation Recovery Compact: reviewed" = 1
+				"B2 Wanderer Evacuation Recovery Compact: settlement portable recovery packet" = 1
+				"B2 Wanderer Evacuation Recovery Compact: harbor keeper trusts player" = 1
+				"B2 Wanderer Evacuation Recovery Compact: route tender trusts player" = 1
+			accept
+			label reconcile
+			`You recommend two lightweight ledgers: one for completed evacuation outcomes and one for borrowed-capacity recovery. A recurring reconciliation closes an obligation only when its restoration evidence exists, while resolved items stop propagating as active warnings. Neither ledger can silently close the other.`
+			action
+				"B2 Wanderer Evacuation Recovery Compact: reviewed" = 1
+				"B2 Wanderer Evacuation Recovery Compact: settlement reconciliation cycle" = 1
+				"B2 Wanderer Evacuation Recovery Compact: harbor keeper trusts player" = 1
+				"B2 Wanderer Evacuation Recovery Compact: route tender trusts player" = 1
+			accept
+
+
+mission "B2 Wanderer Evacuation Recovery Compact: Keeper Remembers"
+	minor
+	name `The Harbor Keeper Remembers`
+	description `A Wanderer coordinator remembers whether safe arrival and restored evacuation capacity remained distinct.`
+	source
+		government "Wanderer"
+	to offer
+		not "B2 Wanderer Evacuation Recovery Compact: aftermath seen"
+		or
+			has "B2 Wanderer Evacuation Recovery Compact: settlement portable recovery packet"
+			has "B2 Wanderer Evacuation Recovery Compact: settlement reconciliation cycle"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Wanderer Evacuation Recovery Compact: settlement reconciliation cycle"
+			`The Harbor Keeper shows you a copied recovery packet from another Wanderer port. "This family arrived safely months ago. That stayed true. The borrowed shelter generator was restored last week. That changed. The packet kept both facts without letting either rewrite the other."`
+			goto record
+			label reconcile
+			`The Harbor Keeper points to a compact reconciliation sheet. "The evacuation record closes when people reach safety. The capacity ledger closes when the borrowed berth, shelter, crew, or maintenance obligation is actually restored. We finally stopped making one success erase the other unfinished job."`
+			label record
+			action
+				"B2 Wanderer Evacuation Recovery Compact: aftermath seen" = 1
+			accept
