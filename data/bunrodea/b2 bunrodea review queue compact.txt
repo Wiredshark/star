@@ -1,0 +1,157 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Bunrodea Review Queue Compact production slice.
+#
+# This is a sequel to B2 Bunrodea Freight Petition Compact. It consumes that
+# compact's settlement state and the authoritative A1
+# `world: bunrodea freight review backlog` signal read-only.
+#
+# Sedi Var and Iral Kes already solved how freight facts and petition authority
+# should remain distinct. Their new problem is queue discipline under load: urgent
+# cases can legitimately move first, but repeated urgency must not make older
+# unresolved petitions disappear from institutional memory.
+
+
+mission "B2 Bunrodea Review Queue Compact: Offer"
+	minor
+	name `The Case That Keeps Moving Back`
+	description `Sedi Var and Iral Kes disagree over how Bunrodea petition review should prioritize urgent freight cases while the review backlog is high.`
+	source
+		government "Bunrodea"
+	to offer
+		"world: bunrodea freight review backlog" >= 4
+		or
+			has "B2 Bunrodea Freight Petition Compact: settlement portable docket"
+			has "B2 Bunrodea Freight Petition Compact: settlement dual ledger"
+		not "B2 Bunrodea Review Queue Compact: introduced"
+		not "B2 Bunrodea Review Queue Compact: declined"
+	on offer
+		conversation
+			`Sedi Var and Iral Kes are standing over a petition queue that has grown faster than either of them expected. The freight and authority records are still separate, just as you helped arrange, but the review backlog has created a new problem: the same old petition has been pushed backward three times by cargo marked urgent.`
+			`Sedi points to medical machinery and perishable industrial feedstock at the front of the list. "Some cases really cannot wait." Iral points to the repeatedly deferred petition. "And some cases become permanent simply because every new arrival can explain why it is more urgent."`
+			choice
+				`\tUse age-first review: the oldest unresolved petition keeps priority unless a documented emergency temporarily displaces it.`
+					goto age
+				`\tUse risk-first review: urgent safety and perishability cases may move ahead, but every displacement must preserve the older petition's place and reason for delay.`
+					goto risk
+				`\tUse paired lanes: one for immediate operational urgency and one protected lane for aged unresolved petitions.`
+					goto paired
+				`\tRefuse to turn a busy week into a permanent review rule.`
+					goto decline
+			label age
+			`You argue that age should be the default priority because unresolved petitions accumulate real cost even when they are not dramatic. An emergency can still interrupt the order, but only with a recorded reason and a return point for the displaced case. Sedi accepts the exception. Iral approves of the durable place in line.`
+			action
+				"B2 Bunrodea Review Queue Compact: introduced" = 1
+				"B2 Bunrodea Review Queue Compact: route age first" = 1
+				"B2 Bunrodea Review Queue Compact: iral trusts player" = 1
+			accept
+			label risk
+			`You argue that a review system must respond to real operational harm. Medical, safety, and truly perishable cases may move first, but every case they displace keeps its original age, its previous position, and the exact reason it was deferred. Sedi likes the flexibility. Iral says it may work if urgency can never reset the clock.`
+			action
+				"B2 Bunrodea Review Queue Compact: introduced" = 1
+				"B2 Bunrodea Review Queue Compact: route risk first" = 1
+				"B2 Bunrodea Review Queue Compact: sedi trusts player" = 1
+			accept
+			label paired
+			`You separate the queue into two linked views. One tracks immediate operational urgency. The other protects aged unresolved petitions from disappearing behind repeated emergencies. A case can appear in both views, but moving it in one does not erase its history in the other. Sedi and Iral begin sketching the cross-reference together.`
+			action
+				"B2 Bunrodea Review Queue Compact: introduced" = 1
+				"B2 Bunrodea Review Queue Compact: route paired lanes" = 1
+				"B2 Bunrodea Review Queue Compact: sedi trusts player" = 1
+				"B2 Bunrodea Review Queue Compact: iral trusts player" = 1
+			accept
+			label decline
+			`You tell them that a temporary backlog is a poor excuse for writing a permanent rule while everyone is tired. Sedi says that is fair. Iral records that no standing queue procedure was adopted from this dispute.`
+			action
+				"B2 Bunrodea Review Queue Compact: declined" = 1
+			decline
+
+
+mission "B2 Bunrodea Review Queue Compact: Review"
+	minor
+	name `When the Queue Looks Normal`
+	description `Return after Bunrodea freight-review pressure has eased and decide how repeated deferrals should survive after the visible queue clears.`
+	source
+		government "Bunrodea"
+	to offer
+		has "B2 Bunrodea Review Queue Compact: introduced"
+		"world: bunrodea freight review backlog" <= 1
+		not "B2 Bunrodea Review Queue Compact: reviewed"
+	on offer
+		conversation
+			branch age
+				has "B2 Bunrodea Review Queue Compact: route age first"
+			branch risk
+				has "B2 Bunrodea Review Queue Compact: route risk first"
+			`The visible review queue has nearly returned to normal, but Iral has found three petitions whose histories say otherwise. Each one was repeatedly displaced during the surge, and two downstream offices copied only the final review date rather than the weeks of accumulated delay. Sedi says, "The backlog fell. That does not mean every case experienced the same recovery."`
+			choice
+				`\tUse a portable delay history: original arrival, priority changes, each deferral reason, responsible desk, current status, and next review point travel with the petition.`
+					goto history
+				`\tUse a reconciliation cycle: urgent and aged queues remain separate views, but the office must periodically reconcile them before declaring the backlog restored.`
+					goto reconcile
+			label age
+			`Age-first review kept the oldest cases visible, but one office copied only the final completion date and lost the emergency interruptions that explained why the petition took so long. Iral says that a fair queue without a durable delay history can still produce an unfair historical record.`
+			choice
+				`\tMake every petition carry its accumulated delay history and current review point.`
+					goto history
+				`\tReconcile the urgency and age views at regular intervals before declaring the queue recovered.`
+					goto reconcile
+			label risk
+			`Risk-first review moved urgent cargo quickly, but Sedi found a petition that was legitimately deferred four times and then looked new when copied to another office. "Every interruption was defensible," Sedi says. "The total delay was still real." Iral nods.`
+			choice
+				`\tCarry the entire deferral chain forward with the petition.`
+					goto history
+				`\tRequire a reconciliation pass so repeated urgent exceptions cannot silently age older cases out of view.`
+					goto reconcile
+			label history
+			`You recommend a portable delay history. Each petition carries its original arrival date, priority changes, every documented deferral reason, the desk responsible for the next action, current status, and next review point. An urgent exception can remain legitimate without rewriting how long the displaced case actually waited.`
+			action
+				"B2 Bunrodea Review Queue Compact: reviewed" = 1
+				"B2 Bunrodea Review Queue Compact: settlement portable delay history" = 1
+				"B2 Bunrodea Review Queue Compact: sedi trusts player" = 1
+				"B2 Bunrodea Review Queue Compact: iral trusts player" = 1
+			accept
+			label reconcile
+			`You recommend keeping operational urgency and accumulated age as separate linked views. Periodic reconciliation compares them before the office can declare the backlog restored. A review surge may end because new intake slowed, but unresolved deferrals remain visible until they are actually addressed or explicitly closed.`
+			action
+				"B2 Bunrodea Review Queue Compact: reviewed" = 1
+				"B2 Bunrodea Review Queue Compact: settlement reconciliation cycle" = 1
+				"B2 Bunrodea Review Queue Compact: sedi trusts player" = 1
+				"B2 Bunrodea Review Queue Compact: iral trusts player" = 1
+			accept
+
+
+mission "B2 Bunrodea Review Queue Compact: Iral Remembers"
+	minor
+	name `Iral Remembers`
+	description `Iral Kes remembers whether a cleared Bunrodea review queue still preserved the petitions that were repeatedly deferred during the surge.`
+	source
+		government "Bunrodea"
+	to offer
+		not "B2 Bunrodea Review Queue Compact: aftermath seen"
+		or
+			has "B2 Bunrodea Review Queue Compact: settlement portable delay history"
+			has "B2 Bunrodea Review Queue Compact: settlement reconciliation cycle"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Bunrodea Review Queue Compact: settlement reconciliation cycle"
+			`Iral shows you a petition whose final ruling is only a page long. Behind it is a compact history of three emergency deferrals, each still attached to the case rather than buried in the old queue. "The decision did not become better because it was delayed," he says. "But at least the record no longer pretends the delay never happened."`
+			goto record
+			label reconcile
+			`Iral points to two queue summaries side by side. The urgent lane is empty. The aged-case view still contains two unresolved petitions. "Sedi says the surge is over. I agree. We simply no longer confuse the end of the surge with the end of every obligation it created."`
+			label record
+			action
+				"B2 Bunrodea Review Queue Compact: aftermath seen" = 1
+			accept
