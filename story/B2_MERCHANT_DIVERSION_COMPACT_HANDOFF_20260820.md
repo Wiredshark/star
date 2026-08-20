@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native simulation/story/style and production save-load validation. Do not self-integrate; A3 owns integration.
+READY for A3 review/integration. Do not self-integrate; A3 owns integration.
 
 ## Exact repository state
 
@@ -10,8 +10,9 @@ PARTIAL pending exact-head repository-native simulation/story/style and producti
 - Authoritative `main` observed at branch creation: `95fdb069b0a56d990f75a59b0c44fe9d6401038d`
 - Isolated branch: `agent/b2-merchant-diversion-compact-20260820-0223`
 - Production commit: `70243a3338926f2e1685765584951b0de4afbccf`
-- Focused validator commit: `08288cfa03812f3b5c2b7a560d7d4fc2e06aabdf`
-- This handoff commit is the current candidate head.
+- Initial focused validator commit: `08288cfa03812f3b5c2b7a560d7d4fc2e06aabdf`
+- Repaired validator / exact fully validated candidate: `94daa69f3bf1dd1468cb731f913b8062b2ffaff6`
+- This commit only promotes the durable handoff from PARTIAL to READY; production content and validator behavior are unchanged from the fully green exact candidate above.
 
 ## Selection / concurrency
 
@@ -66,13 +67,21 @@ Terminal settlements:
 - `tools/story/validate_b2_merchant_diversion_compact.py`
 - `story/B2_MERCHANT_DIVERSION_COMPACT_HANDOFF_20260820.md`
 
-## Required exact-head validation
+## Exact validation evidence
 
-Before READY / A3 integration:
+The first simulation/story workflow on handoff head `d5ab237d256543c1487e0cd2375d4923bb317b4c` found one validator-only defect: the validator required an exact phrase spanning a line break in the production-file comment. Production content and changed-content style passed. The validator was repaired in `94daa69f3bf1dd1468cb731f913b8062b2ffaff6` to test the intended continuity concepts without depending on comment line wrapping.
 
-1. `Fork simulation and story validation` must be terminal green on the exact candidate head, including changed-content style and the focused B2 validator.
-2. `Fork save-load integration smoke` must be terminal green on the exact candidate head, including production build and stock save/load smoke.
-3. Actual-game acceptance should verify high-pressure Offer gating, all three substantive routes, refusal, low-pressure Review gating, both settlements, save/reload between stages, and one-shot aftermath behavior.
+On exact candidate `94daa69f3bf1dd1468cb731f913b8062b2ffaff6`:
+
+- `Fork simulation and story validation` run #187 / `32339702062`: SUCCESS.
+- Changed fork content style: SUCCESS.
+- Focused story validators, including `validate_b2_merchant_diversion_compact.py`: SUCCESS.
+- A1 simulation/state-ownership contracts: SUCCESS.
+- `Fork save-load integration smoke` run #176 / `32339702054`: SUCCESS.
+- Production configure/build: SUCCESS.
+- Stock save-load smoke: SUCCESS.
+
+Actual-game review remains useful but is no longer a blocker to READY because repository-native production build and stock persistence gates are green on the exact candidate.
 
 ## A3 / B3 integration notes
 
