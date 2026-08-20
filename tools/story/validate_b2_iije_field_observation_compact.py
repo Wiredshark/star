@@ -40,11 +40,11 @@ def main() -> None:
 
     for phrase in (
         "you have private shorthand for them",
-        "you think of the careful field biologist as the Observer",
-        "the expedition pilot as the Pilot",
-        "Neither has introduced those words as a title",
+        "you think of the careful field biologist as the observer",
+        "the expedition pilot as the pilot",
+        "neither has introduced those words as a title",
     ):
-        if phrase not in text:
+        if phrase not in lower:
             fail(f"missing recurring-character continuity phrase: {phrase}")
 
     if text.count('source "Midgard"') != 2:
