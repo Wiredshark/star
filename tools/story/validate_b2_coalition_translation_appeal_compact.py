@@ -111,10 +111,12 @@ def main() -> None:
         "source wording, translator, literal rendering, assumptions, alternatives, revisions, confidence, and disposition",
         "dual-language disposition ledger",
         "source evidence stays fixed",
-        "Repeated copies of one translation must never become independent corroboration",
     ):
         if phrase not in text:
             fail(f"missing translation-provenance invariant: {phrase}")
+
+    if "repeated copies of one translation must never become independent corroboration" not in lower:
+        fail("missing translation-provenance invariant: repeated copies remain one evidence lineage")
 
     offer_block = next(b for b in blocks if b.startswith(f'mission "{PREFIX} Offer"'))
     decline_block = offer_block.split("label decline", 1)[1]
