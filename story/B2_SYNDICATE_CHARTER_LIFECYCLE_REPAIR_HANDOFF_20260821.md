@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native validation on the exact candidate head.
+READY for A3 review/integration.
 
 ## Exact state
 
@@ -10,6 +10,7 @@ PARTIAL pending repository-native validation on the exact candidate head.
 - Branch: `agent/b2-syndicate-charter-lifecycle-20260821-0724`
 - Production lifecycle repair: `5a33ec5ed16f4d2c3e1c1beb8dbfc8ad897ab9f2`
 - Focused validator hardening: `993ff520b68473efa434ab4421fcf30dd2da7c09`
+- Exact fully validated production/validator/handoff candidate: `0da9d56402fb148ce574731dc666e72be30b3eaf`
 
 ## Defect
 
@@ -32,10 +33,19 @@ PARTIAL pending repository-native validation on the exact candidate head.
 - `Solis Remembers` remains a one-shot aftermath reader.
 - No credits, reputation, cargo, combat, ship, fleet, or equipment mutation was added.
 
-## Validation required before READY
+## Exact validation
 
-Run the repository-native `Fork simulation and story validation` and `Fork save-load integration smoke` workflows on the exact candidate. READY requires terminal green focused story validation, changed-content style, A1/state-ownership regressions, production configure/build, and stock save-load smoke.
+On exact candidate `0da9d56402fb148ce574731dc666e72be30b3eaf`:
+
+- `Fork simulation and story validation` run #322 / `32477222329`: SUCCESS.
+  - focused simulation/story contracts: SUCCESS
+  - focused story validators including Syndicate Charter lifecycle validation: SUCCESS
+  - A1 simulation/state-ownership regressions: SUCCESS
+  - changed-content style: SUCCESS
+- `Fork save-load integration smoke` run #307 / `32477222350`: SUCCESS.
+  - production configure/build: SUCCESS
+  - stock save-load smoke: SUCCESS
 
 ## A3/B3 integration note
 
-This is lifecycle-only. Preserve all existing Syndicate Charter route/settlement semantics and the invariant that dialogue-only missions which merely persist state terminate with `decline`; `accept` is reserved for objective-bearing mission lifecycles.
+This is lifecycle-only. Preserve all existing Syndicate Charter route/settlement semantics and the invariant that dialogue-only missions which merely persist state terminate with `decline`; `accept` is reserved for objective-bearing mission lifecycles. A3 retains integration authority; this branch remains isolated and unmerged.
