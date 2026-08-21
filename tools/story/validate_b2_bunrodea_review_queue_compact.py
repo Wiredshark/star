@@ -81,6 +81,28 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("later reader must persist completion")
 
+    # Dialogue lifecycle: these three missions have no gameplay objective. Ending a
+    # conversation with `accept` would move an objective-less mission into the
+    # active mission list. Persistent state is written before each terminal, so
+    # every route must close with `decline` instead.
+    if re.search(r'^\s*accept\s*$', text, flags=re.MULTILINE):
+        fail("dialogue-only B2 missions must not use accept terminal endpoints")
+    decline_count = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+    if decline_count != 7:
+        fail(f"expected 7 dialogue terminal declines, found {decline_count}")
+    objective_tokens = (
+        "cargo ",
+        "passenger ",
+        "destination ",
+        "waypoint ",
+        "npc ",
+        "deadline ",
+        "stopover ",
+    )
+    lowered = text.lower()
+    if any(re.search(rf'^\s*{re.escape(token)}', lowered, flags=re.MULTILINE) for token in objective_tokens):
+        fail("lifecycle assumption changed: gameplay objective token now present")
+
     # Every direct persistent write must remain inside the B2 namespace.
     for raw in re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, flags=re.MULTILINE):
         if not raw.startswith(PREFIX):
@@ -122,7 +144,6 @@ def main() -> None:
         "reconciliation",
         "petition",
     )
-    lowered = text.lower()
     for term in continuity_terms:
         if term not in lowered:
             fail(f"missing queue-continuity concept: {term}")
@@ -140,6 +161,7 @@ def main() -> None:
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Iral Remembers")
+    print("PASS: dialogue_lifecycle=state-only terminals decline")
     print("PASS: mutation_surface=B2 conditions only")
 
 
