@@ -79,6 +79,13 @@ def main() -> None:
     if '"A2 Free Worlds Reserve Practice: recurrence seen" = 1' not in text:
         fail("missing one-shot recurrence state")
 
+    # Both missions are state-only conversations. Their terminal paths must close
+    # the offer instead of moving an objective-less mission into the accepted list.
+    if re.search(r'^\s*accept\s*$', text, flags=re.MULTILINE):
+        fail("dialogue-only A2 missions must terminate with decline, not accept")
+    if len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)) < 5:
+        fail("expected all four briefing terminals and recurrence terminal to decline")
+
     condition_write = re.compile(r'^\s*"([^"]+)"\s*(?:=|\+=|-=)\s*\d+', re.MULTILINE)
     for cond in condition_write.findall(text):
         if not cond.startswith(A2_PREFIX):
@@ -139,6 +146,7 @@ def main() -> None:
     print("PASS: authoritative_a1_input=world: free worlds relief reserve strain (read-only)")
     print("PASS: b2_aftermath_and_settlements=read-only")
     print("PASS: calm-period briefing + future high-strain recurrence")
+    print("PASS: dialogue_lifecycle=state-only terminals decline")
     print("PASS: persistence_model=stock mission/global conditions")
     print("PASS: write_ownership=A2 namespace only")
 
