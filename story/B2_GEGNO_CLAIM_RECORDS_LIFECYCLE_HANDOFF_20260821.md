@@ -1,6 +1,6 @@
 # B2 Gegno Claim Records lifecycle repair handoff
 
-Verdict: PARTIAL pending repository-native validation on the exact branch head.
+Verdict: READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -8,6 +8,7 @@ Verdict: PARTIAL pending repository-native validation on the exact branch head.
 - Isolated branch: `agent/b2-gegno-claim-lifecycle-20260821-1623`.
 - Production lifecycle repair: `d1f17c5b4ab4080d2d73fb57693b674374139f45`.
 - Focused validator hardening: `54e3413bb970cafb7a8c69f6d39da28935a3fbe5`.
+- Exact fully validated candidate: `e28d43fa6573e2a8d40a1434d4f80491d78a5da1`.
 - No integration, merge, rebase, reset, clean, or force-push was performed.
 
 The exposed private execution host was inspected before repository work. It reported four pre-existing service-owned processes. Its `repository-workspace` is an unrelated dirty Fallout renderer checkout (`docs/agent-loop-briefing-20260728` with RH035 files), so it was preserved and not used as Endless Sky runtime evidence.
@@ -43,14 +44,21 @@ Preserved invariants include:
 
 All prior mission-graph, dependency, route, settlement, source-scope, `goto`/`label`, state-ownership, reward-mutation, and continuity checks remain.
 
-## Validation still required
+## Exact validation evidence
 
-Do not promote this branch to READY until repository-native validation on the exact candidate is terminal green. Required gates:
+On exact candidate `e28d43fa6573e2a8d40a1434d4f80491d78a5da1`:
 
-1. `Fork simulation and story validation` — focused story validators, A1/state-ownership contracts, and changed-content style.
-2. `Fork save-load integration smoke` — production configure/build and stock persistence smoke.
+- `Fork simulation and story validation` run `32523795836` / #351: **SUCCESS**.
+  - focused story validators: **SUCCESS**;
+  - hardened Gegno lifecycle validator: **SUCCESS** through repository validator discovery;
+  - A1 simulation/state-ownership contracts: **SUCCESS**;
+  - changed-content style: **SUCCESS**.
+- `Fork save-load integration smoke` run `32523795833` / #336: **SUCCESS**.
+  - production dependency install/configure: **SUCCESS**;
+  - production build: **SUCCESS**;
+  - stock save-load smoke: **SUCCESS**.
 
-If CI reports a defect, repair only the actual failure and re-run on the new exact head. Do not weaken the lifecycle invariant to make a test pass.
+No repository-native acceptance gate remains red on the exact production/validator candidate.
 
 ## A3/B3 integration notes
 
