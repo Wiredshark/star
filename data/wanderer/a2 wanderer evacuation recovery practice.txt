@@ -1,0 +1,94 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 Wanderer Evacuation Recovery Practice.
+# Consumes B2 recovery-compact aftermath and A1 evacuation logistics strain read-only.
+# All persistence is namespaced under A2 Wanderer Evacuation Recovery Practice.
+
+mission "A2 Wanderer Evacuation Recovery Practice: Briefing"
+	minor
+	name `What Recovery Records Should Remember`
+	description `Decide what lesson, if any, should survive the Wanderer evacuation recovery compact.`
+	source
+		government "Wanderer"
+	"offer precedence" 9
+	to offer
+		has "B2 Wanderer Evacuation Recovery Compact: aftermath seen"
+		"world: wanderer evacuation logistics strain" <= 1
+		not "A2 Wanderer Evacuation Recovery Practice: introduced"
+		not "A2 Wanderer Evacuation Recovery Practice: declined"
+	on offer
+		conversation
+			`The Harbor Keeper and Route Tender meet you beside a quiet berth. The emergency traffic has eased, but both are wary of turning one recovery compact into permanent doctrine.`
+			`The Harbor Keeper says, "Safe arrival stayed true even while borrowed capacity remained unrestored. What should another harbor remember when the next evacuation begins?"`
+			choice
+				`\tCarry closure evidence: borrowed capacity remains open until restoration is documented.`
+					goto closure
+				`\tCarry current-capacity evidence: old deficits must be reviewed against present operating conditions.`
+					goto current
+				`\tKeep the lesson local: context may travel, but this compact is not borrowed Wanderer authority.`
+					goto local
+				`\tRefuse to establish a standing practice.`
+					goto decline
+			label closure
+			`You choose closure evidence. A successful arrival cannot erase borrowed shelter, berth, crew, or maintenance capacity; each obligation closes only when restoration evidence exists.`
+			action
+				"A2 Wanderer Evacuation Recovery Practice: introduced" = 1
+				"A2 Wanderer Evacuation Recovery Practice: closure evidence" = 1
+			decline
+			label current
+			`You choose current-capacity evidence. Historical deficits remain visible, but every copied warning must be checked against present transport and shelter conditions before it is treated as active.`
+			action
+				"A2 Wanderer Evacuation Recovery Practice: introduced" = 1
+				"A2 Wanderer Evacuation Recovery Practice: current capacity" = 1
+			decline
+			label local
+			`You keep the lesson local. Other harbors may inspect what happened here, but the compact does not become a credential, command, or universal Wanderer rule.`
+			action
+				"A2 Wanderer Evacuation Recovery Practice: introduced" = 1
+				"A2 Wanderer Evacuation Recovery Practice: local only" = 1
+			decline
+			label decline
+			`You refuse to establish a standing practice. Both coordinators record the boundary without converting refusal into consent.`
+			action
+				"A2 Wanderer Evacuation Recovery Practice: declined" = 1
+			decline
+
+mission "A2 Wanderer Evacuation Recovery Practice: Recurrence"
+	minor
+	name `When the Berths Fill Again`
+	description `A later evacuation surge tests what the earlier recovery compact taught.`
+	source
+		government "Wanderer"
+	"offer precedence" 9
+	to offer
+		has "A2 Wanderer Evacuation Recovery Practice: introduced"
+		"world: wanderer evacuation logistics strain" >= 3
+		not "A2 Wanderer Evacuation Recovery Practice: recurrence seen"
+	on offer
+		conversation
+			branch current
+				has "A2 Wanderer Evacuation Recovery Practice: current capacity"
+			branch local
+				has "A2 Wanderer Evacuation Recovery Practice: local only"
+			`The next evacuation surge arrives before the harbor feels ready. Because you required closure evidence, the coordinators can distinguish capacities that were actually restored after the last emergency from obligations that merely disappeared from summaries. The new response starts with fewer hidden debts.`
+			goto done
+			label current
+			`The next evacuation surge arrives with old warnings still circulating. Because you required current-capacity review, repaired berths and restored shelter modules are not counted as active deficits, while genuinely constrained capacity remains visible. Historical evidence informs the response without becoming permanent alarm.`
+			goto done
+			label local
+			`The next evacuation surge arrives under different local conditions. Because you kept the earlier compact contextual, the coordinators use it as evidence rather than authority: they preserve the distinction between safe arrival and restored capacity while allowing this harbor to choose different operating details.`
+			label done
+			action
+				"A2 Wanderer Evacuation Recovery Practice: recurrence seen" = 1
+			decline
