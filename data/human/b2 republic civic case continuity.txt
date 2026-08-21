@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Republic Civic Case Continuity.
+#
+# Consumes A1's authoritative Republic civic-administration strain read-only.
+# The slice focuses on overloaded public-service casework: staff can move between
+# districts without letting a resident's unresolved obligation, consent, context,
+# or next responsible office disappear in the handoff. B2 writes only namespaced
+# character/story state and never mutates world:* simulation state.
+
+
+mission "B2 Republic Civic Case Continuity: Offer"
+	minor
+	name `The Desk That Moved`
+	description `Republic casework supervisor Mara Ellison and neighborhood advocate Jun Park disagree over how overloaded civic cases should survive emergency staff transfers.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	to offer
+		"world: republic civic strain" >= 4
+		not "B2 Republic Civic Case Continuity: introduced"
+		not "B2 Republic Civic Case Continuity: declined"
+	on offer
+		conversation
+			`A temporary Republic service desk has been built out of folding partitions and borrowed terminals. Mara Ellison, a casework supervisor, is assigning housing, documentation, and review files to clerks being shifted between districts. Jun Park, a neighborhood advocate, has a notebook full of residents who have already told the same story twice.`
+			`Ellison says, "The staff move because the queues move. If we keep every case tied to one desk, the busiest district collapses. But when a file transfers, somebody still has to know what was promised, what is unresolved, and who owns the next action."`
+			`Park answers, "And the resident should not become the transport layer for the government's memory. A new clerk cannot treat a closed appointment as a closed need."`
+			choice
+				`\tKeep one named case owner through every staff transfer until the resident's current obligation is explicitly handed off or closed.`
+					goto owner
+				`\tAllow pooled triage, but require every transfer to carry the unresolved obligation, last verified fact, and next responsible office.`
+					goto handoff
+				`\tSeparate resident consent and case context from staff assignment: any office may work the case, but those records travel independently.`
+					goto paired
+				`\tDecline to design new casework rules while the civic system is overloaded.`
+					goto decline
+			label owner
+			`You back continuity of responsibility. A resident may meet several clerks, but one named owner remains accountable until the case is explicitly transferred or closed. Ellison warns that the owner may be working in another district by tomorrow. Park says that is still better than making responsibility disappear whenever the staffing chart changes.`
+			action
+				"B2 Republic Civic Case Continuity: introduced" = 1
+				"B2 Republic Civic Case Continuity: route named owner" = 1
+				"B2 Republic Civic Case Continuity: ellison trusts player" = 1
+			accept
+			label handoff
+			`You support pooled triage, but only with a transfer packet that identifies the unresolved obligation, the last verified fact, the office taking responsibility, and the next review point. Ellison says that lets staff follow the workload without pretending every reassignment is a resolution. Park adds that the resident should be told when responsibility moves.`
+			action
+				"B2 Republic Civic Case Continuity: introduced" = 1
+				"B2 Republic Civic Case Continuity: route accountable handoff" = 1
+				"B2 Republic Civic Case Continuity: ellison trusts player" = 1
+				"B2 Republic Civic Case Continuity: park trusts player" = 1
+			accept
+			label paired
+			`You separate three things that the overload keeps collapsing together: what the resident has consented to share, the factual case context, and which office currently owns the next action. Staff assignment may change rapidly, but a move cannot silently rewrite consent or erase the unfinished obligation. Park calls that the first proposal that treats the resident as more than a queue entry. Ellison says it is also the easiest to audit.`
+			action
+				"B2 Republic Civic Case Continuity: introduced" = 1
+				"B2 Republic Civic Case Continuity: route paired records" = 1
+				"B2 Republic Civic Case Continuity: park trusts player" = 1
+			accept
+			label decline
+			`You tell them an overloaded office may need judgment more than another permanent procedure. Ellison nods and goes back to reallocating clerks. Park says, "Fair. Just remember that when the queue gets shorter, the missing context does not magically come back."`
+			action
+				"B2 Republic Civic Case Continuity: declined" = 1
+			decline
+
+
+mission "B2 Republic Civic Case Continuity: Review"
+	minor
+	name `The Case After the Queue`
+	description `Return after Republic civic strain eases and see whether temporary staff transfers preserved responsibility, consent, and unresolved obligations.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	to offer
+		has "B2 Republic Civic Case Continuity: introduced"
+		"world: republic civic strain" <= 1
+		not "B2 Republic Civic Case Continuity: reviewed"
+	on offer
+		conversation
+			branch owner
+				has "B2 Republic Civic Case Continuity: route named owner"
+			branch handoff
+				has "B2 Republic Civic Case Continuity: route accountable handoff"
+			`Ellison shows you a case that survived four desks. The resident's consent and factual history remained intact, but two offices each believed the other still owned the next housing review. Park says, "We preserved the person and lost the responsibility." Ellison agrees that the system needs an explicit current owner as well as durable context.`
+			choice
+				`\tCreate a portable case packet: context, consent, unresolved obligation, current owner, next action, and closure evidence travel together.`
+					goto packet
+				`\tKeep context and office ownership separate, but require a reconciliation pass before a case may be called resolved.`
+					goto reconcile
+			label owner
+			`The named-owner rule preserved accountability, but emergency staffing still left several owners physically separated from the offices serving their residents. Ellison says, "A name on the file helped, but the next action sometimes sat in another district for days." Park says ownership must be transferable without becoming invisible.`
+			choice
+				`\tUse a portable case packet that names the current owner and carries every transfer with the resident's consent and unfinished obligation.`
+					goto packet
+				`\tUse reconciliation: keep local work flexible, but compare responsibility and resident-facing status before declaring the case closed.`
+					goto reconcile
+			label handoff
+			`The transfer packets made responsibility legible, but one copied summary preserved the office name and dropped the resident's restriction on sharing a medical detail. Park says, "The handoff was administratively correct and personally wrong." Ellison says consent must travel as its own field rather than as optional prose.`
+			choice
+				`\tExpand the portable case packet so consent, context, obligation, owner, next action, and closure evidence all travel explicitly.`
+					goto packet
+				`\tRequire a reconciliation pass that checks resident-facing consent and case status against office ownership before closure.`
+					goto reconcile
+			label packet
+			`You recommend a portable case packet. It carries the last verified facts, the resident's current sharing consent, every unresolved obligation, the office or person responsible for the next action, the next review point, and explicit evidence when an obligation is actually fulfilled or transferred. A shorter queue can no longer close a case by implication. Ellison says the packet is heavier paperwork. Park says it is lighter than making the resident reconstruct the government's memory.`
+			action
+				"B2 Republic Civic Case Continuity: reviewed" = 1
+				"B2 Republic Civic Case Continuity: settlement portable case packet" = 1
+				"B2 Republic Civic Case Continuity: ellison trusts player" = 1
+				"B2 Republic Civic Case Continuity: park trusts player" = 1
+			accept
+			label reconcile
+			`You recommend a reconciliation cycle. Offices may keep local working records and move staff as conditions demand, but before a case is called resolved the system compares the resident-facing status, current consent, unresolved obligations, and current owner. A closed appointment, transferred file, or reduced queue is not itself closure evidence. Ellison says that preserves operational flexibility. Park says it preserves the difference between administrative motion and an actually completed public obligation.`
+			action
+				"B2 Republic Civic Case Continuity: reviewed" = 1
+				"B2 Republic Civic Case Continuity: settlement reconciliation cycle" = 1
+				"B2 Republic Civic Case Continuity: ellison trusts player" = 1
+				"B2 Republic Civic Case Continuity: park trusts player" = 1
+			accept
+
+
+mission "B2 Republic Civic Case Continuity: Park Remembers"
+	minor
+	name `Park Remembers`
+	description `Jun Park remembers what overloaded Republic civic offices learned about moving staff without losing residents between desks.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	to offer
+		not "B2 Republic Civic Case Continuity: aftermath seen"
+		or
+			has "B2 Republic Civic Case Continuity: settlement portable case packet"
+			has "B2 Republic Civic Case Continuity: settlement reconciliation cycle"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Republic Civic Case Continuity: settlement reconciliation cycle"
+			`Park recognizes you beside a service desk with a much shorter line. "The queues are down, but that is not the part I trust now. A transferred case still names what the resident agreed to share, what remains unfinished, and who owes the next action. People still get frustrated. At least they no longer have to become the government's backup copy."`
+			goto record
+			label reconcile
+			`Park is reviewing a closure report when he recognizes you. "The offices still move staff around. That was never the real problem. Now they have to reconcile what the system says with what the resident was actually promised before a case disappears from the active list. A short queue finally means less work, not less memory."`
+			label record
+			action
+				"B2 Republic Civic Case Continuity: aftermath seen" = 1
+			accept
