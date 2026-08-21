@@ -21,6 +21,11 @@
 # should remain distinct. Their new problem is queue discipline under load: urgent
 # cases can legitimately move first, but repeated urgency must not make older
 # unresolved petitions disappear from institutional memory.
+#
+# Dialogue lifecycle note: these missions only record persistent state. They have
+# no cargo/passenger/destination/waypoint/NPC/timer objective, so every terminal
+# conversation path uses `decline` after writing state instead of accepting an
+# objective-less mission into the player's active mission list.
 
 
 mission "B2 Bunrodea Review Queue Compact: Offer"
@@ -55,14 +60,14 @@ mission "B2 Bunrodea Review Queue Compact: Offer"
 				"B2 Bunrodea Review Queue Compact: introduced" = 1
 				"B2 Bunrodea Review Queue Compact: route age first" = 1
 				"B2 Bunrodea Review Queue Compact: iral trusts player" = 1
-			accept
+			decline
 			label risk
 			`You argue that a review system must respond to real operational harm. Medical, safety, and truly perishable cases may move first, but every case they displace keeps its original age, its previous position, and the exact reason it was deferred. Sedi likes the flexibility. Iral says it may work if urgency can never reset the clock.`
 			action
 				"B2 Bunrodea Review Queue Compact: introduced" = 1
 				"B2 Bunrodea Review Queue Compact: route risk first" = 1
 				"B2 Bunrodea Review Queue Compact: sedi trusts player" = 1
-			accept
+			decline
 			label paired
 			`You separate the queue into two linked views. One tracks immediate operational urgency. The other protects aged unresolved petitions from disappearing behind repeated emergencies. A case can appear in both views, but moving it in one does not erase its history in the other. Sedi and Iral begin sketching the cross-reference together.`
 			action
@@ -70,7 +75,7 @@ mission "B2 Bunrodea Review Queue Compact: Offer"
 				"B2 Bunrodea Review Queue Compact: route paired lanes" = 1
 				"B2 Bunrodea Review Queue Compact: sedi trusts player" = 1
 				"B2 Bunrodea Review Queue Compact: iral trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that a temporary backlog is a poor excuse for writing a permanent rule while everyone is tired. Sedi says that is fair. Iral records that no standing queue procedure was adopted from this dispute.`
 			action
@@ -121,7 +126,7 @@ mission "B2 Bunrodea Review Queue Compact: Review"
 				"B2 Bunrodea Review Queue Compact: settlement portable delay history" = 1
 				"B2 Bunrodea Review Queue Compact: sedi trusts player" = 1
 				"B2 Bunrodea Review Queue Compact: iral trusts player" = 1
-			accept
+			decline
 			label reconcile
 			`You recommend keeping operational urgency and accumulated age as separate linked views. Periodic reconciliation compares them before the office can declare the backlog restored. A review surge may end because new intake slowed, but unresolved deferrals remain visible until they are actually addressed or explicitly closed.`
 			action
@@ -129,7 +134,7 @@ mission "B2 Bunrodea Review Queue Compact: Review"
 				"B2 Bunrodea Review Queue Compact: settlement reconciliation cycle" = 1
 				"B2 Bunrodea Review Queue Compact: sedi trusts player" = 1
 				"B2 Bunrodea Review Queue Compact: iral trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Bunrodea Review Queue Compact: Iral Remembers"
@@ -154,4 +159,4 @@ mission "B2 Bunrodea Review Queue Compact: Iral Remembers"
 			label record
 			action
 				"B2 Bunrodea Review Queue Compact: aftermath seen" = 1
-			accept
+			decline
