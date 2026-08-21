@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 Far North Yard Legacy production slice.
 #
 # This content builds directly on the Far North shipwright/apprenticeship history
@@ -31,21 +44,21 @@ mission "B2 Far North Yard Legacy: Offer"
 			action
 				"B2 Far North Yard Legacy: introduced" = 1
 				"B2 Far North Yard Legacy: route balanced" = 1
-			accept
+			decline
 			label vale
 			`You tell them that a remote yard that stops training replacements is borrowing capacity from its own future. Vale nods. Pike replies, "Then we should be honest with captains about the delay."`
 			action
 				"B2 Far North Yard Legacy: introduced" = 1
 				"B2 Far North Yard Legacy: route vale" = 1
 				"B2 Far North Yard Legacy: vale trusts player" = 1
-			accept
+			decline
 			label pike
 			`You tell them the immediate queue has to come first. Pike looks relieved. Vale says, "Short pauses have a way of becoming policy when the numbers stay ugly."`
 			action
 				"B2 Far North Yard Legacy: introduced" = 1
 				"B2 Far North Yard Legacy: route pike" = 1
 				"B2 Far North Yard Legacy: vale doubts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them the yard has enough experience to own the consequences of its schedule. Vale accepts that without argument. Pike wheels the trolley back toward the benches.`
 			action
@@ -93,14 +106,14 @@ mission "B2 Far North Yard Legacy: Review"
 				"B2 Far North Yard Legacy: reviewed" = 1
 				"B2 Far North Yard Legacy: settlement protected training" = 1
 				"B2 Far North Yard Legacy: vale trusts player" = 1
-			accept
+			decline
 			label expand
 			`You suggest making the training itself part of supervised production rather than treating it as time away from real work. Pike immediately begins listing jobs that can tolerate slower hands. Vale says, "That is how apprenticeship became a system in the first place: responsibility before independence."`
 			action
 				"B2 Far North Yard Legacy: reviewed" = 1
 				"B2 Far North Yard Legacy: settlement supervised production" = 1
 				"B2 Far North Yard Legacy: pike trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Far North Yard Legacy: Vale Remembers"
@@ -124,4 +137,4 @@ mission "B2 Far North Yard Legacy: Vale Remembers"
 			label record
 			action
 				"B2 Far North Yard Legacy: aftermath seen" = 1
-			accept
+			decline
