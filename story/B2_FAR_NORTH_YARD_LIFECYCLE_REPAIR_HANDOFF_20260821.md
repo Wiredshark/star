@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native validation.
+READY for A3 review/integration.
 
 ## Exact state
 
@@ -10,6 +10,7 @@ PARTIAL pending exact-head repository-native validation.
 - Branch: `agent/b2-far-north-yard-lifecycle-20260821-0628`
 - Production lifecycle repair: `464c678de48a0a5fdb912b06cd75c39956f25bc5`
 - Validator hardening: `3abae3720e50aaa37da60285f51a78cabe8bbcbc`
+- Exact fully validated production/validator/handoff candidate: `2db3c6bd832da6e407815446bd881385511b0c2f`
 
 ## Defect
 
@@ -38,19 +39,23 @@ The refusal route already used `decline`.
 
 Before branching, live `main`, open B2 PRs, existing B2 branches, and private execution-service process state were inspected. No active Far North Yard lifecycle repair was found. Four pre-existing service-owned private-host processes were observed and left untouched.
 
-## Required validation before READY
+## Exact validation evidence
 
-On the exact candidate head after this handoff commit:
+On exact candidate `2db3c6bd832da6e407815446bd881385511b0c2f`:
 
-1. `python3 tools/story/validate_b2_far_north_yard_legacy.py`
-2. repository focused simulation/story validator discovery
-3. A1 state-ownership/regression contracts
-4. changed-content style
-5. production Endless Sky configure/build
-6. stock save-load smoke
+- `Fork simulation and story validation` #320 / run `32473012086`: **SUCCESS**
+  - changed-content style: **SUCCESS**
+  - focused simulation/story contracts: **SUCCESS**
+  - all focused story validators, including `validate_b2_far_north_yard_legacy.py`: **SUCCESS**
+  - A1 simulation/state-ownership contracts: **SUCCESS**
+- `Fork save-load integration smoke` #305 / run `32473012089`: **SUCCESS**
+  - dependency install: **SUCCESS**
+  - production configure: **SUCCESS**
+  - production build: **SUCCESS**
+  - stock save-load smoke: **SUCCESS**
 
-Do not promote this repair to READY unless the exact candidate is terminal green on the repository-native simulation/story workflow and production save-load workflow.
+The candidate is therefore suitable for A3 review/integration under the documented isolation rules.
 
 ## A3/B3 integration notes
 
-A3 retains integration authority. Re-read current `main`, confirm ancestry/mergeability, and integrate only if exact validation is green. Preserve the lifecycle invariant that dialogue-only B2 missions which merely persist state terminate with `decline`; reserve `accept` for missions that actually create gameplay objectives.
+A3 retains integration authority. Re-read current `main`, confirm ancestry/mergeability, and integrate only if the validated candidate remains semantically clean. Preserve the lifecycle invariant that dialogue-only B2 missions which merely persist state terminate with `decline`; reserve `accept` for missions that actually create gameplay objectives.
