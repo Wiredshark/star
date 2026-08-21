@@ -1,0 +1,121 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 Bunrodea Review Queue Practice.
+# Consumes B2 review-queue aftermath and A1 freight-review backlog read-only.
+
+mission "A2 Bunrodea Review Queue Practice: Briefing"
+	minor
+	name `What Survives the Quiet Queue`
+	description `Sedi Var and Iral Kes ask what review discipline should survive after Bunrodea freight-review pressure recovers.`
+	source
+		government "Bunrodea"
+	"offer precedence" 8
+	to offer
+		has "B2 Bunrodea Review Queue Compact: aftermath seen"
+		"world: bunrodea freight review backlog" <= 1
+		not "A2 Bunrodea Review Queue Practice: decided"
+		not "A2 Bunrodea Review Queue Practice: refused"
+	on offer
+		conversation
+			`The visible review queue is quiet again. Sedi Var has a short stack of urgent-case rulings; Iral Kes has a longer history of the petitions those rulings displaced. "The surge ended," Sedi says. "What should survive into the next one?"`
+			choice
+				`\t[Settlement: Portable delay history] Preserve deferral lineage: every petition keeps its original arrival, each priority change, each reason for displacement, current status, and next responsible desk.`
+					to display
+						has "B2 Bunrodea Review Queue Compact: settlement portable delay history"
+					goto lineage
+				`\t[Settlement: Reconciliation cycle] Preserve linked queue views: urgent handling and accumulated age remain separately visible and must be reconciled before declaring recovery.`
+					to display
+						has "B2 Bunrodea Review Queue Compact: settlement reconciliation cycle"
+					goto reconcile
+				`\tPreserve closure evidence: a petition may stop being active only when its next obligation is completed, transferred with an owner, or explicitly closed.`
+					goto closure
+				`\tRefuse to turn this episode into a standing personal practice.`
+					goto refuse
+			label lineage
+			`You choose lineage. Iral notes that a legitimate emergency may change review order without rewriting how long the displaced petition actually waited.`
+			action
+				"A2 Bunrodea Review Queue Practice: decided" = 1
+				"A2 Bunrodea Review Queue Practice: lineage" = 1
+			decline
+			label reconcile
+			`You choose reconciliation. Sedi records that an empty urgent lane is not enough to call the system recovered if aged unresolved petitions remain elsewhere.`
+			action
+				"A2 Bunrodea Review Queue Practice: decided" = 1
+				"A2 Bunrodea Review Queue Practice: reconcile" = 1
+			decline
+			label closure
+			`You choose closure evidence. Iral writes that a case can leave the active queue without disappearing from institutional memory, but only when the remaining obligation has a recorded disposition.`
+			action
+				"A2 Bunrodea Review Queue Practice: decided" = 1
+				"A2 Bunrodea Review Queue Practice: closure" = 1
+			decline
+			label refuse
+			`You refuse to establish a standing practice. Sedi and Iral preserve the compact they already made and do not treat your participation as continuing authority.`
+			action
+				"A2 Bunrodea Review Queue Practice: refused" = 1
+			decline
+
+
+mission "A2 Bunrodea Review Queue Practice: Recurrence"
+	minor
+	name `The Queue Fills Again`
+	description `A later Bunrodea freight-review surge tests the queue practice you chose after the last recovery.`
+	source
+		government "Bunrodea"
+	"offer precedence" 8
+	to offer
+		has "A2 Bunrodea Review Queue Practice: decided"
+		"world: bunrodea freight review backlog" >= 4
+		not "A2 Bunrodea Review Queue Practice: recurrence seen"
+	on offer
+		conversation
+			branch lineage_history
+				has "A2 Bunrodea Review Queue Practice: lineage"
+				has "B2 Bunrodea Review Queue Compact: settlement portable delay history"
+			branch lineage_reconcile
+				has "A2 Bunrodea Review Queue Practice: lineage"
+				has "B2 Bunrodea Review Queue Compact: settlement reconciliation cycle"
+			branch reconcile_history
+				has "A2 Bunrodea Review Queue Practice: reconcile"
+				has "B2 Bunrodea Review Queue Compact: settlement portable delay history"
+			branch reconcile_cycle
+				has "A2 Bunrodea Review Queue Practice: reconcile"
+				has "B2 Bunrodea Review Queue Compact: settlement reconciliation cycle"
+			branch closure_history
+				has "A2 Bunrodea Review Queue Practice: closure"
+				has "B2 Bunrodea Review Queue Compact: settlement portable delay history"
+			branch closure_cycle
+				has "A2 Bunrodea Review Queue Practice: closure"
+				has "B2 Bunrodea Review Queue Compact: settlement reconciliation cycle"
+			label lineage_history
+			`The new surge pushes a long-running petition behind two legitimate emergency reviews. Its portable delay history keeps the original arrival date and both deferral reasons attached, so the petition moves without becoming artificially new.`
+			goto record
+			label lineage_reconcile
+			`The new surge splits attention between urgent cargo and old petitions. Your lineage rule preserves every displacement inside the reconciliation cycle, so the next cross-check sees both current urgency and accumulated waiting time.`
+			goto record
+			label reconcile_history
+			`The portable histories survive the surge, but your reconciliation rule changes how they are used: the office compares those histories before calling the queue recovered, exposing two old petitions that would otherwise have vanished behind completed urgent work.`
+			goto record
+			label reconcile_cycle
+			`The paired queue views fill at different rates. Because the reconciliation cycle remains mandatory, Sedi can clear urgent cargo without Iral losing sight of the aged petitions accumulating in the parallel view.`
+			goto record
+			label closure_history
+			`One petition is transferred to another desk during the surge. The portable history records the transfer, and your closure rule prevents the originating desk from marking the case finished until the new owner and next review point are explicit.`
+			goto record
+			label closure_cycle
+			`The reconciliation pass finds a petition missing from the active urgent view. Your closure rule forces the office to distinguish "not active here" from "resolved," and the case remains visible until its remaining obligation is explicitly closed.`
+			label record
+			action
+				"A2 Bunrodea Review Queue Practice: recurrence seen" = 1
+			decline
