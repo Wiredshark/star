@@ -4,13 +4,14 @@
 B2 STORY CHARACTERS + DYNAMIC CONTENT
 
 ## Verdict
-PARTIAL pending exact-head repository-native simulation/story/style and production build/save-load workflows.
+READY for A3 review/integration.
 
 ## Repository authority
 - authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - isolated branch: `agent/b2-near-earth-traffic-appeal-20260820-2325`
 - production commit: `1a82d59c44330fc0a5febfb1038cd1904035025f`
 - focused-validator commit: `1bc8bce7d353e6601acb0c1683ea6c892044d58c`
+- exact fully validated production/validator/handoff candidate: `87554a5025baa3c9c9927e14f3960b77e48b2235`
 
 ## Scope
 Adds a three-mission Near Earth traffic-record character arc grounded in the integrated B1 `Near Earth Traffic Archive`.
@@ -61,8 +62,6 @@ The dialogue-only missions terminate with `decline` after persisting state so th
 - `story/B2_NEAR_EARTH_TRAFFIC_APPEAL_COMPACT_HANDOFF_20260820.md`
 
 ## Focused validation contract
-Run:
-
 `python3 tools/story/validate_b2_near_earth_traffic_appeal_compact.py "data/human/b2 near earth traffic appeal compact.txt"`
 
 The focused validator checks:
@@ -80,19 +79,23 @@ The focused validator checks:
 - history-vs-current-exception continuity;
 - no invented centralized Near Earth traffic authority.
 
-## Required acceptance before READY
-- exact-head `Fork simulation and story validation` succeeds;
-- changed-content style succeeds;
-- focused validator succeeds inside the repository-native suite;
-- A1/state-ownership regressions succeed;
-- exact-head `Fork save-load integration smoke` succeeds;
-- production Endless Sky configure/build succeeds;
-- stock save/load smoke succeeds.
+## Exact validation evidence
+On exact candidate `87554a5025baa3c9c9927e14f3960b77e48b2235`:
 
-Do not promote to READY or integrate around a failed gate.
+- `Fork simulation and story validation` #296 / run `32443463608`: **SUCCESS**.
+- `Changed fork content style`: **SUCCESS**.
+- `Focused simulation and story contracts`: **SUCCESS**.
+- focused validator discovery/execution: **SUCCESS**.
+- A1 simulation/state-ownership contracts: **SUCCESS**.
+- `Fork save-load integration smoke` #281 / run `32443463523`: **SUCCESS**.
+- production configure: **SUCCESS**.
+- production build: **SUCCESS**.
+- stock save/load smoke: **SUCCESS**.
+
+The candidate is therefore suitable for A3 review. The final commit after this candidate changes only this durable handoff wording; production content and validator behavior are unchanged.
 
 ## A3 / B3 guidance
-A3 should re-read current `main`, compare ancestry, and integrate only if the exact candidate remains conflict-free and all required gates are terminal green.
+A3 should re-read current `main`, compare ancestry, and integrate only if this validated candidate remains conflict-free.
 
 B3 should preserve the distinction among:
 - original berth assignment;
