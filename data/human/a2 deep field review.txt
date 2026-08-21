@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # A2 Deep Field Review production slice.
 #
 # This slice uses stock mission/conversation/condition persistence only. It
@@ -37,21 +50,21 @@ mission "A2 Deep Field Review: Arcos Interview"
 				"A2 Deep Field Review: route anomaly" = 1
 				"A2 Deep Field Review: arcos trusts scientific judgment" = 1
 				"A2 Deep Field Review: followup pending" = 1
-			accept
+			decline
 			label service
 			`You point out that repeated convoy work gives a captain a baseline for traffic, delays, sensor clutter, and ordinary route hazards. Arcos adds a comparison field to the draft. "Experience as calibration, not rank. I can defend that."`
 			action
 				"A2 Deep Field Review: route field service" = 1
 				"A2 Deep Field Review: arcos trusts operational judgment" = 1
 				"A2 Deep Field Review: followup pending" = 1
-			accept
+			decline
 			label method
 			`You tell Arcos that the safest protocol is one that forces every captain to distinguish what they saw from what they concluded. She rewrites the first page around evidence classes instead of experience tiers. "Less flattering. More reproducible."`
 			action
 				"A2 Deep Field Review: route method" = 1
 				"A2 Deep Field Review: arcos trusts process" = 1
 				"A2 Deep Field Review: followup pending" = 1
-			accept
+			decline
 			label refuse
 			`You tell Arcos that your old jobs should not become policy merely because they are easy to cite. She nods and closes your record. "Then I will record that boundary too. Refusing to become an example is still useful information about how this process should work."`
 			action
@@ -91,7 +104,7 @@ mission "A2 Deep Field Review: Arcos Remembers"
 			label finish
 			action
 				"A2 Deep Field Review: followup pending" = 0
-			accept
+			decline
 
 
 mission "A2 Deep Field Review: Refusal Reader"
@@ -109,4 +122,4 @@ mission "A2 Deep Field Review: Refusal Reader"
 			`Arcos recognizes you but does not open your service record. "I kept your refusal in the protocol notes. It became the reason we now require explicit consent before a captain's named history is used as a training case. I thought you would want to know the boundary held."`
 			action
 				"A2 Deep Field Review: refusal respected" = 1
-			accept
+			decline

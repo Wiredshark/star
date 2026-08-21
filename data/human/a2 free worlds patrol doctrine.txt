@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # A2 dynamic narrative: Free Worlds patrol doctrine after defense strain.
 #
 # Reads A1-owned world state without modifying it. A2 persists only the player's
@@ -37,19 +50,19 @@ mission "A2 Free Worlds Patrol Doctrine: Briefing"
 			action
 				"A2 Free Worlds Patrol Doctrine: civilians" = 1
 				"A2 Free Worlds Patrol Doctrine: later reader pending" = 1
-			accept
+			decline
 			label interdiction
 			`Ro shifts the patrol groups toward the approaches that generated the most assistance calls. "Hit the pressure source instead of endlessly absorbing it. If the intelligence picture is good enough, that may shorten the whole recovery."`
 			action
 				"A2 Free Worlds Patrol Doctrine: interdiction" = 1
 				"A2 Free Worlds Patrol Doctrine: later reader pending" = 1
-			accept
+			decline
 			label mobility
 			`Ro breaks the largest patrol clusters into smaller rotating groups. "No single route gets everything, but no raider gets to learn where the wall ends either. That gives local commanders room to react instead of waiting for another central order."`
 			action
 				"A2 Free Worlds Patrol Doctrine: mobility" = 1
 				"A2 Free Worlds Patrol Doctrine: later reader pending" = 1
-			accept
+			decline
 			label refuse
 			`Ro closes the doctrine draft. "Understood. I will record that you declined to endorse any deployment model rather than letting somebody cite your presence as approval."`
 			action
@@ -129,4 +142,4 @@ mission "A2 Free Worlds Patrol Doctrine: After Action"
 			label finish
 			action
 				"A2 Free Worlds Patrol Doctrine: later reader pending" = 0
-			accept
+			decline

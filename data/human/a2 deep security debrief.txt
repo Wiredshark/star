@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # A2 production dialogue slice: Deep Security Debrief.
 
 mission "A2 Deep Debrief: First Meeting"
@@ -32,21 +45,21 @@ mission "A2 Deep Debrief: First Meeting"
 				"A2 Deep Debrief: approach convoy precedent" = 1
 				"A2 Deep Debrief: venn trusts field history" = 1
 				"A2 Deep Debrief: later reader pending" = 1
-			accept
+			decline
 			label veteran
 			`You point out two moments where staying on schedule would have turned the convoy into a predictable intercept. Venn marks both. "That is the distinction operations keeps flattening. Delay can be a failure, or it can be the price of not losing ships."`
 			action
 				"A2 Deep Debrief: approach threat judgment" = 1
 				"A2 Deep Debrief: venn trusts combat judgment" = 1
 				"A2 Deep Debrief: later reader pending" = 1
-			accept
+			decline
 			label procedure
 			`You refuse to start with blame. Venn walks through the timestamps, contact reports, and fuel state in order. By the end, the disputed decision looks less dramatic and more like a chain of small choices that narrowed the captain's options.`
 			action
 				"A2 Deep Debrief: approach procedure" = 1
 				"A2 Deep Debrief: venn trusts process" = 1
 				"A2 Deep Debrief: later reader pending" = 1
-			accept
+			decline
 			label refuse
 			`Venn closes the report. "Fair. An outside opinion is only useful if it is actually independent." She records that you declined rather than allowing either side to cite your silence as support.`
 			action
@@ -92,4 +105,4 @@ mission "A2 Deep Debrief: Later Reader"
 			label finish
 			action
 				"A2 Deep Debrief: later reader pending" = 0
-			accept
+			decline
