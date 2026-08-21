@@ -1,0 +1,158 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Free Worlds Doctrine Revalidation Compact.
+# Sequel to A2 Free Worlds Patrol Doctrine. Prior doctrine is historical evidence,
+# not an automatic standing order. B2 reads A1/A2 state only.
+
+mission "B2 Free Worlds Doctrine Revalidation Compact: Offer"
+	minor
+	name `The Old Map in a New Surge`
+	description `Anika Ro and maintenance coordinator Mira Keel disagree over how much authority an earlier patrol doctrine should carry into a new mobilization.`
+	source
+		government "Free Worlds"
+	to offer
+		has "world: free worlds patrol surge"
+		"world: free worlds repair backlog" >= 3
+		not "B2 Free Worlds Doctrine Revalidation Compact: introduced"
+		not "B2 Free Worlds Doctrine Revalidation Compact: declined"
+		or
+			has "A2 Free Worlds Patrol Doctrine: civilians future contact"
+			has "A2 Free Worlds Patrol Doctrine: interdiction future contact"
+			has "A2 Free Worlds Patrol Doctrine: mobility future contact"
+	on offer
+		conversation
+			branch civilians
+				has "A2 Free Worlds Patrol Doctrine: civilians future contact"
+			branch interdiction
+				has "A2 Free Worlds Patrol Doctrine: interdiction future contact"
+			branch mobility
+				has "A2 Free Worlds Patrol Doctrine: mobility future contact"
+			label civilians
+			`Anika Ro shows your old civilian-corridor doctrine beside a new patrol map. Mira Keel points to the repair queue. "Three groups on the old map are rotating through yards this time. Same doctrine label, different usable fleet."`
+			goto common
+			label interdiction
+			`Ro shows your old interdiction doctrine. Keel points to the repair queue. "Last time those groups had reserve hulls behind them. This time those reserve ships are part of the yard backlog."`
+			goto common
+			label mobility
+			`Ro shows your old distributed doctrine. Keel points to the repair queue. "A copied patrol shape can hide a different maintenance reality underneath it."`
+			label common
+			`Ro says, "Command pulled the last doctrine because it worked." Keel answers, "The copy lost the assumptions that made it sensible: usable hull count, repair margin, civilian traffic, intelligence confidence, and expected duration."`
+			choice
+				`Treat the old doctrine as a default, but attach its original conditions and require explicit revalidation against the current fleet.`
+					goto baseline
+				`Treat the old doctrine only as historical evidence. Require the current surge to earn its own deployment choice from current conditions.`
+					goto current
+				`Keep linked inherited-doctrine and current-assumptions records showing where this surge matches or diverges from the old one.`
+					goto paired
+				`Do not turn my earlier advice into another general rule.`
+					goto decline
+			label baseline
+			`Keel adds hull availability, repair margin, traffic mix, intelligence confidence, and expected duration beside the old doctrine. Ro says, "Then reuse is a presumption we can challenge, not a command we pretend came from history."`
+			action
+				"B2 Free Worlds Doctrine Revalidation Compact: introduced" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: route baseline" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: ro trusts player" = 1
+			accept
+			label current
+			`Keel opens a clean readiness sheet and records the earlier doctrine as one comparison point. Ro says, "Keep the old result visible. Forgetting the last crisis is as dangerous as obeying it blindly."`
+			action
+				"B2 Free Worlds Doctrine Revalidation Compact: introduced" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: route current" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: keel trusts player" = 1
+			accept
+			label paired
+			`You pair the inherited doctrine with current readiness, repair backlog, traffic, threat evidence, and changed assumptions. Ro keeps institutional memory; Keel keeps the present fleet visible.`
+			action
+				"B2 Free Worlds Doctrine Revalidation Compact: introduced" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: route paired" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: ro trusts player" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: keel trusts player" = 1
+			accept
+			label decline
+			`Ro nods. Keel says, "A useful record does not have to become a central order."`
+			action
+				"B2 Free Worlds Doctrine Revalidation Compact: declined" = 1
+			decline
+
+mission "B2 Free Worlds Doctrine Revalidation Compact: Review"
+	minor
+	name `When the Context Falls Off the Copy`
+	description `Return after the surge and repair queue ease to decide what context must travel with future doctrine copies.`
+	source
+		government "Free Worlds"
+	to offer
+		has "B2 Free Worlds Doctrine Revalidation Compact: introduced"
+		not "world: free worlds patrol surge"
+		"world: free worlds repair backlog" <= 1
+		not "B2 Free Worlds Doctrine Revalidation Compact: reviewed"
+	on offer
+		conversation
+			branch baseline
+				has "B2 Free Worlds Doctrine Revalidation Compact: route baseline"
+			branch current
+				has "B2 Free Worlds Doctrine Revalidation Compact: route current"
+			`Ro and Keel have three versions of the doctrine. The original includes its assumptions. A field copy contains the patrol pattern and little context. A later summary says only that the doctrine was "validated twice."`
+			`Keel says, "That turns copied evidence into invented confidence. The second surge had different hull availability and a different repair backlog."`
+			goto choices
+			label baseline
+			`Ro says the default saved planning time, but field copies kept the default and dropped the conditions that could overturn it. "Once the exception test disappears," Keel says, "the default starts looking like permanent authority."`
+			goto choices
+			label current
+			`Keel says current-first planning prevented blind reuse, but later summaries treated repeated copies of the same original evidence as independent confirmation. Ro says, "Repetition of one source is not several sources."`
+			label choices
+			choice
+				`Create a portable doctrine packet carrying trigger conditions, readiness, repair margin, source lineage, observed outcome, known limits, and a review point.`
+					goto packet
+				`Use a revalidation cycle: keep doctrine as durable guidance, but require every activation to record current assumptions, deviations, and genuinely new evidence.`
+					goto cycle
+			label packet
+			`Every copy will retain the original trigger, ship readiness, maintenance and repair margin, traffic assumptions, intelligence basis, source lineage, observed outcome, known limits, and the condition that forces review. Ro says, "A past success stays useful without becoming a timeless order."`
+			action
+				"B2 Free Worlds Doctrine Revalidation Compact: reviewed" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: settlement portable doctrine packet" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: ro trusts player" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: keel trusts player" = 1
+			accept
+			label cycle
+			`The doctrine remains durable historical guidance, but every activation records current readiness, repair margin, traffic, threat evidence, inherited assumptions, deviations, and the evidence used to renew or reject the pattern. One successful reuse closes only that activation.`
+			action
+				"B2 Free Worlds Doctrine Revalidation Compact: reviewed" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: settlement revalidation cycle" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: ro trusts player" = 1
+				"B2 Free Worlds Doctrine Revalidation Compact: keel trusts player" = 1
+			accept
+
+mission "B2 Free Worlds Doctrine Revalidation Compact: Keel Remembers"
+	minor
+	name `Keel Remembers`
+	description `Mira Keel remembers whether the Free Worlds learned to preserve doctrine context instead of copying only the order.`
+	source
+		government "Free Worlds"
+	to offer
+		not "B2 Free Worlds Doctrine Revalidation Compact: aftermath seen"
+		or
+			has "B2 Free Worlds Doctrine Revalidation Compact: settlement portable doctrine packet"
+			has "B2 Free Worlds Doctrine Revalidation Compact: settlement revalidation cycle"
+	on offer
+		conversation
+			branch cycle
+				has "B2 Free Worlds Doctrine Revalidation Compact: settlement revalidation cycle"
+			`Keel shows you a new patrol packet. Its first page lists hull count, repair reserve, civilian traffic, and unresolved assumptions. "They reused the idea," she says, "not the fiction that the situation was identical."`
+			goto record
+			label cycle
+			`Keel shows you an activation record. The old doctrine is cited, but inherited evidence and new observations are separate. "Nobody needed a central doctrine office. They just stopped letting copied confidence outrun copied evidence."`
+			label record
+			action
+				"B2 Free Worlds Doctrine Revalidation Compact: aftermath seen" = 1
+			accept
