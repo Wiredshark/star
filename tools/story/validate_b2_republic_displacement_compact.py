@@ -72,6 +72,36 @@ def test_later_reader_consumes_both_outcomes():
     assert reader.count(f'"{B2_PREFIX} aftermath seen" = 1') == 1
 
 
+def test_state_only_dialogue_lifecycle():
+    # These missions only persist conditions through dialogue. A terminal `accept`
+    # would place an objective-less mission in the accepted mission list. Every
+    # terminal path must persist its state and close with `decline`.
+    accepts = re.findall(r'^\s*accept\s*$', TEXT, flags=re.MULTILINE)
+    declines = re.findall(r'^\s*decline\s*$', TEXT, flags=re.MULTILINE)
+    assert not accepts, f"state-only slice must not contain terminal accept commands: count={len(accepts)}"
+    assert len(declines) == 7, f"expected exactly 7 terminal decline commands, got {len(declines)}"
+
+    # Guard the lifecycle assumption itself. If a real gameplay objective is ever
+    # added, this validator must fail so the mission lifecycle is reconsidered.
+    objective_directives = (
+        "destination",
+        "waypoint",
+        "stopover",
+        "npc",
+        "passenger",
+        "cargo",
+        "outfit",
+        "ship",
+        "fleet",
+        "deadline",
+        "timer",
+    )
+    for line in TEXT.splitlines():
+        stripped = line.strip().lower()
+        if any(re.match(rf"^{re.escape(token)}(?:\s|$)", stripped) for token in objective_directives):
+            raise AssertionError(f"state-only lifecycle assumption invalidated by objective directive: {line.strip()}")
+
+
 def test_a1_signal_is_read_only():
     for line in TEXT.splitlines():
         if A1_SIGNAL not in line:
@@ -108,6 +138,7 @@ if __name__ == "__main__":
     test_persistent_routes_and_refusal()
     test_review_and_terminal_settlements()
     test_later_reader_consumes_both_outcomes()
+    test_state_only_dialogue_lifecycle()
     test_a1_signal_is_read_only()
     test_no_material_or_reputation_rewards()
     test_local_goto_labels_resolve()
@@ -118,3 +149,4 @@ if __name__ == "__main__":
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Hale Remembers")
+    print("PASS: dialogue_lifecycle=state-only terminals use decline (7/7)")

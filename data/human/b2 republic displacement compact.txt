@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 Republic Displacement Compact production slice.
 #
 # This content consumes A1's authoritative Republic civilian-displacement signal
@@ -47,14 +60,14 @@ mission "B2 Republic Displacement Compact: Offer"
 				"B2 Republic Displacement Compact: introduced" = 1
 				"B2 Republic Displacement Compact: route continuity" = 1
 				"B2 Republic Displacement Compact: ortiz trusts player" = 1
-			accept
+			decline
 			label ledger
 			`You tell Ortiz that emergency capacity cannot be sustained if each office can reserve it indefinitely without recording who owns the next decision. Hale agrees, but Ortiz insists that administrative clarity cannot become an excuse to drop a family between jurisdictions. You recommend explicit expiration and transfer records rather than informal release.`
 			action
 				"B2 Republic Displacement Compact: introduced" = 1
 				"B2 Republic Displacement Compact: route ledger" = 1
 				"B2 Republic Displacement Compact: hale trusts player" = 1
-			accept
+			decline
 			label compact
 			`You propose a paired rule: the resident keeps protected continuity until a receiving office accepts the case, and every protected berth or temporary address carries a visible transfer record naming the responsible office, review time, and next destination. Ortiz says, "No silent discharge." Hale adds, "And no invisible reservation."`
 			action
@@ -62,7 +75,7 @@ mission "B2 Republic Displacement Compact: Offer"
 				"B2 Republic Displacement Compact: route compact" = 1
 				"B2 Republic Displacement Compact: ortiz trusts player" = 1
 				"B2 Republic Displacement Compact: hale trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that changing emergency rules in the middle of a displacement wave may create more confusion than it solves. Ortiz returns to the housing list. Hale says, "Fair. But if nobody writes down where responsibility changes hands, the queue will make the policy for us."`
 			action
@@ -114,14 +127,14 @@ mission "B2 Republic Displacement Compact: Review"
 				"B2 Republic Displacement Compact: settlement continuity compact" = 1
 				"B2 Republic Displacement Compact: ortiz trusts player" = 1
 				"B2 Republic Displacement Compact: hale trusts player" = 1
-			accept
+			decline
 			label reviewsettlement
 			`You recommend bounded placement windows. Protected status cannot disappear merely because a reservation expires, but every responsible office must review the case at a published interval, renew its obligation, or obtain an explicit accepting-office transfer. Ortiz says the review prevents administrative abandonment. Hale says the expiration dates finally mean "review now" instead of "capacity reserved forever."`
 			action
 				"B2 Republic Displacement Compact: reviewed" = 1
 				"B2 Republic Displacement Compact: settlement bounded review" = 1
 				"B2 Republic Displacement Compact: ortiz trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Republic Displacement Compact: Hale Remembers"
@@ -147,4 +160,5 @@ mission "B2 Republic Displacement Compact: Hale Remembers"
 			label record
 			action
 				"B2 Republic Displacement Compact: aftermath seen" = 1
-			accept
+			decline
+
