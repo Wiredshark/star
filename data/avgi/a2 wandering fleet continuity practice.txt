@@ -1,0 +1,91 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+
+# A2 downstream practice for the integrated Wandering Fleet transfer compact.
+# Loadkeeper and Fitter are player-private shorthand, not Avgi offices.
+
+mission "A2 Wandering Fleet Continuity Practice: Briefing"
+	minor
+	name `What Counts as Restored`
+	description `Decide what lesson, if any, you will carry forward from the Wandering Fleet's transfer-debt compact.`
+	source
+		government "Avgi (Consonance)"
+	offer precedence 9
+	to offer
+		has "language: Avgi (Written)"
+		has "avgi: wandering fleet refit 1"
+		not "avgi: lost in twilight"
+		has "B2 Avgi Wandering Fleet Transfer Compact: aftermath seen"
+		not "A2 Wandering Fleet Continuity Practice: resolved"
+	on offer
+		conversation
+			`The Loadkeeper and Fitter find you beside a maintenance board where completed repairs and open fleet obligations are displayed separately. The compact solved one dispute, but the Fitter asks what you intend to remember when another fleet or crew faces the same temptation to call a working machine fully restored.`
+			choice
+				`\tCarry forward the distinction between local repair success and restoration of the wider system that supplied it.`
+					goto resilience
+				`\tCarry forward dependency provenance: every borrowed part, reserve, adapter, or specialist should remain traceable until its obligation actually closes.`
+					goto provenance
+				`\tKeep the lesson local. The Wandering Fleet's constraints do not automatically authorize a rule elsewhere.`
+					goto local
+				`\tRefuse to adopt a standing practice from the compact.`
+					goto refuse
+			label resilience
+			`You say a repaired recipient and a restored network answer different questions. A future decision should be allowed to celebrate the first without silently asserting the second.`
+			action
+				"A2 Wandering Fleet Continuity Practice: resolved" = 1
+				"A2 Wandering Fleet Continuity Practice: resilience boundary" = 1
+			decline
+			label provenance
+			`You say emergency improvisation is safest when the resulting dependency remains inspectable. A borrowed component or specialist can solve today's failure without erasing the capacity that moved elsewhere.`
+			action
+				"A2 Wandering Fleet Continuity Practice: resolved" = 1
+				"A2 Wandering Fleet Continuity Practice: dependency provenance" = 1
+			decline
+			label local
+			`You keep the compact as evidence about one fleet under particular constraints, not as borrowed Avgi authority. The Loadkeeper accepts the boundary; the Fitter notes that context is part of provenance too.`
+			action
+				"A2 Wandering Fleet Continuity Practice: resolved" = 1
+				"A2 Wandering Fleet Continuity Practice: local only" = 1
+			decline
+			label refuse
+			`You decline to turn the compact into your own standing doctrine. Neither specialist treats refusal as consent.`
+			action
+				"A2 Wandering Fleet Continuity Practice: resolved" = 1
+				"A2 Wandering Fleet Continuity Practice: refused" = 1
+			decline
+
+mission "A2 Wandering Fleet Continuity Practice: Reflection"
+	minor
+	name `The Obligation Behind the Repair`
+	description `See how the practice you carried forward changes a later maintenance judgment.`
+	source
+		government "Avgi (Consonance)"
+	offer precedence 9
+	to offer
+		has "language: Avgi (Written)"
+		has "avgi: wandering fleet refit 1"
+		not "avgi: lost in twilight"
+		has "B2 Avgi Wandering Fleet Transfer Compact: aftermath seen"
+		has "A2 Wandering Fleet Continuity Practice: resolved"
+		not "A2 Wandering Fleet Continuity Practice: refused"
+		not "A2 Wandering Fleet Continuity Practice: reflection seen"
+	on offer
+		conversation
+			branch provenance
+				has "A2 Wandering Fleet Continuity Practice: dependency provenance"
+			branch local
+				has "A2 Wandering Fleet Continuity Practice: local only"
+			`A later maintenance summary reports a successful emergency repair, but you notice that the donor reserve has not yet been restored. Because you kept repair success separate from system restoration, the summary can remain true without allowing the wider deficit to disappear. The crew marks the repair complete and the resilience obligation open.`
+			goto done
+			label provenance
+			`A later repair uses a compatible adapter borrowed through two intermediate ships. The work succeeds. Because you preserved dependency provenance, the crew can still trace the adapter, the assumptions attached to it, and the reserve deficit left behind. Success does not sever the evidence chain.`
+			goto done
+			label local
+			`A visiting crew asks whether the Wandering Fleet compact proves how their own maintenance dispute should be settled. You decline to lend them authority you do not possess. Instead, you describe the distinction the compact exposed and the conditions under which it mattered, leaving their own institutions to decide whether the method transfers.`
+			label done
+			action
+				"A2 Wandering Fleet Continuity Practice: reflection seen" = 1
+			decline
