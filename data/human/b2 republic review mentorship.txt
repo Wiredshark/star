@@ -62,7 +62,7 @@ mission "B2 Republic Review Mentorship: Offer"
 				"B2 Republic Review Mentorship: route anonymized casebook" = 1
 				"B2 Republic Review Mentorship: keene trusts player" = 1
 				event "B2 Republic Review Mentorship: Practice Ready" 5 7
-				accept
+				decline
 			label clinic
 			`You recommend live clinics. A trainee may inherit a review flag, but before widening the inquiry they must say what is confirmed, what is inferred, what authority permits the next step, and what the captain has actually consented to. Keene looks relieved. "So the training object is the explanation, not the old case." Noll nods. "And a supervisor can hear when an inference has quietly turned into a fact."`
 			action
@@ -71,7 +71,7 @@ mission "B2 Republic Review Mentorship: Offer"
 				"B2 Republic Review Mentorship: noll trusts player" = 1
 				"B2 Republic Review Mentorship: keene trusts player" = 1
 				event "B2 Republic Review Mentorship: Practice Ready" 5 7
-				accept
+				decline
 			label mentorship
 			`You tell Keene that the safest lesson may be a private one: Noll can teach the reasoning directly, but no portable case file should outlive the context that made each boundary necessary. Keene closes the worksheet and starts taking notes on process instead. Noll says, "That costs us convenience. It also prevents a training example from becoming an unofficial rule."`
 			action
@@ -79,7 +79,7 @@ mission "B2 Republic Review Mentorship: Offer"
 				"B2 Republic Review Mentorship: route private mentorship" = 1
 				"B2 Republic Review Mentorship: noll trusts player" = 1
 				event "B2 Republic Review Mentorship: Practice Ready" 5 7
-				accept
+				decline
 			label decline
 			`You ask Noll to keep the old review closed. Keene deletes the remaining notes and says, "Then I will learn the principle from current work, not by reopening yours." Noll accepts the answer without argument.`
 			action
@@ -125,14 +125,14 @@ mission "B2 Republic Review Mentorship: Practice Review"
 				"B2 Republic Review Mentorship: settlement safeguards record" = 1
 				"B2 Republic Review Mentorship: noll trusts player" = 1
 				"B2 Republic Review Mentorship: keene trusts player" = 1
-				accept
+				decline
 			label circle
 			`You recommend supervised review circles. Trainees bring current cases, state the evidence/inference boundary aloud, and compare reasoning against a shared rubric. Prior files may supply questions, never binding answers. Keene says it keeps the training social enough to expose weak assumptions. Noll says it also keeps responsibility with the current observer instead of letting a dead file make the decision.`
 			action
 				"B2 Republic Review Mentorship: reviewed" = 1
 				"B2 Republic Review Mentorship: settlement supervised review circle" = 1
 				"B2 Republic Review Mentorship: keene trusts player" = 1
-				accept
+				decline
 
 
 mission "B2 Republic Review Mentorship: Keene Remembers"
@@ -159,4 +159,4 @@ mission "B2 Republic Review Mentorship: Keene Remembers"
 			label finish
 			action
 				"B2 Republic Review Mentorship: aftermath seen" = 1
-				accept
+				decline
