@@ -50,19 +50,19 @@ mission "A2 Free Worlds Reserve Practice: Briefing"
 			action
 				"A2 Free Worlds Reserve Practice: introduced" = 1
 				"A2 Free Worlds Reserve Practice: closure evidence" = 1
-			accept
+			decline
 			label current
 			`You tell Brenner that yesterday's recovery record should never substitute for today's capacity check. Sol agrees to keep the old packet visible as provenance while making the live staffing, transport, maintenance, and stock state the basis for the next emergency decision.`
 			action
 				"A2 Free Worlds Reserve Practice: introduced" = 1
 				"A2 Free Worlds Reserve Practice: current capacity" = 1
-			accept
+			decline
 			label local
 			`You tell them that the useful lesson is how the network exposed hidden obligations, not that every Free World must copy the same procedure. Sol keeps the record as a precedent. Brenner writes "context, not authority" across the top.`
 			action
 				"A2 Free Worlds Reserve Practice: introduced" = 1
 				"A2 Free Worlds Reserve Practice: local only" = 1
-			accept
+			decline
 			label decline
 			`You decline to turn the recovered depot's experience into a standing rule. Sol accepts the boundary. Brenner closes his notebook without treating your refusal as agreement.`
 			action
@@ -122,4 +122,4 @@ mission "A2 Free Worlds Reserve Practice: Recurrence"
 			label record
 			action
 				"A2 Free Worlds Reserve Practice: recurrence seen" = 1
-			accept
+			decline
