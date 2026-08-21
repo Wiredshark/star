@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 Broken Compact production slice.
 #
 # Uses stock mission/conversation/global-condition mechanisms only. The story packet
@@ -34,21 +47,21 @@ mission "B2 Broken Compact: Notice"
 			action
 				"ES-STORY-0002: introduced" = 1
 				"ES-STORY-0002: evidence broker" = 1
-			accept
+			decline
 			label estate
 			`You tell Dorne that registry and creditor claims must remain controlling unless the operating crew can show more than memory. Kelm's expression hardens. "Then at least look at what we actually kept running before you call it memory."`
 			action
 				"ES-STORY-0002: introduced" = 1
 				"ES-STORY-0002: early estate position" = 1
 				"ES-STORY-0002: kelm resents player" = 1
-			accept
+			decline
 			label partnership
 			`You tell Kelm that years of deferred compensation can create a real obligation even when the legal form is weak. Dorne answers, "An obligation, perhaps. Title is a different question."`
 			action
 				"ES-STORY-0002: introduced" = 1
 				"ES-STORY-0002: early partnership position" = 1
 				"ES-STORY-0002: dorne resents player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that a neutral signature would only disguise uncertainty as judgment. Dorne returns to his file. Kelm says, "Then the sale clock keeps moving."`
 			action
@@ -82,14 +95,14 @@ mission "B2 Broken Compact: Senn Evidence"
 				"ES-STORY-0002: found senn annotation" = 1
 				"ES-STORY-0002: senn disclosed evidence" = 1
 				"ES-STORY-0002: senn trusts player" = 1
-			accept
+			decline
 			label pressure
 			`You tell Senn that silence may become a choice for the sale. She reluctantly opens the log and finds the same annotation, but her tone changes. "Use it if you must. Do not tell people I volunteered to become the case."`
 			action
 				"ES-STORY-0002: found senn annotation" = 1
 				"ES-STORY-0002: senn disclosed evidence" = 1
 				"ES-STORY-0002: senn pressured" = 1
-			accept
+			decline
 			label leave
 			`You tell Senn you will not drag her into the argument. She shoulders the flight case. "Thank you. I leave Republic space tomorrow."`
 			action
@@ -121,19 +134,19 @@ mission "B2 Broken Compact: Dorne Evidence"
 			action
 				"ES-STORY-0002: found private message" = 1
 				"ES-STORY-0002: dorne trusts player" = 1
-			accept
+			decline
 			label public
 			`You tell Dorne that withholding the message while selling the ship would make every later compromise suspect. He agrees to disclose it, but warns that the heirs will read the disclosure as a concession.`
 			action
 				"ES-STORY-0002: found private message" = 1
 				"ES-STORY-0002: player testimony public" = 1
-			accept
+			decline
 			label dismiss
 			`You tell Dorne the language is too vague to outweigh the registry. He closes the file. "That may be legally convenient. I am no longer sure it is factually complete."`
 			action
 				"ES-STORY-0002: found private message" = 1
 				"ES-STORY-0002: dorne resents player" = 1
-			accept
+			decline
 
 
 mission "B2 Broken Compact: Settlement"
@@ -171,21 +184,21 @@ mission "B2 Broken Compact: Settlement"
 				"ES-STORY-0002: settlement operating partnership" = 1
 				"ES-STORY-0002: kelm trusts player" = 1
 				"ES-STORY-0002: dorne resents player" = 1
-			accept
+			decline
 			label estate
 			`You separate obligation from title: the estate retains the ship for sale, but the crew's documented claim must be recognized in the distribution. Kelm calls it an erasure of the partnership. Dorne calls it the cleanest result the records can support.`
 			action
 				"ES-STORY-0002: settlement estate sale" = 1
 				"ES-STORY-0002: kelm resents player" = 1
 				"ES-STORY-0002: dorne trusts player" = 1
-			accept
+			decline
 			label arbitration
 			`You refuse to convert evidence of obligation into an invented ownership percentage. The sale is paused while an arbitrator prices the crew claim and tests whether the operating partnership can buy out the estate interest. Nobody gets an immediate victory, but nobody loses a claim by delay.`
 			action
 				"ES-STORY-0002: settlement arbitration" = 1
 				"ES-STORY-0002: kelm trusts player" = 1
 				"ES-STORY-0002: dorne trusts player" = 1
-			accept
+			decline
 			label acquisition
 			`You offer to buy the Morrow Line cheaply with the crew claim still attached. Senn goes silent. Kelm says, "So that was the value of hearing us out." Dorne warns that any purchase will inherit the dispute rather than erase it.`
 			action
@@ -193,7 +206,7 @@ mission "B2 Broken Compact: Settlement"
 				"ES-STORY-0002: kelm resents player" = 1
 				"ES-STORY-0002: dorne resents player" = 1
 				"ES-STORY-0002: player exploited ambiguity" = 1
-			accept
+			decline
 
 
 mission "B2 Broken Compact: Kelm Aftermath"
@@ -229,4 +242,4 @@ mission "B2 Broken Compact: Kelm Aftermath"
 			label record
 			action
 				"ES-STORY-0002: kelm aftermath seen" = 1
-			accept
+			decline
