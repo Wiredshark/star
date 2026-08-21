@@ -1,0 +1,144 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Coalition Translation Appeal Compact production slice.
+#
+# This consumes the integrated Coalition Interpretation Register and Port Arbitration
+# Ledger as historical continuity: Coalition ports share enough procedural language
+# to move disputes across local jurisdictions, but translation remains an interpretive
+# act whose source wording, alternatives, and review status must not disappear.
+#
+# The player privately uses Interpreter and Arbiter as shorthand for two recurring
+# Coalition civic specialists. Neither label is presented as a canonical Coalition
+# title, centralized office, or new layer of political authority.
+
+mission "B2 Coalition Translation Appeal Compact: Offer"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "license: Coalition"
+		not "B2 Coalition Translation Appeal Compact: introduced"
+		not "B2 Coalition Translation Appeal Compact: declined"
+		random < 18
+	on offer
+		conversation
+			`Near a Coalition port-arbitration desk, two familiar civil specialists are comparing three versions of the same freight dispute. One usually works through technical and legal language across several Coalition traditions, so privately you think of that person as the Interpreter. The other keeps evidence packets, hearing notes, and disposition records moving between ports, so in your own head you call that person the Arbiter. Neither word is a title or office they have given you.`
+			`\tThe original contract uses a local term for a carrier's responsibility after a cargo seal is broken. One translation renders it as continuing liability. Another renders it as a duty to document the condition of the freight before responsibility passes onward. A downstream port has already copied the first translation into its dispute summary as though the wording itself were settled evidence.`
+			choice
+				`\tProtect the source wording first. Carry the original term, literal translation, and unresolved alternatives into every later hearing.`
+					goto source
+				`\tLet each port use a practical local translation, but require the translator, assumptions, and review status to travel with it.`
+					goto local
+				`\tUse paired records: keep the source-language evidence immutable while allowing a separate working interpretation to be revised.`
+					goto paired
+				`\tRefuse to tell Coalition specialists how much uncertainty their own arbitration process should tolerate.`
+					goto decline
+			label source
+			`You argue that the source term must remain visible because later readers cannot evaluate an interpretation if the original wording has vanished. The Interpreter starts a parallel-entry format for literal meaning and plausible alternatives. The Arbiter adds a flag so unresolved translation cannot silently become a final finding.`
+			action
+				"B2 Coalition Translation Appeal Compact: introduced" = 1
+				"B2 Coalition Translation Appeal Compact: route source first" = 1
+				"B2 Coalition Translation Appeal Compact: interpreter trusts player" = 1
+			accept
+			label local
+			`You argue that ports need usable language, not a page of caveats before every routine decision. The Interpreter agrees to produce a practical local rendering, but the record must name the translator, identify the assumptions that made the rendering useful, and say whether another specialist has reviewed it. The Arbiter says that gives hearings something concrete without pretending the translation is the source.`
+			action
+				"B2 Coalition Translation Appeal Compact: introduced" = 1
+				"B2 Coalition Translation Appeal Compact: route local rendering" = 1
+				"B2 Coalition Translation Appeal Compact: arbiter trusts player" = 1
+			accept
+			label paired
+			`You separate evidence from interpretation. The source-language contract and direct inspection record stay immutable. A linked working interpretation can be revised as specialists compare legal custom, engineering practice, and later evidence. The Interpreter likes that revisions remain possible. The Arbiter likes that a revised translation cannot rewrite what was originally submitted.`
+			action
+				"B2 Coalition Translation Appeal Compact: introduced" = 1
+				"B2 Coalition Translation Appeal Compact: route paired records" = 1
+				"B2 Coalition Translation Appeal Compact: interpreter trusts player" = 1
+				"B2 Coalition Translation Appeal Compact: arbiter trusts player" = 1
+			accept
+			label decline
+			`You leave the choice to the people who will have to defend it before several different ports. The Interpreter keeps the three translations open. The Arbiter records only that no general procedure was adopted from this dispute.`
+			action
+				"B2 Coalition Translation Appeal Compact: declined" = 1
+			decline
+
+
+mission "B2 Coalition Translation Appeal Compact: Review"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "license: Coalition"
+		has "B2 Coalition Translation Appeal Compact: introduced"
+		not "B2 Coalition Translation Appeal Compact: reviewed"
+		random < 24
+	on offer
+		conversation
+			branch source
+				has "B2 Coalition Translation Appeal Compact: route source first"
+				`The Interpreter and Arbiter find you beside a later appeal. The original wording and alternatives survived exactly as intended. But one downstream summary copied only the most convenient alternative and dropped the note that the interpretation remained unresolved. Nothing false was added; the uncertainty simply disappeared.`
+				goto question
+			branch local
+				has "B2 Coalition Translation Appeal Compact: route local rendering"
+				`The Interpreter and Arbiter find you beside a later appeal. A practical local rendering let two ports process the dispute quickly, but a third copied the translated conclusion without the translator, assumptions, or review status. The working language survived. The conditions that made it trustworthy did not.`
+				goto question
+			`The Interpreter and Arbiter find you beside a later appeal. The paired source and interpretation records worked well at the first port. Downstream, however, clerks copied the interpretation into ordinary summaries while the link back to source wording, alternatives, and revisions became harder to see.`
+			label question
+			`\tThe Arbiter says Coalition ports need a compact way to distinguish source evidence, literal translation, working interpretation, revision, and final disposition. The Interpreter adds that repeated copies of one translation must never become independent corroboration merely because several ports now possess it.`
+			choice
+				`\tCreate a portable translation-provenance packet: source wording, translator, literal rendering, assumptions, alternatives, revisions, confidence, and disposition travel together.`
+					goto provenance
+				`\tCreate a dual-language disposition ledger: source evidence stays fixed while each working interpretation keeps its review chain, superseded versions, and explicit open or closed status.`
+					goto ledger
+			label provenance
+			`The Interpreter reduces the format to a compact packet that can travel with routine case summaries. A reader can see what the source actually said, who translated it, which assumptions shaped the useful rendering, what alternatives remain plausible, what later revisions changed, and whether the issue is still open. The Arbiter adds that a copied packet counts as one evidence lineage no matter how many ports store it.`
+			action
+				"B2 Coalition Translation Appeal Compact: reviewed" = 1
+				"B2 Coalition Translation Appeal Compact: settlement provenance packet" = 1
+			accept
+			label ledger
+			`The Arbiter keeps the source evidence immutable and gives each interpretation its own review history. Superseded versions remain visible rather than disappearing, and every disposition says whether translation uncertainty is still open, resolved, or irrelevant to the ruling. The Interpreter approves because later specialists can revise meaning without rewriting history.`
+			action
+				"B2 Coalition Translation Appeal Compact: reviewed" = 1
+				"B2 Coalition Translation Appeal Compact: settlement disposition ledger" = 1
+			accept
+
+
+mission "B2 Coalition Translation Appeal Compact: Interpreter Remembers"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "license: Coalition"
+		has "B2 Coalition Translation Appeal Compact: reviewed"
+		not "B2 Coalition Translation Appeal Compact: aftermath seen"
+		random < 30
+	on offer
+		conversation
+			branch provenance
+				has "B2 Coalition Translation Appeal Compact: settlement provenance packet"
+				`The Coalition specialist you privately call the Interpreter shows you a dispute summary that now carries a compact translation-provenance packet. The practical rendering is still easy to read, but the source wording, translator, assumptions, alternatives, revisions, confidence, and disposition are one step away. "A short answer can stay short," the Interpreter says. "It just cannot pretend it was born without a history."`
+				goto remember
+			`The Coalition specialist you privately call the Interpreter shows you a hearing record with the source evidence fixed on one side and a chain of working interpretations on the other. Older translations remain visible after revision, each with its own reviewer and disposition. "Changing our understanding should not require changing what happened," the Interpreter says.`
+			label remember
+			`\tThe Arbiter closes another case nearby and leaves one translation issue marked unresolved even though the freight dispute itself is settled. The record treats those as different facts. No new central authority has appeared; several Coalition ports simply have a more reliable way to preserve what they mean when their words differ.`
+			action
+				"B2 Coalition Translation Appeal Compact: aftermath seen" = 1
+			decline
