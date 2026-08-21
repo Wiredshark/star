@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native validation on the exact branch head. Do not integrate until simulation/story/style and production build/save-load workflows are terminal green.
+READY for A3 review/integration. Production behavior and focused lifecycle validation are terminal green on exact candidate `d1f41366628ac58b89682d26fe2db35856e180aa`. This branch remains draft and unmerged; A3 retains integration authority.
 
 ## Exact state
 
@@ -10,6 +10,7 @@ PARTIAL pending repository-native validation on the exact branch head. Do not in
 - branch: `agent/b2-broken-compact-lifecycle-20260821-1325`
 - production lifecycle repair: `947ef852c4df26d4b5e18ab2ecb5d168d51e0102`
 - validator hardening: `3d7b0bb2ec9cb32504233f633bb44b4fd4127990`
+- exact fully validated production/validator/handoff candidate: `d1f41366628ac58b89682d26fe2db35856e180aa`
 
 ## Defect
 
@@ -44,11 +45,22 @@ No state ownership changes are introduced. Existing `ES-STORY-0002:*` condition 
 
 The important narrative distinction remains: evidence of an obligation does not automatically establish a specific ownership percentage or title. The four settlement outcomes and character trust/resentment consequences remain exactly as previously authored.
 
-## Validation required before READY
+## Exact validation
 
-Run the repository-native fork validation workflows on the exact final head:
+On exact candidate `d1f41366628ac58b89682d26fe2db35856e180aa`:
 
-1. Fork simulation and story validation, including focused validator discovery, A1/state-ownership regressions, and changed-content style.
-2. Fork save-load integration smoke, including production configure/build and stock save-load smoke.
+- `Fork simulation and story validation` run `32508272812` / #339: **SUCCESS**
+  - changed-content style: **SUCCESS**
+  - focused story validators, including the hardened Broken Compact validator: **SUCCESS**
+  - A1 simulation/state-ownership contracts: **SUCCESS**
+- `Fork save-load integration smoke` run `32508272818` / #324: **SUCCESS**
+  - production configure/build: **SUCCESS**
+  - stock save-load smoke: **SUCCESS**
 
-A3 retains integration authority. This branch must remain unmerged until exact-head validation is terminal green and the handoff is promoted to READY.
+The exact base-to-candidate comparison is 3 commits ahead / 0 behind and changes only:
+
+- `data/human/b2 broken compact.txt`
+- `tools/story/validate_b2_broken_compact_production.py`
+- `story/B2_BROKEN_COMPACT_LIFECYCLE_REPAIR_HANDOFF_20260821.md`
+
+A3 should re-read current `main`, verify ancestry and mergeability, and preserve the state-only dialogue lifecycle invariant while integrating. No self-integration was performed.
