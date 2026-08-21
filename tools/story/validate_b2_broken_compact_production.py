@@ -2,12 +2,13 @@
 """Focused structural validation for the B2 Broken Compact production slice.
 
 This intentionally does not replace Endless Sky's own parser/runtime validation.
-It checks the persistence/branching contract that B2 owns.
+It checks the persistence/branching/lifecycle contract that B2 owns.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -97,6 +98,23 @@ def main() -> int:
         "missing durable refusal/unresolved outcome",
     )
 
+    # This entire production slice is dialogue/state-only. It creates no cargo,
+    # destination, passenger, NPC, waypoint, timer, boarding, or other playable
+    # objective. Terminal paths must close with decline after persisting state;
+    # accept would move an objective-less offered mission into the accepted list.
+    if re.search(r'^\s*accept\s*$', text, re.M):
+        failures.append("state-only Broken Compact slice must not leave accepted missions active")
+    declines = re.findall(r'^\s*decline\s*$', text, re.M)
+    if len(declines) != 15:
+        failures.append(f"expected 15 state-only decline terminals, found {len(declines)}")
+
+    objective_directives = re.compile(
+        r'^\s*(?:destination|waypoint|stopover|cargo|passengers|npc|deadline|distance|job|assisting|boarding)\b',
+        re.I | re.M,
+    )
+    if objective_directives.search(text):
+        failures.append("lifecycle assumption invalidated by objective-bearing mission directives")
+
     # B2 must not invent a second relationship store or new engine schema.
     forbidden = (
         "relationship database",
@@ -120,6 +138,7 @@ def main() -> int:
     print(f"PASS: terminal_outcomes={len(TERMINAL_STATES)}")
     print(f"PASS: evidence_states={len(EVIDENCE_STATES)}")
     print("PASS: later_reader=Kelm Aftermath")
+    print("PASS: lifecycle=15 state-only decline terminals")
     return 0
 
 
