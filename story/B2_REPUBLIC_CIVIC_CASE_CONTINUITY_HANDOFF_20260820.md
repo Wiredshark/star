@@ -2,7 +2,7 @@
 
 ## Status
 
-PARTIAL pending repository-native validation.
+READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -11,6 +11,7 @@ PARTIAL pending repository-native validation.
 - Isolated branch: `agent/b2-republic-civic-case-continuity-20260820-2127`
 - Production commit: `5529c3ad05ed8c59008411716aaba422ed9464ad`
 - Focused-validator commit: `7ac7e5c74db8610278ff75c28ca7109ea207f409`
+- Exact fully validated production/validator/handoff candidate: `4af568da40f9b6aef304c659ec3228f9e63a48c3`
 - B2 does not self-integrate.
 
 ## What this adds
@@ -45,7 +46,7 @@ A1 remains sole owner/writer of `world: republic civic strain`. B2 reads it only
 
 Every new persistent write is under `B2 Republic Civic Case Continuity:*`.
 
-No direct credits, reputation, cargo, outfits, ships, fleets, combat rating, or unrelated campaign/world-state mutation is intended.
+No direct credits, reputation, cargo, outfits, ships, fleets, combat rating, or unrelated campaign/world-state mutation is introduced.
 
 ## Core continuity invariant
 
@@ -60,23 +61,22 @@ A closed appointment, transferred file, reassigned clerk, or reduced aggregate q
 - the next required action;
 - explicit evidence that the obligation was fulfilled, transferred, or legitimately closed.
 
-## Validation
+## Validation evidence
 
-Focused validator added:
+Focused validator:
 
 ```text
 python3 tools/story/validate_b2_republic_civic_case_continuity.py
 ```
 
-Before promotion to READY, require the repository-native gates used by current B2 slices:
+Repository-native validation on exact candidate `4af568da40f9b6aef304c659ec3228f9e63a48c3`:
 
-- focused story validator discovery / story contract suite;
-- changed-content style;
-- A1 simulation/state-ownership regressions;
-- production configure/build;
-- stock save-load integration smoke.
+- `Fork simulation and story validation` run #291 / `32436520552`: **SUCCESS**
+- `Fork save-load integration smoke` run #276 / `32436520542`: **SUCCESS**
 
-No validation result is claimed until those workflows actually complete.
+Those workflows cover the repository's focused story-validator discovery/contracts, changed-content style, A1 simulation/state-ownership regressions, production configure/build, and stock save-load smoke used by current B2 acceptance.
+
+The final READY commit changes only this durable handoff; production content and validator behavior are unchanged from the fully validated candidate above.
 
 ## A3/B3 integration notes
 
