@@ -1,0 +1,107 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 dynamic narrative consumer for A1 Republic border pressure.
+# A1 remains sole owner of `world: republic border pressure`. This file reads
+# that state and writes only `A2 Republic Border Alert Practice:*` narrative
+# state. Pirate-space origin is never treated as evidence of individual guilt.
+
+
+mission "A2 Republic Border Alert Practice: Briefing"
+	minor
+	name `Border Alert Practice`
+	description `Republic transit coordinator Mara Vey asks what rule should govern civilian traffic while the border alert is elevated.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		"world: republic border pressure" >= 4
+		not "A2 Republic Border Alert Practice: introduced"
+	on offer
+		conversation
+			`A Republic transit coordinator meets you beside a route board crowded with temporary patrol notices. "Mara Vey. The alert is real, but an alert is not evidence that every ship arriving from pirate-held space has done something wrong. We need an operating rule that keeps traffic moving without turning route origin into a verdict."`
+			choice
+				`\tRequire every heightened inspection to record its current factual basis separately from the general border alert.`
+					goto basis
+				`\tProtect documented civilian, medical, and relief transit capacity even while patrols concentrate elsewhere.`
+					goto continuity
+				`\tRequire temporary alert restrictions to carry a review point instead of renewing automatically.`
+					goto review
+				`\tDecline to establish a standing rule from one alert cycle.`
+					goto refuse
+			label basis
+			`You choose a current-basis rule: the general alert may justify attention, but any action against one ship must preserve the facts that actually support it. Vey nods. "Then repeated scrutiny cannot manufacture evidence merely by being repeated."`
+			action
+				"A2 Republic Border Alert Practice: introduced" = 1
+				"A2 Republic Border Alert Practice: basis" = 1
+				"A2 Republic Border Alert Practice: recovery pending" = 1
+				decline
+			label continuity
+			`You choose continuity: reserve enough routing and berth capacity that medical, relief, passenger, and other documented civilian traffic can still move. Vey says, "Security concentration has a capacity cost. We should record who pays it instead of pretending the rest of the network is empty."`
+			action
+				"A2 Republic Border Alert Practice: introduced" = 1
+				"A2 Republic Border Alert Practice: continuity" = 1
+				"A2 Republic Border Alert Practice: recovery pending" = 1
+				decline
+			label review
+			`You choose explicit review points. Restrictions can be urgent without becoming permanent by inertia. Vey adds a review field to the alert template. "If the reason still exists, we can say so. If it does not, the old alert cannot renew itself."`
+			action
+				"A2 Republic Border Alert Practice: introduced" = 1
+				"A2 Republic Border Alert Practice: review" = 1
+				"A2 Republic Border Alert Practice: recovery pending" = 1
+				decline
+			label refuse
+			`You decline to turn one alert cycle into a standing doctrine. Vey records that boundary without treating it as opposition to the current patrol posture. "Fair. No one gets to cite your silence later as approval of a permanent rule."`
+			action
+				"A2 Republic Border Alert Practice: introduced" = 1
+				"A2 Republic Border Alert Practice: refusal" = 1
+				"A2 Republic Border Alert Practice: recovery pending" = 1
+				decline
+
+mission "A2 Republic Border Alert Practice: Recovery Review"
+	minor
+	name `Border Alert Practice: Recovery Review`
+	description `Mara Vey reviews what the earlier operating rule changed after Republic border pressure recedes.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "A2 Republic Border Alert Practice: recovery pending"
+		"world: republic border pressure" <= 2
+		not "A2 Republic Border Alert Practice: recovery seen"
+	on offer
+		conversation
+			branch basis
+				has "A2 Republic Border Alert Practice: basis"
+			branch continuity
+				has "A2 Republic Border Alert Practice: continuity"
+			branch review
+				has "A2 Republic Border Alert Practice: review"
+			`Vey finds you after the alert boards have mostly cleared. "You declined a standing rule, and the record says exactly that. The alert receded without turning your refusal into consent or a permanent border doctrine."`
+				goto finish
+			label basis
+			`Vey shows you two closed review records. Both began under the same general alert, but only one had ship-specific facts worth preserving. "Separating the alert from the factual basis kept the other file from inheriting suspicion just because it existed during a bad week."`
+				goto finish
+			label continuity
+			`Vey points to a recovery ledger. Several patrol sectors borrowed routing capacity, but medical and relief movements retained documented slots. "We still delayed people. The difference is that the capacity cost is visible, and the recovery queue knows what was displaced."`
+				goto finish
+			label review
+			`Vey closes an obsolete restriction while you watch. Its scheduled review found no current reason to renew it. "The old alert remains in the history. It just does not get to govern the next week by inertia."`
+			label finish
+			`The border pressure has receded on the simulation's own timetable. Vey's review does not claim your choice ended the alert; it records how the Republic handled authority and civilian obligations while the alert existed.`
+			action
+				"A2 Republic Border Alert Practice: recovery pending" = 0
+				"A2 Republic Border Alert Practice: recovery seen" = 1
+				decline
