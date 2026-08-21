@@ -1,0 +1,125 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 Free Worlds Reserve Practice production slice.
+#
+# This content begins only after the integrated B2 Free Worlds Reserve Recovery
+# Compact has reached its aftermath. It lets the player carry one evidence and
+# capacity practice forward during a calm period, then tests that practice during
+# a later authoritative A1 relief-reserve strain recurrence. A1 and B2 state are
+# read-only here.
+
+
+mission "A2 Free Worlds Reserve Practice: Briefing"
+	minor
+	name `What Survives the Recovery`
+	description `Rina Sol and Cal Brenner ask which part of the reserve-recovery lesson should survive into the next emergency.`
+	source
+		government "Free Worlds"
+	to offer
+		has "B2 Free Worlds Reserve Recovery Compact: aftermath seen"
+		"world: free worlds relief reserve strain" <= 1
+		not "A2 Free Worlds Reserve Practice: introduced"
+		not "A2 Free Worlds Reserve Practice: declined"
+	on offer
+		conversation
+			`Rina Sol has finally taken the red marker off most of the depot board. Cal Brenner has not. His remaining notes are narrower now: which reserve categories only looked restored because a borrowed crew stayed an extra week, which generator was returned without its maintenance kit, and which local report corrected an earlier optimistic estimate.`
+			`Sol says, "The compact did its job. What I do not want is for the next emergency to begin with everyone remembering the headline and forgetting why the recovery record worked."`
+			`Brenner points to the two settlement records. "A packet and a reconciliation cycle solve different copying problems. Neither matters if the next surge turns the old settlement into ritual instead of evidence."`
+			choice
+				`\tCarry closure evidence forward: any reserve declared restored must keep the evidence that closed each stock, staffing, transport, maintenance, and borrowed-capacity obligation.`
+					goto closure
+				`\tCarry current capacity forward: old recovery records stay useful context, but present staffing, transport, maintenance, and stock conditions decide what is actually available now.`
+					goto current
+				`\tKeep the compact local: use it as a lesson from this network, not as automatic authority over another Free World's reserve practice.`
+					goto local
+				`\tDecline to establish a standing practice for the next emergency.`
+					goto decline
+			label closure
+			`You tell Sol that a future reserve claim should remain auditable all the way back to the obligation it closes. A full shelf can be real progress without erasing an unpaid crew loan or an overdue repair. Brenner adds a field for closure evidence to his next template.`
+			action
+				"A2 Free Worlds Reserve Practice: introduced" = 1
+				"A2 Free Worlds Reserve Practice: closure evidence" = 1
+			decline
+			label current
+			`You tell Brenner that yesterday's recovery record should never substitute for today's capacity check. Sol agrees to keep the old packet visible as provenance while making the live staffing, transport, maintenance, and stock state the basis for the next emergency decision.`
+			action
+				"A2 Free Worlds Reserve Practice: introduced" = 1
+				"A2 Free Worlds Reserve Practice: current capacity" = 1
+			decline
+			label local
+			`You tell them that the useful lesson is how the network exposed hidden obligations, not that every Free World must copy the same procedure. Sol keeps the record as a precedent. Brenner writes "context, not authority" across the top.`
+			action
+				"A2 Free Worlds Reserve Practice: introduced" = 1
+				"A2 Free Worlds Reserve Practice: local only" = 1
+			decline
+			label decline
+			`You decline to turn the recovered depot's experience into a standing rule. Sol accepts the boundary. Brenner closes his notebook without treating your refusal as agreement.`
+			action
+				"A2 Free Worlds Reserve Practice: declined" = 1
+			decline
+
+
+mission "A2 Free Worlds Reserve Practice: Recurrence"
+	minor
+	name `The Next Empty Shelf`
+	description `A later relief-reserve surge tests what the Free Worlds actually carried forward from the previous recovery.`
+	source
+		government "Free Worlds"
+	to offer
+		has "A2 Free Worlds Reserve Practice: introduced"
+		"world: free worlds relief reserve strain" >= 3
+		not "A2 Free Worlds Reserve Practice: recurrence seen"
+	on offer
+		conversation
+			branch currentPacket
+				has "A2 Free Worlds Reserve Practice: current capacity"
+				has "B2 Free Worlds Reserve Recovery Compact: settlement portable reserve packet"
+			branch currentReconcile
+				has "A2 Free Worlds Reserve Practice: current capacity"
+				has "B2 Free Worlds Reserve Recovery Compact: settlement reconciliation cycle"
+			branch localPacket
+				has "A2 Free Worlds Reserve Practice: local only"
+				has "B2 Free Worlds Reserve Recovery Compact: settlement portable reserve packet"
+			branch localReconcile
+				has "A2 Free Worlds Reserve Practice: local only"
+				has "B2 Free Worlds Reserve Recovery Compact: settlement reconciliation cycle"
+			branch closureReconcile
+				has "A2 Free Worlds Reserve Practice: closure evidence"
+				has "B2 Free Worlds Reserve Recovery Compact: settlement reconciliation cycle"
+			`The reserve-status packet reaches the depot before the new surge does. One medical category is marked "restored," but its closure evidence shows that a neighboring world supplied the last maintenance crew and never received an equivalent replacement. Sol keeps the stock count green and reopens the support obligation instead of treating the old declaration as permanent proof.`
+			`Brenner says, "The packet did not predict this emergency. It just stopped yesterday's closure from becoming today's missing evidence."`
+			goto record
+			label closureReconcile
+			`The reconciliation cycle catches a category that had been closed during the last recovery. The stock is still present, but the maintenance window used as closure evidence is now obsolete under the new surge. Sol leaves the old closure in history and opens a new current obligation rather than pretending the earlier record was false.`
+			`Brenner says, "Closure evidence tells us why the old case ended. It does not promise the condition can never deteriorate again."`
+			goto record
+			label currentPacket
+			`A copied reserve packet says two categories were fully restored after the last emergency. The live check says otherwise: one crew is exhausted and a transport pool has been reassigned. Sol keeps the packet as provenance but bases the new allocation on current capacity instead of the historical percentage.`
+			`Brenner says, "That is the distinction we wanted. The old packet is evidence about what was true then, not a warranty for today."`
+			goto record
+			label currentReconcile
+			`The old reconciliation record shows every previous obligation closed. The new surge creates different constraints: transport availability has fallen before physical stock has. Brenner starts a fresh current-capacity pass rather than reopening old debts simply because the same category is under pressure again.`
+			`Sol says, "A clean old ledger and a strained current reserve can both be true."`
+			goto record
+			label localPacket
+			`A neighboring Free World copies the old packet format but changes its reserve categories to match local crews, distances, and equipment. Sol compares the two records without declaring either one authoritative. The shared structure exposes a borrowed-capacity gap without pretending the worlds operate identical depots.`
+			`Brenner says, "The lesson travelled. The jurisdiction did not."`
+			goto record
+			label localReconcile
+			`A smaller port declines to copy the old reconciliation cycle verbatim. Instead it uses the same principle: separate stock, staffing, transport, maintenance, and borrowed obligations on a shorter local review cadence. Sol accepts the result because the evidence is inspectable even though the procedure differs.`
+			`Brenner says, "Context survived without becoming borrowed authority."`
+			label record
+			action
+				"A2 Free Worlds Reserve Practice: recurrence seen" = 1
+			decline
