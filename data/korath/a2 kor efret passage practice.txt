@@ -10,7 +10,7 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <https://www.gnu.org/licenses/>.
-#
+
 # A2 Kor Efret Passage Practice.
 # Consumes the resolved B2 Passage Continuity Compact read-only. The player carries
 # forward a private operating practice without acquiring Kor Efreti authority.
