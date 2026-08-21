@@ -43,6 +43,27 @@ assert sorted(set(settlements)) == ["packet", "renewal"], settlements
 for settlement in ("packet", "renewal"):
     assert text.count(f'has "B2 Syndicate Qualification Compact: settlement {settlement}"') >= 1
 
+# These are dialogue/state-only missions. They create no gameplay objective, so every
+# terminal path must close with decline instead of leaving an accepted objective-less
+# mission active in the player's mission list.
+accepts = re.findall(r'^\s*accept\s*$', text, re.M)
+declines = re.findall(r'^\s*decline\s*$', text, re.M)
+assert not accepts, f"state-only lifecycle must not use accept terminals: {len(accepts)}"
+assert len(declines) == 7, f"expected 7 decline terminals, found {len(declines)}"
+for objective in (
+    r'^\s*destination\b',
+    r'^\s*stopover\b',
+    r'^\s*waypoint\b',
+    r'^\s*npc\b',
+    r'^\s*cargo\b',
+    r'^\s*passengers?\b',
+    r'^\s*deadline\b',
+    r'^\s*timer\b',
+):
+    assert not re.search(objective, text, re.M | re.I), (
+        f"objective-bearing directive invalidates state-only lifecycle assumption: {objective}"
+    )
+
 # B2 owns only its own persistent conditions.
 for line in text.splitlines():
     stripped = line.strip()
@@ -90,5 +111,6 @@ print("PASS: missions=3")
 print("PASS: named_characters=2")
 print("PASS: initial_routes=3 + refusal")
 print("PASS: terminal_settlements=2")
+print("PASS: lifecycle=7 decline terminals, 0 accept terminals")
 print("PASS: a1_labor_state=read_only")
 print("PASS: mutation_surface=B2 conditions only")
