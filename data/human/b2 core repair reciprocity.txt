@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 Core Repair Reciprocity production slice.
 #
 # This content consumes the Core Ship Standard Hall and Core Civil Service Ledger
@@ -36,14 +49,14 @@ mission "B2 Core Repair Reciprocity: Offer"
 				"B2 Core Repair Reciprocity: introduced" = 1
 				"B2 Core Repair Reciprocity: route renn" = 1
 				"B2 Core Repair Reciprocity: renn trusts player" = 1
-			accept
+			decline
 			label cross
 			`You tell Renn that repeating a full certification process at every port wastes skilled labor and rewards paperwork over demonstrated competence. Cross gives a short nod. Renn says, "Then local endorsement needs an accountable inspector and a record that follows the mechanic afterward."`
 			action
 				"B2 Core Repair Reciprocity: introduced" = 1
 				"B2 Core Repair Reciprocity: route cross" = 1
 				"B2 Core Repair Reciprocity: cross trusts player" = 1
-			accept
+			decline
 			label provisional
 			`You suggest separating the portable part of a credential from the local part: common technical work can transfer automatically, while unusual systems require supervised sign-off before a mechanic works unsupervised. Renn starts listing which repair classes could be portable. Cross says, "That is still bureaucracy. At least it is bureaucracy that remembers what you already proved."`
 			action
@@ -51,7 +64,7 @@ mission "B2 Core Repair Reciprocity: Offer"
 				"B2 Core Repair Reciprocity: route provisional" = 1
 				"B2 Core Repair Reciprocity: renn trusts player" = 1
 				"B2 Core Repair Reciprocity: cross trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that captains come to the yard for repairs, not to referee licensing policy. Cross shrugs. Renn says, "Fair. But every captain eventually discovers the licensing policy when a ship is waiting for a mechanic who is not allowed to touch it."`
 			action
@@ -101,14 +114,14 @@ mission "B2 Core Repair Reciprocity: Review"
 				"B2 Core Repair Reciprocity: reviewed" = 1
 				"B2 Core Repair Reciprocity: settlement reciprocal credential" = 1
 				"B2 Core Repair Reciprocity: renn trusts player" = 1
-			accept
+			decline
 			label endorsement
 			`You recommend preserving local licensing authority while making supervised endorsements portable. A mechanic can arrive with a common work history, demonstrate unfamiliar tasks under an accountable local inspector, and carry that verified experience forward. Cross likes that experience accumulates instead of resetting at every port. Renn likes that somebody local still signs the risky work.`
 			action
 				"B2 Core Repair Reciprocity: reviewed" = 1
 				"B2 Core Repair Reciprocity: settlement portable endorsement" = 1
 				"B2 Core Repair Reciprocity: cross trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Core Repair Reciprocity: Renn Remembers"
@@ -134,4 +147,4 @@ mission "B2 Core Repair Reciprocity: Renn Remembers"
 			label record
 			action
 				"B2 Core Repair Reciprocity: aftermath seen" = 1
-			accept
+			decline

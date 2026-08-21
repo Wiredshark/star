@@ -82,6 +82,27 @@ for forbidden in (
     if forbidden in text:
         fail(f"unexpected direct material/gameplay reward mutation: {forbidden.strip()}")
 
+# These three missions are dialogue/state-only. Accepting a terminal branch would
+# leave an objective-less mission active after the conversation closes, so every
+# terminal path must decline after persisting its state.
+if re.search(r'^\s*accept\s*$', text, flags=re.MULTILINE):
+    fail("state-only Core Repair Reciprocity missions must not leave accepted missions active")
+
+if len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)) != 7:
+    fail("expected exactly seven state-only dialogue terminals to decline")
+
+for objective in (
+    '\tdestination ',
+    '\tstopover ',
+    '\twaypoint ',
+    '\tnpc ',
+    '\tdeadline ',
+    '\tpassengers ',
+    '\tcargo ',
+):
+    if objective in text:
+        fail(f"unexpected mission objective in state-only lifecycle slice: {objective.strip()}")
+
 print("PASS: B2 Core Repair Reciprocity structure validated")
 print("PASS: missions=3")
 print("PASS: named_characters=2")
@@ -90,3 +111,4 @@ print("PASS: review_routing=provisional fallthrough + explicit Renn/Cross branch
 print("PASS: terminal_settlements=2")
 print("PASS: later_reader=Renn Remembers")
 print("PASS: persistence_model=stock mission/global conditions")
+print("PASS: lifecycle=state-only dialogue terminals decline cleanly")
