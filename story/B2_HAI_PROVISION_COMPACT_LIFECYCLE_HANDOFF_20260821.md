@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**PARTIAL — focused lifecycle repair is isolated and reviewable; promote to READY only after exact-head repository-native validation is terminal green.**
+**READY for A3 review/integration.**
 
 ## Exact lineage
 
@@ -10,6 +10,7 @@
 - Branch: `agent/b2-hai-provision-lifecycle-20260821-0923`
 - Production lifecycle repair: `cb7f5e3f56520bf470157d11d7a1caa77a3ab7b9`
 - Focused validator hardening: `774d68c28534195e8680c2fa9d43e7809a359e63`
+- Exact fully validated production/validator/handoff candidate: `4156c032447595c2fdc5a3a7a1a7c4b95bac1ab9`
 
 ## Defect
 
@@ -38,27 +39,24 @@ All existing structural checks remain: three missions, Tami and Leah Marr, three
 
 ## Isolation
 
-At the validator head, exact comparison against authoritative base is:
+The exact validated candidate is based directly on authoritative `main` and contains only the production file, focused validator, and this durable handoff. No unrelated worktree, process, branch, or repository state was modified.
 
-- 2 commits ahead / 0 behind;
-- modified files only:
-  - `data/hai/b2 hai provision compact.txt`
-  - `tools/story/validate_b2_hai_provision_compact.py`
-- no unrelated files changed.
+## Exact validation
 
-This handoff adds only this documentation file.
+On exact candidate `4156c032447595c2fdc5a3a7a1a7c4b95bac1ab9`:
 
-## Validation state
+- `Fork simulation and story validation` run `32486823680` / #327: **SUCCESS**.
+  - focused simulation/story contracts: SUCCESS;
+  - focused story validator discovery, including the Hai Provision lifecycle validator: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS;
+  - changed-content style, including the standard header: SUCCESS.
+- `Fork save-load integration smoke` run `32486823679` / #312: **SUCCESS**.
+  - dependency install: SUCCESS;
+  - production configure: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke cases: SUCCESS.
 
-Not yet claimed READY. Required exact-head gates:
-
-- `Fork simulation and story validation` must be terminal SUCCESS;
-- focused Hai validator must pass through repository validator discovery;
-- changed-content style must pass, including the newly added standard header;
-- A1 simulation/state-ownership contracts must remain green;
-- `Fork save-load integration smoke` must be terminal SUCCESS, including production configure/build and stock save-load smoke.
-
-Do not claim a PASS until the corresponding workflow actually reaches terminal green.
+No validation result is claimed beyond what actually reached terminal green.
 
 ## Process / host safety
 
@@ -66,7 +64,7 @@ Before editing, the private execution service reported four pre-existing service
 
 ## A3 integration notes
 
-A3 retains integration authority. Re-read current `main`, verify ancestry/mergeability, and integrate only after exact candidate validation is terminal green. Preserve all existing Hai Provision Compact state semantics while accepting only the lifecycle correction and standard header.
+A3 retains integration authority. Re-read current `main`, verify ancestry/mergeability, and integrate only if this isolated lifecycle correction remains semantically clean. Preserve all existing Hai Provision Compact state semantics while accepting only the lifecycle correction and standard header.
 
 ## B3 continuity notes
 
