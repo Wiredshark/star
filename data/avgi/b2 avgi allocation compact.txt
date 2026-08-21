@@ -46,14 +46,14 @@ mission "B2 Avgi Allocation Compact: Offer"
 				"B2 Avgi Allocation Compact: introduced" = 1
 				"B2 Avgi Allocation Compact: route verdigris" = 1
 				"B2 Avgi Allocation Compact: verdigris trusts player" = 1
-			accept
+			decline
 			label ochre
 			`You tell Verdigris that emergency reserve officers need authority to act before a cascading failure becomes irreversible, provided every draw is logged and reviewed afterward. Ochre clicks their beak in approval. Verdigris answers, "Acceptance with condition. Review must reconstruct what was displaced, not merely confirm that the Guard believed itself urgent."`
 			action
 				"B2 Avgi Allocation Compact: introduced" = 1
 				"B2 Avgi Allocation Compact: route ochre" = 1
 				"B2 Avgi Allocation Compact: ochre trusts player" = 1
-			accept
+			decline
 			label paired
 			`You suggest that the argument exists because the two offices are looking at different ledgers. Civilian floors, Guard reserve classes, shelter loads, and discretionary industry draws could be pre-classified against a single reserve picture. During an alert, the Guard could act inside those classes immediately; anything outside them would require an explicit exception visible to both offices. Verdigris begins rewriting columns on the board. Ochre says, "Assessment. Less freedom than I prefer. More speed than your office currently permits."`
 			action
@@ -61,7 +61,7 @@ mission "B2 Avgi Allocation Compact: Offer"
 				"B2 Avgi Allocation Compact: route paired" = 1
 				"B2 Avgi Allocation Compact: verdigris trusts player" = 1
 				"B2 Avgi Allocation Compact: ochre trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that a visiting human captain is a poor substitute for an Avgi emergency-allocation commission. Verdigris answers, "Acknowledgment. Sensible." Ochre adds, "Dry observation. Sensible decisions are not the usual reason outsiders become involved in our institutions."`
 			action
@@ -111,14 +111,14 @@ mission "B2 Avgi Allocation Compact: Review"
 				"B2 Avgi Allocation Compact: reviewed" = 1
 				"B2 Avgi Allocation Compact: settlement public emergency ledger" = 1
 				"B2 Avgi Allocation Compact: verdigris trusts player" = 1
-			accept
+			decline
 			label dualthreshold
 			`You recommend preserving separate civilian and Guard authority while defining explicit release thresholds in advance. The Guard may draw immediately inside its declared emergency class. A draw beyond that class is still permitted when delay would be dangerous, but it automatically creates a joint review record identifying what was displaced, why the threshold was crossed, and what must be restored first afterward. Ochre accepts the speed. Verdigris accepts that exceptional authority now leaves an exceptional record.`
 			action
 				"B2 Avgi Allocation Compact: reviewed" = 1
 				"B2 Avgi Allocation Compact: settlement dual threshold" = 1
 				"B2 Avgi Allocation Compact: ochre trusts player" = 1
-			accept
+			decline
 
 mission "B2 Avgi Allocation Compact: Verdigris Remembers"
 	minor
@@ -144,4 +144,4 @@ mission "B2 Avgi Allocation Compact: Verdigris Remembers"
 			label record
 			action
 				"B2 Avgi Allocation Compact: aftermath seen" = 1
-			accept
+			decline
