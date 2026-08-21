@@ -1,0 +1,166 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Merchant Salvage Claim Compact.
+#
+# Consumes the integrated B1 Merchant Salvage Provenance Ledger and A1's
+# authoritative merchant salvage-demand signal. B2 reads both but never writes
+# world state. This arc preserves the distinction among recovery location,
+# claimant, custody, repair history, emergency reuse, current technical state,
+# and explicit ownership/dispute closure. It does not create a centralized
+# Merchant salvage court or universal law.
+
+
+event "B2 Merchant Salvage Claim Compact: Review Ready"
+	"B2 Merchant Salvage Claim Compact: review ready" = 1
+
+
+mission "B2 Merchant Salvage Claim Compact: Offer"
+	minor
+	name `The Part That Had Two Owners`
+	description `Salvage broker Tessa Arlen and yard mechanic Bram Voss disagree over how a recovered drive component should move through a strained Merchant repair network while its ownership history remains disputed.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		has "Merchant Salvage Provenance Ledger: offered"
+		"world: merchant salvage demand" >= 3
+		not "B2 Merchant Salvage Claim Compact: introduced"
+		not "B2 Merchant Salvage Claim Compact: declined"
+	on offer
+		conversation
+			`A dismantled drive assembly sits on a cart between Tessa Arlen, a salvage broker, and Bram Voss, a yard mechanic. The part was recovered from a disabled freighter, transferred through two salvage crews, and is now the fastest way to return another ship to service. The difficulty is that two claim records name different owners.`
+			`Tessa points to the recovery ledger. "If we let scarcity erase provenance, every stolen component can become legitimate merely by passing through a busy yard." Bram taps the inspection tag. "And if a sound part sits here until every old claimant answers a message, another freighter stays grounded while the network is already short on components."`
+			`Neither argues that the disputed history should disappear. They disagree over what may happen before that history is resolved.`
+			choice
+				`\tBack Tessa: preserve the complete claim and custody chain before the component changes hands again.`
+					goto provenance
+				`\tBack Bram: permit emergency reuse after technical inspection, but record that use as temporary rather than as ownership closure.`
+					goto reuse
+				`\tPair both: keep an immutable provenance record and a separate operational-use record linked to the unresolved claim.`
+					goto paired
+				`\tRefuse to turn one disputed component into a general Merchant salvage compact.`
+					goto refuse
+			label provenance
+			`You side with Tessa. Recovery location, ship identity, claimant history, custody transfers, identification marks, and known repairs should remain attached before another transfer. Bram accepts the rule if an emergency yard can still inspect the part and prepare it while the claim is being checked.`
+			action
+				"B2 Merchant Salvage Claim Compact: introduced" = 1
+				"B2 Merchant Salvage Claim Compact: route provenance first" = 1
+				"B2 Merchant Salvage Claim Compact: tessa trusts player" = 1
+				event "B2 Merchant Salvage Claim Compact: Review Ready" 7 11
+				decline
+			label reuse
+			`You side with Bram. A technically sound component may be used to keep a ship moving during a salvage shortage, but the installation record must say that the yard received custody for emergency use, not that the ownership dispute vanished. Tessa insists that the original claim records remain linked to every later copy.`
+			action
+				"B2 Merchant Salvage Claim Compact: introduced" = 1
+				"B2 Merchant Salvage Claim Compact: route emergency reuse" = 1
+				"B2 Merchant Salvage Claim Compact: bram trusts player" = 1
+				event "B2 Merchant Salvage Claim Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You recommend two linked records. The provenance record preserves recovery source, claimants, custody, identification, and repair history. The operational record says who inspected the component, where it is installed now, what assumptions were made about compatibility, and whether the use is temporary while a claim remains open. Tessa and Bram both agree that neither record should silently rewrite the other.`
+			action
+				"B2 Merchant Salvage Claim Compact: introduced" = 1
+				"B2 Merchant Salvage Claim Compact: route paired records" = 1
+				"B2 Merchant Salvage Claim Compact: tessa trusts player" = 1
+				"B2 Merchant Salvage Claim Compact: bram trusts player" = 1
+				event "B2 Merchant Salvage Claim Compact: Review Ready" 7 11
+				decline
+			label refuse
+			`You tell them that one contested component is not enough reason to impose a standing convention on every Merchant yard. Tessa keeps the claim chain attached to this case. Bram keeps the inspection result. Neither treats your refusal as a ruling on ownership.`
+			action
+				"B2 Merchant Salvage Claim Compact: declined" = 1
+				decline
+
+
+mission "B2 Merchant Salvage Claim Compact: Review"
+	minor
+	name `When Custody Starts Looking Like Ownership`
+	description `Return after Tessa Arlen and Bram Voss have used the salvage arrangement long enough to discover what downstream copies can lose.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		has "B2 Merchant Salvage Claim Compact: introduced"
+		has "B2 Merchant Salvage Claim Compact: review ready"
+		"world: merchant salvage demand" <= 1
+		not "B2 Merchant Salvage Claim Compact: reviewed"
+	on offer
+		conversation
+			branch provenance
+				has "B2 Merchant Salvage Claim Compact: route provenance first"
+			branch reuse
+				has "B2 Merchant Salvage Claim Compact: route emergency reuse"
+			`Tessa and Bram have collected several weeks of transfer records. The paired approach kept work moving, but a copied yard summary now says only that a component was "cleared for use." The unresolved claim, temporary-custody status, and one earlier repair warning disappeared from the short copy.`
+			`Tessa says, "A useful summary just became an ownership claim nobody actually decided." Bram adds, "And a technical clearance lost the repair assumption that made it safe."`
+			choice
+				`\tAdopt a portable claim packet that carries provenance, custody, technical-use status, unresolved claim, and explicit closure evidence together.`
+					goto packet
+				`\tAdopt a custody-reconciliation rule: operational use and ownership claims stay separate until both records explicitly agree on transfer, return, compensation, abandonment, or another closure.`
+					goto reconcile
+			label provenance
+			`The provenance-first route preserved the history well, but some yards began treating possession of the complete packet as evidence that the current holder owned the part. Tessa says, "Custody is evidence of who has it, not automatically why they are entitled to keep it."`
+			choice
+				`\tUse a portable claim packet that labels recovery, custody, use authority, claimant status, and closure separately.`
+					goto packet
+				`\tKeep ownership and operational custody in separate linked records until an explicit reconciliation closes the dispute.`
+					goto reconcile
+			label reuse
+			`Emergency reuse kept ships moving, but one later buyer received a record showing repeated successful operation and no longer saw that the original claimant had never withdrawn the claim. Bram says, "Working safely for three weeks did not make the ownership question answer itself."`
+			choice
+				`\tCarry the unresolved claim and use authority inside a portable packet with the technical record.`
+					goto packet
+				`\tRequire a separate custody-reconciliation step before emergency use can become a closed ownership record.`
+					goto reconcile
+			label packet
+			`You recommend a portable claim packet. Every downstream copy distinguishes recovery source, claimants, custody transfers, identification, known repairs, current technical-use status, compatibility assumptions, unresolved disputes, and explicit closure evidence. A yard may know that a component is safe to use without pretending that safety proves ownership.`
+			action
+				"B2 Merchant Salvage Claim Compact: reviewed" = 1
+				"B2 Merchant Salvage Claim Compact: settlement portable claim packet" = 1
+				"B2 Merchant Salvage Claim Compact: tessa trusts player" = 1
+				"B2 Merchant Salvage Claim Compact: bram trusts player" = 1
+				decline
+			label reconcile
+			`You recommend custody reconciliation. Yards keep operational custody and technical history lightweight enough to work with, while ownership claims remain a separate linked record. A dispute closes only when the records explicitly agree on transfer, return, compensation, abandonment, or another documented disposition. Continued possession or successful use alone cannot manufacture ownership.`
+			action
+				"B2 Merchant Salvage Claim Compact: reviewed" = 1
+				"B2 Merchant Salvage Claim Compact: settlement custody reconciliation" = 1
+				"B2 Merchant Salvage Claim Compact: tessa trusts player" = 1
+				"B2 Merchant Salvage Claim Compact: bram trusts player" = 1
+				decline
+
+
+mission "B2 Merchant Salvage Claim Compact: Tessa Remembers"
+	minor
+	name `Tessa Remembers`
+	description `Tessa Arlen remembers whether Merchant salvage records learned to separate recovery provenance, operational custody, technical fitness, and ownership closure.`
+	source
+		government "Merchant"
+		not attributes "automaton"
+	to offer
+		not "B2 Merchant Salvage Claim Compact: aftermath seen"
+		or
+			has "B2 Merchant Salvage Claim Compact: settlement portable claim packet"
+			has "B2 Merchant Salvage Claim Compact: settlement custody reconciliation"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Merchant Salvage Claim Compact: settlement custody reconciliation"
+			`Tessa shows you a recovered thruster controller now installed in a working freighter. Its packet says exactly where it was recovered, who claimed it, who held it, what repairs were made, why the current yard may use it, and how the original dispute was finally closed. "A part can have a complicated history without becoming an unknowable one," she says.`
+			goto record
+			label reconcile
+			`Tessa shows you two linked records for the same reactor component. The yard record says who currently holds and uses it; the claim record says who asserted ownership and how the dispute was resolved. "Possession stopped pretending to be judgment," she says. "That made both mechanics and claimants easier to trust."`
+			label record
+			action
+				"B2 Merchant Salvage Claim Compact: aftermath seen" = 1
+				decline
