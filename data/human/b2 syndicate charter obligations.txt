@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 Syndicate Charter Obligations production slice.
 #
 # This content builds on the B1 "Syndicate Charter Gallery" history conversation by
@@ -34,20 +47,20 @@ mission "B2 Syndicate Charter Obligations: Offer"
 				"B2 Syndicate Charter Obligations: introduced" = 1
 				"B2 Syndicate Charter Obligations: route solis" = 1
 				"B2 Syndicate Charter Obligations: solis trusts player" = 1
-			accept
+			decline
 			label compromise
 			`You suggest separating the public obligation from the historical implementation: guarantee emergency capacity, but fund it across participating firms and rotate which berth carries the reserve duty. Merrow starts calculating before Solis has finished objecting. "I dislike it," Solis says, "which may mean it is an actual compromise."`
 			action
 				"B2 Syndicate Charter Obligations: introduced" = 1
 				"B2 Syndicate Charter Obligations: route compromise" = 1
-			accept
+			decline
 			label merrow
 			`You tell them that preserving every obsolete implementation would turn history into a veto on current operations. Merrow looks relieved. Solis does not. "Then write down who accepts responsibility when the replacement systems fail," she says. "Obsolescence is easy to declare when nobody owns the fallback."`
 			action
 				"B2 Syndicate Charter Obligations: introduced" = 1
 				"B2 Syndicate Charter Obligations: route merrow" = 1
 				"B2 Syndicate Charter Obligations: solis doubts player" = 1
-			accept
+			decline
 			label decline
 			`You decline to referee a dispute that already has lawyers, administrators, and a century of amendments attached to it. Solis gathers her charter copies. Merrow says, "That may be the healthiest decision anybody has made about this paragraph."`
 			action
@@ -97,14 +110,14 @@ mission "B2 Syndicate Charter Obligations: Review"
 				"B2 Syndicate Charter Obligations: reviewed" = 1
 				"B2 Syndicate Charter Obligations: settlement public covenant" = 1
 				"B2 Syndicate Charter Obligations: solis trusts player" = 1
-			accept
+			decline
 			label consortium
 			`The consortium signs a reserve agreement: every member contributes to emergency fuel and towing costs, and berth-priority duty rotates on a published schedule. Solis files the agreement beside the old charter. Merrow says, "Apparently the modern version of institutional memory is a budget line nobody can delete by accident."`
 			action
 				"B2 Syndicate Charter Obligations: reviewed" = 1
 				"B2 Syndicate Charter Obligations: settlement consortium reserve" = 1
 				"B2 Syndicate Charter Obligations: merrow trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Syndicate Charter Obligations: Solis Remembers"
@@ -130,4 +143,4 @@ mission "B2 Syndicate Charter Obligations: Solis Remembers"
 			label record
 			action
 				"B2 Syndicate Charter Obligations: aftermath seen" = 1
-			accept
+			decline
