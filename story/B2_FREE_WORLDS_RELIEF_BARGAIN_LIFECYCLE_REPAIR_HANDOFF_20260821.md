@@ -1,6 +1,6 @@
 # B2 Free Worlds Relief Bargain lifecycle repair handoff
 
-Verdict: PARTIAL pending repository-native validation.
+Verdict: READY for A3 review/integration.
 
 ## Stage
 B2 — Story Characters + Dynamic Content
@@ -38,15 +38,16 @@ Hardened `tools/story/validate_b2_free_worlds_relief_bargain.py` to require:
 - exactly seven terminal `decline` commands;
 - no objective-bearing directives that would invalidate the state-only lifecycle assumption.
 
-## Validation required before READY
-Run on the exact branch head after this handoff commit:
-1. focused validator:
-   `python3 tools/story/validate_b2_free_worlds_relief_bargain.py "data/human/b2 free worlds relief bargain.txt"`
-2. repository focused story/simulation validation workflow, including A1 state-ownership regressions;
-3. changed-content style;
-4. production build and stock save/load integration smoke.
+## Exact validated candidate
+Candidate head: `d0e234cfe2755ca529ddd7edf6aa2c72fc1db701`
 
-Do not promote to READY or integrate until those gates are terminal green. Do not treat this PARTIAL handoff as authorization to merge.
+Repository-native validation on that exact head:
+- `Fork simulation and story validation` run `32482383493` / #325: SUCCESS;
+- focused B2 lifecycle validator: included in the successful focused story suite;
+- A1 simulation/state-ownership regressions: included in the successful simulation/story workflow;
+- changed-content style: included in the successful simulation/story workflow;
+- `Fork save-load integration smoke` run `32482383503` / #310: SUCCESS;
+- production configure/build and stock save/load integration smoke: therefore terminal green.
 
 ## A3 / B3 integration notes
 - This is a lifecycle-only repair. Do not reinterpret the narrative policy choices or settlement semantics.
@@ -54,3 +55,4 @@ Do not promote to READY or integrate until those gates are terminal green. Do no
 - Preserve every existing `B2 Free Worlds Relief Bargain:*` condition name/value.
 - Durable lifecycle invariant: dialogue-only B2 missions that merely persist state terminate with `decline`; reserve `accept` for mission paths that actually create gameplay objectives.
 - If current `main` advances before integration, re-read ancestry and revalidate the isolated diff rather than rebasing destructively.
+- A3 retains integration authority; B2 did not merge this branch.
