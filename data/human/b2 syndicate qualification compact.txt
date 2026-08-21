@@ -52,14 +52,14 @@ mission "B2 Syndicate Qualification Compact: Offer"
 				"B2 Syndicate Qualification Compact: introduced" = 1
 				"B2 Syndicate Qualification Compact: route local" = 1
 				"B2 Syndicate Qualification Compact: venn trusts player" = 1
-			accept
+			decline
 			label portable
 			`You tell Venn that repeated emergency rotations are exactly when a verified qualification record should have value beyond its home yard. Rook says, "Let the record travel. If a local exception matters, write the exception." Venn agrees, but insists that transferred qualification must say what equipment, date, supervision level, and limits it actually covered.`
 			action
 				"B2 Syndicate Qualification Compact: introduced" = 1
 				"B2 Syndicate Qualification Compact: route portable" = 1
 				"B2 Syndicate Qualification Compact: rook trusts player" = 1
-			accept
+			decline
 			label paired
 			`You suggest splitting the problem. Core qualification evidence travels between participating yards; local endorsement is reserved for the systems, hazards, or procedures that genuinely differ. Rook says, "Then an experienced technician arrives as experienced." Venn adds, "And nobody mistakes familiarity with one reactor family for blanket clearance everywhere."`
 			action
@@ -67,7 +67,7 @@ mission "B2 Syndicate Qualification Compact: Offer"
 				"B2 Syndicate Qualification Compact: route paired" = 1
 				"B2 Syndicate Qualification Compact: venn trusts player" = 1
 				"B2 Syndicate Qualification Compact: rook trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them an outsider should not turn a strained shift board into a universal labor rule. Venn accepts that immediately. Rook shrugs. "Fair. But the next borrowed crew will still arrive with a stack of records somebody has to interpret."`
 			action
@@ -120,14 +120,14 @@ mission "B2 Syndicate Qualification Compact: Review"
 				"B2 Syndicate Qualification Compact: reviewed" = 1
 				"B2 Syndicate Qualification Compact: settlement packet" = 1
 				"B2 Syndicate Qualification Compact: venn trusts player" = 1
-			accept
+			decline
 			label renewal
 			`You recommend an expiry-and-renewal model. Prior qualification evidence remains visible and reusable, but local endorsements say exactly which equipment, hazard context, and supervision assumptions they cover, and they expire when those assumptions materially change. Rook says, "No starting from zero." Venn adds, "And no clearance that quietly becomes permanent because nobody remembers why it was issued."`
 			action
 				"B2 Syndicate Qualification Compact: reviewed" = 1
 				"B2 Syndicate Qualification Compact: settlement renewal" = 1
 				"B2 Syndicate Qualification Compact: rook trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Syndicate Qualification Compact: Venn Remembers"
@@ -153,4 +153,4 @@ mission "B2 Syndicate Qualification Compact: Venn Remembers"
 			label record
 			action
 				"B2 Syndicate Qualification Compact: aftermath seen" = 1
-			accept
+			decline
