@@ -46,14 +46,14 @@ mission "B2 Incipias License Compact: Offer"
 				"B2 Incipias License Compact: introduced" = 1
 				"B2 Incipias License Compact: route standard" = 1
 				"B2 Incipias License Compact: registrar trusts player" = 1
-			accept
+			decline
 			label experience
 			`You point to the Pilot's long flight record and then to the renewal symbol. The Pilot flashes bright green while the Registrar hesitates, finally adding an endorsement tied to the existing record. The immediate mismatch is solved, but the exception leaves a harder question: which kinds of experience should count when thousands of private crews begin asking for the same treatment?`
 			action
 				"B2 Incipias License Compact: introduced" = 1
 				"B2 Incipias License Compact: route experience" = 1
 				"B2 Incipias License Compact: pilot trusts player" = 1
-			accept
+			decline
 			label provisional
 			`You indicate the Pilot's record, the missing category, and a sequence of supervised-flight symbols. After several attempts the Registrar and Pilot seem to understand. The renewal becomes provisional rather than denied: prior experience counts, but the unfamiliar class must still be demonstrated under observation before the endorsement can travel to other ports.`
 			action
@@ -61,7 +61,7 @@ mission "B2 Incipias License Compact: Offer"
 				"B2 Incipias License Compact: route provisional" = 1
 				"B2 Incipias License Compact: registrar trusts player" = 1
 				"B2 Incipias License Compact: pilot trusts player" = 1
-			accept
+			decline
 			label decline
 			`You hold up both hands and step away. The Pilot and Registrar return to the terminal, their colors less heated but no closer to agreement. The unresolved renewal remains on the screen when you leave.`
 			action
@@ -112,7 +112,7 @@ mission "B2 Incipias License Compact: Review"
 				"B2 Incipias License Compact: settlement portable endorsement" = 1
 				"B2 Incipias License Compact: registrar trusts player" = 1
 				"B2 Incipias License Compact: pilot trusts player" = 1
-			accept
+			decline
 			label tiered
 			`You recommend a tiered renewal. A port may keep an experienced crew flying under a temporary local endorsement, but portability requires a second independent review of the evidence and the ship-class difference. The system keeps room for judgment while preventing a single convenient exception from quietly becoming a galaxy-wide rule.`
 			action
@@ -120,7 +120,7 @@ mission "B2 Incipias License Compact: Review"
 				"B2 Incipias License Compact: settlement tiered renewal" = 1
 				"B2 Incipias License Compact: registrar trusts player" = 1
 				"B2 Incipias License Compact: pilot trusts player" = 1
-			accept
+			decline
 
 mission "B2 Incipias License Compact: Registrar Remembers"
 	landing
@@ -145,4 +145,4 @@ mission "B2 Incipias License Compact: Registrar Remembers"
 			label done
 			action
 				"B2 Incipias License Compact: aftermath seen" = 1
-			accept
+			decline

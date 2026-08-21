@@ -116,12 +116,31 @@ def main() -> None:
     if f'"{PREFIX} introduced" = 1' in decline_block:
         fail("decline path must not set introduced")
 
+    # These missions are dialogue/state-only. Accepting them would create an
+    # objective-less active mission after the conversation closes, so every
+    # terminal path must persist its state and then decline cleanly.
+    accept_terminals = re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE)
+    decline_terminals = re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)
+    if accept_terminals:
+        fail(f"state-only lifecycle must not use accept terminals: {len(accept_terminals)} found")
+    if len(decline_terminals) != 7:
+        fail(f"expected exactly 7 state-only decline terminals, found {len(decline_terminals)}")
+
+    objective_directive = re.compile(
+        r'^\s*(destination|stopover|waypoint|npc|cargo|passengers?|deadline|timer)\b',
+        flags=re.MULTILINE | re.IGNORECASE,
+    )
+    match = objective_directive.search(text)
+    if match:
+        fail(f"unexpected gameplay-objective directive in state-only slice: {match.group(1)}")
+
     print("PASS: B2 Incipias License Compact structure validated")
     print("PASS: missions=3")
     print("PASS: recurring_characters=Registrar + Pilot private shorthands")
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Registrar Remembers")
+    print("PASS: lifecycle=7 decline terminals + no objectives")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: b1_inputs=crew licensing + private-spaceflight growth")
 
