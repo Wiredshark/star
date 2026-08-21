@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -57,11 +58,13 @@ def main() -> int:
 
     # The balanced route is deliberately the Review conversation's fallthrough
     # case. Vale and Pike have explicit branches; if neither is set, the balanced
-    # route is the only remaining accepted introduced state.
+    # route is the only remaining introduced state.
     require(text, 'has "B2 Far North Yard Legacy: introduced"', failures,
             "review mission does not require the initial interaction")
     require(text, 'not "B2 Far North Yard Legacy: reviewed"', failures,
             "review mission is not one-shot gated")
+    if '\t\t\tbranch balanced' in text:
+        failures.append("balanced route should remain the intentional Review fallthrough")
 
     require(text, '"B2 Far North Yard Legacy: declined" = 1', failures,
             "decline route is not persisted")
@@ -69,6 +72,35 @@ def main() -> int:
             "later reader is not one-shot persisted")
     require(text, 'source "Prime"', failures,
             "production slice is not anchored at Prime")
+
+    labels = set(re.findall(r'^\s*label ([A-Za-z0-9_-]+)\s*$', text, flags=re.MULTILINE))
+    gotos = re.findall(r'^\s*goto ([A-Za-z0-9_-]+)\s*$', text, flags=re.MULTILINE)
+    missing = sorted(set(gotos) - labels)
+    if missing:
+        failures.append(f"goto target(s) missing labels: {missing}")
+
+    # These missions are dialogue/state-only. Accepting any terminal path would
+    # leave an objective-less mission in the active mission list after the
+    # conversation closes, so every terminal path must decline after writing the
+    # same persistent state.
+    if re.search(r'^\s*accept\s*$', text, flags=re.MULTILINE):
+        failures.append("state-only Far North Yard missions must not leave accepted missions active")
+
+    decline_count = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+    if decline_count != 7:
+        failures.append(f"expected exactly seven state-only dialogue terminals to decline, found {decline_count}")
+
+    for objective in (
+        '\tdestination ',
+        '\tstopover ',
+        '\twaypoint ',
+        '\tnpc ',
+        '\tdeadline ',
+        '\tpassengers ',
+        '\tcargo ',
+    ):
+        if objective in text:
+            failures.append(f"unexpected mission objective in state-only lifecycle slice: {objective.strip()}")
 
     # The slice must stay on stock condition state rather than inventing a new
     # relationship or apprenticeship persistence store.
@@ -91,11 +123,12 @@ def main() -> int:
     print("PASS: B2 Far North Yard Legacy structure validated")
     print(f"PASS: missions={len(MISSIONS)}")
     print(f"PASS: named_characters={len(CHARACTERS)}")
-    print(f"PASS: initial_routes={len(ROUTES)}")
+    print(f"PASS: initial_routes={len(ROUTES)} + refusal")
     print("PASS: review_routing=balanced fallthrough + explicit Vale/Pike branches")
     print(f"PASS: terminal_settlements={len(SETTLEMENTS)}")
     print("PASS: later_reader=Vale Remembers")
     print("PASS: persistence_model=stock mission/global conditions")
+    print("PASS: lifecycle=state-only dialogue terminals decline cleanly")
     return 0
 
 
