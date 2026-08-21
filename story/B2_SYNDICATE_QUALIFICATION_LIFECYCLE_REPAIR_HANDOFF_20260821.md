@@ -1,11 +1,12 @@
 # B2 Syndicate Qualification Compact lifecycle repair handoff
 
 - Stage: B2
-- Verdict: PARTIAL pending repository-native CI
-- Authoritative base/main: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
+- Verdict: READY for A3 review/integration
+- Authoritative base/main observed: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated branch: `agent/b2-syndicate-qualification-lifecycle-20260821-1928`
 - Production lifecycle repair: `142ec1f205af346b52c395ed3aaa4e528fa205ce`
 - Focused validator hardening: `a946e3f32910200a276b9747b3a8c64b02b422ef`
+- Exact fully validated candidate: `359f3a9b49db9d05b4706638bc9ae8c0e278e8cb`
 
 ## Repair
 
@@ -31,17 +32,19 @@ All existing mission graph, named-character, route, settlement, A1 read-only own
 - No material/reputation/cargo/outfit/ship/fleet mutation was introduced.
 - The compact remains a practical agreement among participating yards, not universal Syndicate labor law or centralized personnel authority.
 
-## Validation
+## Validation evidence
 
-Repository-native workflows must pass on the exact candidate before promotion to READY:
+Exact candidate `359f3a9b49db9d05b4706638bc9ae8c0e278e8cb` passed both repository-native acceptance workflows:
 
-- Fork simulation and story validation
-- changed-content style
-- focused story validators including the hardened Syndicate Qualification validator
-- A1 simulation/state-ownership contracts
-- Fork save-load integration smoke
-- production configure/build and stock save-load smoke
+- `Fork simulation and story validation` run #360 / `32537118507`: SUCCESS
+  - changed-content style: passed
+  - focused story validators, including the hardened Syndicate Qualification validator: passed
+  - A1 simulation/state-ownership contracts: passed
+- `Fork save-load integration smoke` run #345 / `32537118708`: SUCCESS
+  - production configure: passed
+  - production build: passed
+  - stock save-load smoke: passed
 
 ## A3/B3 integration notes
 
-Integrate only after the exact candidate reaches terminal green. Preserve the existing route/settlement semantics and the lifecycle invariant that dialogue-only B2 missions which merely persist state terminate with `decline`; reserve `accept` for mission lifecycles that actually create gameplay objectives.
+The candidate is suitable for A3 review/integration. Re-read current `main` before integration and preserve the existing route/settlement semantics and ownership boundaries. The durable lifecycle invariant is that dialogue-only B2 missions which merely persist state terminate with `decline`; reserve `accept` for mission lifecycles that actually create gameplay objectives.
