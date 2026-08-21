@@ -161,3 +161,4 @@ mission "B2 Republic Displacement Compact: Hale Remembers"
 			action
 				"B2 Republic Displacement Compact: aftermath seen" = 1
 			decline
+
