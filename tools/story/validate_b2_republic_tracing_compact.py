@@ -72,6 +72,35 @@ def main() -> None:
     if '"B2 Republic Tracing Compact: aftermath seen" = 1' not in text:
         fail("missing one-shot later-reader persistence")
 
+    # These are dialogue/state-only missions. A terminal `accept` would move an
+    # objective-less mission into the accepted mission list. Every terminal path
+    # must persist its state and close with `decline`.
+    accepts = re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE)
+    declines = re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)
+    if accepts:
+        fail(f"state-only slice must not contain terminal accept commands: count={len(accepts)}")
+    if len(declines) != 7:
+        fail(f"expected exactly 7 terminal decline commands, got {len(declines)}")
+
+    # Guard the lifecycle assumption: this slice must remain dialogue/state only.
+    objective_directives = (
+        "destination",
+        "waypoint",
+        "stopover",
+        "npc",
+        "passenger",
+        "cargo",
+        "outfit",
+        "ship",
+        "fleet",
+        "deadline",
+        "timer",
+    )
+    for line in text.splitlines():
+        stripped = line.strip().lower()
+        if any(re.match(rf"^{re.escape(token)}(?:\s|$)", stripped) for token in objective_directives):
+            fail(f"state-only lifecycle assumption invalidated by objective directive: {line.strip()}")
+
     # Guard this story slice against direct material/combat/reputation mutation.
     forbidden_write_patterns = (
         r'^\s*credits\s*[+=-]',
@@ -98,6 +127,7 @@ def main() -> None:
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Saye Remembers")
+    print("PASS: dialogue_lifecycle=state-only terminals use decline (7/7)")
     print("PASS: world_state_writes=none")
 
 
