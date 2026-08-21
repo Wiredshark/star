@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 South Convoy Compact production slice.
 #
 # This content consumes the South Convoy Memorial history by turning the
@@ -35,14 +48,14 @@ mission "B2 South Convoy Compact: Offer"
 				"B2 South Convoy Compact: introduced" = 1
 				"B2 South Convoy Compact: route dane" = 1
 				"B2 South Convoy Compact: dane trusts player" = 1
-			accept
+			decline
 			label reeve
 			`You tell Dane that mutual aid loses legitimacy when captains discover the obligation only after a distress signal appears. Reeve gives you a short nod. Dane says, "Then voluntary cannot mean invisible. I want every captain to state what they will answer before they clear the port."`
 			action
 				"B2 South Convoy Compact: introduced" = 1
 				"B2 South Convoy Compact: route reeve" = 1
 				"B2 South Convoy Compact: reeve trusts player" = 1
-			accept
+			decline
 			label pledge
 			`You suggest publishing rescue commitments with the departure schedule: full convoy support, limited emergency response, or independent passage. Dane starts sketching symbols for the board. Reeve says, "If everyone can see the promise before launch, at least nobody gets to rewrite it when the alarms start."`
 			action
@@ -50,7 +63,7 @@ mission "B2 South Convoy Compact: Offer"
 				"B2 South Convoy Compact: route pledge" = 1
 				"B2 South Convoy Compact: dane trusts player" = 1
 				"B2 South Convoy Compact: reeve trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that a frontier full of experienced captains should be able to define its own rescue customs without an outsider's vote. Reeve shrugs. Dane says, "That is what we have been trying to do for two hundred years."`
 			action
@@ -100,14 +113,14 @@ mission "B2 South Convoy Compact: Review"
 				"B2 South Convoy Compact: reviewed" = 1
 				"B2 South Convoy Compact: settlement standing rescue compact" = 1
 				"B2 South Convoy Compact: dane trusts player" = 1
-			accept
+			decline
 			label registry
 			`You recommend keeping rescue participation voluntary but making every captain publish a rescue status before departure. The board becomes a contract with no signatures: everyone can see who will answer, under what conditions, and who should not be counted on. Reeve calls it honest. Dane calls honesty enforceable when it is public.`
 			action
 				"B2 South Convoy Compact: reviewed" = 1
 				"B2 South Convoy Compact: settlement public rescue registry" = 1
 				"B2 South Convoy Compact: reeve trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 South Convoy Compact: Reeve Remembers"
@@ -133,4 +146,4 @@ mission "B2 South Convoy Compact: Reeve Remembers"
 			label record
 			action
 				"B2 South Convoy Compact: aftermath seen" = 1
-			accept
+			decline
