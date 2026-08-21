@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native validation.
+READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -11,9 +11,10 @@ PARTIAL pending exact-head repository-native validation.
 - Branch: `agent/b2-bunrodea-review-lifecycle-20260821-0227`
 - Production lifecycle repair: `f5511e65b47950aa741358504c921264ee3f920d`
 - Focused validator hardening: `16dce33349b855dce4a8094b63e2205da521802d`
-- Final handoff head: this commit
+- Exact fully validated production/validator/handoff candidate: `f7598db1aa30f2310ccbc19d58c689205a87b496`
+- Final READY handoff head: this commit
 
-This branch is isolated and must remain unmerged until A3 review.
+This branch remains isolated and unmerged for A3 integration authority.
 
 ## Why this repair exists
 
@@ -58,19 +59,21 @@ No dialogue text, route condition, A1 backlog threshold, B2 state name/value, se
 - Refusal remains refusal.
 - Positive choices and settlements write exactly the same B2 conditions as before.
 
-## Validation required before READY
+## Exact validation evidence
 
-Run the exact branch through repository-native gates:
+On exact candidate `f7598db1aa30f2310ccbc19d58c689205a87b496`:
 
-1. `Fork simulation and story validation`
-2. changed-content style
-3. focused `validate_b2_bunrodea_review_queue_compact.py`
-4. A1/state-ownership regressions
-5. `Fork save-load integration smoke`
-6. production configure/build and stock save-load smoke
+- `Fork simulation and story validation` #308 / run `32454633968`: **SUCCESS**
+- changed-content style: **SUCCESS**
+- focused simulation and story contracts: **SUCCESS**
+- focused B2 Bunrodea validator including lifecycle assertions: **SUCCESS**
+- A1 simulation/state-ownership regressions: **SUCCESS**
+- `Fork save-load integration smoke` #293 / run `32454633801`: **SUCCESS**
+- production configure/build: **SUCCESS**
+- stock save-load smoke: **SUCCESS**
 
-If those gates are green on the exact final head, promote this handoff to READY without changing production behavior.
+The final READY commit changes only this durable handoff; production content and validator behavior are unchanged from the fully validated candidate.
 
 ## A3 / B3 integration note
 
-This is a lifecycle repair, not a narrative rewrite. A3 should review it as a two-file behavioral correction plus handoff. B3 should preserve the existing Bunrodea queue continuity semantics unchanged.
+This is a lifecycle repair, not a narrative rewrite. A3 should review it as a two-file behavioral correction plus handoff. Preserve the exact state writes and Bunrodea queue semantics while preventing objective-less accepted missions from lingering in the active mission list. B3 should preserve the existing queue continuity semantics unchanged.
