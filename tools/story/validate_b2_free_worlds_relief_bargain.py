@@ -90,6 +90,30 @@ def main() -> None:
         if stripped.startswith(forbidden_commands):
             fail(f"unexpected direct gameplay mutation command: {stripped}")
 
+    # This slice consists entirely of conversations that persist global state.
+    # It creates no destination, cargo, NPC, timer, or other gameplay objective,
+    # so accepting these missions would leave objective-less active missions.
+    accepts = re.findall(r'^\s*accept$', text, flags=re.MULTILINE)
+    declines = re.findall(r'^\s*decline$', text, flags=re.MULTILINE)
+    if accepts:
+        fail(f"state-only dialogue slice must have zero accept terminals, got {len(accepts)}")
+    if len(declines) != 7:
+        fail(f"expected exactly seven decline terminals, got {len(declines)}")
+
+    objective_prefixes = (
+        "destination ",
+        "waypoint ",
+        "stopover ",
+        "npc ",
+        "deadline ",
+        "passengers ",
+        "cargo ",
+    )
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith(objective_prefixes):
+            fail(f"unexpected gameplay objective in state-only dialogue slice: {stripped}")
+
     labels, gotos = labels_and_gotos(text)
     missing = sorted(gotos - labels)
     if missing:
@@ -102,6 +126,7 @@ def main() -> None:
     print("PASS: authoritative_a1_input=world: free worlds relief demand (read-only)")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Vale Remembers")
+    print("PASS: lifecycle=state-only dialogue; accept=0 decline=7")
     print("PASS: persistence_model=stock mission/global conditions")
 
 

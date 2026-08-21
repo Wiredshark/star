@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 Free Worlds Relief Bargain production slice.
 #
 # This content consumes the Free Worlds Relief Cooperative Archive and the
@@ -37,14 +50,14 @@ mission "B2 Free Worlds Relief Bargain: Offer"
 				"B2 Free Worlds Relief Bargain: introduced" = 1
 				"B2 Free Worlds Relief Bargain: route reserve" = 1
 				"B2 Free Worlds Relief Bargain: kern trusts player" = 1
-			accept
+			decline
 			label floor
 			`You tell Kern that emergency access collapses if independent carriers learn that answering the call means gambling their own solvency. Vale nods once. Kern says, "Then the minimum has to be predictable enough that dispatch can publish it before we start assigning hulls."`
 			action
 				"B2 Free Worlds Relief Bargain: introduced" = 1
 				"B2 Free Worlds Relief Bargain: route floor" = 1
 				"B2 Free Worlds Relief Bargain: vale trusts player" = 1
-			accept
+			decline
 			label ledger
 			`You suggest separating immediate movement from final accounting. The cooperative reserve pays fuel, crew, and basic risk now; the receiving world records a recovery obligation that can be repaid after the crisis. Kern starts rewriting the dispatch form. Vale says, "That is at least a debt the institution chose, instead of one the carrier discovers afterward."`
 			action
@@ -52,7 +65,7 @@ mission "B2 Free Worlds Relief Bargain: Offer"
 				"B2 Free Worlds Relief Bargain: route ledger" = 1
 				"B2 Free Worlds Relief Bargain: kern trusts player" = 1
 				"B2 Free Worlds Relief Bargain: vale trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them the Free Worlds have been arguing over shared burdens longer than you have been flying through them, and they do not need an outsider to cast the deciding vote. Kern exhales. Vale says, "Fair. Just make sure whoever decides has seen an actual fuel bill."`
 			action
@@ -103,14 +116,14 @@ mission "B2 Free Worlds Relief Bargain: Review"
 				"B2 Free Worlds Relief Bargain: settlement shared recovery ledger" = 1
 				"B2 Free Worlds Relief Bargain: kern trusts player" = 1
 				"B2 Free Worlds Relief Bargain: vale trusts player" = 1
-			accept
+			decline
 			label mutual
 			`You recommend treating catastrophic relief freight as a genuinely mutual cost. Member worlds fund a reserve in advance; when a crisis crosses an agreed threshold, the cooperative pays the carrier and does not force the damaged world to recreate the emergency as debt. Vale insists the carrier terms stay explicit. Kern insists the threshold stay public. Both agree that the argument should happen before the next surge.`
 			action
 				"B2 Free Worlds Relief Bargain: reviewed" = 1
 				"B2 Free Worlds Relief Bargain: settlement mutual relief reserve" = 1
 				"B2 Free Worlds Relief Bargain: kern trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Free Worlds Relief Bargain: Vale Remembers"
@@ -135,4 +148,4 @@ mission "B2 Free Worlds Relief Bargain: Vale Remembers"
 			label record
 			action
 				"B2 Free Worlds Relief Bargain: aftermath seen" = 1
-			accept
+			decline
