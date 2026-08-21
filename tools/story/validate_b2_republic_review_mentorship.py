@@ -63,6 +63,30 @@ def test_source_scope_and_lifecycle():
         assert '\ton offer\n\t\tconversation' in block
         assert '\ton complete' not in block
 
+    # These missions exist only to record dialogue/state choices. They create no
+    # destination, cargo, NPC, timer, or other gameplay objective, so every
+    # terminal path must close immediately rather than leave an accepted mission
+    # in the player's active mission list.
+    assert not re.search(r'^\s*accept\s*$', TEXT, re.M), "state-only terminal accept found"
+    declines = re.findall(r'^\s*decline\s*$', TEXT, re.M)
+    assert len(declines) == 7, f"expected 7 state-only decline terminals, found {len(declines)}"
+
+    objective_directives = (
+        "destination",
+        "stopover",
+        "waypoint",
+        "npc",
+        "cargo",
+        "passengers",
+        "deadline",
+        "timer",
+    )
+    for directive in objective_directives:
+        pattern = rf'^\s*{directive}\b'
+        assert not re.search(pattern, TEXT, re.M | re.I), (
+            f"objective-bearing directive invalidates state-only lifecycle assumption: {directive}"
+        )
+
 
 def test_local_gotos_resolve():
     for name in MISSIONS:
@@ -119,6 +143,7 @@ def main():
     print("PASS: terminal_settlements=2")
     print("PASS: upstream_A1_A2_state=read_only")
     print("PASS: later_reader=Keene Remembers")
+    print("PASS: lifecycle=state-only terminals decline cleanly (7/7)")
 
 
 if __name__ == "__main__":
