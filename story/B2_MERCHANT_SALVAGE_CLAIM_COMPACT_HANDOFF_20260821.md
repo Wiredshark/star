@@ -4,14 +4,15 @@
 B2 STORY CHARACTERS + DYNAMIC CONTENT
 
 ## Verdict
-PARTIAL pending exact-head repository-native simulation/story/style and production build/save-load validation.
+READY for A3 review/integration. Do not self-integrate.
 
 ## Repository authority
 - Repository: `Wiredshark/star`
-- Authoritative base/main recovered at run start: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
+- Authoritative base/main recovered at run start and rechecked after validation: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated branch: `agent/b2-merchant-salvage-claim-compact-20260821-0026`
 - Production commit: `64d18015f3c54549dc0f6edf0b2340d255a1dd21`
 - Focused validator commit: `c529616b260154df14f6d130ecc16d077b249fb8`
+- Exact fully validated production/validator/handoff candidate: `d1736ad90ccf88c4cb64948736c4958755c7fe48`
 
 ## Scope
 Adds a persistent Merchant salvage character arc grounded in two already-authoritative inputs:
@@ -82,15 +83,24 @@ Before branching, live main, recent commits, open B2/A2/A1 PRs, and existing Mer
 - provenance/custody/technical-fitness/ownership/closure distinctions;
 - absence of invented centralized Merchant salvage authority.
 
-## Required acceptance before READY
-Run on the exact candidate head:
-- focused story validation, including `python3 tools/story/validate_b2_merchant_salvage_claim_compact.py`;
-- repository-wide fork simulation/story/state-ownership contracts;
-- changed-content style gate;
-- production Endless Sky configure/build;
-- stock save-load integration smoke.
+## Exact validation evidence
+On exact candidate `d1736ad90ccf88c4cb64948736c4958755c7fe48`:
+- `Fork simulation and story validation` #298 / run `32447142254`: **SUCCESS**.
+- `Changed fork content style`: **SUCCESS**.
+- `Focused simulation and story contracts`: **SUCCESS**, including compile and automatic execution of the new Merchant salvage validator.
+- A1 simulation/state-ownership contracts: **SUCCESS**.
+- `Fork save-load integration smoke` #283 / run `32447142259`: **SUCCESS**.
+- Production configure: **SUCCESS**.
+- Production build: **SUCCESS**.
+- Stock save-load smoke cases: **SUCCESS**.
 
-Do not promote to READY or integrate if any required gate is non-green.
+The READY promotion commit changes only this durable handoff; production content and validator behavior are unchanged from the exact fully validated candidate above.
+
+## Isolation evidence
+Exact base-to-validated-candidate comparison:
+- 3 commits ahead / 0 behind;
+- exactly 3 added files;
+- 428 additions / 0 deletions.
 
 ## A3 / B3 guidance
-A3 should re-read current `main`, verify ancestry/mergeability, and integrate only after exact-head gates are terminal green. B3 should preserve the distinction among recovery provenance, operational custody, technical fitness, claimant status, and explicit disposition/closure evidence.
+A3 should re-read current `main`, verify ancestry/mergeability, and integrate only if the validated candidate remains semantically clean. B3 should preserve the distinction among recovery provenance, operational custody, technical fitness, claimant status, and explicit disposition/closure evidence.
