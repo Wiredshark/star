@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL — production content and focused validator are isolated on a clean branch. Repository-native simulation/story/style and production build/save-load workflows must reach terminal green before A3 integration.
+READY for A3 review/integration. The exact production+validator candidate passed repository-native simulation/story/style validation and production build/save-load smoke. The final commit updates only this durable handoff.
 
 ## Authority and isolation
 
@@ -10,7 +10,8 @@ PARTIAL — production content and focused validator are isolated on a clean bra
 - Authoritative base observed at slice selection: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-coalition-translation-provenance-20260820-2224`
 - Production commit: `4594111b9e56b973285a5e819d995e3463a682a2`
-- Focused-validator commit / production+validator head: `bac31f611d5d8ddccb7d119c517fea4637349ffc`
+- Initial focused-validator commit: `bac31f611d5d8ddccb7d119c517fea4637349ffc`
+- Validator wording repair / exact fully validated production+validator candidate: `9b8843e3fb4497195be0f810d58a7871059cdcab`
 - No self-integration performed.
 
 ## B1 continuity consumed
@@ -95,18 +96,23 @@ Persistence is implemented only with stock mission/global conditions already use
 - decline does not accidentally enter the settlement chain;
 - no implied centralized Coalition authority.
 
-## Required validation before READY
+The first CI pass found one validator-only defect: the invariant check was case-sensitive even though the production content contained the intended sentence in lowercase. Production content and changed-content style were already valid. The validator was repaired in `9b8843e3fb4497195be0f810d58a7871059cdcab` without changing production behavior.
 
-Run on the exact candidate head:
+## Exact validation evidence
 
-```text
-python3 tools/story/validate_b2_coalition_translation_appeal_compact.py
-python3 tools/story/validate_story_repo.py
-python3 tools/story/test_b2_character_packets.py
-python3 utils/check_content_style.py
-```
+On exact candidate `9b8843e3fb4497195be0f810d58a7871059cdcab`:
 
-Then run the repository-native simulation/story validation workflow and production build/save-load integration smoke. Do not claim READY until both workflows reach terminal green on a head whose production file and validator are unchanged.
+- `Fork simulation and story validation` run #294 / `32440007014`: **SUCCESS**
+  - changed-content style: PASS
+  - focused story validators: PASS, including the repaired Coalition validator
+  - repository story/state-ownership contracts: PASS
+  - A1 simulation contracts: PASS
+- `Fork save-load integration smoke` run #279 / `32440006976`: **SUCCESS**
+  - production configure: PASS
+  - production build: PASS
+  - stock save-load smoke cases: PASS
+
+Process safety check: the private execution service reported four pre-existing service-owned orphan processes. They were preserved; no unrelated process or workspace was killed or modified.
 
 ## A3 / B3 integration notes
 
