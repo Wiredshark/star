@@ -2,15 +2,16 @@
 
 ## Verdict
 
-**PARTIAL — implementation complete; repository-native CI pending.**
+**READY for A3 review/integration.**
 
-A3 must not integrate this branch until both repository-native validation workflows reach terminal green on the exact candidate head recorded below.
+The exact production/validator candidate passed both repository-native acceptance workflows. A3 retains integration authority; B2 did not self-integrate.
 
 ## Authority and isolation
 
 - Stage: B2 — Story Characters + Dynamic Content
 - Authoritative integration branch: `main`
 - Authoritative base SHA: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
+- Main rechecked after validation: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated branch: `agent/b2-republic-displacement-lifecycle-20260821-1428`
 - Self-integration: **not performed**
 
@@ -22,15 +23,20 @@ The refusal path already terminated with `decline`.
 
 ## Repair
 
-Production lifecycle repair commit:
+Initial production lifecycle repair:
 
 - `c61b2e059d72d66a78c89b27addecb59776a11ee`
+
+Final style/production candidate:
+
+- `2b989f76701c120d5325d9540cdbe398b2a63939`
 
 Changes:
 
 - added the repository-standard Endless Sky GPL header because the legacy production file is now touched by changed-content style;
 - changed all six positive state-only terminal `accept` commands to `decline`;
 - preserved the existing refusal `decline`, yielding seven clean state-only terminals total;
+- fixed the repository style requirement for a trailing empty line after the first changed-content-style run exposed it;
 - preserved Lena Ortiz / Devin Hale dialogue and characterization;
 - preserved all three initial routes (`continuity`, `ledger`, `compact`) and refusal;
 - preserved both terminal settlements (`continuity compact`, `bounded review`);
@@ -65,31 +71,41 @@ B2 continues to read that signal only for Offer/Review gating. All B2 persistenc
 
 Narrative semantics are unchanged: protected housing/passage continuity, explicit accepting-office handoff, bounded review, private carrier capacity, and public responsibility remain distinct but linked concerns.
 
-## Candidate under validation
+No story-state migration is required because all existing condition names and values are unchanged.
 
-Exact production + validator candidate before this handoff commit:
+## Validation evidence
 
-- `dc2b3f188aa5992e3f027a2475a00231defad98e`
+Exact fully validated production/validator candidate:
 
-Required repository-native gates:
+- `2b989f76701c120d5325d9540cdbe398b2a63939`
+
+Repository-native gates on that exact candidate:
 
 1. `Fork simulation and story validation`
-   - focused Republic Displacement validator
-   - focused story suite / repository content contracts
-   - A1 simulation and state-ownership regressions
-   - changed-content style
-2. `Fork save-load integration smoke`
-   - production configure/build
-   - stock save/load smoke cases
+   - run number: `343`
+   - run id: `32514572783`
+   - conclusion: **SUCCESS**
+   - focused Republic Displacement lifecycle validator: passed as part of the focused story suite
+   - focused simulation/story contracts: passed
+   - A1 simulation/state-ownership regressions: passed
+   - changed-content style: passed
 
-At handoff creation these workflows have not yet been observed terminal green, so the verdict remains PARTIAL.
+2. `Fork save-load integration smoke`
+   - run number: `328`
+   - run id: `32514572790`
+   - conclusion: **SUCCESS**
+   - production configure: passed
+   - production build: passed
+   - stock save/load smoke: passed
+
+The earlier style run exposed only a missing trailing empty line; that was repaired before the exact green candidate above.
 
 ## A3 / B3 integration notes
 
-A3 should integrate only after the exact validated candidate reaches terminal green and should re-read current `main` first for ancestry/concurrency changes.
+A3 should re-read current `main` and ancestry before integration, then integrate this branch only if the validated lifecycle repair remains clean against the authoritative line. B2 must remain unmerged until A3 acts.
 
 B3 should preserve the lifecycle invariant:
 
 > Dialogue-only B2 missions that merely persist state terminate with `decline`; `accept` is reserved for mission lifecycles that actually create gameplay objectives.
 
-No story-state migration is required because condition names and values are unchanged.
+The Republic-specific continuity invariant also remains unchanged: protected resident status, accepting-office responsibility, private capacity reservations, bounded review, and explicit handoff closure are separate facts that must not silently erase one another.
