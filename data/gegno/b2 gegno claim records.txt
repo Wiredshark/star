@@ -56,7 +56,7 @@ mission "B2 Gegno Claim Records: Offer"
 				"B2 Gegno Claim Records: route custody chain" = 1
 				"B2 Gegno Claim Records: tchei trusts player" = 1
 				event "B2 Gegno Claim Records: Review Ready" 5 7
-				accept
+				decline
 			label assay
 			`You side with Duei on the practical question: the workshop needs the current assay first. But you recommend preserving any disputed older measurement as a warning, not deleting it. Duei says that would let haulers move cargo without pretending the old claim never existed. Tchei agrees only after insisting that every replacement measurement name the crew responsible for it.`
 			action
@@ -64,7 +64,7 @@ mission "B2 Gegno Claim Records: Offer"
 				"B2 Gegno Claim Records: route current assay" = 1
 				"B2 Gegno Claim Records: duei trusts player" = 1
 				event "B2 Gegno Claim Records: Review Ready" 5 7
-				accept
+				decline
 			label paired
 			`You propose two linked records. The first carries the current mass, purity, and contamination notes used for trade. The second carries the claim history: who surveyed, who extracted, and which measurements were disputed. Tchei likes that neither record can erase the other. Duei likes that a hauler can read the working assay without reconstructing a territorial argument first.`
 			action
@@ -73,7 +73,7 @@ mission "B2 Gegno Claim Records: Offer"
 				"B2 Gegno Claim Records: tchei trusts player" = 1
 				"B2 Gegno Claim Records: duei trusts player" = 1
 				event "B2 Gegno Claim Records: Review Ready" 5 7
-				accept
+				decline
 			label decline
 			`You tell them that a foreign captain should not decide which Gegno record deserves authority. Tchei takes the claim plate back. Duei shrugs and returns to the scales. The disagreement continues without you.`
 			action
@@ -117,14 +117,14 @@ mission "B2 Gegno Claim Records: Review"
 				"B2 Gegno Claim Records: settlement transferable record" = 1
 				"B2 Gegno Claim Records: tchei trusts player" = 1
 				"B2 Gegno Claim Records: duei trusts player" = 1
-				accept
+				decline
 			label signatures
 			`You recommend a handoff signed from both sides. The departing recorder certifies which entries are current, historical, hazardous, or disputed. The receiving crew certifies only that it received those meanings intact. Duei says that prevents a signature from becoming a political concession. Tchei says it also prevents a new crew from claiming that an inconvenient warning was never passed along.`
 			action
 				"B2 Gegno Claim Records: reviewed" = 1
 				"B2 Gegno Claim Records: settlement two-signature handoff" = 1
 				"B2 Gegno Claim Records: duei trusts player" = 1
-				accept
+				decline
 
 
 mission "B2 Gegno Claim Records: Tchei Remembers"
@@ -149,4 +149,4 @@ mission "B2 Gegno Claim Records: Tchei Remembers"
 			label finish
 			action
 				"B2 Gegno Claim Records: aftermath seen" = 1
-				accept
+				decline

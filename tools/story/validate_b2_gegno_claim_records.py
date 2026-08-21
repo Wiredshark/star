@@ -63,6 +63,26 @@ def test_source_scope_and_lifecycle():
         assert '\ton offer\n\t\tconversation' in block
         assert '\ton complete' not in block
 
+    # Lifecycle invariant: these missions only write persistent dialogue/story
+    # state and create no cargo, destination, NPC, waypoint, stopover, timer, or
+    # other gameplay objective. Every terminal path therefore closes with
+    # decline after writing the same state, rather than accepting an objective-
+    # less mission into the player's active mission list.
+    accepts = re.findall(r'^\s*accept\s*$', TEXT, re.M)
+    declines = re.findall(r'^\s*decline\s*$', TEXT, re.M)
+    assert not accepts, f"state-only dialogue slice must not contain accept terminals: {len(accepts)} found"
+    assert len(declines) == 7, f"expected exactly 7 decline terminals, found {len(declines)}"
+
+    objective_directives = re.findall(
+        r'^\s*(destination|stopover|waypoint|npc|cargo|passengers|deadline|timer)\b',
+        TEXT,
+        re.M | re.I,
+    )
+    assert not objective_directives, (
+        "state-only lifecycle assumption invalidated by objective directives: "
+        f"{objective_directives}"
+    )
+
 
 def test_local_gotos_resolve():
     for name in MISSIONS:
@@ -124,6 +144,7 @@ def main():
     print("PASS: source=Tschyss")
     print("PASS: upstream_state=read_only")
     print("PASS: later_reader=Tchei Remembers")
+    print("PASS: lifecycle=7 decline terminals, 0 accepts, no objectives")
 
 
 if __name__ == "__main__":
