@@ -1,11 +1,12 @@
 # B2 Hicemus Access Compact lifecycle repair — handoff
 
-Verdict: PARTIAL pending terminal production build/save-load validation.
+Verdict: READY for A3 review/integration.
 
 ## Authority and isolation
 - Authoritative base: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated branch: `agent/b2-hicemus-access-lifecycle-20260821-1527`
-- Production + validator candidate: `0f022a6f1553f43444774ccae21a75f66f988e11`
+- Initial production + validator candidate: `0f022a6f1553f43444774ccae21a75f66f988e11`
+- Exact fully validated candidate: `1bc6d7e23983ae6aa68d0226e6b5f2ebda51c6e0`
 - B2 only; no self-integration.
 
 ## Defect repaired
@@ -25,11 +26,13 @@ Verdict: PARTIAL pending terminal production build/save-load validation.
 
 Existing mission graph, route, settlement, character, state-ownership, mutation, continuity, and goto/label checks remain.
 
-## Validation evidence
-On exact production/validator candidate `0f022a6f1553f43444774ccae21a75f66f988e11`:
-- `Fork simulation and story validation` #347 / run `32518783347`: SUCCESS.
-- Repository focused story contracts, A1 simulation/state-ownership contracts, and changed-content style are therefore green through that workflow.
-- `Fork save-load integration smoke` #332 / run `32518783404`: still in progress at the latest observation; no production build/save-load PASS is claimed yet.
+## Exact validation evidence
+On exact fully validated candidate `1bc6d7e23983ae6aa68d0226e6b5f2ebda51c6e0`:
+- `Fork simulation and story validation` #348 / run `32519076721`: SUCCESS.
+- `Fork save-load integration smoke` #333 / run `32519076873`: SUCCESS.
+- Repository focused story contracts, A1 simulation/state-ownership contracts, changed-content style, production configure/build, and stock save-load smoke are therefore green on that exact candidate.
+
+The earlier candidate save-load run #332 was cancelled when the handoff-only validation-state commit superseded it; no failure is inferred from that cancellation. The superseding exact head passed the full save-load gate.
 
 The private execution service process inventory reported 4 pre-existing service-owned processes. They were preserved; none were killed or modified.
 
@@ -38,7 +41,10 @@ Dialogue-only B2 missions that merely persist state terminate with `decline`; `a
 
 The Hicemus continuity boundary is unchanged: temporary routing rules are practical station coordination and do not define the political meaning of the Hicemus/Conlatio division. Dispatcher/Maintainer remain player-private shorthand.
 
-## Remaining gate before READY
-Wait for exact candidate save-load run `32518783404` to reach terminal green. If it succeeds, this slice can be promoted to READY without changing production or validator behavior. If it fails, repair the actual failure and rerun both required workflows.
+## A3 integration notes
+- Re-read current `main` before integration and confirm ancestry remains clean.
+- Integrate only this isolated lifecycle repair; do not alter Hicemus route/settlement semantics while integrating.
+- Preserve all existing `B2 Hicemus Access Compact:*` condition names and values.
+- Preserve all seven state-only terminal paths as `decline`.
 
-A3 must not integrate while this handoff remains PARTIAL.
+READY for A3 review/integration. A3 retains integration authority.
