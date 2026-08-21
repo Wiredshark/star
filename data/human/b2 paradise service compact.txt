@@ -1,8 +1,25 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 Paradise Service Compact production slice.
 #
 # This content consumes the Paradise Service District Museum history by turning
 # the public/private service-access problem into a named-character dispute.
 # It uses stock mission/conversation/global-condition mechanisms only.
+#
+# These missions are dialogue/state-only. Terminal conversation paths persist
+# their state and then decline so no objective-less accepted mission can remain
+# in the player's active mission list.
 
 mission "B2 Paradise Service Compact: Offer"
 	minor
@@ -35,14 +52,14 @@ mission "B2 Paradise Service Compact: Offer"
 				"B2 Paradise Service Compact: introduced" = 1
 				"B2 Paradise Service Compact: route mercer" = 1
 				"B2 Paradise Service Compact: mercer trusts player" = 1
-			accept
+			decline
 			label voss
 			`You tell Mercer that public dependence does not erase the estate's ownership or operating costs. Voss gives you a measured nod. Mercer says, "Then we need a transition that does not strand people whose employers scheduled around this gate."`
 			action
 				"B2 Paradise Service Compact: introduced" = 1
 				"B2 Paradise Service Compact: route voss" = 1
 				"B2 Paradise Service Compact: voss trusts player" = 1
-			accept
+			decline
 			label compact
 			`You suggest treating access and funding as separate questions: preserve a late worker corridor, then negotiate a municipal contribution for the hours that function as public transit. Mercer starts calculating service windows. Voss asks for a written review date instead of a permanent promise.`
 			action
@@ -50,7 +67,7 @@ mission "B2 Paradise Service Compact: Offer"
 				"B2 Paradise Service Compact: route compact" = 1
 				"B2 Paradise Service Compact: mercer trusts player" = 1
 				"B2 Paradise Service Compact: voss trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that the district has enough lawyers, planners, and transit staff to own the consequences of its own agreement. Mercer exhales through her nose. Voss says, "On that point, at least, we agree."`
 			action
@@ -101,14 +118,14 @@ mission "B2 Paradise Service Compact: Review"
 				"B2 Paradise Service Compact: reviewed" = 1
 				"B2 Paradise Service Compact: settlement municipal corridor" = 1
 				"B2 Paradise Service Compact: mercer trusts player" = 1
-			accept
+			decline
 			label shared
 			`You recommend a standing compact: the estate keeps operating the gate, the municipality funds the late public-service window, and both sides publish a review schedule instead of treating every dispute as a referendum on ownership. Mercer calls it administratively ugly. Voss calls that a compliment.`
 			action
 				"B2 Paradise Service Compact: reviewed" = 1
 				"B2 Paradise Service Compact: settlement shared service compact" = 1
 				"B2 Paradise Service Compact: voss trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Paradise Service Compact: Mercer Remembers"
@@ -135,4 +152,4 @@ mission "B2 Paradise Service Compact: Mercer Remembers"
 			label record
 			action
 				"B2 Paradise Service Compact: aftermath seen" = 1
-			accept
+			decline

@@ -32,6 +32,23 @@ assert '"B2 Paradise Service Compact: reviewed" = 1' in text
 assert '"B2 Paradise Service Compact: aftermath seen" = 1' in text
 assert '"B2 Paradise Service Compact: declined" = 1' in text
 
+# These are state-recording dialogue-only missions. No branch has a real
+# mission objective, so every terminal conversation path must decline after
+# persisting state. An `accept` here would leave an objective-less mission active.
+assert not re.search(r'^\s*accept\s*$', text, re.MULTILINE), (
+    "state-only Paradise dialogue must not leave accepted objective-less missions"
+)
+assert len(re.findall(r'^\s*decline\s*$', text, re.MULTILINE)) == 7, (
+    "expected 4 Offer + 2 Review + 1 aftermath dialogue terminals"
+)
+for objective_token in [
+    "destination ", "waypoint ", "stopover ", "cargo ", "passenger ",
+    "npc ", "deadline ", "distance ", "clearance ", "outfit ",
+]:
+    assert not re.search(rf'^\s*{re.escape(objective_token)}', text, re.MULTILINE), (
+        f"unexpected objective-bearing directive invalidates lifecycle assumption: {objective_token.strip()}"
+    )
+
 # The slice must stay scoped to Paradise Republic worlds and avoid stations.
 for block in re.split(r'(?=mission "B2 Paradise Service Compact:)', text)[1:]:
     assert 'government "Republic"' in block
@@ -69,4 +86,5 @@ print("PASS: named_characters=2")
 print("PASS: initial_routes=3 + refusal")
 print("PASS: terminal_settlements=2")
 print("PASS: later_reader=Mercer Remembers")
+print("PASS: lifecycle=7 state-only terminals decline; 0 accept")
 print("PASS: persistence_model=stock mission/global conditions")
