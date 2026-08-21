@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 Republic Tracing Compact production slice.
 #
 # Consumes B1's Republic evacuation-manifest / return-and-resettlement history
@@ -36,14 +49,14 @@ mission "B2 Republic Tracing Compact: Offer"
 				"B2 Republic Tracing Compact: introduced" = 1
 				"B2 Republic Tracing Compact: route portable tracing" = 1
 				"B2 Republic Tracing Compact: saye trusts player" = 1
-			accept
+			decline
 			label registry
 			`You tell Saye that every transfer should identify a current address, the resident's consent about contact sharing, and the office responsible for the next update. Vell agrees, while Saye warns that administrative closure cannot be mistaken for family reunification. You recommend that the record distinguish "case transferred" from "case resolved."`
 			action
 				"B2 Republic Tracing Compact: introduced" = 1
 				"B2 Republic Tracing Compact: route accountable registry" = 1
 				"B2 Republic Tracing Compact: vell trusts player" = 1
-			accept
+			decline
 			label compact
 			`You propose two independent tracks. A tracing file remains portable until reunification or an explicit closure decision, while return, onward migration, and local settlement are recorded separately as voluntary choices. Vell says that gives each office a legible responsibility. Saye says it prevents "going home" from becoming an administrative assumption about what every displaced person wants.`
 			action
@@ -51,7 +64,7 @@ mission "B2 Republic Tracing Compact: Offer"
 				"B2 Republic Tracing Compact: route dual track" = 1
 				"B2 Republic Tracing Compact: saye trusts player" = 1
 				"B2 Republic Tracing Compact: vell trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them an active surge is the wrong moment to invent a new records doctrine. Saye returns to the manifest stack. Vell nods toward the unresolved names and says, "Fair. But if the system cannot tell the difference between moved, returned, settled, and reunited, the paperwork will make that decision for us."`
 			action
@@ -104,14 +117,14 @@ mission "B2 Republic Tracing Compact: Review"
 				"B2 Republic Tracing Compact: settlement portable family file" = 1
 				"B2 Republic Tracing Compact: saye trusts player" = 1
 				"B2 Republic Tracing Compact: vell trusts player" = 1
-			accept
+			decline
 			label consentSettlement
 			`You recommend a consent ledger. Every transfer records the resident's current address, the office responsible for the next update, whether contact information may be shared, and whether a family-tracing case remains open. A move, return, or local settlement can change one field without silently changing the others. Vell says the ledger makes responsibility auditable. Saye says it makes administrative consent visible instead of assumed.`
 			action
 				"B2 Republic Tracing Compact: reviewed" = 1
 				"B2 Republic Tracing Compact: settlement consent ledger" = 1
 				"B2 Republic Tracing Compact: vell trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Republic Tracing Compact: Saye Remembers"
@@ -137,4 +150,4 @@ mission "B2 Republic Tracing Compact: Saye Remembers"
 			label record
 			action
 				"B2 Republic Tracing Compact: aftermath seen" = 1
-			accept
+			decline
