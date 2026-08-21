@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused structural validator for B2 Hai Provision Compact."""
+"""Focused structural and dialogue-lifecycle validator for B2 Hai Provision Compact."""
 
 from pathlib import Path
 import re
@@ -45,6 +45,29 @@ for forbidden in (
 ):
     assert forbidden not in text, f"forbidden direct mutation token: {forbidden!r}"
 
+# Dialogue lifecycle contract: these missions only record persistent state. Accepting one
+# would move an objective-less mission into the active mission list. Every terminal route
+# must therefore close with decline after writing the exact same persistent conditions.
+terminal_accepts = len(re.findall(r"^\s*accept\s*$", text, re.MULTILINE))
+terminal_declines = len(re.findall(r"^\s*decline\s*$", text, re.MULTILINE))
+assert terminal_accepts == 0, f"state-only slice must not accept missions; found {terminal_accepts} accept terminal(s)"
+assert terminal_declines == 7, f"expected 7 state-only decline terminals, found {terminal_declines}"
+
+# Guard the state-only assumption. If a real gameplay objective is added later, this
+# validator should fail so the lifecycle contract is reconsidered rather than silently
+# forcing an objective-bearing mission to decline.
+objective_directives = (
+    "\tdestination ",
+    "\tstopover ",
+    "\twaypoint ",
+    "\tnpc ",
+    "\tpassenger ",
+    "\tdeadline ",
+    "\tcommodity ",
+)
+for directive in objective_directives:
+    assert directive not in text, f"objective-bearing directive invalidates state-only lifecycle assumption: {directive!r}"
+
 # Every local goto target must have a corresponding label somewhere in the file.
 gotos = set(re.findall(r"^\s*goto ([A-Za-z0-9_ -]+)\s*$", text, re.MULTILINE))
 labels = set(re.findall(r"^\s*label ([A-Za-z0-9_ -]+)\s*$", text, re.MULTILINE))
@@ -69,4 +92,5 @@ print("PASS: review_routing=threshold/manifest branches + dual-ledger fallthroug
 print("PASS: terminal_settlements=2")
 print("PASS: source_scope=inhabited Hai government")
 print("PASS: later_reader=Marr Remembers")
+print("PASS: lifecycle=state-only terminals decline (7/7)")
 print("PASS: persistence_model=stock mission/global conditions")

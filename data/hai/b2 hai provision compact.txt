@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 Hai Provision Compact production slice.
 #
 # This content consumes the B1 "Hai Provision Compact Archive" and turns its
@@ -39,14 +52,14 @@ mission "B2 Hai Provision Compact: Offer"
 				"B2 Hai Provision Compact: introduced" = 1
 				"B2 Hai Provision Compact: route threshold" = 1
 				"B2 Hai Provision Compact: tami trusts player" = 1
-			accept
+			decline
 			label manifest
 			`You tell Tami that a reserve promise is not operational until the people moving it know the route risk and agree to the terms. Marr nods. Tami answers, "Then the declaration must document risk without turning danger into a veto over need."`
 			action
 				"B2 Hai Provision Compact: introduced" = 1
 				"B2 Hai Provision Compact: route manifest" = 1
 				"B2 Hai Provision Compact: marr trusts player" = 1
-			accept
+			decline
 			label dual
 			`You suggest two linked records. The civilian ledger decides when the reserve should be released. A separate routing ledger records danger, escorts, carrier consent, delays, and losses. Tami says, "Need remains a civil judgment." Marr adds, "And the people flying the route stop disappearing into a footnote."`
 			action
@@ -54,7 +67,7 @@ mission "B2 Hai Provision Compact: Offer"
 				"B2 Hai Provision Compact: route dual ledger" = 1
 				"B2 Hai Provision Compact: tami trusts player" = 1
 				"B2 Hai Provision Compact: marr trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that a compact older than your involvement should not be rewritten because a passing captain happened to be standing near the ledger. Tami accepts that without offense. Marr says, "Fair. Just remember that 'the institution will handle it' is still a decision made by people."`
 			action
@@ -105,14 +118,14 @@ mission "B2 Hai Provision Compact: Review"
 				"B2 Hai Provision Compact: settlement dual ledger" = 1
 				"B2 Hai Provision Compact: tami trusts player" = 1
 				"B2 Hai Provision Compact: marr trusts player" = 1
-			accept
+			decline
 			label reviewpanel
 			`You recommend a small joint review after each exceptional shipment. Civil provision officers retain authority over whether need qualifies for reserve release. Route planners and carrier representatives can change routing, escort, scheduling, and documentation practices, but cannot retroactively declare that the civilian need never existed. Tami calls the boundary necessary. Marr calls the review useful because someone finally has to answer for repeated operational mistakes.`
 			action
 				"B2 Hai Provision Compact: reviewed" = 1
 				"B2 Hai Provision Compact: settlement bounded review" = 1
 				"B2 Hai Provision Compact: tami trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Hai Provision Compact: Marr Remembers"
@@ -138,4 +151,4 @@ mission "B2 Hai Provision Compact: Marr Remembers"
 			label record
 			action
 				"B2 Hai Provision Compact: aftermath seen" = 1
-			accept
+			decline
