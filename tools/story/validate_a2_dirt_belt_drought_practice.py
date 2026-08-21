@@ -29,6 +29,11 @@ for line in text.splitlines():
     assert '"world: dirt belt drought pressure" =' not in stripped
     assert '"world: dirt belt irrigation reserve strain" =' not in stripped
 
+# Both missions are state-only conversations. None may use mission acceptance,
+# because that would leave an objective-less mission in the accepted list.
+assert "\n\t\t\taccept" not in text, "state-only dialogue endpoint must not accept"
+assert text.count("\n\t\t\tdecline") == 5, "all four briefing routes and recovery review must decline"
+
 assert text.count('"A2 Dirt Belt Drought Practice: introduced" = 1') == 3
 assert text.count('"A2 Dirt Belt Drought Practice: recovery seen" = 1') == 1
 assert 'not "A2 Dirt Belt Drought Practice: declined"' in text
