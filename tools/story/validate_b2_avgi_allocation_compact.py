@@ -85,6 +85,24 @@ for forbidden in (
     if forbidden in text:
         fail(f"unexpected material/gameplay mutation: {forbidden.strip()}")
 
+# Dialogue-only lifecycle contract: these missions only persist conditions.
+# They must terminate cleanly instead of creating objective-less accepted missions.
+if re.search(r'^\s*accept\s*$', text, flags=re.MULTILINE):
+    fail("state-only dialogue slice must not contain terminal accept commands")
+if len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)) != 7:
+    fail("state-only dialogue slice must contain exactly seven decline terminals")
+for objective_token in (
+    '\tdestination ',
+    '\twaypoint ',
+    '\tstopover ',
+    '\tcargo ',
+    '\tpassenger ',
+    '\tnpc ',
+    '\tdeadline ',
+):
+    if objective_token in text:
+        fail(f"unexpected gameplay objective in state-only lifecycle slice: {objective_token.strip()}")
+
 print("PASS: B2 Avgi Allocation Compact structure validated")
 print("PASS: missions=3")
 print("PASS: named_characters=2")
