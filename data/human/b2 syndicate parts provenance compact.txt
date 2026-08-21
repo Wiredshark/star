@@ -1,0 +1,156 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Syndicate Parts Provenance Compact.
+#
+# Consumes B1's replacement-stock provenance history and A1's authoritative
+# Syndicate replacement-parts scarcity signal. This slice is intentionally
+# separate from A2 maintenance triage and the B2 qualification compact: it is
+# about what a scarce replacement part is known to be, what substitutions were
+# made, and whether a working installation is actually equivalent to the original
+# specification. B2 never writes A1 world state.
+
+
+mission "B2 Syndicate Parts Provenance Compact: Offer"
+	minor
+	name `The Part That Fits`
+	description `Tessa Marr and procurement controller Ren Vale disagree over how far a scarce substitute component can be trusted when its history is incomplete.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		"world: syndicate parts scarcity" >= 3
+		not "B2 Syndicate Parts Provenance Compact: introduced"
+		not "B2 Syndicate Parts Provenance Compact: declined"
+	on offer
+		conversation
+			`Tessa Marr is standing beside an opened parts crate with a procurement controller you have not met before. The controller introduces himself as Ren Vale and points to a compact actuator assembly whose casing carries three different yard stamps.`
+			`Marr says, "It fits the berth machinery we need back online today. The stock system calls it compatible. What it does not tell me is whether the rebuilt control package inside still matches the original heat and duty-cycle limits."`
+			`Vale brings up the component history. One repair entry lists a replacement bearing, another records a control-board substitution, and a third simply says the unit passed a bench test. "Scarcity makes 'it worked somewhere' sound dangerously close to 'it is equivalent everywhere,'" he says.`
+			`Marr glances toward the crowded maintenance board. "And waiting for perfect records can turn a usable part into dead inventory while ships sit in the queue. We need a rule that keeps uncertainty visible without pretending uncertainty means unusable."`
+			choice
+				`\tPreserve provenance first: use the part only when its repair and substitution history supports the intended duty.`
+					goto provenance
+				`\tAllow emergency use from current test evidence, but record every assumption and limitation instead of calling the part fully equivalent.`
+					goto operational
+				`\tKeep two linked records: immutable source/repair provenance and a separate installation-specific qualification.`
+					goto paired
+				`\tTell them an outside captain should not define Syndicate procurement practice.`
+					goto refuse
+			label provenance
+			`You tell Marr that scarcity is exactly when a compatible label needs more evidence behind it, not less. Vale nods. "Supplier, repair, substitution, test method, known limits." Marr answers, "Fine. But if the evidence is enough for this job, we use it instead of waiting for a mythical perfect part."`
+			action
+				"B2 Syndicate Parts Provenance Compact: introduced" = 1
+				"B2 Syndicate Parts Provenance Compact: route provenance" = 1
+				"B2 Syndicate Parts Provenance Compact: vale trusts player" = 1
+				decline
+			label operational
+			`You suggest treating the present bench test as evidence for a bounded emergency installation, not proof of universal equivalence. Marr says, "That gets the berth moving." Vale adds, "As long as the copied record says what was tested, what was assumed, and what still needs inspection."`
+			action
+				"B2 Syndicate Parts Provenance Compact: introduced" = 1
+				"B2 Syndicate Parts Provenance Compact: route operational" = 1
+				"B2 Syndicate Parts Provenance Compact: marr trusts player" = 1
+				decline
+			label paired
+			`You tell them the archive and the installation decision answer different questions. The original record should preserve supplier, repairs, substitutions, and prior tests; the local qualification should record this berth, this duty cycle, this test, and this temporary limit. Vale says, "Then the next yard can see both what the part is and what we asked it to do."`
+			action
+				"B2 Syndicate Parts Provenance Compact: introduced" = 1
+				"B2 Syndicate Parts Provenance Compact: route paired" = 1
+				"B2 Syndicate Parts Provenance Compact: marr trusts player" = 1
+				"B2 Syndicate Parts Provenance Compact: vale trusts player" = 1
+				decline
+			label refuse
+			`You tell them that the shortage is real, but that does not give a passing captain authority to standardize procurement across independent yards and contractors. Marr accepts the answer without argument. Vale closes the component record. "Then at least nobody can cite your silence as approval."`
+			action
+				"B2 Syndicate Parts Provenance Compact: declined" = 1
+				decline
+
+
+mission "B2 Syndicate Parts Provenance Compact: Review"
+	minor
+	name `After the Substitute`
+	description `Return after replacement-stock scarcity recedes and review what the emergency substitute taught Marr and Vale about provenance and equivalence.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		has "B2 Syndicate Parts Provenance Compact: introduced"
+		"world: syndicate parts scarcity" <= 1
+		not "B2 Syndicate Parts Provenance Compact: reviewed"
+	on offer
+		conversation
+			branch provenance
+				has "B2 Syndicate Parts Provenance Compact: route provenance"
+			branch operational
+				has "B2 Syndicate Parts Provenance Compact: route operational"
+			`Marr and Vale have the substitute actuator on the screen again. Under the paired approach it completed the emergency duty without incident, but two downstream summaries now describe it simply as "approved compatible stock." One copy has already dropped the temporary duty-cycle limit that made the installation acceptable.`
+			`Vale says, "The records were individually true when written. The problem is that every condensation kept the conclusion and discarded a little context." Marr replies, "Then compatibility needs to travel with its assumptions, not just its yes-or-no result."`
+			choice
+				`\tCreate a portable qualification packet that keeps provenance, substitutions, test method, duty limits, installation context, and unresolved uncertainty together.`
+					goto packet
+				`\tAdopt an expiry-and-revalidation rule: prior evidence remains useful, but a changed system, repair, or operating assumption forces explicit requalification.`
+					goto revalidate
+			label provenance
+			`The provenance-first rule prevented the actuator from being treated as anonymous stock, but one yard still copied only the final compatibility decision and not the repair chain that justified it. Vale says, "We protected the original record and still let the summary escape from it." Marr taps the copy. "Then the decision needs a portable trail back to the evidence."`
+			choice
+				`\tMake provenance, substitutions, test basis, operating limits, and the resulting qualification one portable packet.`
+					goto packet
+				`\tKeep the old evidence reusable, but require revalidation whenever the part, system, or operating assumptions materially change.`
+					goto revalidate
+			label operational
+			`The emergency-use rule kept equipment moving, but a later copy preserved the phrase "bench-tested" without the load profile, temperature range, or inspection interval that bounded the original decision. Marr says, "A useful shortcut became a permanent-looking answer." Vale adds, "Then emergency qualification has to carry its expiry and its assumptions with it."`
+			choice
+				`\tBundle the evidence and every operating limit into a portable qualification packet.`
+					goto packet
+				`\tRequire explicit revalidation when the component or installation context changes instead of letting emergency approval become permanent.`
+					goto revalidate
+			label packet
+			`You recommend a portable qualification packet. Supplier and repair provenance remain visible; substitutions identify what changed; tests record method and conditions; the installation records the system and duty actually qualified; unresolved uncertainty stays attached instead of being replaced by a broad compatibility label. Marr says, "A working part can move. Its context moves with it."`
+			action
+				"B2 Syndicate Parts Provenance Compact: reviewed" = 1
+				"B2 Syndicate Parts Provenance Compact: settlement packet" = 1
+				"B2 Syndicate Parts Provenance Compact: vale trusts player" = 1
+				decline
+			label revalidate
+			`You recommend expiry and revalidation. Prior provenance and successful tests remain useful evidence, but any material repair, different equipment family, changed duty cycle, or new operating limit reopens the qualification question. Vale says, "The history is never thrown away." Marr adds, "And yesterday's emergency approval never turns into universal equivalence by inertia."`
+			action
+				"B2 Syndicate Parts Provenance Compact: reviewed" = 1
+				"B2 Syndicate Parts Provenance Compact: settlement revalidate" = 1
+				"B2 Syndicate Parts Provenance Compact: marr trusts player" = 1
+				decline
+
+
+mission "B2 Syndicate Parts Provenance Compact: Vale Remembers"
+	minor
+	name `Vale Remembers`
+	description `Ren Vale shows how participating Syndicate yards now distinguish replacement-part provenance from installation-specific qualification.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		not "B2 Syndicate Parts Provenance Compact: aftermath seen"
+		or
+			has "B2 Syndicate Parts Provenance Compact: settlement packet"
+			has "B2 Syndicate Parts Provenance Compact: settlement revalidate"
+	on offer
+		conversation
+			branch revalidate
+				has "B2 Syndicate Parts Provenance Compact: settlement revalidate"
+			`Vale opens a replacement-part packet for a rebuilt coolant pump. Supplier, two repairs, an impeller substitution, bench-test conditions, and the local installation limit are visible on one screen. "The summary still says compatible," he says. "Now it also says compatible with what, under which evidence, and with which uncertainty."`
+			goto record
+			label revalidate
+			`Vale shows you a familiar actuator assembly. Its earlier qualification is still visible, but the record is flagged for revalidation because a later repair changed the control board and the receiving yard uses a different duty cycle. "The old success still counts as evidence," he says. "It just does not answer a new question by itself."`
+			label record
+			action
+				"B2 Syndicate Parts Provenance Compact: aftermath seen" = 1
+				decline
