@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native simulation/story/style and production build/save-load validation on the exact candidate head. Do not integrate until those gates are terminal green.
+READY for A3 review/integration. The exact production/validator/handoff candidate `09fb14020eef1040b36c60fbdd7d42c6e981d0eb` passed both repository-native acceptance workflows.
 
 ## Scope
 
@@ -19,6 +19,7 @@ This repair converts those six positive state-only terminal `accept` commands to
 - isolated branch: `agent/b2-republic-review-mentorship-lifecycle-20260821-1723`
 - production lifecycle repair: `f675eca4aa1dde9267ea6c3ff2cb891c783a3727`
 - focused validator hardening: `727a3c26131885d0c8995826e43b6cce0a022c5f`
+- exact fully validated candidate: `09fb14020eef1040b36c60fbdd7d42c6e981d0eb`
 
 ## Preserved semantics
 
@@ -52,14 +53,20 @@ Before editing, the live repository branch and open work were inspected. No acti
 
 The private execution service reported four pre-existing service-owned processes. They were preserved; no process was killed, cancelled, or modified.
 
-## Validation required before READY
+## Validation evidence
 
-Run the repository-native acceptance gates on the exact candidate head:
+Exact candidate `09fb14020eef1040b36c60fbdd7d42c6e981d0eb`:
 
-1. `Fork simulation and story validation` — must pass, including focused story validators, A1/state-ownership contracts, and changed-content style.
-2. `Fork save-load integration smoke` — must pass, including production configure/build and stock save/load smoke.
+1. `Fork simulation and story validation` run #354 (`32528493372`): SUCCESS.
+   - focused story validators: green;
+   - Republic Review Mentorship lifecycle contract: green;
+   - A1/state-ownership contracts: green;
+   - changed-content style: green.
+2. `Fork save-load integration smoke` run #339 (`32528493319`): SUCCESS.
+   - production configure/build: green;
+   - stock save/load smoke: green.
 
-A3 should also confirm the branch remains isolated against current `main` before integration.
+A3 should still re-check current `main` ancestry immediately before integration because this branch is intentionally not self-integrated.
 
 ## A3/B3 integration invariant
 
