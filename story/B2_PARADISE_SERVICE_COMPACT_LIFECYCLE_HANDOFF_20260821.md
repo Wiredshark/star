@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native validation.
+READY for A3 review/integration.
 
 ## Scope
 
@@ -21,6 +21,7 @@ Because the production file is modified, it also receives the standard Endless S
 - branch: `agent/b2-paradise-service-lifecycle-20260821-0428`
 - production lifecycle commit: `95e3e640d8eb7e4dddd73127e3adfe532c059ca0`
 - validator-hardening commit: `9770fb56b0406775d0d8104c02fdcb7d9555ec10`
+- exact fully validated production/validator/handoff candidate: `80a3ee191843bb60b9b9ce5967be49177f95dea0`
 
 ## Files changed
 
@@ -33,6 +34,7 @@ Because the production file is modified, it also receives the standard Endless S
   - require exactly seven terminal `decline` commands;
   - reject objective-bearing directives that would invalidate the state-only lifecycle assumption;
   - preserve all existing route, scope, settlement, goto/label, persistence, and material-mutation checks.
+- this handoff document.
 
 ## Invariants preserved
 
@@ -48,19 +50,25 @@ Because the production file is modified, it also receives the standard Endless S
 - No credits, reputation, cargo, outfits, combat, ships, fleets, or A1 `world:*` state are written.
 - B2 does not self-integrate.
 
-## Validation required
+## Exact validation evidence
 
-Exact-head acceptance must include the repository-native gates that cover this content:
+Exact candidate `80a3ee191843bb60b9b9ce5967be49177f95dea0` is terminal green on both repository-native acceptance workflows:
 
-- focused `validate_b2_paradise_service_compact.py` execution as part of the discovered story-validator suite;
-- changed-content style;
-- story/state-ownership regression contracts;
-- A1 simulation regressions;
-- production configure/build;
-- stock save/load smoke.
+- `Fork simulation and story validation` run `32463528675` / #316: SUCCESS
+  - compile focused Python validation code: SUCCESS
+  - run all focused story validators: SUCCESS
+  - run A1 simulation contract tests: SUCCESS
+  - changed fork content style: SUCCESS
+- `Fork save-load integration smoke` run `32463528654` / #301: SUCCESS
+  - production dependency setup: SUCCESS
+  - production configure: SUCCESS
+  - production build: SUCCESS
+  - stock save/load smoke cases: SUCCESS
 
-Do not promote this handoff to READY unless both exact-head repository-native workflows are terminal green.
+The private execution-service process inventory was also checked. Four pre-existing service-owned processes were observed and preserved; no unrelated process was killed or modified.
 
 ## A3 / B3 integration notes
 
-This is intentionally a minimal lifecycle repair. A3 should integrate only if current-main ancestry remains compatible and exact-head validation is green. B3 should preserve the rule that dialogue-only B2 missions that merely write persistent state terminate with `decline`; `accept` should be reserved for missions that actually enter an objective-bearing lifecycle.
+This is intentionally a minimal lifecycle repair. A3 should re-read current `main`, confirm ancestry remains compatible, and integrate this branch only through normal integration authority.
+
+B3 should preserve the rule that dialogue-only B2 missions that merely write persistent state terminate with `decline`; `accept` should be reserved for missions that actually enter an objective-bearing lifecycle.
