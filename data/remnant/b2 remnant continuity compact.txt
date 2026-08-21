@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # B2 Remnant Continuity Compact production slice.
 #
 # This content consumes B1's Remnant continuity, watch-rotation, salvage-provenance,
@@ -37,14 +50,14 @@ mission "B2 Remnant Continuity Compact: Offer"
 				"B2 Remnant Continuity Compact: introduced" = 1
 				"B2 Remnant Continuity Compact: route continuity" = 1
 				"B2 Remnant Continuity Compact: venn trusts player" = 1
-			accept
+			decline
 			label provenance
 			`You side with Taal. The Remnant survive because repairs remain repeatable across generations; an emergency component without known interfaces, modifications, and failure history may simply move the danger somewhere else. Venn concedes the point but signs, "Then the record standard must be small enough to finish while the launch window is still open."`
 			action
 				"B2 Remnant Continuity Compact: introduced" = 1
 				"B2 Remnant Continuity Compact: route provenance" = 1
 				"B2 Remnant Continuity Compact: taal trusts player" = 1
-			accept
+			decline
 			label compact
 			`You propose two records instead of one impossible standard. The transfer cannot leave without a custody minimum: item identity, source, known hazards, responsible sender, responsible receiver, and unresolved technical questions. The complete provenance can follow during a mandatory reconciliation after arrival. Venn signs, "The reserve moves." Taal adds, "And the uncertainty moves with a name attached to it."`
 			action
@@ -52,7 +65,7 @@ mission "B2 Remnant Continuity Compact: Offer"
 				"B2 Remnant Continuity Compact: route compact" = 1
 				"B2 Remnant Continuity Compact: venn trusts player" = 1
 				"B2 Remnant Continuity Compact: taal trusts player" = 1
-			accept
+			decline
 			label decline
 			`You decline to rewrite procedures whose mistakes may have consequences you cannot see. Venn signs that caution is reasonable. Taal looks back at the incomplete component record and says, "The problem will still be here after the patrol window."`
 			action
@@ -102,7 +115,7 @@ mission "B2 Remnant Continuity Compact: Review"
 				"B2 Remnant Continuity Compact: settlement custody reconciliation" = 1
 				"B2 Remnant Continuity Compact: venn trusts player" = 1
 				"B2 Remnant Continuity Compact: taal trusts player" = 1
-			accept
+			decline
 			label twokeysettlement
 			`You recommend a two-key reserve rule. Routine transfers still require full provenance, but a time-critical launch may proceed with an incomplete technical record only when both the reserve custodian and technical custodian acknowledge the same unresolved risks and name the receiving engineer responsible for reconciliation. Venn signs that no single office can hide behind urgency. Taal says no engineer can quietly convert caution into a veto.`
 			action
@@ -110,7 +123,7 @@ mission "B2 Remnant Continuity Compact: Review"
 				"B2 Remnant Continuity Compact: settlement two key reserve" = 1
 				"B2 Remnant Continuity Compact: venn trusts player" = 1
 				"B2 Remnant Continuity Compact: taal trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Remnant Continuity Compact: Taal Remembers"
@@ -135,4 +148,4 @@ mission "B2 Remnant Continuity Compact: Taal Remembers"
 			label record
 			action
 				"B2 Remnant Continuity Compact: aftermath seen" = 1
-			accept
+			decline
