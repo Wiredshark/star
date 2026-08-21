@@ -1,0 +1,167 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 dynamic-narrative consumer for the A1 Free Worlds geomagnetic-storm loop.
+# A1 remains sole owner of the storm, cooldown, advisory, and navigation-strain state.
+# This slice records only the player's preferred operating doctrine, waits for a full
+# recovery boundary, then evaluates that doctrine during a later storm recurrence.
+
+
+mission "A2 Free Worlds Storm Navigation Doctrine: Briefing"
+	minor
+	name `Free Worlds Navigation: Storm Doctrine`
+	description `Traffic coordinator Rhea Solano asks how captains and controllers should operate while a geomagnetic storm is straining Free Worlds navigation services.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "world: free worlds geomagnetic storm active"
+		"world: free worlds geomagnetic navigation strain" >= 3
+		not "A2 Free Worlds Storm Navigation Doctrine: briefing seen"
+	on offer
+		conversation
+			`Rhea Solano catches you near a departure board whose route estimates keep changing by a few minutes at a time. "Different problem today, Captain <last>. The storm is degrading beacon confidence faster than the controllers can verify every route."`
+			branch severe
+				"world: free worlds geomagnetic navigation strain" >= 5
+			`She turns a diagnostic panel toward you. "The navigation service is strained, but not blind. We can still choose a doctrine instead of improvising ship by ship."`
+				goto doctrine
+			label severe
+			`Nearly every verification queue on Solano's panel is red. "We are close to the point where a perfectly ordinary correction can arrive too late to be useful. The doctrine matters more when spare attention is gone."`
+			label doctrine
+			`Solano taps three proposed operating rules. "If this were your watch, what would you make every controller and willing captain protect first?"`
+			choice
+				`\tProtect verified corridors: fewer approved routes, but keep emergency and passenger traffic on paths controllers have checked recently.`
+					goto corridors
+				`\tProtect independent cross-checks: require ships and controllers to compare beacon, inertial, and neighboring-ship fixes before accepting a correction.`
+					goto crosscheck
+				`\tProtect local autonomy: let experienced captains slow down or reroute without waiting for a central queue when their own instruments disagree.`
+					goto autonomy
+				`\tI am not setting a standing navigation doctrine for Free Worlds traffic control.`
+					goto refuse
+			label corridors
+			`Solano marks a small set of routes green. "Verified capacity instead of nominal capacity. Fewer lanes, fewer surprises, and emergency traffic gets the newest checks first."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: briefing seen" = 1
+				"A2 Free Worlds Storm Navigation Doctrine: doctrine verified corridors" = 1
+				"A2 Free Worlds Storm Navigation Doctrine: recovery pending" = 1
+				decline
+			label crosscheck
+			`Solano adds a comparison field to the routing notes. "No single beacon gets to become truth by repetition. If two sources disagree, the disagreement itself becomes part of the handoff."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: briefing seen" = 1
+				"A2 Free Worlds Storm Navigation Doctrine: doctrine independent crosscheck" = 1
+				"A2 Free Worlds Storm Navigation Doctrine: recovery pending" = 1
+				decline
+			label autonomy
+			`Solano nods slowly. "Give local judgment room to act before a queue turns caution into delay. Controllers still publish what they know, but captains are allowed to stop treating the published route as a command."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: briefing seen" = 1
+				"A2 Free Worlds Storm Navigation Doctrine: doctrine local autonomy" = 1
+				"A2 Free Worlds Storm Navigation Doctrine: recovery pending" = 1
+				decline
+			label refuse
+			`Solano closes the proposal list. "Fair. A captain's refusal is not a missing vote that somebody else gets to fill in later."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: briefing seen" = 1
+				"A2 Free Worlds Storm Navigation Doctrine: refused" = 1
+				decline
+
+
+mission "A2 Free Worlds Storm Navigation Doctrine: Recovery Boundary"
+	invisible
+	landing
+	non-blocking
+	repeat
+	source
+		government "Free Worlds"
+	destination "Earth"
+	to offer
+		has "A2 Free Worlds Storm Navigation Doctrine: recovery pending"
+		not "world: free worlds geomagnetic storm active"
+		"world: free worlds geomagnetic navigation strain" <= 1
+		not "A2 Free Worlds Storm Navigation Doctrine: recurrence armed"
+	on offer
+		set "A2 Free Worlds Storm Navigation Doctrine: recurrence armed"
+		clear "A2 Free Worlds Storm Navigation Doctrine: recovery pending"
+		fail
+
+
+mission "A2 Free Worlds Storm Navigation Doctrine: Recurrence Review"
+	minor
+	name `Free Worlds Navigation: Doctrine Under Load`
+	description `A later geomagnetic storm gives Rhea Solano a chance to compare the remembered navigation doctrine against new operating conditions.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Free Worlds Storm Navigation Doctrine: recurrence armed"
+		has "world: free worlds geomagnetic storm active"
+		"world: free worlds geomagnetic navigation strain" >= 3
+		not "A2 Free Worlds Storm Navigation Doctrine: recurrence seen"
+	on offer
+		conversation
+			branch corridors_severe
+				has "A2 Free Worlds Storm Navigation Doctrine: doctrine verified corridors"
+				"world: free worlds geomagnetic navigation strain" >= 5
+			branch corridors_moderate
+				has "A2 Free Worlds Storm Navigation Doctrine: doctrine verified corridors"
+			branch crosscheck_severe
+				has "A2 Free Worlds Storm Navigation Doctrine: doctrine independent crosscheck"
+				"world: free worlds geomagnetic navigation strain" >= 5
+			branch crosscheck_moderate
+				has "A2 Free Worlds Storm Navigation Doctrine: doctrine independent crosscheck"
+			branch autonomy_severe
+				has "A2 Free Worlds Storm Navigation Doctrine: doctrine local autonomy"
+				"world: free worlds geomagnetic navigation strain" >= 5
+			branch autonomy_moderate
+				has "A2 Free Worlds Storm Navigation Doctrine: doctrine local autonomy"
+			`Solano meets you with a clean copy of the old review. "You declined to set a doctrine. That boundary survived the quiet period and the next storm. Nobody converted your refusal into a standing rule."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: refusal respected" = 1
+				goto finish
+			label corridors_severe
+			`Solano shows a map with most routes deliberately closed. "The strain is worse this time, so verified corridors cost us throughput. But the routes still open are the ones controllers can actually defend with current checks, and emergency traffic is not competing with stale certainty."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: Solano remembers corridors severe" = 1
+				goto finish
+			label corridors_moderate
+			`Only a few routes on Solano's map are restricted. "Verified corridors are costing some convenience, not system capacity. The useful part is that pilots know a green route means somebody checked it recently instead of merely inheriting yesterday's confidence."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: Solano remembers corridors moderate" = 1
+				goto finish
+			label crosscheck_severe
+			`Solano points to a long discrepancy log. "Independent cross-checks are slower under this much strain, but they caught two beacon corrections that agreed with each other and disagreed with inertial fixes. Repetition stopped being mistaken for corroboration."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: Solano remembers crosscheck severe" = 1
+				goto finish
+			label crosscheck_moderate
+			`The comparison queue is short enough to read at a glance. "Cross-checking is mostly invisible at this load. That is what I wanted: disagreements are recorded before they become emergencies, without turning every departure into an investigation."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: Solano remembers crosscheck moderate" = 1
+				goto finish
+			label autonomy_severe
+			`Solano highlights several captain-initiated holds and diversions. "Local autonomy produced a messy map, but the mess is legible. Captains slowed or rerouted when their instruments diverged instead of waiting for a saturated controller to validate their caution."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: Solano remembers autonomy severe" = 1
+				goto finish
+			label autonomy_moderate
+			`Solano shows only a handful of captain-initiated deviations. "At this load, autonomy mostly prevents small disagreements from entering the central queue. Controllers see the exceptions afterward without needing to authorize every cautious decision in advance."`
+			action
+				"A2 Free Worlds Storm Navigation Doctrine: Solano remembers autonomy moderate" = 1
+			label finish
+			action
+				clear "A2 Free Worlds Storm Navigation Doctrine: recurrence armed"
+				"A2 Free Worlds Storm Navigation Doctrine: recurrence seen" = 1
+				decline
