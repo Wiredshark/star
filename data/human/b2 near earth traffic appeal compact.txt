@@ -1,0 +1,164 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Near Earth Traffic Appeal Compact.
+#
+# This character slice consumes the integrated B1 Near Earth Traffic Archive,
+# which frames modern port procedure as accumulated compromises around congestion,
+# damaged cargo, missed connections, accidents, captains, dockworkers, local
+# governments, and insurers. The present-day problem is how a schedule change
+# remains reviewable after copies of the operating board travel between ports.
+
+
+event "B2 Near Earth Traffic Appeal Compact: Review Ready"
+	"B2 Near Earth Traffic Appeal Compact: review ready" = 1
+
+
+mission "B2 Near Earth Traffic Appeal Compact: Offer"
+	minor
+	name `The Slot That Became a Delay`
+	description `Sera Venn and Oren Mall disagree over how an emergency berth reassignment should survive in copied Near Earth traffic records.`
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	to offer
+		has "Near Earth Traffic Archive: offered"
+		not "B2 Near Earth Traffic Appeal Compact: introduced"
+		not "B2 Near Earth Traffic Appeal Compact: declined"
+	on offer
+		conversation
+			`Sera Venn, a traffic clerk, has spread three copies of the same docking board across a terminal counter. Oren Mall, an independent tug captain, keeps pointing to the same freighter. On the first board it had a normal berth slot. On the second, a medical transport displaced it. On the third, copied downstream without the emergency note, the freighter simply appears to have arrived late.`
+			`Sera taps the missing annotation. "That captain is now being charged as if the delay were theirs." Oren shakes his head. "And the medical ship did need the berth. The emergency was legitimate. The problem is that the reason disappeared while the schedule kept traveling."`
+			choice
+				`\tMake every berth reassignment carry its reason, source, affected ship, and review status with the copied schedule.`
+					goto provenance
+				`\tLet ports publish a clean current schedule, but require each changed slot to retain a durable link back to the change record.`
+					goto current
+				`\tKeep two linked records: the operating schedule and an immutable change ledger. Neither silently rewrites the other.`
+					goto paired
+				`\tRefuse to turn one bad copy into a general Near Earth traffic rule.`
+					goto decline
+			label provenance
+			`You argue that a reassigned slot is not just a new time. It is a decision with a cause, a source, an affected ship, and a later question of whether the exception should still influence fees or priority. Sera likes the audit trail. Oren says captains will accept emergency changes more readily if the record can still prove why they were moved.`
+			action
+				"B2 Near Earth Traffic Appeal Compact: introduced" = 1
+				"B2 Near Earth Traffic Appeal Compact: route change provenance" = 1
+				"B2 Near Earth Traffic Appeal Compact: sera trusts player" = 1
+				event "B2 Near Earth Traffic Appeal Compact: Review Ready" 7 11
+				decline
+			label current
+			`You argue that crews need one usable current board, not a stack of historical revisions. Ports may publish the clean operational schedule, but every changed slot must retain a durable reference to who changed it, why, and what earlier slot it replaced. Oren approves the simplicity. Sera insists that the link must survive copying between ports.`
+			action
+				"B2 Near Earth Traffic Appeal Compact: introduced" = 1
+				"B2 Near Earth Traffic Appeal Compact: route current schedule link" = 1
+				"B2 Near Earth Traffic Appeal Compact: oren trusts player" = 1
+				event "B2 Near Earth Traffic Appeal Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You separate operational truth from decision history. One record says which ship should berth when. A second records every reassignment, source, reason, affected ship, fee consequence, and review result. The two remain linked, so neither a busy dispatcher nor a later auditor has to pretend one document can serve both purposes.`
+			action
+				"B2 Near Earth Traffic Appeal Compact: introduced" = 1
+				"B2 Near Earth Traffic Appeal Compact: route paired schedule ledger" = 1
+				"B2 Near Earth Traffic Appeal Compact: sera trusts player" = 1
+				"B2 Near Earth Traffic Appeal Compact: oren trusts player" = 1
+				event "B2 Near Earth Traffic Appeal Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that one copied board is not enough evidence for a new standing convention. Sera keeps the disputed records attached to this case. Oren says that is better than making every port pretend it has one universal traffic code.`
+			action
+				"B2 Near Earth Traffic Appeal Compact: declined" = 1
+				decline
+
+
+mission "B2 Near Earth Traffic Appeal Compact: Review"
+	minor
+	name `When the Exception Outlives the Emergency`
+	description `Return after Sera Venn and Oren Mall have used the traffic-record arrangement long enough to discover what copied exceptions can lose.`
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	to offer
+		has "B2 Near Earth Traffic Appeal Compact: introduced"
+		has "B2 Near Earth Traffic Appeal Compact: review ready"
+		not "B2 Near Earth Traffic Appeal Compact: reviewed"
+	on offer
+		conversation
+			branch provenance
+				has "B2 Near Earth Traffic Appeal Compact: route change provenance"
+			branch current
+				has "B2 Near Earth Traffic Appeal Compact: route current schedule link"
+			`Sera and Oren have collected several weeks of copied boards. The worst case is no longer a missing reason. It is an old emergency exception that survived every copy after the emergency ended. One port still treats the displaced freighter as lower priority because its copied record contains the changed slot but not the later review that closed the exception.`
+			choice
+				`\tUse a portable slot-change packet: original slot, new slot, source, reason, affected ship, fee or priority effect, review point, and explicit closure travel together.`
+					goto packet
+				`\tUse an expiry-and-renewal rule: temporary exceptions stop propagating as active restrictions unless fresh evidence renews them.`
+					goto expiry
+			label provenance
+			`The provenance-first route preserved why changes happened, but one copied record still kept the emergency exception active after the review had closed it. Sera says an audit trail without a clear closure state can turn an honest historical reason into a permanent operational penalty.`
+			choice
+				`\tMake closure evidence travel in the same portable packet as the original reassignment.`
+					goto packet
+				`\tMake temporary exceptions expire unless a later review explicitly renews them.`
+					goto expiry
+			label current
+			`The clean-current-board route kept dispatch work simple, but one copied link pointed to the original emergency change and not the later review that ended it. Oren says a link is only useful if downstream ports can tell whether the linked exception is still active.`
+			choice
+				`\tCarry the current status and closure evidence with each slot-change packet.`
+					goto packet
+				`\tRequire temporary exceptions to expire unless fresh evidence renews them.`
+					goto expiry
+			label packet
+			`You recommend a portable slot-change packet. It carries the original and reassigned slots, who authorized the change, the operational reason, the affected ship, any fee or priority consequence, the review point, and explicit closure or renewal evidence. A copied board may remain concise, but it cannot turn one emergency decision into an unexplained permanent fact.`
+			action
+				"B2 Near Earth Traffic Appeal Compact: reviewed" = 1
+				"B2 Near Earth Traffic Appeal Compact: settlement portable slot change packet" = 1
+				"B2 Near Earth Traffic Appeal Compact: sera trusts player" = 1
+				"B2 Near Earth Traffic Appeal Compact: oren trusts player" = 1
+				decline
+			label expiry
+			`You recommend an expiry-and-renewal rule. Emergency slot changes and temporary priority effects remain searchable history, but they stop propagating as active restrictions when their review date passes unless fresh evidence explicitly renews them. Sera likes that old decisions stay auditable. Oren likes that history cannot quietly become current punishment.`
+			action
+				"B2 Near Earth Traffic Appeal Compact: reviewed" = 1
+				"B2 Near Earth Traffic Appeal Compact: settlement expiry and renewal" = 1
+				"B2 Near Earth Traffic Appeal Compact: sera trusts player" = 1
+				"B2 Near Earth Traffic Appeal Compact: oren trusts player" = 1
+				decline
+
+
+mission "B2 Near Earth Traffic Appeal Compact: Sera Remembers"
+	minor
+	name `Sera Remembers`
+	description `Sera Venn remembers whether Near Earth traffic records learned to distinguish a historical berth exception from a current operational restriction.`
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	to offer
+		not "B2 Near Earth Traffic Appeal Compact: aftermath seen"
+		or
+			has "B2 Near Earth Traffic Appeal Compact: settlement portable slot change packet"
+			has "B2 Near Earth Traffic Appeal Compact: settlement expiry and renewal"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Near Earth Traffic Appeal Compact: settlement expiry and renewal"
+			`Sera shows you a current docking board with a short note beside one reassigned slot. The note links to a complete packet showing the emergency cause, affected ship, temporary fee waiver, later review, and closure. "The board can stay simple," she says. "Simple no longer means context-free."`
+			goto record
+			label expiry
+			`Sera points out an old emergency reassignment in the archive. It is still searchable, but the active traffic board no longer treats it as a current restriction because the exception expired without renewal. "We kept the history," she says. "We stopped confusing history with today's order."`
+			label record
+			action
+				"B2 Near Earth Traffic Appeal Compact: aftermath seen" = 1
+				decline
