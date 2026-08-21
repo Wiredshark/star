@@ -50,14 +50,14 @@ mission "B2 Hicemus Access Compact: Offer"
 				"B2 Hicemus Access Compact: introduced" = 1
 				"B2 Hicemus Access Compact: route emergency" = 1
 				"B2 Hicemus Access Compact: maintainer trusts player" = 1
-			accept
+			decline
 			label conditional
 			`You point to the freight queue, mark a limited flow through the quiet corridor, and then mimic the display's emergency symbol overriding everything else. The Dispatcher brightens and programs a capacity limit. The Maintainer adds a hard preemption rule. The immediate queue shrinks, but both now depend on every future operator recognizing when a temporary exception has become too crowded to remain safe.`
 			action
 				"B2 Hicemus Access Compact: introduced" = 1
 				"B2 Hicemus Access Compact: route conditional" = 1
 				"B2 Hicemus Access Compact: dispatcher trusts player" = 1
-			accept
+			decline
 			label compact
 			`You trace three separate marks on the display: a freight window, an emergency override, and a time when the whole arrangement must be reviewed. After several exchanges the Dispatcher and Maintainer add all three. The route remains shared, but the exception now carries its own limits and an expiration point instead of quietly becoming the new default.`
 			action
@@ -65,7 +65,7 @@ mission "B2 Hicemus Access Compact: Offer"
 				"B2 Hicemus Access Compact: route compact" = 1
 				"B2 Hicemus Access Compact: dispatcher trusts player" = 1
 				"B2 Hicemus Access Compact: maintainer trusts player" = 1
-			accept
+			decline
 			label decline
 			`You hold up both hands and step away from the display. The two Incipias return to their argument, alternating between the old maps and the live traffic count. When you leave, the freight queue is still growing and the backup route remains undecided.`
 			action
@@ -116,7 +116,7 @@ mission "B2 Hicemus Access Compact: Review"
 				"B2 Hicemus Access Compact: settlement portable access record" = 1
 				"B2 Hicemus Access Compact: dispatcher trusts player" = 1
 				"B2 Hicemus Access Compact: maintainer trusts player" = 1
-			accept
+			decline
 			label conflict
 			`You recommend a shared conflict table. Departments may still make local routing decisions, but every temporary exception is checked against the same emergency corridors, junction capacities, and simultaneous-load limits before it activates. The station keeps local discretion while making the interactions between separate exceptions visible before they become a crisis.`
 			action
@@ -124,7 +124,7 @@ mission "B2 Hicemus Access Compact: Review"
 				"B2 Hicemus Access Compact: settlement shared conflict table" = 1
 				"B2 Hicemus Access Compact: dispatcher trusts player" = 1
 				"B2 Hicemus Access Compact: maintainer trusts player" = 1
-			accept
+			decline
 
 mission "B2 Hicemus Access Compact: Maintainer Remembers"
 	landing
@@ -149,4 +149,4 @@ mission "B2 Hicemus Access Compact: Maintainer Remembers"
 			label done
 			action
 				"B2 Hicemus Access Compact: aftermath seen" = 1
-			accept
+			decline
