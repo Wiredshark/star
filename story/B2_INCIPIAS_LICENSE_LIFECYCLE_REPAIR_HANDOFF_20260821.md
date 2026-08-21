@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native validation. Production and validator changes are isolated and ready for CI, but A3 must not integrate until the exact candidate passes both the fork simulation/story workflow and the production build/save-load workflow.
+READY for A3 review/integration. The exact production/validator/handoff candidate passed both repository-native acceptance workflows. The final commit after that validated candidate changes this handoff only; production and validator behavior are unchanged.
 
 ## Authority and isolation
 
@@ -10,6 +10,7 @@ PARTIAL pending repository-native validation. Production and validator changes a
 - Isolated branch: `agent/b2-incipias-license-lifecycle-20260821-1828`.
 - No existing Incipias License Compact lifecycle branch or open PR was found before creating this slice.
 - No self-integration is performed; A3 retains integration authority.
+- Private execution-service process inventory reported four pre-existing service-owned processes; none were killed or modified.
 
 ## Defect repaired
 
@@ -46,13 +47,22 @@ All prior mission, character, route, settlement, state-ownership, material-mutat
 
 - Production lifecycle repair: `42b2ef2289b535cba6cc85eb1be88f1f53abb11d`.
 - Validator hardening: `70c8f588c4d6276ba2b6561f6ab8984c7d4bb00e`.
+- Exact fully validated production/validator/handoff candidate: `80442a597b7b1d9d7c37fe80971d412e611b064a`.
 
-## Required acceptance evidence
+## Validation evidence
 
-Before promotion to READY, exact candidate validation must show:
+Exact candidate `80442a597b7b1d9d7c37fe80971d412e611b064a` passed:
 
-1. `Fork simulation and story validation` — SUCCESS, including changed-content style, focused story validation, and A1/state-ownership contracts.
-2. `Fork save-load integration smoke` — SUCCESS, including production configure/build and stock save/load smoke.
+1. `Fork simulation and story validation` run #357 / `32533334445`: SUCCESS.
+   - changed-content style: SUCCESS;
+   - focused story validators: SUCCESS;
+   - A1 simulation/state-ownership contracts: SUCCESS.
+2. `Fork save-load integration smoke` run #342 / `32533334399`: SUCCESS.
+   - production configuration: SUCCESS;
+   - production build: SUCCESS;
+   - stock save-load smoke cases: SUCCESS.
+
+The candidate is exactly three commits ahead / zero behind its authoritative base and changes only three files: the Incipias production slice, its focused validator, and this durable handoff.
 
 ## A3 / B3 integration notes
 
