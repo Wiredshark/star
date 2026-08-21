@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native simulation/story/style and production build/save-load gates on the exact remote head.
+READY for A3 review/integration.
 
 ## Authority and branch
 
@@ -11,7 +11,8 @@ PARTIAL pending repository-native simulation/story/style and production build/sa
 - Isolated branch: `agent/b2-avgi-allocation-lifecycle-20260821-1123`
 - Production lifecycle repair commit: `ab5829278f7816ffc249afb3840d42f959676547`
 - Focused-validator hardening commit: `11618b826383a0b031643707677970ff6c342466`
-- Current handoff head: this commit
+- Exact fully validated production/validator/handoff candidate: `debe540c298e394b850c695268a90b9eb0515f2f`
+- Final READY handoff head: this commit
 
 B2 remains isolated and unmerged. A3 retains integration authority.
 
@@ -27,17 +28,27 @@ B2 remains isolated and unmerged. A3 retains integration authority.
 - Hardened `tools/story/validate_b2_avgi_allocation_compact.py` to reject any terminal `accept`, require exactly seven `decline` terminals, and reject gameplay-objective directives that would invalidate the state-only lifecycle assumption.
 - Preserved existing validator checks for routes, settlements, Review fallthrough, one-shot aftermath, B2-only write authority, upstream Avgi/world state read-only ownership, material/reputation mutation guards, and local `goto`/`label` integrity.
 
-## Validation evidence already executed in an isolated `Wiredshark/star` clone
+## Validation evidence
 
-The clone was pinned to the same authoritative base and contained byte-equivalent production and validator changes before publication.
+### Isolated clone checks
 
 - `python3 tools/story/validate_b2_avgi_allocation_compact.py` — PASS.
 - `python3 tools/story/validate_story_repo.py` — PASS.
 - `python3 tools/story/test_b2_character_packets.py` — PASS.
 - `git diff --check` — PASS.
-- `python3 utils/check_content_style.py "data/avgi/b2 avgi allocation compact.txt"` — could not start because the private host Python environment lacks third-party package `regex` (`ModuleNotFoundError`). No host-side style PASS is claimed.
+- Host-side `python3 utils/check_content_style.py "data/avgi/b2 avgi allocation compact.txt"` could not start because that host lacks third-party package `regex`; no host-side style PASS is claimed.
 
-Repository-native CI remains the acceptance authority for style/build/save-load.
+### Repository-native exact-head gates on `debe540c298e394b850c695268a90b9eb0515f2f`
+
+- `Fork simulation and story validation` run #335 / `32498220305` — SUCCESS.
+- Focused story validation including the hardened Avgi Allocation validator — SUCCESS.
+- A1 simulation/state-ownership contracts — SUCCESS.
+- Changed-content style — SUCCESS.
+- `Fork save-load integration smoke` run #320 / `32498220350` — SUCCESS.
+- Production configure/build — SUCCESS.
+- Stock save-load smoke cases — SUCCESS.
+
+The final READY commit changes only this handoff document; production and validator behavior are unchanged from the exact fully validated candidate.
 
 ## Persistence / canon / ownership
 
@@ -48,6 +59,6 @@ Repository-native CI remains the acceptance authority for style/build/save-load.
 
 ## A3 / B3 integration notes
 
-- Integrate only after repository-native simulation/story/style and production build/save-load gates are terminal green on the exact candidate head.
 - Preserve the lifecycle invariant: dialogue-only B2 missions that merely persist state terminate with `decline`; `accept` is reserved for mission lifecycles that actually create gameplay objectives.
 - No B1/A1 dependency ordering change is introduced by this repair; this is a lifecycle-only correction to already integrated B2 content.
+- Re-read current `main` before integration and confirm ancestry/mergeability remain clean.
