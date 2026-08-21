@@ -68,6 +68,22 @@ def test_later_reader_consumes_both_outcomes():
     assert reader.count(f'"{B2_PREFIX} aftermath seen" = 1') == 1
 
 
+def test_state_only_dialogue_lifecycle():
+    # These missions only record persistent dialogue/global state; they do not
+    # create cargo, destination, NPC, waypoint, timer, or other playable objectives.
+    # Terminal paths must therefore close with decline rather than accept, otherwise
+    # an objective-less mission can remain active after its conversation ends.
+    assert not re.search(r'^\s*accept\s*$', TEXT, re.M), "state-only B2 slice must not leave accepted missions active"
+    declines = re.findall(r'^\s*decline\s*$', TEXT, re.M)
+    assert len(declines) == 7, f"expected 7 state-only decline terminals, found {len(declines)}"
+
+    objective_directives = re.compile(
+        r'^\s*(?:destination|waypoint|stopover|cargo|passengers|npc|deadline|distance|job|assisting|boarding)\b',
+        re.I | re.M,
+    )
+    assert not objective_directives.search(TEXT), "lifecycle assumption invalidated by objective-bearing mission directives"
+
+
 def test_no_world_or_material_mutation():
     # Inspect executable data lines, not comments/dialogue prose. B2 may discuss
     # resources in text but must not issue material/reputation/world-state commands.
@@ -100,6 +116,7 @@ if __name__ == "__main__":
     test_persistent_routes_and_refusal()
     test_review_and_terminal_settlements()
     test_later_reader_consumes_both_outcomes()
+    test_state_only_dialogue_lifecycle()
     test_no_world_or_material_mutation()
     test_local_goto_labels_resolve()
     print("PASS: B2 Remnant Continuity Compact structure validated")
@@ -108,4 +125,5 @@ if __name__ == "__main__":
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Taal Remembers")
+    print("PASS: lifecycle=7 state-only decline terminals")
     print("PASS: mutation_surface=B2 conditions only")
