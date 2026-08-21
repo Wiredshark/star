@@ -71,6 +71,30 @@ def main() -> None:
     require("charter" in text.lower() and "emergency" in text.lower(),
             "institutional-history anchor disappeared")
 
+    # These three missions are dialogue/state-only. A terminal `accept` would move
+    # an objective-less offered mission into the active mission list after the
+    # conversation closes. All seven terminal paths must persist the same state and
+    # terminate with `decline` instead.
+    require(not re.search(r'^\s*accept\s*$', text, flags=re.MULTILINE),
+            "state-only Syndicate Charter missions must not leave accepted missions active")
+    decline_count = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+    require(decline_count == 7,
+            f"expected exactly seven state-only dialogue terminals to decline, found {decline_count}")
+
+    # If a real gameplay objective is added later, the lifecycle assumption above
+    # must be revisited rather than silently keeping this validator stale.
+    for objective in (
+        '\tdestination ',
+        '\tstopover ',
+        '\twaypoint ',
+        '\tnpc ',
+        '\tdeadline ',
+        '\tpassengers ',
+        '\tcargo ',
+    ):
+        require(objective not in text,
+                f"unexpected mission objective in state-only lifecycle slice: {objective.strip()}")
+
     # Guard against accidentally turning this into economy rewards/reputation mutation.
     forbidden = ("payment ", "credits", "reputation", "combat rating", "cargo ")
     lower = text.lower()
@@ -86,10 +110,11 @@ def main() -> None:
     print("PASS: B2 Syndicate Charter Obligations structure validated")
     print("PASS: missions=3")
     print("PASS: named_characters=2")
-    print("PASS: initial_routes=3")
+    print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Solis Remembers")
     print("PASS: persistence_model=stock mission/global conditions")
+    print("PASS: lifecycle=state-only dialogue terminals decline cleanly")
 
 
 if __name__ == "__main__":
