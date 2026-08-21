@@ -1,6 +1,6 @@
 # B2 Syndicate Parts Provenance Compact — Handoff
 
-Verdict: **PARTIAL** pending repository-native validation.
+Verdict: **READY for A3 review/integration**.
 
 ## Authority and isolation
 
@@ -9,6 +9,7 @@ Verdict: **PARTIAL** pending repository-native validation.
 - Isolated branch: `agent/b2-syndicate-parts-provenance-20260821-0124`
 - Production commit: `ffa50167331b0a224f44b11c770bd65b091cdf86`
 - Focused-validator commit: `1438a495ed6e79ce91ac1e46f78f3665c71f247a`
+- Exact fully validated production/validator/handoff candidate: `49d5954ec40e0d98b1c8006478d5bfc7bf84a986`
 - B2 does not self-integrate.
 
 ## Slice
@@ -70,11 +71,16 @@ Focused validator covers:
 - bounded rather than universal equivalence;
 - dialogue-only lifecycle uses `decline`, not `accept`.
 
-Repository-native simulation/story/style and production build/save-load workflows are still required before READY. Do not treat this handoff as integrable until those exact-head gates are terminal green.
+On exact candidate `49d5954ec40e0d98b1c8006478d5bfc7bf84a986`, repository-native validation is terminal green:
+
+- `Fork simulation and story validation` run #303 / `32450668197`: **SUCCESS**.
+- `Fork save-load integration smoke` run #288 / `32450668198`: **SUCCESS**.
+
+Those workflows provide the repository-native story/simulation/style gate and the production build/save-load integration smoke gate required for READY. This final commit changes only the durable handoff wording; production content and validator behavior are unchanged from the exact fully validated candidate.
 
 ## A3 / B3 integration notes
 
-A3 should re-read current `main` before integration because the integration branch may advance while this specialist branch is under validation. If ancestry remains clean and the exact candidate is green, integrate the focused B2 commits through the normal A3 authority path.
+A3 should re-read current `main` before integration because the integration branch may advance while this specialist branch is under validation. If ancestry remains clean, integrate the focused B2 slice through the normal A3 authority path. Do not infer that the draft PR authorizes B2 to self-integrate.
 
 B3 should preserve the core distinction:
 
