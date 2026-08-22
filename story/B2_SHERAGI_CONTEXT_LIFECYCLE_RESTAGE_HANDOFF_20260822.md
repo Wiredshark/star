@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native validation on the restaged current-main branch.
+READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -10,7 +10,8 @@ PARTIAL pending exact-head repository-native validation on the restaged current-
 - Authoritative `main` base recovered at run start: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Restage branch: `agent/b2-sheragi-context-lifecycle-20260822-1626`
 - Original stalled B2 PR: #124 / head `c494b53bca6ec89ed6f3f8e230cfb2fe55df1b48`
-- Original exact-head repository workflows are now both terminal green, but that PR is stale against current main and still contains the old objective-less `accept` lifecycle.
+- Exact fully validated current-main production/validator/handoff candidate: `d6deccc02dfa88e6420e54557adb52b9aec79962`
+- Original PR #124 is closed as superseded.
 - This branch is a clean current-main restage rather than a destructive rewrite of the old branch.
 - B2 does not self-integrate; A3 retains integration authority.
 
@@ -28,7 +29,7 @@ Persistent initial approaches remain emergency shelter/removal, context-first su
 
 The original candidate used terminal `accept` on six positive dialogue/state-only paths even though these missions create no destination, cargo, NPC, timer, waypoint, passenger, or other gameplay objective. This restage changes those six terminals to `decline`; refusal already declined. All seven terminal paths now write the same persistent state as before and close cleanly.
 
-The focused validator now enforces:
+The focused validator enforces:
 
 - zero terminal `accept` commands;
 - exactly seven `decline` terminals;
@@ -46,15 +47,20 @@ The focused validator now enforces:
 
 ## Validation
 
-Original stalled head `c494b53bca6ec89ed6f3f8e230cfb2fe55df1b48` is now known to have passed:
+Original stalled head `c494b53bca6ec89ed6f3f8e230cfb2fe55df1b48` eventually passed both historical workflows, confirming the original content semantics:
 
 - Fork simulation and story validation #143 / `32313220657`: SUCCESS
 - Fork save-load integration smoke #132 / `32313220731`: SUCCESS
 
-Those runs validate the original production semantics but predate this lifecycle restage. The exact current restage head must independently pass both repository-native workflows before READY promotion.
+On exact current-main restage candidate `d6deccc02dfa88e6420e54557adb52b9aec79962`:
+
+- Fork simulation and story validation #425 / `32596789536`: SUCCESS
+- Fork save-load integration smoke #410 / `32596789549`: SUCCESS
+
+The restage is exactly 3 commits ahead / 0 behind its selected authoritative base before this READY-handoff-only update and changes only three files: production content, focused validator, and this durable handoff.
 
 ## A3 / B3 guidance
 
-A3 should integrate this current-main restage rather than old PR #124 if the exact restage head is green and mergeable. Do not integrate both.
+A3 should integrate this current-main restage rather than old PR #124. Do not integrate both. Re-read current `main` immediately before integration and confirm ancestry remains clean.
 
 B3 should preserve the core evidence boundary: a conserved physical artifact is not the same thing as its excavation context; a reconstruction is not direct evidence; downstream copies must not erase uncertainty or silently convert interpretation into original Sheragi fact.
