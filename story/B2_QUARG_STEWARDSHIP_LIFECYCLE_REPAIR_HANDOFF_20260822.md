@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native simulation/story and save-load workflows on the exact repair head.
+READY for A3 review/integration.
 
 ## Authority and ancestry
 
@@ -12,6 +12,7 @@ PARTIAL pending repository-native simulation/story and save-load workflows on th
 - lifecycle branch: `agent/b2-quarg-stewardship-lifecycle-20260822-1227`
 - production lifecycle repair: `b8a9e3bc9889227859a19a451513a9bdfb57db9d`
 - validator hardening: `d2a2a688ce77a641ece0e5ca0c30b52dadd64076`
+- exact fully validated production/validator/handoff candidate: `79a74c9172dbe8fff77630485f6ce17201406872`
 
 ## Repair
 
@@ -30,6 +31,19 @@ No dialogue, route, settlement, character, source scope, trust state, condition 
 - no objective-bearing `destination`, `stopover`, `waypoint`, `npc`, `cargo`, `passengers`, `deadline`, or `timer` directives.
 
 All prior mission graph, route, settlement, B1 dependency, Quarg scope, B2-only write ownership, material/reputation mutation, local goto/label, and aftermath-reader checks remain.
+
+## Validation evidence
+
+Exact candidate `79a74c9172dbe8fff77630485f6ce17201406872` passed both repository-native acceptance workflows:
+
+- `Fork simulation and story validation` run `32584877052` / #410: **SUCCESS**
+  - focused Python validation compilation: PASS
+  - all focused story validators, including the Quarg lifecycle validator: PASS
+  - A1 simulation contract tests: PASS
+  - changed fork content style: PASS
+- `Fork save-load integration smoke` run `32584877049` / #395: **SUCCESS**
+  - production configure/build: PASS
+  - stock save-load smoke cases: PASS
 
 ## Persistence and canon
 
