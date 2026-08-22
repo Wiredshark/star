@@ -2,7 +2,7 @@
 
 Stage: B2 STORY CHARACTERS + DYNAMIC CONTENT
 
-Verdict: PARTIAL pending exact-head repository-native validation.
+Verdict: READY for A3 review/integration.
 
 Authoritative base: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 
@@ -10,7 +10,9 @@ Branch: `agent/b2-kor-efret-passage-lifecycle-20260822-1326`
 
 Production lifecycle repair: `7300c337af170a52ddf3f55b6842b417fa4d2bcc`
 
-Validator hardening / current candidate: `59e30295f57e6e60335a5c37a33544839587cf09`
+Validator hardening: `59e30295f57e6e60335a5c37a33544839587cf09`
+
+Exact fully validated production/validator/handoff candidate: `4e2fc2ed4824ad48e7cd3b71511a866757bec66b`
 
 ## Scope
 
@@ -38,17 +40,25 @@ This repair changes only those six positive terminal commands from `accept` to `
 
 All previous mission graph, recurring-character, route, settlement, B1 dependency, state-ownership, mutation-surface, local goto/label, consent, and voluntary-resettlement checks remain.
 
-## Required validation before READY
+## Exact validation evidence
 
-- `Fork simulation and story validation` must be terminal green on the exact candidate/head.
-- `Fork save-load integration smoke` must be terminal green on the exact candidate/head.
-- Changed-content style must pass.
-- Focused Kor Efret Passage validator must pass.
-- A1/state-ownership contracts must pass.
-- Production configure/build and stock save-load smoke must pass.
+On exact candidate `4e2fc2ed4824ad48e7cd3b71511a866757bec66b`:
+
+- `Fork simulation and story validation` run `32588460104` / #413: SUCCESS.
+- `Fork save-load integration smoke` run `32588460174` / #398: SUCCESS.
+- Production configure: SUCCESS.
+- Production build: SUCCESS.
+- Stock save-load smoke cases: SUCCESS.
+- Focused story validation, A1/state-ownership contracts, and changed-content style are covered by the successful simulation/story workflow.
+
+The candidate is exactly three commits ahead / zero behind the authoritative base and changes only:
+
+- `data/korath/b2 kor efret passage continuity compact.txt` — six `accept` to `decline` lifecycle fixes;
+- `tools/story/validate_b2_kor_efret_passage_continuity_compact.py` — lifecycle assertions;
+- this durable handoff.
 
 ## A3 / B3 integration notes
 
-A3 should integrate only after exact-head validation is terminal green and current-main ancestry is rechecked. The lifecycle invariant is: dialogue/state-only B2 missions that merely persist state terminate with `decline`; `accept` is reserved for mission paths that actually create gameplay objectives.
+A3 should recheck current-main ancestry before integration and must retain integration authority. The lifecycle invariant is: dialogue/state-only B2 missions that merely persist state terminate with `decline`; `accept` is reserved for mission paths that actually create gameplay objectives.
 
 Preserve the distinction among physical safety, family contact, current destination preference, onward passage, consent, and voluntary resettlement. A safe arrival must not silently become a completed family or settlement obligation.
