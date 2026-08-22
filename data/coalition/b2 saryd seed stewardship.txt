@@ -47,14 +47,14 @@ mission "B2 Saryd Seed Stewardship: Offer"
 				"B2 Saryd Seed Stewardship: introduced" = 1
 				"B2 Saryd Seed Stewardship: route provenance" = 1
 				"B2 Saryd Seed Stewardship: keeper trusts player" = 1
-			accept
+			decline
 			label access
 			`You point from the resistant seed to the affected-settlement requests. The Grower immediately starts arranging distribution. The Keeper reluctantly adds provisional tags to each release. The harvest response will begin sooner, but the archive now depends on recipients remembering to report what was planted, crossed, or lost while the emergency is still unfolding.`
 			action
 				"B2 Saryd Seed Stewardship: introduced" = 1
 				"B2 Saryd Seed Stewardship: route access" = 1
 				"B2 Saryd Seed Stewardship: grower trusts player" = 1
-			accept
+			decline
 			label paired
 			`You separate a small emergency release from the untouched reserve and then point to the archive's return-record fields. The Grower brightens at the immediate distribution while the Keeper adds a requirement that every receiving settlement report planting location, survival, cross-breeding, and retained local seed. The exchange accepts that emergency use can change a lineage, but not that the change should become invisible.`
 			action
@@ -62,7 +62,7 @@ mission "B2 Saryd Seed Stewardship: Offer"
 				"B2 Saryd Seed Stewardship: route paired" = 1
 				"B2 Saryd Seed Stewardship: keeper trusts player" = 1
 				"B2 Saryd Seed Stewardship: grower trusts player" = 1
-			accept
+			decline
 			label decline
 			`You step away from the cases. The Keeper and Grower return to their argument, one pointing to incomplete records and the other to damaged harvest reports. The seed remains sealed while they search for a compromise without you.`
 			action
@@ -114,7 +114,7 @@ mission "B2 Saryd Seed Stewardship: Review"
 				"B2 Saryd Seed Stewardship: settlement portable seed passport" = 1
 				"B2 Saryd Seed Stewardship: keeper trusts player" = 1
 				"B2 Saryd Seed Stewardship: grower trusts player" = 1
-			accept
+			decline
 			label reserve
 			`You recommend a local reserve covenant. Communities remain free to distribute, cross, and adapt working seed, but each exchange participant preserves an uncrossed reference population and periodically verifies that it still exists. The archive stops treating preservation as a demand that nothing change; instead, it keeps a living point of comparison so adaptation does not erase its own history.`
 			action
@@ -122,7 +122,7 @@ mission "B2 Saryd Seed Stewardship: Review"
 				"B2 Saryd Seed Stewardship: settlement local reserve covenant" = 1
 				"B2 Saryd Seed Stewardship: keeper trusts player" = 1
 				"B2 Saryd Seed Stewardship: grower trusts player" = 1
-			accept
+			decline
 
 mission "B2 Saryd Seed Stewardship: Keeper Remembers"
 	landing
@@ -148,4 +148,4 @@ mission "B2 Saryd Seed Stewardship: Keeper Remembers"
 			label done
 			action
 				"B2 Saryd Seed Stewardship: aftermath seen" = 1
-			accept
+			decline
