@@ -51,14 +51,14 @@ mission "B2 Free Worlds Reserve Recovery Compact: Offer"
 				"B2 Free Worlds Reserve Recovery Compact: introduced" = 1
 				"B2 Free Worlds Reserve Recovery Compact: route target" = 1
 				"B2 Free Worlds Reserve Recovery Compact: sol trusts player" = 1
-			accept
+			decline
 			label support
 			`You tell Sol that contingency capacity is operated by people, not counted by crates. Brenner begins drafting rest rotations, replacement crews, maintenance windows, and limits on repeated emergency borrowing. Sol says, "Then the support ledger has to say when the physical reserve is still short, too. I will not call an exhausted crew a substitute for missing equipment."`
 			action
 				"B2 Free Worlds Reserve Recovery Compact: introduced" = 1
 				"B2 Free Worlds Reserve Recovery Compact: route support" = 1
 				"B2 Free Worlds Reserve Recovery Compact: brenner trusts player" = 1
-			accept
+			decline
 			label paired
 			`You propose treating reserve recovery as a linked set of obligations. Replaced cargo, restored fuel, returned borrowed equipment, rested crews, repaired generators, and reopened shelter capacity can be recorded separately, but none of them should silently stand in for the others. Sol draws connecting lines across the board. Brenner says, "That would at least show which part of the promise is still missing."`
 			action
@@ -66,7 +66,7 @@ mission "B2 Free Worlds Reserve Recovery Compact: Offer"
 				"B2 Free Worlds Reserve Recovery Compact: route paired" = 1
 				"B2 Free Worlds Reserve Recovery Compact: sol trusts player" = 1
 				"B2 Free Worlds Reserve Recovery Compact: brenner trusts player" = 1
-			accept
+			decline
 			label decline
 			`You decline to turn one depot's argument into a regional rule. Sol nods. Brenner says, "Fair. Independent worlds are allowed to learn the same lesson differently."`
 			action
@@ -118,7 +118,7 @@ mission "B2 Free Worlds Reserve Recovery Compact: Review"
 				"B2 Free Worlds Reserve Recovery Compact: settlement portable reserve packet" = 1
 				"B2 Free Worlds Reserve Recovery Compact: sol trusts player" = 1
 				"B2 Free Worlds Reserve Recovery Compact: brenner trusts player" = 1
-			accept
+			decline
 			label reconcile
 			`You recommend keeping stock, staffing, transport, shelter, fuel, and maintenance records lightweight and locally owned, but requiring a reconciliation pass before a reserve is declared restored. Each world can choose its own operating margin, yet an unresolved borrowed crew, missing generator, deferred repair, or depleted fuel store prevents the regional record from treating that category as closed.`
 			action
@@ -126,7 +126,7 @@ mission "B2 Free Worlds Reserve Recovery Compact: Review"
 				"B2 Free Worlds Reserve Recovery Compact: settlement reconciliation cycle" = 1
 				"B2 Free Worlds Reserve Recovery Compact: sol trusts player" = 1
 				"B2 Free Worlds Reserve Recovery Compact: brenner trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Free Worlds Reserve Recovery Compact: Brenner Remembers"
@@ -151,4 +151,4 @@ mission "B2 Free Worlds Reserve Recovery Compact: Brenner Remembers"
 			label record
 			action
 				"B2 Free Worlds Reserve Recovery Compact: aftermath seen" = 1
-			accept
+			decline
