@@ -1,0 +1,138 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 consumes the A1 Merchant repair backlog and surge read-only. A player-selected
+# yard policy persists through recovery and is later interpreted against whether the
+# A1 pooled-capacity surge is still active.
+
+mission "A2 Merchant Repair Priority: Yard Briefing"
+	minor
+	name `Merchant Yards: Repair Priority`
+	description `A Merchant yard coordinator asks how a strained repair queue should allocate scarce dock capacity.`
+	source
+		government "Merchant"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		"world: merchant repair backlog" >= 3
+		not "A2 Merchant Repair Priority: briefing seen"
+	on offer
+		conversation
+			`Yard coordinator Elian Cross meets you beside a queue board crowded with rescue-damaged hulls. "Tugs got them home. That does not mean the yards can return all of them to service at once."`
+			branch pooled
+				has "world: merchant repair surge"
+			`Cross lays out three rules. "What should scarce berth time protect first: safe return to service, continuity for working freight hulls, or the oldest repair obligations?"`
+				goto choose
+			label pooled
+			`Temporary pooled capacity has opened extra berths, but Cross shakes his head. "A surge buys time. It does not answer who should get that time first."`
+			label choose
+			choice
+				`\tProtect flight-critical safety first, regardless of schedule or contract age.`
+					goto safety
+				`\tProtect working freight continuity so active routes lose as little capacity as possible.`
+					goto freight
+				`\tProtect queue fairness: honor the oldest documented repair obligations first.`
+					goto queue
+				`\tI am not setting a standing priority for Merchant yards.`
+					goto refuse
+			label safety
+			`Cross marks the rule plainly. "Then technical release criteria outrank commercial pressure. If a hull is unsafe, its place in the schedule cannot make it safe."`
+			action
+				"A2 Merchant Repair Priority: briefing seen" = 1
+				"A2 Merchant Repair Priority: priority safety" = 1
+				decline
+			label freight
+			`Cross reserves qualifying slots for ships already carrying active route obligations. "We will record what gets displaced. Continuity is a tradeoff, not a claim that freight matters more than every other crew."`
+			action
+				"A2 Merchant Repair Priority: briefing seen" = 1
+				"A2 Merchant Repair Priority: priority freight" = 1
+				decline
+			label queue
+			`Cross sorts the board by documented intake time. "Then exceptions have to be written as exceptions. Nobody quietly jumps the queue because their contract is louder."`
+			action
+				"A2 Merchant Repair Priority: briefing seen" = 1
+				"A2 Merchant Repair Priority: priority queue" = 1
+				decline
+			label refuse
+			`Cross closes the policy field. "Understood. Your refusal is not a blank signature for somebody else's yard rule."`
+			action
+				"A2 Merchant Repair Priority: briefing seen" = 1
+				"A2 Merchant Repair Priority: refused" = 1
+				decline
+
+mission "A2 Merchant Repair Priority: Recovery Review"
+	minor
+	name `Merchant Yards: After the Queue`
+	description `With the Merchant repair backlog largely cleared, Elian Cross reviews what the earlier priority actually changed.`
+	source
+		government "Merchant"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Merchant Repair Priority: briefing seen"
+		"world: merchant repair backlog" <= 1
+		not "A2 Merchant Repair Priority: recovery seen"
+	on offer
+		conversation
+			branch safety_surge
+				has "A2 Merchant Repair Priority: priority safety"
+				has "world: merchant repair surge"
+			branch safety_quiet
+				has "A2 Merchant Repair Priority: priority safety"
+			branch freight_surge
+				has "A2 Merchant Repair Priority: priority freight"
+				has "world: merchant repair surge"
+			branch freight_quiet
+				has "A2 Merchant Repair Priority: priority freight"
+			branch queue_surge
+				has "A2 Merchant Repair Priority: priority queue"
+				has "world: merchant repair surge"
+			branch queue_quiet
+				has "A2 Merchant Repair Priority: priority queue"
+			`Cross shows you the cleared policy field. "You declined to set the rule. The queue recovered without anybody converting that refusal into your endorsement."`
+			action
+				"A2 Merchant Repair Priority: refusal respected" = 1
+				goto finish
+			label safety_surge
+			`"Pooled capacity is still active," Cross says. "Safety-first kept marginal hulls from being rushed through the extra berths. The surge increased throughput without lowering the release threshold."`
+			action
+				"A2 Merchant Repair Priority: Cross remembers safety under surge" = 1
+				goto finish
+			label safety_quiet
+			`"The temporary pool has closed," Cross says. "Safety-first outlasted it because the useful part was the release threshold, not the emergency capacity."`
+			action
+				"A2 Merchant Repair Priority: Cross remembers safety after quiet" = 1
+				goto finish
+			label freight_surge
+			`Cross points to the remaining pooled berths. "Freight continuity used the surge aggressively. Routes recovered quickly, and the displaced non-route work stayed visible on the ledger instead of disappearing."`
+			action
+				"A2 Merchant Repair Priority: Cross remembers freight under surge" = 1
+				goto finish
+			label freight_quiet
+			`"Once pooled capacity ended, freight preference stopped with the shortage that justified it," Cross says. "Working routes kept continuity without becoming permanent seniority over every later repair."`
+			action
+				"A2 Merchant Repair Priority: Cross remembers freight after quiet" = 1
+				goto finish
+			label queue_surge
+			`"The surge gave us room to honor the old queue faster," Cross says. "Extra capacity did not become a second hidden priority list; documented intake order still explained who moved first."`
+			action
+				"A2 Merchant Repair Priority: Cross remembers queue under surge" = 1
+				goto finish
+			label queue_quiet
+			`"With the surge gone, the oldest-obligation rule became ordinary queue discipline," Cross says. "Exceptions are still possible, but now they leave a reason somebody else can inspect."`
+			action
+				"A2 Merchant Repair Priority: Cross remembers queue after quiet" = 1
+			label finish
+			action
+				"A2 Merchant Repair Priority: recovery seen" = 1
+				decline
