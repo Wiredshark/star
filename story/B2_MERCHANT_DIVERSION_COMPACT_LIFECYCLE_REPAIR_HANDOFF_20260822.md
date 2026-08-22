@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native validation.
+READY for A3 review/integration.
 
 ## Authoritative base
 
@@ -22,6 +22,7 @@ The production repair converts all six objective-less positive `accept` terminal
 
 - production lifecycle repair: `fdc2b6b4acf8ba979aa4b9eec6efd12ff69ebe49`
 - validator hardening: `0add002577ffe99bd4a83fbd1f906c02483e7ef9`
+- exact fully validated production/validator/handoff candidate: `1159157d503151d4bd284515c820b8fd3af47834`
 
 ## Files changed
 
@@ -52,9 +53,22 @@ The focused validator now additionally requires:
 
 All existing mission graph, route, settlement, A1 ownership, B2 write ownership, mutation-surface, continuity, and local `goto`/`label` checks remain.
 
-## Validation state
+## Exact validation evidence
 
-Repository-native validation is pending on the exact branch head. Do not promote to READY or integrate until both simulation/story/style and production build/save-load workflows are terminal green.
+On exact candidate `1159157d503151d4bd284515c820b8fd3af47834`:
+
+- `Fork simulation and story validation` #374 / run `32551818482`: **SUCCESS**
+  - focused simulation/story contracts: SUCCESS
+  - hardened Merchant Diversion focused validator through repository discovery: SUCCESS
+  - A1 simulation/state-ownership contracts: SUCCESS
+  - changed-content style: SUCCESS
+- `Fork save-load integration smoke` #359 / run `32551818507`: **SUCCESS**
+  - dependency installation: SUCCESS
+  - production configure: SUCCESS
+  - production build: SUCCESS
+  - stock save-load smoke: SUCCESS
+
+No manual interactive game acceptance is claimed beyond the repository-native production build/save-load smoke.
 
 ## A3 / B3 integration notes
 
