@@ -1,4 +1,4 @@
-# Copyright (c) 2026 by the Endless Sky contributors
+# Copyright (c) 2026 by Wiredshark
 #
 # Endless Sky is free software: you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -10,7 +10,6 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <https://www.gnu.org/licenses/>.
-
 
 mission "A2 Dirt Belt Resilience Practice"
 	minor
@@ -63,7 +62,6 @@ mission "A2 Dirt Belt Resilience Practice"
 				"A2 Dirt Belt Resilience Practice: local" = 1
 				"A2 Dirt Belt Resilience Practice: reflection pending" = 1
 				decline
-
 
 mission "A2 Dirt Belt Resilience Practice Reflection"
 	minor
