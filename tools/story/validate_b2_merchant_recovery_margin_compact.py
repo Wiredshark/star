@@ -67,6 +67,27 @@ for forbidden in (
 ):
     assert not re.search(forbidden, text, re.M | re.I), f"forbidden mutation pattern: {forbidden}"
 
+# These missions only record persistent dialogue state. They must close the
+# offered mission immediately rather than leaving an objective-less accepted
+# mission in the player's active mission list.
+accept_terminals = re.findall(r'^\s*accept\s*$', text, re.M)
+decline_terminals = re.findall(r'^\s*decline\s*$', text, re.M)
+assert not accept_terminals, f"state-only dialogue must not use accept terminals: {len(accept_terminals)}"
+assert len(decline_terminals) == 7, f"expected 7 state-only decline terminals, got {len(decline_terminals)}"
+for objective_directive in (
+    "destination",
+    "stopover",
+    "waypoint",
+    "npc",
+    "cargo",
+    "passenger",
+    "deadline",
+    "timer",
+):
+    assert not re.search(rf'^\s*{objective_directive}\b', text, re.M | re.I), (
+        f"unexpected gameplay objective directive in state-only slice: {objective_directive}"
+    )
+
 # Every local goto target must have a label somewhere in the same content file.
 gotos = set(re.findall(r'^\s*goto\s+([A-Za-z0-9_-]+)\s*$', text, re.M))
 labels = set(re.findall(r'^\s*label\s+([A-Za-z0-9_-]+)\s*$', text, re.M))
@@ -91,6 +112,8 @@ print("PASS: B2 Merchant Recovery Margin Compact structure validated")
 print("PASS: missions=3")
 print("PASS: named_characters=2")
 print("PASS: initial_routes=3 + refusal")
+print("PASS: authoritative_a1_input=world: merchant repair backlog (read-only)")
 print("PASS: terminal_settlements=2")
+print("PASS: dialogue_lifecycle=7 decline terminals, 0 accept terminals")
 print("PASS: a1_repair_backlog=read_only")
 print("PASS: mutation_surface=B2 conditions only")
