@@ -56,7 +56,7 @@ mission "B2 Arach Provenance Compact: Offer"
 				"B2 Arach Provenance Compact: route portable provenance" = 1
 				"B2 Arach Provenance Compact: assayer trusts player" = 1
 				event "B2 Arach Provenance Compact: Review Ready" 5 7
-				accept
+				decline
 			label custody
 			`You tell them that responsibility should stay legible at each handoff. The Carrier immediately starts rewriting the transfer record so every seal, delay, and observed condition belongs to one leg only. The Assayer agrees, but insists the mine history remain available as a separate source rather than disappearing when custody changes.`
 			action
@@ -64,7 +64,7 @@ mission "B2 Arach Provenance Compact: Offer"
 				"B2 Arach Provenance Compact: route bounded custody" = 1
 				"B2 Arach Provenance Compact: carrier trusts player" = 1
 				event "B2 Arach Provenance Compact: Review Ready" 5 7
-				accept
+				decline
 			label paired
 			`You suggest two linked records. One follows what the ore was believed to be at the mine; the other follows what each carrier actually observed and accepted. Neither record is allowed to silently rewrite the other. The Assayer calls that enough continuity to investigate the source. The Carrier calls it enough separation to keep a later handoff from becoming an inherited confession.`
 			action
@@ -73,7 +73,7 @@ mission "B2 Arach Provenance Compact: Offer"
 				"B2 Arach Provenance Compact: assayer trusts player" = 1
 				"B2 Arach Provenance Compact: carrier trusts player" = 1
 				event "B2 Arach Provenance Compact: Review Ready" 5 7
-				accept
+				decline
 			label decline
 			`You leave the dispute to them. The Carrier closes the transfer ledger. The Assayer returns to the archive of old assays. Neither asks you to choose again.`
 			action
@@ -118,14 +118,14 @@ mission "B2 Arach Provenance Compact: Review"
 				"B2 Arach Provenance Compact: reviewed" = 1
 				"B2 Arach Provenance Compact: settlement provenance packet" = 1
 				"B2 Arach Provenance Compact: assayer trusts player" = 1
-				accept
+				decline
 			label dispute
 			`You recommend a linked dispute ledger. Mine provenance and freight custody remain separate records, but a contradiction between them becomes its own portable state. Nobody may close it merely by copying a shorter summary; a later buyer can see both histories and whether the discrepancy was investigated, reassigned, or left unresolved. The Carrier calls it responsibility without inherited guilt. The Assayer calls it memory without inherited certainty.`
 			action
 				"B2 Arach Provenance Compact: reviewed" = 1
 				"B2 Arach Provenance Compact: settlement portable dispute ledger" = 1
 				"B2 Arach Provenance Compact: carrier trusts player" = 1
-				accept
+				decline
 
 
 mission "B2 Arach Provenance Compact: Assayer Remembers"
@@ -152,4 +152,4 @@ mission "B2 Arach Provenance Compact: Assayer Remembers"
 			label finish
 			action
 				"B2 Arach Provenance Compact: aftermath seen" = 1
-				accept
+				decline
