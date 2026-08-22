@@ -1,0 +1,112 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 Republic Border Testimony Practice.
+# Consumes B2 border-testimony aftermath and A1 border pressure read-only.
+
+mission "A2 Republic Border Testimony Practice: Briefing"
+	minor
+	name `What Counts Tomorrow`
+	description `Talia Rook asks what evidence discipline should survive the last border-alert review.`
+	source
+		government "Republic"
+	"offer precedence" 8
+	to offer
+		has "B2 Republic Border Testimony Compact: aftermath seen"
+		"world: republic border pressure" <= 2
+		not "A2 Republic Border Testimony Practice: decided"
+		not "A2 Republic Border Testimony Practice: refused"
+	on offer
+		conversation
+			`Talia Rook has closed the last review, but not the question behind it. "The compact fixed one chain of records. What do you want people to remember when the next alert arrives?"`
+			choice
+				`\t[Evidence: Portable provenance packet] Preserve source lineage: every operational claim should retain whether it is direct, derived, corrected, contradicted, open, or resolved.`
+					to display
+						has "B2 Republic Border Testimony Compact: settlement portable provenance packet"
+					goto lineage
+				`\t[Verran trusts your evidence judgment] Preserve independence: repeated copies may preserve history, but only genuinely independent observations increase corroboration.`
+					to activate
+						has "B2 Republic Border Testimony Compact: verran trusts player"
+					goto independence
+				`\t[Settlement: Expiry and renewal] Preserve closure: resolved warnings remain searchable history but need genuinely new evidence before becoming active again.`
+					to display
+						has "B2 Republic Border Testimony Compact: settlement expiry and renewal"
+					goto closure
+				`\tKeep the compact local. Do not turn one border-record settlement into a standing personal doctrine.`
+					goto local
+				`\tRefuse to adopt a standing evidence practice.`
+					goto refuse
+			label lineage
+			`You choose lineage. Rook notes that a conclusion without its source history can become more confident each time it is copied.`
+			action
+				"A2 Republic Border Testimony Practice: decided" = 1
+				"A2 Republic Border Testimony Practice: lineage" = 1
+			decline
+			label independence
+			`You choose independence. Rook records that ten summaries of one patrol sighting remain one underlying observation, not ten witnesses.`
+			action
+				"A2 Republic Border Testimony Practice: decided" = 1
+				"A2 Republic Border Testimony Practice: independence" = 1
+			decline
+			label closure
+			`You choose closure. Rook records that searchable history should not behave like an active accusation after its evidence has been resolved.`
+			action
+				"A2 Republic Border Testimony Practice: decided" = 1
+				"A2 Republic Border Testimony Practice: closure" = 1
+			decline
+			label local
+			`You keep the lesson local. The compact remains useful context, not borrowed authority for every later dispute.`
+			action
+				"A2 Republic Border Testimony Practice: decided" = 1
+				"A2 Republic Border Testimony Practice: local" = 1
+			decline
+			label refuse
+			`You refuse to establish a standing practice. Rook records the boundary and does not schedule a later review.`
+			action
+				"A2 Republic Border Testimony Practice: refused" = 1
+			decline
+
+
+mission "A2 Republic Border Testimony Practice: Recurrence"
+	minor
+	name `The Next Alert`
+	description `A later Republic border alert tests the evidence practice you chose after the testimony compact.`
+	source
+		government "Republic"
+	"offer precedence" 8
+	to offer
+		has "A2 Republic Border Testimony Practice: decided"
+		"world: republic border pressure" >= 4
+		not "A2 Republic Border Testimony Practice: recurrence seen"
+	on offer
+		conversation
+			branch independence
+				has "A2 Republic Border Testimony Practice: independence"
+			branch closure
+				has "A2 Republic Border Testimony Practice: closure"
+			branch local
+				has "A2 Republic Border Testimony Practice: local"
+			`The next alert produces a familiar stack of reports. Rook points out that several alarming summaries still trace back to one patrol observation. Because source lineage survived, the operations desk can see the real evidentiary shape before deciding what the alert means.`
+			goto record
+			label independence
+			`The next alert arrives with six reports, but four derive from the same witness statement. Your independence rule keeps the copied material visible without allowing repetition to manufacture corroboration. Two genuinely separate observations remain two observations.`
+			goto record
+			label closure
+			`A historical warning resurfaces during the next alert. Its old disposition travels with it, so clerks do not silently reactivate it. A new patrol observation is recorded separately and can be judged on its own evidence.`
+			goto record
+			label local
+			`The next alert reaches a different port with different records and personnel. Rook uses the old compact as context, not authority. The local office documents its own evidence chain instead of pretending your earlier settlement automatically governs this case.`
+			label record
+			action
+				"A2 Republic Border Testimony Practice: recurrence seen" = 1
+			decline

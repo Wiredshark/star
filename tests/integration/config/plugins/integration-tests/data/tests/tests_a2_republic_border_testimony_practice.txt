@@ -1,0 +1,206 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# Headless actual-game acceptance for the Republic Border Testimony Practice.
+# Drives hidden and visible-disabled production choices through the normal
+# spaceport UI, persists the selected practice, and exercises the later A1 reader.
+
+
+test "A2 Republic Border Testimony Prepare"
+	status partial
+	description "Load a quiet Republic save and arm the integrated B2 aftermath with recovered A1 border pressure."
+	sequence
+		inject "Three Earthly Barges Save"
+		call "Load First Savegame"
+		apply
+			"Intro [0]: offered" = 1
+			"Intro [0]: declined" = 1
+			"A2 Career Review: seen" = 1
+			"B2 Republic Border Testimony Compact: aftermath seen" = 1
+			"world: republic border pressure" = 0
+		assert
+			"B2 Republic Border Testimony Compact: aftermath seen" == 1
+			"world: republic border pressure" == 0
+
+
+test "A2 Republic Border Testimony Trigger Earth Spaceport"
+	status partial
+	description "Refresh mission offer conditions by departing and landing on Earth before entering the spaceport."
+	sequence
+		call "Depart"
+		navigate
+			"travel destination" Earth
+		call "Land"
+		input
+			key p
+
+
+test "A2 Republic Border Testimony Persist And Recur"
+	status partial
+	description "Persist the chosen route through save/reload and exercise the production recurrence mission."
+	sequence
+		input
+			key l
+		call "Save To Default Snapshot"
+		call "Open Menu"
+		call "Load First Savegame"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: recurrence seen" == 0
+		apply
+			"world: republic border pressure" = 4
+		# Mission offer conditions are refreshed on departure/landing, matching the
+		# established integration-test helpers instead of assuming apply() instantly
+		# rebuilds the landed spaceport offer list.
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: recurrence seen" == 1
+			"A2 Republic Border Testimony Practice: Recurrence: active" == 0
+		# Force another full offer refresh to prove the one-shot recurrence does not
+		# reappear after its persistent reader state has been recorded.
+		input
+			key l
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
+		assert
+			"A2 Republic Border Testimony Practice: recurrence seen" == 1
+			"A2 Republic Border Testimony Practice: Recurrence: active" == 0
+
+
+test "A2 Republic Border Testimony Lineage"
+	status active
+	description "Exercise the hidden-until-known provenance response, persistence, and later recurrence."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
+		input
+			key "Return"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: lineage" == 1
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+
+
+test "A2 Republic Border Testimony Independence"
+	status active
+	description "Exercise the visible trust-gated response when Verran trust is present."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: verran trusts player" = 1
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
+		input
+			key "Return"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: independence" == 1
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+
+
+test "A2 Republic Border Testimony Closure"
+	status active
+	description "Exercise the expiry settlement response while provenance remains hidden and trust remains visibly disabled."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		apply
+			"B2 Republic Border Testimony Compact: settlement expiry and renewal" = 1
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
+		input
+			key "Return"
+		# Independence is visible but disabled; expiry/renewal is the next choice.
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: closure" == 1
+			"A2 Republic Border Testimony Practice: lineage" == 0
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+
+
+test "A2 Republic Border Testimony Local"
+	status active
+	description "Verify the visible trust-gated response rejects selection when trust is absent, then take the valid local route."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
+		input
+			key "Return"
+		# With no B2 settlement and no Verran trust, the trust response remains
+		# visible but disabled. Return must fail without writing route state.
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 0
+			"A2 Republic Border Testimony Practice: independence" == 0
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: decided" == 1
+			"A2 Republic Border Testimony Practice: local" == 1
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		call "A2 Republic Border Testimony Persist And Recur"
+
+
+test "A2 Republic Border Testimony Refusal"
+	status active
+	description "Exercise explicit refusal with the trust response visible-but-disabled and verify persistence without recurrence."
+	sequence
+		call "A2 Republic Border Testimony Prepare"
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
+		input
+			key "Return"
+		# Displayed choices are disabled trust, local, refusal.
+		input
+			key "Down"
+		input
+			key "Down"
+		input
+			key "Return"
+		input
+			key "Return"
+		assert
+			"A2 Republic Border Testimony Practice: refused" == 1
+			"A2 Republic Border Testimony Practice: decided" == 0
+			"A2 Republic Border Testimony Practice: recurrence seen" == 0
+			"A2 Republic Border Testimony Practice: Briefing: active" == 0
+		input
+			key l
+		call "Save To Default Snapshot"
+		call "Open Menu"
+		call "Load First Savegame"
+		assert
+			"A2 Republic Border Testimony Practice: refused" == 1
+			"A2 Republic Border Testimony Practice: decided" == 0
+			"A2 Republic Border Testimony Practice: recurrence seen" == 0

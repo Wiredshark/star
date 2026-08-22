@@ -1,0 +1,3 @@
+# Production A2 actual-game acceptance cases.
+# Diagnostic single-case run for PR #198 runtime-failure isolation. Assertions remain unchanged.
+A2 Republic Border Testimony Lineage
