@@ -1,0 +1,103 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# A2 Rulei Exposure Practice. This is a downstream, player-facing consumer of the
+# resolved B2 exposure-accountability arc. It does not establish Rulei causation,
+# motive, medical authority, or representative authority.
+
+
+mission "A2 Rulei Exposure Practice: Offer"
+	minor
+	name `What the Warning Carries`
+	description `Orlov asks what lesson should survive when a bounded Rulei-contact record is reused outside the case that produced it.`
+	source "Earth"
+	"offer precedence" 7
+	to offer
+		has "B2 Rulei Exposure Accountability: aftermath seen"
+		not "A2 Rulei Exposure Practice: introduced"
+	on offer
+		conversation
+			branch escrow
+				has "B2 Rulei Exposure Accountability: settlement consent escrow"
+			`Dr. Sena Orlov shows you a training copy of the bounded exposure certificate. The important part, she says, is not the Rulei-contact label. It is that observation, current fitness, follow-up, and the date on which a warning loses authority travel together. Eli Verran adds that the certificate still says nothing about what caused the symptoms or what the Rulei intended.`
+				goto choose
+			label escrow
+			`Dr. Sena Orlov shows you a training request built from the consent-escrow settlement. Purpose, audience, permitted fields, and expiry are visible before any record opens. Eli Verran points out that testimony remains separately controlled and that neither a copied warning nor an analyst's interpretation becomes a diagnosis merely by traveling farther.`
+			label choose
+			choice
+				`\tCarry forward a bounded-warning practice: whenever a risk marker travels, its evidence, present status, and removal or review condition should travel with it.`
+					goto bounded
+				`\tCarry forward a consent-and-purpose practice: secondary use should name why the record is needed, who receives it, and when that permission ends.`
+					goto consent
+				`\tKeep this lesson local to Rulei-contact records rather than treating one unusual case as a universal policy.`
+					goto local
+				`\tDecline to adopt a standing practice from someone else's medical and testimony dispute.`
+					goto refuse
+			label bounded
+			`You keep the narrow lesson: a warning without its evidence and exit condition is not the same record. Orlov approves of the emphasis on current findings. Verran approves of the expiration boundary. Neither treats the practice as proof of Rulei causation.`
+			action
+				"A2 Rulei Exposure Practice: introduced" = 1
+				"A2 Rulei Exposure Practice: bounded warning" = 1
+				accept
+			label consent
+			`You keep the permission lesson instead. A record may be useful in a new setting, but that new use should identify its purpose, audience, and expiry rather than silently inheriting every old permission. Orlov notes that treatment facts can still move when needed. Verran notes that interpretation still requires its own authority.`
+			action
+				"A2 Rulei Exposure Practice: introduced" = 1
+				"A2 Rulei Exposure Practice: consent purpose" = 1
+				accept
+			label local
+			`You decide the case is too unusual to become a general rule. Orlov records that the exposure system remains useful on its own terms. Verran is satisfied that an uncertain contact history has not quietly become a template for judging unrelated people.`
+			action
+				"A2 Rulei Exposure Practice: introduced" = 1
+				"A2 Rulei Exposure Practice: local only" = 1
+				accept
+			label refuse
+			`You decline to turn the dispute into a standing practice. Orlov and Verran leave the existing settlement intact without attaching your name to a broader lesson.`
+			action
+				"A2 Rulei Exposure Practice: introduced" = 1
+				"A2 Rulei Exposure Practice: refused" = 1
+				accept
+
+
+mission "A2 Rulei Exposure Practice: Reflection"
+	minor
+	name `A Warning With an Exit`
+	description `A later administrative request tests what you chose to remember from the Rulei exposure dispute.`
+	source "Earth"
+	"offer precedence" 7
+	to offer
+		has "A2 Rulei Exposure Practice: introduced"
+		not "A2 Rulei Exposure Practice: reflection seen"
+	on offer
+		conversation
+			branch consent
+				has "A2 Rulei Exposure Practice: consent purpose"
+			branch local
+				has "A2 Rulei Exposure Practice: local only"
+			branch refuse
+				has "A2 Rulei Exposure Practice: refused"
+			`Orlov shows you an unrelated occupational warning whose copied version omitted the review date. Remembering the practice you chose, you ask for the current finding and the condition that removes the warning before anyone treats it as permanent. The correction is procedural, not a claim that the Rulei case explains this one.`
+				goto finish
+			label consent
+			`A research office asks to reuse an old exposure summary for a purpose never named in the original request. Remembering the practice you chose, you ask them to state the audience, fields, purpose, and expiry before access changes. Verran notes that the question is about permission, not whether the old interpretation was true.`
+				goto finish
+			label local
+			`A clerk suggests importing the Rulei exposure template into an unrelated personnel review. You point out that the original settlement answered a specific evidence-and-consent problem under unusual uncertainty. The clerk uses the local review rules instead. Keeping a precedent bounded proves useful too.`
+				goto finish
+			label refuse
+			`Orlov mentions that another office asked whether your earlier participation amounted to an endorsed policy. She told them it did not. Your refusal remains exactly that: no standing rule, no borrowed authority, and no claim about Rulei causation.`
+			label finish
+			action
+				"A2 Rulei Exposure Practice: reflection seen" = 1
+				accept
