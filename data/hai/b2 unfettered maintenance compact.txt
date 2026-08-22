@@ -54,14 +54,14 @@ mission "B2 Unfettered Maintenance Compact: Offer"
 				"B2 Unfettered Maintenance Compact: introduced" = 1
 				"B2 Unfettered Maintenance Compact: route obligation" = 1
 				"B2 Unfettered Maintenance Compact: keeper trusts player" = 1
-			accept
+			decline
 			label risk
 			`You argue that maintenance priority has to follow present danger. The Mechanic immediately agrees. The Keeper does not object to the regulator moving, but points at the older entries. "Then every new priority must say what it displaced. Otherwise urgency becomes a machine for forgetting."`
 			action
 				"B2 Unfettered Maintenance Compact: introduced" = 1
 				"B2 Unfettered Maintenance Compact: route risk" = 1
 				"B2 Unfettered Maintenance Compact: mechanic trusts player" = 1
-			accept
+			decline
 			label paired
 			`You suggest two linked records. The operational board can reprioritize parts whenever failure risk changes. A second obligation ledger records each promised repair, every diversion, and whether the displaced settlement later received an equivalent repair. The Keeper studies the idea. "Then sacrifice remains visible." The Mechanic nods. "And visibility does not become a veto on emergency work."`
 			action
@@ -69,7 +69,7 @@ mission "B2 Unfettered Maintenance Compact: Offer"
 				"B2 Unfettered Maintenance Compact: route paired ledger" = 1
 				"B2 Unfettered Maintenance Compact: keeper trusts player" = 1
 				"B2 Unfettered Maintenance Compact: mechanic trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that you do not know enough about the settlements, crews, or machinery to decide which promise should bend. The Keeper accepts that. The Mechanic says, "Then at least remember what the argument was. Outsiders usually remember only which habitat got the part."`
 			action
@@ -121,14 +121,14 @@ mission "B2 Unfettered Maintenance Compact: Review"
 				"B2 Unfettered Maintenance Compact: settlement portable packet" = 1
 				"B2 Unfettered Maintenance Compact: keeper trusts player" = 1
 				"B2 Unfettered Maintenance Compact: mechanic trusts player" = 1
-			accept
+			decline
 			label reconcile
 			`You recommend leaving local repair boards free to respond to immediate danger, but requiring a reconciliation before the next planning cycle. Repeatedly displaced work must be reviewed alongside present failure risk, and an old obligation cannot be marked complete merely because everyone involved has grown used to seeing it postponed. The Keeper calls that memory with a deadline. The Mechanic calls it a way to prevent yesterday's emergency from becoming tomorrow's permanent excuse.`
 			action
 				"B2 Unfettered Maintenance Compact: reviewed" = 1
 				"B2 Unfettered Maintenance Compact: settlement reconciliation" = 1
 				"B2 Unfettered Maintenance Compact: keeper trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Unfettered Maintenance Compact: Keeper Remembers"
@@ -155,4 +155,4 @@ mission "B2 Unfettered Maintenance Compact: Keeper Remembers"
 			label record
 			action
 				"B2 Unfettered Maintenance Compact: aftermath seen" = 1
-			accept
+			decline
