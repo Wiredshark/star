@@ -50,14 +50,14 @@ mission "B2 Kor Efret Passage Continuity Compact: Offer"
 				"B2 Kor Efret Passage Continuity Compact: introduced" = 1
 				"B2 Kor Efret Passage Continuity Compact: route reunion" = 1
 				"B2 Kor Efret Passage Continuity Compact: tracker trusts player" = 1
-			accept
+			decline
 			label passage
 			`You point to the ship that has room now, then draw a second mark from the passenger's destination toward the still-separated family symbol. The Passage Keeper answers with a rapid series of gestures and adds a continuation mark to the passenger record. The immediate evacuation can proceed, but the unmatched family contact and onward-travel question remain explicit rather than disappearing behind the word "arrived."`
 			action
 				"B2 Kor Efret Passage Continuity Compact: introduced" = 1
 				"B2 Kor Efret Passage Continuity Compact: route passage" = 1
 				"B2 Kor Efret Passage Continuity Compact: passage keeper trusts player" = 1
-			accept
+			decline
 			label paired
 			`You separate the problem into three marks: safe location, family contact, and preferred destination. The Tracker adds the known relatives. The Passage Keeper adds the available berth and the contributions making it possible. A fourth mark records whether the traveler still wants onward passage after reaching safety. The resulting record is more complicated, but it does not force one kind of recovery to stand in for all the others.`
 			action
@@ -65,7 +65,7 @@ mission "B2 Kor Efret Passage Continuity Compact: Offer"
 				"B2 Kor Efret Passage Continuity Compact: route paired" = 1
 				"B2 Kor Efret Passage Continuity Compact: tracker trusts player" = 1
 				"B2 Kor Efret Passage Continuity Compact: passage keeper trusts player" = 1
-			accept
+			decline
 			label decline
 			`You hold up both hands and step back. The Tracker and Passage Keeper continue working through the family's choices without treating your silence as approval of either approach. Before you leave, one of them marks the case as unresolved rather than forcing it into a completed category.`
 			action
@@ -117,7 +117,7 @@ mission "B2 Kor Efret Passage Continuity Compact: Review"
 				"B2 Kor Efret Passage Continuity Compact: settlement family packet" = 1
 				"B2 Kor Efret Passage Continuity Compact: tracker trusts player" = 1
 				"B2 Kor Efret Passage Continuity Compact: passage keeper trusts player" = 1
-			accept
+			decline
 			label ledger
 			`You recommend a two-stage settlement ledger. One record answers whether the person is physically safe and has workable shelter and passage. The other answers whether family contact, onward travel, return, or a new resettlement choice has been voluntarily resolved. A person can be safe without being reunited, reunited without choosing to return, or settled somewhere new without invalidating the history of how they got there. Neither stage silently closes the other.`
 			action
@@ -125,7 +125,7 @@ mission "B2 Kor Efret Passage Continuity Compact: Review"
 				"B2 Kor Efret Passage Continuity Compact: settlement two stage" = 1
 				"B2 Kor Efret Passage Continuity Compact: tracker trusts player" = 1
 				"B2 Kor Efret Passage Continuity Compact: passage keeper trusts player" = 1
-			accept
+			decline
 
 mission "B2 Kor Efret Passage Continuity Compact: Tracker Remembers"
 	landing
@@ -151,4 +151,4 @@ mission "B2 Kor Efret Passage Continuity Compact: Tracker Remembers"
 			label record
 			action
 				"B2 Kor Efret Passage Continuity Compact: aftermath seen" = 1
-			accept
+			decline
