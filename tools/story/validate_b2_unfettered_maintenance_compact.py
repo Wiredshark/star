@@ -59,6 +59,22 @@ for forbidden in (
 ):
     assert forbidden not in text, f"forbidden direct mutation token: {forbidden!r}"
 
+# Dialogue-only lifecycle contract: these missions only persist state and must not
+# remain accepted as objective-less active missions.
+assert not re.search(r"^\s*accept\s*$", text, re.MULTILINE), "state-only terminal accept remains"
+assert len(re.findall(r"^\s*decline\s*$", text, re.MULTILINE)) == 7, "expected exactly seven terminal decline paths"
+for directive in (
+    "destination",
+    "stopover",
+    "waypoint",
+    "npc",
+    "cargo",
+    "passenger",
+    "deadline",
+    "timer",
+):
+    assert not re.search(rf"^\s+{directive}(?:\s|$)", text, re.MULTILINE), f"objective-bearing directive invalidates state-only lifecycle: {directive}"
+
 # All action writes are B2-owned conditions.
 actions = re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, re.MULTILINE)
 assert actions, "no persistent condition writes found"
@@ -88,5 +104,6 @@ print("PASS: initial_routes=3 + refusal")
 print("PASS: terminal_settlements=2")
 print("PASS: source_scope=Unfettered + first contact + pre-invasion")
 print("PASS: mutation_surface=B2 conditions only")
+print("PASS: lifecycle=7 state-only terminals close with decline")
 print("PASS: continuity=priority/diversion/unfinished obligation remain distinct")
 print("PASS: later_reader=Keeper Remembers")
