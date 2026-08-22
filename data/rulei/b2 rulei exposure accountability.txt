@@ -55,7 +55,7 @@ mission "B2 Rulei Exposure Accountability: Offer"
 				"B2 Rulei Exposure Accountability: route clinical" = 1
 				"B2 Rulei Exposure Accountability: orlov trusts player" = 1
 				event "B2 Rulei Exposure Accountability: Review Ready" 7 11
-				accept
+				decline
 			label witness
 			`You argue that a crew member should not have to surrender an uncertain experience every time someone asks whether they can fly. Orlov reduces the portable record to current fitness, directly observed symptoms, dates, and follow-up needs. Verran keeps the full testimony in the research archive under separate access rules. A future clinic can ask for more with the witness's consent instead of inheriting a frightening story as an employment fact.`
 			action
@@ -63,7 +63,7 @@ mission "B2 Rulei Exposure Accountability: Offer"
 				"B2 Rulei Exposure Accountability: route witness" = 1
 				"B2 Rulei Exposure Accountability: verran trusts player" = 1
 				event "B2 Rulei Exposure Accountability: Review Ready" 7 11
-				accept
+				decline
 			label paired
 			`You suggest that the disagreement exists because medical continuity and testimony continuity have been forced into one document. Orlov creates a compact operational summary containing observed symptoms, recovery, examinations, and any current restrictions. Verran keeps the witness account beside it but under explicit consent, with interpretation labeled separately from perception. The two records reference each other without granting the same audience access to both.`
 			action
@@ -72,7 +72,7 @@ mission "B2 Rulei Exposure Accountability: Offer"
 				"B2 Rulei Exposure Accountability: orlov trusts player" = 1
 				"B2 Rulei Exposure Accountability: verran trusts player" = 1
 				event "B2 Rulei Exposure Accountability: Review Ready" 7 11
-				accept
+				decline
 			label decline
 			`You tell them that the uncertainty is exactly why you should not decide how another person's medical history travels. Orlov leaves the pilot's current clearance unchanged. Verran asks the archive to keep the full testimony under its existing rules. Their policy argument continues without your name attached to it.`
 			action
@@ -116,7 +116,7 @@ mission "B2 Rulei Exposure Accountability: Review"
 				"B2 Rulei Exposure Accountability: settlement bounded certificate" = 1
 				"B2 Rulei Exposure Accountability: orlov trusts player" = 1
 				"B2 Rulei Exposure Accountability: verran trusts player" = 1
-				accept
+				decline
 			label escrow
 			`You recommend treating downstream use as a new decision instead of a free copy. The archive records who may use the exposure summary, for what purpose, and until when. A clinic may retain direct observations needed for treatment, but an employer cannot convert testimony or an analyst's interpretation into a permanent fitness claim without renewed consent or a new examination. Verran calls it a boundary around the person. Orlov calls it a chain of custody for permission.`
 			action
@@ -124,7 +124,7 @@ mission "B2 Rulei Exposure Accountability: Review"
 				"B2 Rulei Exposure Accountability: settlement consent escrow" = 1
 				"B2 Rulei Exposure Accountability: orlov trusts player" = 1
 				"B2 Rulei Exposure Accountability: verran trusts player" = 1
-				accept
+				decline
 
 
 mission "B2 Rulei Exposure Accountability: Orlov Remembers"
@@ -149,4 +149,4 @@ mission "B2 Rulei Exposure Accountability: Orlov Remembers"
 			label finish
 			action
 				"B2 Rulei Exposure Accountability: aftermath seen" = 1
-				accept
+				decline
