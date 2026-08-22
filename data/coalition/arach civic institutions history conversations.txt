@@ -1,0 +1,81 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Arach History: Mining Provenance Register"
+	minor
+	source
+		government "Coalition"
+		attributes "arach"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "license: Coalition"
+	on offer
+		conversation
+			`A public archive near the spaceport displays old mine maps beside ore samples and fragments of collapsed supports. Every exhibit is covered in small annotations identifying where the material came from, who inspected it, and which tunnels were later abandoned or reinforced.`
+			`\tAn Arach visitor explains that mining families once kept most such records for themselves. As workings became deeper and trade carried ore farther from its source, disagreements over tunnel boundaries, ore quality, and responsibility for collapses became harder to settle from memory alone. Survey notes, assay records, and incident reports gradually became part of a shared register.`
+			`\tThe archive treats those records as more than commercial paperwork. Old failures remain useful to engineers deciding where not to dig, while old assays let buyers compare a shipment against what a mine historically produced. Even a worked-out tunnel can remain valuable if its history keeps somebody from repeating the same mistake.`
+				decline
+
+
+mission "Arach History: Freight Contract Ledger"
+	minor
+	source
+		government "Coalition"
+		attributes "arach"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "license: Coalition"
+	on offer
+		conversation
+			`A terminal in a busy concourse cycles through examples of old freight contracts. The earliest are short agreements between individual carriers and merchants. Later examples contain standardized entries for cargo condition, transfer points, delays, damage, payment disputes, and which ship accepted responsibility at each stage of a journey.`
+			`\tAn Arach freight clerk says that such ledgers became important as couriers, transports, and large freighters began moving goods through increasingly complicated routes. A shipment could pass through several holds before reaching its buyer, and a verbal promise was little help when something arrived spoiled, incomplete, or months late.`
+			`\tCommon contract forms did not remove bargaining from Arach commerce. Instead, they made the bargain easier to examine after the fact. Merchants could still argue over price and risk, but they increasingly argued from the same record of what had actually been promised, loaded, transferred, and delivered.`
+				decline
+
+
+mission "Arach History: Courier Relay Register"
+	minor
+	source
+		government "Coalition"
+		attributes "arach"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "license: Coalition"
+	on offer
+		conversation
+			`A wall display traces a web of old courier routes between Arach worlds. Beside each route are notes about missed connections, replacement crews, emergency diversions, mechanical trouble, and the points where messages or small high-priority cargo changed ships.`
+			`\tAccording to the accompanying history, reliable courier service grew from repeated attempts to keep commercial and family correspondence moving even when one vessel failed to arrive. Carriers began recording expected handoff windows, trusted substitutes, repair contacts, and fallback destinations rather than treating every journey as an isolated arrangement.`
+			`\tOver time, the register became a kind of institutional memory for movement itself. New routes could be planned from old delays, merchants could tell which connections were dependable, and a broken ship no longer had to mean that every obligation aboard it was simply forgotten.`
+				decline
+
+
+mission "Arach History: Patronage Subscription Archive"
+	minor
+	source
+		government "Coalition"
+		attributes "arach"
+		attributes "folklore"
+	"offer precedence" 5
+	to offer
+		random < 1
+		has "license: Coalition"
+	on offer
+		conversation
+			`In the lobby of a performance hall, an archive lists old patrons beside orchestras, actors, stage crews, public broadcasts, and the maintenance of theaters themselves. Some entries record expensive reserved seats, while others describe subscriptions that paid for performances to be transmitted far beyond the hall.`
+			`\tAn Arach attendant explains that prestigious performances have long attracted wealthy patrons, but patronage gradually became more formal than simply purchasing the best view. Repeated productions needed rehearsal space, technicians, replacement instruments, archives, and predictable funding even when a particular show failed to fill every seat.`
+			`\tSubscription records grew around those needs. They preserved who had promised support, what access or recognition came with it, and which performances were also made available to audiences who would never attend in person. The archive presents Arach patronage as both a marker of status and a practical institution for keeping costly arts alive between individual celebrations.`
+				decline
