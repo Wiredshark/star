@@ -55,7 +55,7 @@ mission "B2 Quarg Stewardship Boundaries: Offer"
 				"B2 Quarg Stewardship Boundaries: route local autonomy" = 1
 				"B2 Quarg Stewardship Boundaries: steward trusts player" = 1
 				event "B2 Quarg Stewardship Boundaries: Review Ready" 6 9
-				accept
+				decline
 			label accountable
 			`You recommend joint review for a while longer, but with a written justification and expiration point every time the Quarg override a local decision. The steward says, "Then even a necessary intervention admits that it is temporary. A future steward cannot inherit authority merely because an earlier one once needed it."`
 			action
@@ -63,7 +63,7 @@ mission "B2 Quarg Stewardship Boundaries: Offer"
 				"B2 Quarg Stewardship Boundaries: route accountable protection" = 1
 				"B2 Quarg Stewardship Boundaries: steward trusts player" = 1
 				event "B2 Quarg Stewardship Boundaries: Review Ready" 6 9
-				accept
+				decline
 			label dual
 			`You suggest separate records: the community records its own decisions, while the Quarg record the obligations they have promised to fulfill. If a protector intervenes, the two records must show exactly where the boundary changed and why. The steward clicks its teeth softly. "A ledger that remembers both responsibility and restraint. That may be harder to administer, which is sometimes a sign that the distinction is real."`
 			action
@@ -71,7 +71,7 @@ mission "B2 Quarg Stewardship Boundaries: Offer"
 				"B2 Quarg Stewardship Boundaries: route dual ledger" = 1
 				"B2 Quarg Stewardship Boundaries: steward trusts player" = 1
 				event "B2 Quarg Stewardship Boundaries: Review Ready" 6 9
-				accept
+				decline
 			label decline
 			`You tell the steward that the protected community should answer the question itself. The Quarg bows its head. "A refusal may also contain advice. We will not record your silence as consent."`
 			action
@@ -115,14 +115,14 @@ mission "B2 Quarg Stewardship Boundaries: Review"
 				"B2 Quarg Stewardship Boundaries: reviewed" = 1
 				"B2 Quarg Stewardship Boundaries: settlement narrow covenant" = 1
 				"B2 Quarg Stewardship Boundaries: steward trusts player" = 1
-				accept
+				decline
 			label paired
 			`You recommend keeping the records separate but binding them together at the moment of intervention. Promised aid remains a Quarg duty, while ordinary decisions remain local. The protector may decide only when the community requests it or an immediate survival threat leaves no time to ask. The steward replies, "Then assistance does not quietly carry jurisdiction inside it."`
 			action
 				"B2 Quarg Stewardship Boundaries: reviewed" = 1
 				"B2 Quarg Stewardship Boundaries: settlement paired duty register" = 1
 				"B2 Quarg Stewardship Boundaries: steward trusts player" = 1
-				accept
+				decline
 
 
 mission "B2 Quarg Stewardship Boundaries: Steward Remembers"
@@ -148,4 +148,4 @@ mission "B2 Quarg Stewardship Boundaries: Steward Remembers"
 			label finish
 			action
 				"B2 Quarg Stewardship Boundaries: aftermath seen" = 1
-				accept
+				decline
