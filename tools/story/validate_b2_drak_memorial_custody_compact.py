@@ -33,6 +33,31 @@ def main() -> None:
     if missions != expected:
         fail(f"expected missions {expected!r}, found {missions!r}")
 
+    # These three missions only record persistent story state. They create no
+    # destination, cargo, NPC, waypoint, deadline, timer, or other gameplay
+    # objective, so terminal accept would leave an objective-less active mission.
+    accepts = re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE)
+    declines = re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)
+    if accepts:
+        fail(f"state-only dialogue must not use terminal accept; found {len(accepts)}")
+    if len(declines) != 7:
+        fail(f"expected exactly 7 state-only decline terminals, found {len(declines)}")
+
+    objective_directives = (
+        "destination ",
+        "stopover ",
+        "waypoint ",
+        "npc ",
+        "cargo ",
+        "passenger ",
+        "deadline ",
+        "timer ",
+    )
+    for line in text.splitlines():
+        stripped = line.strip().lower()
+        if any(stripped.startswith(token) for token in objective_directives):
+            fail(f"unexpected gameplay objective in state-only lifecycle slice: {line.strip()}")
+
     # The recurring Drak presence is intentionally a player-assigned shorthand,
     # not a new canonical Drak title or named office.
     required_character_phrases = (
@@ -129,6 +154,7 @@ def main() -> None:
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Custodian Remembers")
+    print("PASS: lifecycle=state-only terminals decline cleanly")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: autonomy_model=restraint + refusal, not invented authority")
 
