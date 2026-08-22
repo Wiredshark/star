@@ -1,0 +1,99 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# A2 Drak Stewardship Echo.
+# Consumes the resolved B2 memorial-custody compact without asserting Drak command
+# authority, bureaucracy, or a public Drak communications system.
+
+mission "A2 Drak Stewardship Echo: Offer"
+	entering
+	minor
+	invisible
+	offer precedence 9
+	source
+		system "Sayaiban"
+	to offer
+		has "B2 Drak Memorial Custody Compact: aftermath seen"
+		not "A2 Drak Stewardship Echo: introduced"
+	on offer
+		conversation
+			branch archive
+				has "B2 Drak Memorial Custody Compact: settlement severed function archive"
+			`The familiar Drak presence brushes your thoughts again. The Custodian remains only your private name for its cadence. This time there is no vanished machine before you. Instead, you see a younger species uncovering a dangerous relic of its own past and arguing over whether safety requires forgetting what the relic once did.`
+			`\tThe bounded memorial you helped describe appears only as a pattern: an inaccessible original, surrounded by reconstructions whose omissions and substitutions remain visible. The younger observers can learn from what was contained without mistaking a safe copy for untouched history.`
+			goto choose
+			label archive
+			`The familiar Drak presence brushes your thoughts again. The Custodian remains only your private name for its cadence. This time there is no vanished machine before you. Instead, you see a younger species uncovering a dangerous relic of its own past and arguing over whether safety requires forgetting what the relic once did.`
+			`\tThe severed-function archive you helped describe appears only as a pattern: a harmless working copy beside an immutable record of the dangerous function and the intervention that disabled it. The younger observers can use the safe system without pretending that safety was part of the original design.`
+			label choose
+			`\tYou understand the question without words. Should this precedent remain a private lesson between you and the Custodian, or may its principle be carried into later encounters where it could help others reason about dangerous inheritance?`
+			choice
+				`\tKeep the precedent private. A lesson shown in confidence should not become authority over strangers.`
+					goto private
+				`\tCarry the principle forward, but only as advice with its origin and limits made explicit.`
+					goto bounded
+				`\tCarry only the method: separate evidence, intervention, and present-day operation without invoking the Drak as authority.`
+					goto method
+			label private
+			`You hold the memory close. The Custodian's attention recedes without disappointment. Whatever value the precedent has, you will not spend another being's trust to make your argument stronger.`
+			action
+				"A2 Drak Stewardship Echo: introduced" = 1
+				"A2 Drak Stewardship Echo: precedent private" = 1
+			decline
+			label bounded
+			`You accept the principle as something you may repeat only with its boundaries attached: it came from one problem, under one form of custody, and it does not make you a Drak representative. The Custodian leaves you with the image of a record whose margins remain attached to every copy.`
+			action
+				"A2 Drak Stewardship Echo: introduced" = 1
+				"A2 Drak Stewardship Echo: precedent bounded advice" = 1
+			decline
+			label method
+			`You keep no claim of endorsement. What you carry forward is a procedure: distinguish the original evidence from later intervention, distinguish both from what is safe to operate now, and make those boundaries visible. The Custodian answers with three separate patterns that never collapse into one.`
+			action
+				"A2 Drak Stewardship Echo: introduced" = 1
+				"A2 Drak Stewardship Echo: precedent method only" = 1
+			decline
+
+mission "A2 Drak Stewardship Echo: Later Reflection"
+	entering
+	minor
+	invisible
+	offer precedence 9
+	source
+		system "Fasitopfar"
+	to offer
+		has "B2 Drak Memorial Custody Compact: aftermath seen"
+		has "A2 Drak Stewardship Echo: introduced"
+		not "A2 Drak Stewardship Echo: reflection seen"
+	on offer
+		conversation
+			branch private
+				has "A2 Drak Stewardship Echo: precedent private"
+			branch method
+				has "A2 Drak Stewardship Echo: precedent method only"
+			branch bounded
+				has "A2 Drak Stewardship Echo: precedent bounded advice"
+			`The Custodian's presence passes without a recognizable precedent to revisit. Whatever state was lost, no new authority is inferred from the gap.`
+			goto done
+			label bounded
+			`The Custodian returns only long enough to show you a later dispute. Someone has repeated the stewardship principle as advice, but has also repeated its limits: no Drak mandate, no universal rule, no claim that one settlement answers every dangerous inheritance. The people hearing it argue with the principle instead of submitting to its source. That, you realize, was the boundary you chose.`
+			goto done
+			label private
+			`The Custodian returns only long enough to show you another people reaching a similar distinction on their own. They preserve evidence, mark intervention, and separate safe operation from historical truth without ever hearing the precedent you kept private. The resemblance is imperfect, which makes it more convincing: restraint did not prevent others from reasoning for themselves.`
+			goto done
+			label method
+			`The Custodian returns only long enough to show you a technical review where three columns are kept separate: original evidence, later intervention, and present operation. Nobody invokes the Drak. Nobody invokes you. The method survives because it can be examined on its own merits rather than borrowed authority.`
+			label done
+			action
+				"A2 Drak Stewardship Echo: reflection seen" = 1
+			decline
