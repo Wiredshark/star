@@ -1,13 +1,14 @@
 # B2 Drak Memorial Custody Compact lifecycle repair handoff
 
-Verdict: **PARTIAL pending exact-head repository-native validation.**
+Verdict: **READY for A3 review/integration.**
 
 ## Authority and isolation
 
-- Authoritative integration base observed: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
+- Authoritative integration base observed and rechecked: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated branch: `agent/b2-drak-memorial-lifecycle-20260821-2127`
 - Production lifecycle repair: `a7dd70ca265e6ff4052f5dc963a4b4764f0a2f1f`
 - Focused validator hardening: `6ec25fe666198e4f656e928ec39d32f984ec916b`
+- Exact fully validated candidate: `0c9a6032b3f1d74985e2d6e57bbb965ef43aa624`
 - No self-integration performed.
 
 ## Defect
@@ -36,19 +37,26 @@ All prior mission-graph, route, settlement, one-shot reader, state-ownership, ma
 
 No persistent condition name or value changed. No save migration is required. The repair changes only how state-only conversations terminate after writing the same existing state.
 
+## Exact validation evidence
+
+Exact candidate `0c9a6032b3f1d74985e2d6e57bbb965ef43aa624` is terminal green on both repository-native gates:
+
+- `Fork simulation and story validation` #368 / run `32543832083`: **SUCCESS**
+  - focused story validators: SUCCESS
+  - hardened Drak lifecycle validator: SUCCESS
+  - A1 simulation/state-ownership contracts: SUCCESS
+  - changed-content style: SUCCESS
+- `Fork save-load integration smoke` #353 / run `32543832076`: **SUCCESS**
+  - dependency installation: SUCCESS
+  - production configure/build: SUCCESS
+  - stock save-load smoke: SUCCESS
+
 ## Process safety
 
 The private execution service reported four pre-existing service-owned processes before work. They were preserved. No unrelated process was killed or modified.
 
-## Required acceptance before A3 integration
-
-Run the repository-native validation gates on the exact candidate head:
-
-1. `Fork simulation and story validation`
-2. `Fork save-load integration smoke`
-
-READY requires both to reach terminal green, including changed-content style, focused story validators, A1 simulation/state-ownership contracts, production configure/build, and stock save-load smoke.
-
 ## A3 / B3 integration notes
 
-A3 should re-read current `main`, verify ancestry/mergeability, and integrate only after exact-head validation is green. Preserve the lifecycle invariant: dialogue-only B2 missions that merely persist state terminate with `decline`; reserve `accept` for mission lifecycles that actually create gameplay objectives.
+A3 should re-read current `main`, verify ancestry/mergeability, and integrate the exact validated candidate plus this handoff-only READY promotion if the branch remains clean. Preserve the lifecycle invariant: dialogue-only B2 missions that merely persist state terminate with `decline`; reserve `accept` for mission lifecycles that actually create gameplay objectives.
+
+Preserve the Drak continuity invariant that `Custodian` is the player's private shorthand rather than a canonical title or office, and preserve the distinction between historical source, later intervention, safe reconstruction, provenance, and memorial custody.
