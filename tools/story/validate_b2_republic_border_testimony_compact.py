@@ -95,6 +95,25 @@ def main() -> None:
         if stripped.startswith(forbidden_commands):
             fail(f"unexpected direct gameplay mutation command: {stripped}")
 
+    # Lifecycle contract: these are dialogue/state-only missions. Accepting a
+    # mission with no gameplay objective can leave an objective-less mission active.
+    # Every terminal path should persist state and close with `decline` instead.
+    accept_count = len(re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE))
+    decline_count = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+    if accept_count != 0:
+        fail(f"state-only dialogue must not use terminal accept; found {accept_count}")
+    if decline_count != 7:
+        fail(f"expected exactly 7 terminal decline paths, got {decline_count}")
+
+    objective_prefixes = (
+        "destination ", "stopover ", "waypoint ", "npc ", "cargo ",
+        "passenger ", "deadline ", "timer ",
+    )
+    for line in text.splitlines():
+        stripped = line.strip().lower()
+        if stripped.startswith(objective_prefixes):
+            fail(f"state-only lifecycle assumption invalidated by objective directive: {line.strip()}")
+
     # Evidence-boundary contract: repeated copies are not independent evidence,
     # and closed reports must carry disposition rather than remain perpetual warnings.
     required_fragments = (
@@ -140,6 +159,8 @@ def main() -> None:
     print("PASS: later_reader=Rook Remembers")
     print("PASS: persistence_model=stock mission/global conditions")
     print("PASS: write_ownership=B2 namespace only")
+    print("PASS: lifecycle=7 state-only terminals use decline")
+    print("PASS: objective_surface=none")
     print("PASS: evidence_boundary=copies do not manufacture independent corroboration")
 
 
