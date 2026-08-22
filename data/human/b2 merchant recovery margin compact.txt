@@ -52,14 +52,14 @@ mission "B2 Merchant Recovery Margin Compact: Offer"
 				"B2 Merchant Recovery Margin Compact: introduced" = 1
 				"B2 Merchant Recovery Margin Compact: route reserve" = 1
 				"B2 Merchant Recovery Margin Compact: vale trusts player" = 1
-			accept
+			decline
 			label throughput
 			`You tell Vale that a reserve which never becomes productive capacity can strand the ships the rescue system already saved. Beck nods. Vale answers, "Then backlog clearance cannot quietly become permanent reserve depletion. If we spend tomorrow's margin today, somebody has to record the debt."`
 			action
 				"B2 Merchant Recovery Margin Compact: introduced" = 1
 				"B2 Merchant Recovery Margin Compact: route throughput" = 1
 				"B2 Merchant Recovery Margin Compact: beck trusts player" = 1
-			accept
+			decline
 			label paired
 			`You suggest treating each emergency reserve slot as an explicit obligation rather than an untouchable berth. A yard may use the capacity when backlog requires it, but the record must say what reserve was displaced, why, and when equivalent capacity is expected back. Beck says, "That I can schedule." Vale replies, "And I can tell the next dispatcher what capacity actually exists instead of what a spreadsheet assumes."`
 			action
@@ -67,7 +67,7 @@ mission "B2 Merchant Recovery Margin Compact: Offer"
 				"B2 Merchant Recovery Margin Compact: route paired" = 1
 				"B2 Merchant Recovery Margin Compact: vale trusts player" = 1
 				"B2 Merchant Recovery Margin Compact: beck trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them an outsider should not turn one port's repair problem into a universal Merchant rule. Vale accepts that. Beck says, "Good. If somebody writes a compact, it should survive contact with an actual yard schedule."`
 			action
@@ -120,14 +120,14 @@ mission "B2 Merchant Recovery Margin Compact: Review"
 				"B2 Merchant Recovery Margin Compact: reviewed" = 1
 				"B2 Merchant Recovery Margin Compact: settlement margin packet" = 1
 				"B2 Merchant Recovery Margin Compact: vale trusts player" = 1
-			accept
+			decline
 			label reconcile
 			`You recommend a recurring reconciliation cycle instead of one shared reserve formula. Participating yards keep local control over scheduling, but they periodically compare usable berths, standby repair crews, borrowed reserve, and unresolved restoration commitments. An old emergency entry cannot be marked closed merely because the original ship has departed. Beck says, "That keeps the schedule honest." Vale says, "And it tells dispatchers whether recovery is real instead of inferred."`
 			action
 				"B2 Merchant Recovery Margin Compact: reviewed" = 1
 				"B2 Merchant Recovery Margin Compact: settlement reconciliation" = 1
 				"B2 Merchant Recovery Margin Compact: beck trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Merchant Recovery Margin Compact: Vale Remembers"
@@ -153,4 +153,4 @@ mission "B2 Merchant Recovery Margin Compact: Vale Remembers"
 			label record
 			action
 				"B2 Merchant Recovery Margin Compact: aftermath seen" = 1
-			accept
+			decline
