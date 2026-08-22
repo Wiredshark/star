@@ -1,0 +1,151 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Sheragi Context Compact production slice.
+# Consumes B1 Sheragi provenance/context institutions after the archaeology epilogue.
+# Nadia Rell and Ivo March are contemporary human researchers; their dispute is about
+# conservation practice, not a claim about ancient Sheragi motives or institutions.
+
+
+event "B2 Sheragi Context Compact: Review Ready"
+	"B2 Sheragi Context Compact: review ready" = 1
+
+
+mission "B2 Sheragi Context Compact: Offer"
+	minor
+	name `The Wall and the Weather`
+	description `Two archaeologists disagree over whether a newly exposed Sheragi wall fragment should be moved immediately for preservation or left in place until its surrounding context is fully recorded.`
+	source "Vinci"
+	"offer precedence" 8
+	to offer
+		has "Sheragi Archaeology: Epilogue: done"
+		has "Sheragi History: Evidence Provenance Register: offered"
+		has "Sheragi History: Site Context Registry: offered"
+		not "B2 Sheragi Context Compact: introduced"
+		not "B2 Sheragi Context Compact: declined"
+	on offer
+		conversation
+			`Near a university conservation lab, field archaeologist Ivo March and conservator Nadia Rell are arguing over photographs of a newly exposed Sheragi wall fragment. A storm uncovered the carved surface at the edge of an old excavation. Water is already entering a fracture, but the surrounding soil, repairs, debris, and missing material have only been partly mapped.`
+			`\tNadia wants the fragment moved indoors before another storm destroys it. Ivo agrees that the stone may not survive long, but says removing it now could preserve the object while destroying the evidence that explains where it sat, what touched it, and which marks are ancient rather than later damage.`
+			choice
+				`\tMove it now, but require an emergency custody record that marks every unrecorded part of the original context as unresolved rather than silently reconstructed.`
+					goto shelter
+				`\tFinish the context survey first, using temporary shielding and accepting some conservation risk to preserve the relationships around the fragment.`
+					goto context
+				`\tUse a paired emergency protocol: record the minimum site context needed to make removal interpretable, then move the fragment with an explicit map of what was observed, inferred, and still unknown.`
+					goto paired
+				`\tRefuse to turn a visitor's preference into an archaeological rule.`
+					goto decline
+			label shelter
+			`You side with Nadia on immediate preservation, but not on pretending the move is neutral. The team photographs the fracture, marks the fragment's orientation, logs every visible neighboring layer, and writes a blunt list of what the storm prevented them from recording. The object moves indoors with its missing context treated as missing evidence, not a blank to be filled later.`
+			action
+				"B2 Sheragi Context Compact: introduced" = 1
+				"B2 Sheragi Context Compact: route shelter" = 1
+				"B2 Sheragi Context Compact: Nadia trusts player" = 1
+				event "B2 Sheragi Context Compact: Review Ready" 7 11
+				decline
+			label context
+			`You side with Ivo on finishing the survey. Temporary covers go up while the team records soil layers, repaired masonry, nearby fragments, drainage channels, and several absences that would have vanished from the record once the wall was lifted. Nadia accepts the delay only after the survey plan defines a hard weather threshold that will trigger removal whether or not the map feels complete.`
+			action
+				"B2 Sheragi Context Compact: introduced" = 1
+				"B2 Sheragi Context Compact: route context" = 1
+				"B2 Sheragi Context Compact: Ivo trusts player" = 1
+				event "B2 Sheragi Context Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You argue that preservation and context are different losses and should be tracked separately. The field team records orientation, neighboring layers, visible repairs, sample points, and uncertainty before removal. Nadia's conservation record then links every later cleaning or stabilization step back to that field map. Neither record is allowed to imply that the removed fragment still contains the whole site around it.`
+			action
+				"B2 Sheragi Context Compact: introduced" = 1
+				"B2 Sheragi Context Compact: route paired" = 1
+				"B2 Sheragi Context Compact: Nadia trusts player" = 1
+				"B2 Sheragi Context Compact: Ivo trusts player" = 1
+				event "B2 Sheragi Context Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that the surviving evidence should not inherit a new rule simply because an outsider was present for the argument. Nadia and Ivo keep the disagreement in the project record and continue under their existing emergency procedure.`
+			action
+				"B2 Sheragi Context Compact: declined" = 1
+				decline
+
+
+mission "B2 Sheragi Context Compact: Review"
+	minor
+	name `A Reconstruction Without a Site`
+	description `Nadia and Ivo return after a museum reconstruction preserved the fragment's shape while quietly losing the uncertainty and site relationships that gave the reconstruction meaning.`
+	source "Mirrorlake"
+	"offer precedence" 8
+	to offer
+		has "B2 Sheragi Context Compact: introduced"
+		has "B2 Sheragi Context Compact: review ready"
+		not "B2 Sheragi Context Compact: reviewed"
+	on offer
+		conversation
+			branch shelter
+				has "B2 Sheragi Context Compact: route shelter"
+			branch context
+				has "B2 Sheragi Context Compact: route context"
+			`Nadia and Ivo meet you beside a museum reconstruction built from the rescued fragment and the field survey. The display is visually careful, but a copied educational model has begun circulating without the notes that distinguish measured geometry from reconstructed wall sections. A useful interpretation is hardening into an apparent original.`
+				goto settle
+			label shelter
+			`The emergency move saved the fragment, but the museum's reconstruction filled several undocumented gaps with the most likely neighboring geometry. The main display labels those choices. A copied model does not. The object survived while the uncertainty created by its rescue began disappearing downstream.`
+				goto settle
+			label context
+			`The longer field survey captured unusually rich site relationships, but later modelers compressed them into a clean reconstructed wall. The digital copy preserves measurements and loses the difference between a recorded absence, an inferred continuation, and a decorative choice made for visitors.`
+			label settle
+			choice
+				`\tCreate a portable context packet: every reconstruction carries source images, site relationships, measured geometry, inferred sections, later conservation changes, and unresolved uncertainty.`
+					goto packet
+				`\tRequire reversible reconstruction: interpretive additions must remain separable from measured evidence so a later researcher can remove the reconstruction and recover the original evidentiary state.`
+					goto reversible
+			label packet
+			`You suggest treating context as part of the artifact's usable record rather than a footnote beside it. Copies may become simpler, but each one carries a compact provenance layer showing what was measured, what came from neighboring site evidence, what was reconstructed, which conservation steps altered appearance, and where uncertainty remains. A museum model can travel without pretending to be the excavation.`
+			action
+				"B2 Sheragi Context Compact: reviewed" = 1
+				"B2 Sheragi Context Compact: settlement portable context packet" = 1
+				"B2 Sheragi Context Compact: Nadia trusts player" = 1
+				"B2 Sheragi Context Compact: Ivo trusts player" = 1
+				decline
+			label reversible
+			`You argue that interpretation becomes safest when it can be undone. Measured surfaces, original photographs, excavation relationships, conservation changes, and reconstructed additions remain separate layers. Visitors may see a complete wall, but researchers can strip the model back to the direct evidence and inspect exactly where interpretation began.`
+			action
+				"B2 Sheragi Context Compact: reviewed" = 1
+				"B2 Sheragi Context Compact: settlement reversible reconstruction" = 1
+				"B2 Sheragi Context Compact: Nadia trusts player" = 1
+				"B2 Sheragi Context Compact: Ivo trusts player" = 1
+				decline
+
+
+mission "B2 Sheragi Context Compact: Nadia Remembers"
+	minor
+	name `Nadia Remembers`
+	description `Nadia remembers the rule that now keeps a reconstruction tied to the evidence and uncertainty from which it was built.`
+	source "Vinci"
+	"offer precedence" 8
+	to offer
+		not "B2 Sheragi Context Compact: aftermath seen"
+		or
+			has "B2 Sheragi Context Compact: settlement portable context packet"
+			has "B2 Sheragi Context Compact: settlement reversible reconstruction"
+	on offer
+		conversation
+			branch reversible
+				has "B2 Sheragi Context Compact: settlement reversible reconstruction"
+			`Nadia recognizes you while reviewing a new teaching model. Its visible surface looks complete, but a student can toggle away the reconstructed sections and reveal only the measured fragment, excavation photographs, neighboring layers, and conservation changes. The missing pieces remain visible as missing evidence instead of becoming invisible certainty.`
+				goto finish
+			label reversible
+			`Nadia recognizes you beside a reconstruction whose interpretive additions are stored separately from its evidentiary layers. A new translation proposal has changed one likely orientation, so the museum updates the reconstruction without overwriting the photographs, measurements, or previous interpretation that led to the older display.`
+			label finish
+			action
+				"B2 Sheragi Context Compact: aftermath seen" = 1
+				decline
