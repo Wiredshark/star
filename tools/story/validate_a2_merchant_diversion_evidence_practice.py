@@ -16,7 +16,7 @@ required = [
     '"A2 Merchant Diversion Evidence Practice: contradiction" = 1',
     '"A2 Merchant Diversion Evidence Practice: declined" = 1',
     '"A2 Merchant Diversion Evidence Practice: recurrence seen" = 1',
-    'centralized Merchant route authority',
+    'centralized Merchant routing authority',
 ]
 for token in required:
     assert token in s, token
