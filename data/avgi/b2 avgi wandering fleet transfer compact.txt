@@ -50,14 +50,14 @@ mission "B2 Avgi Wandering Fleet Transfer Compact: Offer"
 				"B2 Avgi Wandering Fleet Transfer Compact: introduced" = 1
 				"B2 Avgi Wandering Fleet Transfer Compact: route reserve" = 1
 				"B2 Avgi Wandering Fleet Transfer Compact: loadkeeper trusts player" = 1
-			accept
+			decline
 			label repair
 			`You tell the Loadkeeper that documented compatibility and known provenance are enough to justify an urgent reversible transfer when a ship would otherwise become a hazard to the fleet. The donor's lost reserve should remain visible, but not function as a veto. The Fitter clicks their beak. The Loadkeeper answers, "Concession. Then the transfer record must survive the repaired ship. A successful recipient cannot be allowed to erase the donor's new weakness."`
 			action
 				"B2 Avgi Wandering Fleet Transfer Compact: introduced" = 1
 				"B2 Avgi Wandering Fleet Transfer Compact: route repair" = 1
 				"B2 Avgi Wandering Fleet Transfer Compact: fitter trusts player" = 1
-			accept
+			decline
 			label paired
 			`You suggest treating the transfer as two linked facts rather than one completed repair. The receiving ship records the component's provenance, compatibility assumptions, and any interface changes. The donor records the reserve it lost, the resulting dependency, the responsible replacement plan, and the condition that will actually close the deficit. The Loadkeeper begins drawing a line between the two ship silhouettes. The Fitter adds a second line for the regulator's service history. "Assessment," the Fitter says. "A part can travel without its limits disappearing."`
 			action
@@ -65,7 +65,7 @@ mission "B2 Avgi Wandering Fleet Transfer Compact: Offer"
 				"B2 Avgi Wandering Fleet Transfer Compact: route paired" = 1
 				"B2 Avgi Wandering Fleet Transfer Compact: loadkeeper trusts player" = 1
 				"B2 Avgi Wandering Fleet Transfer Compact: fitter trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that a human captain should not turn one urgent transfer into permanent Wandering Fleet procedure. The Loadkeeper answers, "Reasonable boundary." The Fitter adds, "And the regulator still needs moving." They return to the argument without asking you to settle it.`
 			action
@@ -117,14 +117,14 @@ mission "B2 Avgi Wandering Fleet Transfer Compact: Review"
 				"B2 Avgi Wandering Fleet Transfer Compact: reviewed" = 1
 				"B2 Avgi Wandering Fleet Transfer Compact: settlement portable transfer debt" = 1
 				"B2 Avgi Wandering Fleet Transfer Compact: loadkeeper trusts player" = 1
-			accept
+			decline
 			label reconcile
 			`You recommend keeping each ship's repair record focused on what its crew actually did, while adding a fleet-wide reconciliation cycle. At each review, borrowed components, missing reserves, temporary adapters, deferred inspections, and replacement promises are compared against the current physical fleet. An obligation closes only when the missing capacity has actually been restored or a documented equivalent has replaced it. The Fitter keeps local repair authority. The Loadkeeper gets a recurring test against hidden dependency debt.`
 			action
 				"B2 Avgi Wandering Fleet Transfer Compact: reviewed" = 1
 				"B2 Avgi Wandering Fleet Transfer Compact: settlement dependency reconciliation" = 1
 				"B2 Avgi Wandering Fleet Transfer Compact: fitter trusts player" = 1
-			accept
+			decline
 
 mission "B2 Avgi Wandering Fleet Transfer Compact: Loadkeeper Remembers"
 	minor
@@ -151,4 +151,4 @@ mission "B2 Avgi Wandering Fleet Transfer Compact: Loadkeeper Remembers"
 			label record
 			action
 				"B2 Avgi Wandering Fleet Transfer Compact: aftermath seen" = 1
-			accept
+			decline
