@@ -62,7 +62,7 @@ mission "B2 Successor Interface Provenance Compact: Offer"
 				"B2 Successor Interface Provenance Compact: route provenance" = 1
 				"B2 Successor Interface Provenance Compact: archivist trusts player" = 1
 				event "B2 Successor Interface Provenance Compact: Review Ready" 7 11
-				accept
+				decline
 			label field
 			`You tell the Fitter that the registry should remain useful under pressure. A crew may start from a previously successful configuration, but the new record must say which conditions were directly checked, which were assumed equivalent, and which changed. The Archivist agrees so long as a copied success never becomes evidence that two installations were identical.`
 			action
@@ -70,7 +70,7 @@ mission "B2 Successor Interface Provenance Compact: Offer"
 				"B2 Successor Interface Provenance Compact: route field" = 1
 				"B2 Successor Interface Provenance Compact: fitter trusts player" = 1
 				event "B2 Successor Interface Provenance Compact: Review Ready" 7 11
-				accept
+				decline
 			label paired
 			`You split the record in two. The tested-interface record preserves what was actually proven and under which conditions. The installation record says where the shape was reused, what was measured locally, what differed, and whether the reuse passed inspection. Neither layer silently rewrites the other.`
 			action
@@ -79,7 +79,7 @@ mission "B2 Successor Interface Provenance Compact: Offer"
 				"B2 Successor Interface Provenance Compact: archivist trusts player" = 1
 				"B2 Successor Interface Provenance Compact: fitter trusts player" = 1
 				event "B2 Successor Interface Provenance Compact: Review Ready" 7 11
-				accept
+				decline
 			label decline
 			`You decline to establish a standing procedure from one repair. The Fitter uses a conventional replacement instead, and the Archivist records that no general interface rule was adopted from the incident.`
 			action
@@ -126,7 +126,7 @@ mission "B2 Successor Interface Provenance Compact: Review"
 				"B2 Successor Interface Provenance Compact: settlement portable qualification packet" = 1
 				"B2 Successor Interface Provenance Compact: archivist trusts player" = 1
 				"B2 Successor Interface Provenance Compact: fitter trusts player" = 1
-				accept
+				decline
 			label revalidate
 			`You recommend expiry and revalidation. The registry keeps successful geometry and its history, but changes in pressure, medium, electrical behavior, control convention, temperature, neighboring seals, or material state invalidate only the assumptions they affect. Crews may reuse prior work without pretending an old approval is permanent proof.`
 			action
@@ -134,7 +134,7 @@ mission "B2 Successor Interface Provenance Compact: Review"
 				"B2 Successor Interface Provenance Compact: settlement expiry and revalidation" = 1
 				"B2 Successor Interface Provenance Compact: archivist trusts player" = 1
 				"B2 Successor Interface Provenance Compact: fitter trusts player" = 1
-				accept
+				decline
 
 
 mission "B2 Successor Interface Provenance Compact: Fitter Remembers"
@@ -162,4 +162,4 @@ mission "B2 Successor Interface Provenance Compact: Fitter Remembers"
 			label finish
 			action
 				"B2 Successor Interface Provenance Compact: aftermath seen" = 1
-				accept
+				decline
