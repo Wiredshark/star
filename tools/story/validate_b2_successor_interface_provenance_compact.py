@@ -76,6 +76,27 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("missing one-shot aftermath state")
 
+    # These missions are dialogue/state-only. A terminal `accept` would move an
+    # objective-less mission into the accepted mission list instead of closing it.
+    accept_count = len(re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE))
+    decline_count = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+    if accept_count:
+        fail(f"state-only dialogue lifecycle must contain zero accept terminals, got {accept_count}")
+    if decline_count != 7:
+        fail(f"expected exactly 7 state-only decline terminals, got {decline_count}")
+
+    # Keep this check anchored to real tab-indented mission directives so ordinary
+    # dialogue prose containing words such as 'destination' cannot become a false
+    # positive. If an actual gameplay objective is added later, the lifecycle must
+    # be reconsidered rather than silently retaining the state-only contract.
+    objective_directive = re.compile(
+        r'^(?:\t)+(?:destination|stopover|waypoint|npc|cargo|passengers?|deadline|timer)\b',
+        flags=re.MULTILINE | re.IGNORECASE,
+    )
+    objective_match = objective_directive.search(text)
+    if objective_match:
+        fail(f"state-only lifecycle invalidated by gameplay objective directive: {objective_match.group(0).strip()}")
+
     condition_write = re.compile(r'^\s*"([^"]+)"\s*(?:=|\+=|-=)\s*\d+', re.MULTILINE)
     for cond in condition_write.findall(text):
         if not cond.startswith(PREFIX):
@@ -137,6 +158,8 @@ def main() -> None:
     print("PASS: later_reader=Fitter Remembers")
     print("PASS: persistence_model=stock mission/global conditions")
     print("PASS: write_ownership=B2 namespace only")
+    print("PASS: dialogue_lifecycle=0 accept + 7 decline")
+    print("PASS: objective_surface=state-only dialogue")
     print("PASS: compatibility_boundary=geometry does not prove operating-context compatibility")
 
 
