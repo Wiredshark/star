@@ -95,6 +95,31 @@ def main() -> None:
         if missing:
             fail(f"unresolved local goto labels: {sorted(missing)}")
 
+    # Lifecycle contract: these missions only write persistent story state and do
+    # not create gameplay objectives. They must close with decline instead of
+    # leaving objective-less accepted missions in the active mission list.
+    terminal_accepts = re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE)
+    terminal_declines = re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)
+    if terminal_accepts:
+        fail(f"state-only dialogue must not use terminal accept: count={len(terminal_accepts)}")
+    if len(terminal_declines) != 7:
+        fail(f"expected exactly 7 terminal decline commands, found {len(terminal_declines)}")
+
+    objective_directives = (
+        "destination ",
+        "stopover ",
+        "waypoint ",
+        "npc ",
+        "cargo ",
+        "passenger ",
+        "deadline ",
+        "timer ",
+    )
+    for line in text.splitlines():
+        stripped = line.strip().lower()
+        if any(stripped.startswith(token) for token in objective_directives):
+            fail(f"unexpected objective-bearing directive in state-only slice: {line.strip()}")
+
     for phrase in (
         "seed-exchange",
         "lineage",
@@ -128,6 +153,7 @@ def main() -> None:
     print("PASS: later_reader=Keeper Remembers")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: b1_inputs=seed lineage exchange + ecological recovery")
+    print("PASS: lifecycle=7 declines + 0 accepts + no gameplay objectives")
 
 
 if __name__ == "__main__":
