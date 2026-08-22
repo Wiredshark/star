@@ -1,6 +1,6 @@
 # A2 Syndicate Qualification Practice Restage Handoff — 2026-08-21
 
-Verdict: **PARTIAL** pending refreshed exact-head repository-native validation.
+Verdict: **READY for A3 review/integration**.
 
 ## Authority and isolation
 
@@ -11,6 +11,7 @@ Verdict: **PARTIAL** pending refreshed exact-head repository-native validation.
 - Production restage: `06901b6b5abe9800243ae08cec17da1720f2bb3c`
 - Initial strengthened validator: `0fd986f870c43c74ee60b4632ba260945377e424`
 - Validator comparison-parsing repair: `537fa17e2abafa1ebbb6f9449c6583be615fd068`
+- Exact validated production/validator head: `d264c3307e14f06ccd71926eaaf6526d78bce3f4`
 
 ## Implemented RPG / narrative loop
 
@@ -35,7 +36,14 @@ A later authoritative A1 labor rotation pressure-tests each positive practice wh
 
 ## Validation history
 
-Initial exact-head story/simulation validation run `32539121102` failed because the new focused validator incorrectly treated the read-only comparison `world: syndicate labor strain >= 2` as an assignment by rejecting every `=` character. Commit `537fa17e2abafa1ebbb6f9449c6583be615fd068` narrows the ownership check to assignment syntax (` = `), preserving rejection of actual A1/B2 writes while allowing comparisons. The first exact-head save-load run was still in progress when the validator repair was made and is superseded for acceptance by refreshed validation on the repaired head.
+Initial story/simulation validation run `32539121102` failed because the new focused validator incorrectly treated the read-only comparison `world: syndicate labor strain >= 2` as an assignment by rejecting every `=` character. Commit `537fa17e2abafa1ebbb6f9449c6583be615fd068` narrows the ownership check to assignment syntax (` = `), preserving rejection of actual A1/B2 writes while allowing comparisons.
+
+Refreshed validation on exact head `d264c3307e14f06ccd71926eaaf6526d78bce3f4` is terminal green:
+
+- Fork simulation and story validation run `32539185282` / #364: **SUCCESS**.
+- Fork save-load integration smoke run `32539185252` / #349: **SUCCESS**.
+
+These runs validate the production data and strengthened validator at the exact accepted head. This READY promotion changes only the handoff document.
 
 ## Files
 
@@ -43,8 +51,8 @@ Initial exact-head story/simulation validation run `32539121102` failed because 
 - `tools/story/validate_a2_syndicate_qualification_practice.py`
 - `story/A2_SYNDICATE_QUALIFICATION_PRACTICE_RESTAGE_HANDOFF_20260821.md`
 
-## Validation required before A3
+## A3 integration instructions
 
-Require refreshed exact-head Fork simulation/story/style validation and Fork save-load integration smoke after the validator repair. Actual-game acceptance should verify B2-aftermath gating, all four briefing choices, refusal suppression, persistence across save/reload, later A1 labor-rotation pressure testing for all three positive routes, one-shot suppression, and Syndicate offer-precedence behavior.
+Review/integrate the exact validated production/validator content from `d264c3307e14f06ccd71926eaaf6526d78bce3f4` (plus this handoff-only READY promotion). Preserve A1/B2 read-only ownership, refusal semantics, offer precedence 9, and state-only `decline` lifecycle. Actual-game acceptance may additionally exercise all four briefing choices, save/reload persistence, later A1 labor-rotation pressure testing, one-shot suppression, and Syndicate offer-precedence behavior.
 
 Do not self-integrate. A3 owns integration review.
