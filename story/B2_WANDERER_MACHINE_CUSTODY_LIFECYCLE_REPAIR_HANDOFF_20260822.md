@@ -1,6 +1,6 @@
 # B2 Wanderer Machine Custody Compact lifecycle repair handoff
 
-Verdict: PARTIAL pending repository-native CI.
+Verdict: READY for A3 review/integration.
 
 ## Scope
 
@@ -16,6 +16,7 @@ The production repair changes those six positive terminal commands from `accept`
 - branch: `agent/b2-wanderer-machine-custody-lifecycle-20260822-0526`
 - production repair: `f9e51e3e51fe2e6168e30314297896501c6a2bf3`
 - validator hardening: `1d5cbe357b166fb13ce1a2c94ceec9c06d82e44b`
+- exact fully validated production/validator/handoff candidate: `c3182bf094a30d20e87f698fc5c4002feaa8bd73`
 
 ## Files changed
 
@@ -54,17 +55,25 @@ All pre-existing route, settlement, state-ownership, mutation-surface, provenanc
 
 Before work, the service-owned process inventory reported four pre-existing processes. They were preserved. The normal private host repository workspace is unrelated to authoritative `Wiredshark/star`, so no host workspace or process was modified for this slice.
 
-## Required acceptance before READY
+## Validation evidence
 
-Repository-native CI must be terminal green for the exact candidate head:
+Exact candidate `c3182bf094a30d20e87f698fc5c4002feaa8bd73` is terminal green on both repository-native acceptance workflows:
 
-1. Fork simulation and story validation, including changed-content style, focused story validators, and A1/state-ownership contracts.
-2. Fork save-load integration smoke, including production configure/build and stock save/load smoke.
+- Fork simulation and story validation run `32565072144` / #389: SUCCESS.
+  - Changed fork content style: SUCCESS.
+  - Focused simulation and story contracts: SUCCESS.
+  - Compile focused Python validation code: SUCCESS.
+  - Run all focused story validators: SUCCESS.
+  - Run A1 simulation contract tests: SUCCESS.
+- Fork save-load integration smoke run `32565072198` / #374: SUCCESS.
+  - Production configuration: SUCCESS.
+  - Production build: SUCCESS.
+  - Stock save-load smoke: SUCCESS.
 
-Do not promote to READY or integrate until those gates are green.
+The exact base-to-candidate diff is isolated: three commits ahead / zero behind, with only the production file, focused validator, and this handoff changed. The production-file diff itself is six `accept` -> `decline` replacements.
 
 ## A3 / B3 integration notes
 
-This is a focused lifecycle repair. A3 should integrate only after verifying current-main ancestry and green exact-head CI. No ordering dependency beyond the already-integrated Wanderer Machine Custody content is introduced.
+This is a focused lifecycle repair. A3 should verify current-main ancestry, then integrate the READY branch if no conflicting newer repair supersedes it. No ordering dependency beyond the already-integrated Wanderer Machine Custody content is introduced.
 
 Durable lifecycle invariant: dialogue/state-only B2 missions that merely persist state terminate with `decline`; `accept` is reserved for mission paths that actually create gameplay objectives.
