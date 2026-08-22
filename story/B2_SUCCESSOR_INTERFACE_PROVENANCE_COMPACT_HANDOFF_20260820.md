@@ -16,6 +16,7 @@ B2 — Story Characters + Dynamic Content
 - Prior PARTIAL handoff head: `e5b6b3f18c58221fde2a724a43018886bd94bb64`
 - Dialogue-lifecycle production repair: `bd891fe311cd4e54dfcaf1796bef2f8edb5da630`
 - Lifecycle-validator hardening: `78fd6dfb6f831f7722656c30fac6623139a307ca`
+- Exact fully validated production/validator/handoff candidate: `639f9a2ffceb3b7b915ca7baaaeb6cab12629834`
 
 ## Slice
 
@@ -80,22 +81,27 @@ The objective-directive check is anchored to actual mission directives rather th
 
 ## Validation
 
-Focused validator command:
+Exact candidate `639f9a2ffceb3b7b915ca7baaaeb6cab12629834` is terminal green on both repository-native acceptance workflows.
 
-```text
-python3 tools/story/validate_b2_successor_interface_provenance_compact.py "data/successors/b2 successor interface provenance compact.txt"
-```
+`Fork simulation and story validation` run #432 / `32602546376`: **SUCCESS**.
 
-Broader repository gates required before READY:
+Its jobs completed successfully for:
 
-```text
-python3 tools/story/validate_story_repo.py
-python3 utils/check_content_style.py
-```
+- compile focused Python validation code;
+- run all focused story validators, including the hardened Successor lifecycle validator;
+- run A1 simulation contract tests;
+- changed fork content style.
 
-Repository-native `Fork simulation and story validation` and `Fork save-load integration smoke` must both be terminal green on the exact production/validator/handoff candidate before A3 integration.
+`Fork save-load integration smoke` run #417 / `32602546388`: **SUCCESS**.
 
-Current verdict remains **PARTIAL** until those exact-head repository-native gates are observed terminal green after the lifecycle repair. Earlier pre-repair success cannot be used as acceptance evidence for the lifecycle change.
+Its stock save-load job completed successfully for:
+
+- dependency installation;
+- production configuration;
+- production executable build;
+- stock save-load smoke cases.
+
+This validation directly covers the lifecycle repair. Earlier pre-repair workflow results are not being used as acceptance evidence.
 
 ## Concurrency / process safety
 
@@ -116,4 +122,4 @@ At recovery time:
 
 ## Verdict
 
-**PARTIAL** — lifecycle production repair and validator hardening are committed; exact-head repository-native validation is required before READY.
+**READY for A3 review/integration** — exact candidate `639f9a2ffceb3b7b915ca7baaaeb6cab12629834` passed simulation/story/style, A1 contract, production build, and stock save-load validation. B2 remains isolated and does not self-integrate.
