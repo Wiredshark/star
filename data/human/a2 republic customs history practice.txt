@@ -81,7 +81,9 @@ mission "A2 Republic Customs History Practice Reflection"
 				has "A2 Republic Customs History Practice: basis separation"
 			branch interval
 				has "A2 Republic Customs History Practice: current reason"
-			`At another Republic port, a clerk recognizes that your earlier lesson was deliberately local. She uses the old case only as context while rebuilding today's record from today's sources. The resemblance is noted, but no borrowed rule is allowed to substitute for current evidence.`
+			branch local
+				has "A2 Republic Customs History Practice: local only"
+			`The archivist cannot match the pending reflection to a recorded practice. Rather than infer one, she leaves the record unresolved.`
 				goto finish
 			label provenance
 			`At another Republic port, a clerk traces a corrected manifest through every amendment instead of replacing the old entry. The final record shows what changed, who changed it, and which earlier uncertainty remained reasonable before the correction arrived.`
@@ -91,6 +93,9 @@ mission "A2 Republic Customs History Practice Reflection"
 				goto finish
 			label interval
 			`At another Republic port, an examiner notices that an old review flag is being copied forward without a fresh basis. The historical flag stays searchable, but the new inspection is not opened until the office states what current fact actually justifies repeating it.`
+				goto finish
+			label local
+			`At another Republic port, a clerk recognizes that your earlier lesson was deliberately local. She uses the old case only as context while rebuilding today's record from today's sources. The resemblance is noted, but no borrowed rule is allowed to substitute for current evidence.`
 			label finish
 			`The result is mundane rather than triumphant. The value of the practice is that records remain inspectable and decisions revisable without pretending that procedure itself guarantees correctness.`
 			action
