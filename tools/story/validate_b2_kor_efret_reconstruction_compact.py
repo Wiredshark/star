@@ -68,6 +68,24 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("later reader must persist completion")
 
+    # These missions only record persistent dialogue state. They do not create
+    # gameplay objectives, so every terminal conversation path must decline
+    # after writing state instead of accepting an objective-less mission.
+    accept_count = sum(1 for line in text.splitlines() if line.strip() == "accept")
+    decline_count = sum(1 for line in text.splitlines() if line.strip() == "decline")
+    if accept_count:
+        fail(f"state-only slice must not leave accepted missions: accept={accept_count}")
+    if decline_count != 7:
+        fail(f"expected exactly 7 state-only decline terminals, found {decline_count}")
+
+    objective_directives = re.compile(
+        r'^\s*(destination|stopover|waypoint|npc|cargo|passengers?|deadline|timer)\b',
+        flags=re.MULTILINE | re.IGNORECASE,
+    )
+    objective_hits = objective_directives.findall(text)
+    if objective_hits:
+        fail(f"unexpected gameplay-objective directives in state-only slice: {objective_hits}")
+
     # Every persistent write must remain inside this B2 namespace.
     for raw in re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, flags=re.MULTILINE):
         if not raw.startswith(PREFIX):

@@ -48,14 +48,14 @@ mission "B2 Kor Efret Reconstruction Compact: Offer"
 				"B2 Kor Efret Reconstruction Compact: introduced" = 1
 				"B2 Kor Efret Reconstruction Compact: route record" = 1
 				"B2 Kor Efret Reconstruction Compact: recorder trusts player" = 1
-			accept
+			decline
 			label repair
 			`You point toward the occupied block and mime moving the recycler there. The Repairer answers with an emphatic palm-up gesture and begins preparing the component for transport. The Recorder does not interfere, but carefully copies the casing marks before the machine leaves. The immediate need is served; whether the old district's unfinished obligation survives the transfer is less certain.`
 			action
 				"B2 Kor Efret Reconstruction Compact: introduced" = 1
 				"B2 Kor Efret Reconstruction Compact: route repair" = 1
 				"B2 Kor Efret Reconstruction Compact: repairer trusts player" = 1
-			accept
+			decline
 			label paired
 			`You point to the recycler, the tablet, the occupied block, and finally the sealed district, repeating the sequence until both Kor Efreti stop arguing. The Recorder adds a transfer mark beside the old provenance record. The Repairer adds a second mark beside the destination sketch. The component can move, but the abandoned district does not disappear from the ledger merely because one useful piece has left it.`
 			action
@@ -63,7 +63,7 @@ mission "B2 Kor Efret Reconstruction Compact: Offer"
 				"B2 Kor Efret Reconstruction Compact: route paired" = 1
 				"B2 Kor Efret Reconstruction Compact: recorder trusts player" = 1
 				"B2 Kor Efret Reconstruction Compact: repairer trusts player" = 1
-			accept
+			decline
 			label decline
 			`You hold up both palms and step away. The Recorder and Repairer resume their argument, but more slowly. Before you leave, the Recorder adds a mark indicating that the dispute itself remains unresolved.`
 			action
@@ -115,7 +115,7 @@ mission "B2 Kor Efret Reconstruction Compact: Review"
 				"B2 Kor Efret Reconstruction Compact: settlement provenance bond" = 1
 				"B2 Kor Efret Reconstruction Compact: recorder trusts player" = 1
 				"B2 Kor Efret Reconstruction Compact: repairer trusts player" = 1
-			accept
+			decline
 			label priority
 			`You recommend a restoration-priority ledger. Before a component leaves a damaged site, the record must show the site's current habitability, environmental recovery, remaining systems, and realistic replacement prospects. Emergency use can still outrank future restoration, but the trade is made against measured recovery rather than convenience. The Repairer keeps access to scarce parts; the Recorder keeps dismantling from becoming invisible abandonment.`
 			action
@@ -123,7 +123,7 @@ mission "B2 Kor Efret Reconstruction Compact: Review"
 				"B2 Kor Efret Reconstruction Compact: settlement restoration priority" = 1
 				"B2 Kor Efret Reconstruction Compact: recorder trusts player" = 1
 				"B2 Kor Efret Reconstruction Compact: repairer trusts player" = 1
-			accept
+			decline
 
 mission "B2 Kor Efret Reconstruction Compact: Recorder Remembers"
 	landing
@@ -149,4 +149,4 @@ mission "B2 Kor Efret Reconstruction Compact: Recorder Remembers"
 			label record
 			action
 				"B2 Kor Efret Reconstruction Compact: aftermath seen" = 1
-			accept
+			decline
