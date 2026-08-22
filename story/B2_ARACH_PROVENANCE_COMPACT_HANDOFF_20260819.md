@@ -1,17 +1,20 @@
-# B2 Arach Provenance Compact handoff — 2026-08-19
+# B2 Arach Provenance Compact handoff — 2026-08-22
 
 ## Status
 
-PARTIAL pending repository-native validation.
+READY for A3 review/integration.
 
 ## Base and branch
 
 - Repository: `Wiredshark/star`
-- B1 dependency branch: `agent/b1-arach-civic-institutions-20260819-1124`
+- Authoritative `main` observed during this completion pass: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
+- Required B1 dependency branch: `agent/b1-arach-civic-institutions-20260819-1124`
 - Exact B1 parent SHA: `46f723bf88acb6fdb210e15e79131148abc84bf6`
 - B2 branch: `agent/b2-arach-obligation-ledger-20260819-1328`
-- Production commit: `6d7ecedf0786b8746e807b824b62210a4ab308e5`
-- Focused-validator commit: `80d7bfadd202b067a11884c379e3ef5a59211819`
+- Original production commit: `6d7ecedf0786b8746e807b824b62210a4ab308e5`
+- Original focused-validator commit: `80d7bfadd202b067a11884c379e3ef5a59211819`
+- Dialogue-lifecycle repair commit: `539a7fdef14c825d2493ebf05e690bfcc28ddee5`
+- Lifecycle-validator hardening / exact fully validated candidate: `65f2351401fd4ce5388cb0a83b508075fb27d131`
 
 ## Slice
 
@@ -38,6 +41,18 @@ The delayed Review exposes information-loss during downstream copying and resolv
 
 `Assayer Remembers` is the one-shot later reader.
 
+## Dialogue lifecycle repair
+
+The three Arach missions are dialogue/state-only and create no gameplay objective. The original slice used `accept` on six positive terminal paths, which could leave objective-less accepted missions active.
+
+The completion pass changes only those six terminal commands to `decline`; refusal already declined. All 7 terminal paths now persist the same state and close immediately.
+
+The focused validator now enforces:
+
+- zero terminal `accept` commands;
+- exactly seven terminal `decline` commands;
+- no destination, stopover, waypoint, NPC, cargo, passenger, deadline, or timer directives that would invalidate the state-only lifecycle assumption.
+
 ## Ownership and invariants
 
 - Every persistent write is under `B2 Arach Provenance Compact:*`.
@@ -46,6 +61,7 @@ The delayed Review exposes information-loss during downstream copying and resolv
 - Freight custody records describe bounded observations/responsibility during each leg; they do not erase upstream provenance.
 - A shortened/copy-derived record must not silently harden an inference into a direct observation.
 - Practical shared record conventions do not imply centralized Arach political authority.
+- Dialogue/state-only B2 missions terminate with `decline`; `accept` is reserved for mission paths that actually create gameplay objectives.
 
 ## Files
 
@@ -53,20 +69,21 @@ The delayed Review exposes information-loss during downstream copying and resolv
 - `tools/story/validate_b2_arach_provenance_compact.py`
 - `story/B2_ARACH_PROVENANCE_COMPACT_HANDOFF_20260819.md`
 
-## Required validation
+## Validation evidence
 
-Run before promotion to READY:
+Exact candidate `65f2351401fd4ce5388cb0a83b508075fb27d131` passed both required repository-native pull-request workflows:
 
-```bash
-python3 tools/story/validate_b2_arach_provenance_compact.py
-python3 tools/story/validate_story_repo.py
-python3 utils/check_content_style.py
-```
+- `Fork simulation and story validation` run #402 / `32573074231`: SUCCESS.
+- `Fork save-load integration smoke` run #387 / `32573074182`: SUCCESS.
 
-Also require the repository's normal fork simulation/story workflow and production build/save-load smoke on the exact final B2 head.
+The simulation/story workflow covers focused story validation, state-ownership/simulation contracts, and changed-content style. The save-load workflow covers production configuration/build and stock persistence smoke.
 
-Runtime acceptance should exercise all three initial routes, refusal, delayed Review availability, both mutually exclusive settlements, persistence across save/load, and one-shot aftermath behavior.
+## Process and concurrency safety
+
+Before editing, the execution-service inventory showed four pre-existing service-owned processes. They were preserved. No unrelated process, branch, worktree, or dirty workspace was modified.
+
+PR #103 had not been updated since 2026-08-19, so this pass completed that existing isolated B2 slice rather than creating a competing duplicate.
 
 ## A3 integration guidance
 
-Integrate the B1 Arach civic-institutions dependency first, then this B2 slice. Do not integrate while this handoff remains PARTIAL. If CI/content/runtime validation exposes only validator defects, repair the validator without weakening the production invariants. If production syntax/state ownership fails, repair production content and rerun exact-head validation.
+Integrate/accept the B1 Arach civic-institutions dependency first, then this B2 branch. Re-read current authoritative `main` immediately before integration and verify ancestry remains appropriate. Preserve the player-private Assayer/Carrier naming boundary, B2-only write ownership, provenance/custody distinction, and state-only `decline` lifecycle invariant.
