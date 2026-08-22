@@ -74,6 +74,31 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("aftermath reader must persist completion")
 
+    # These missions only record persistent dialogue state; they create no gameplay
+    # objective. Every terminal path must close with decline so no objective-less
+    # accepted mission can remain in the player's active mission list.
+    accepts = re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE)
+    declines = re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)
+    if accepts:
+        fail(f"state-only mission contains {len(accepts)} terminal accept command(s)")
+    if len(declines) != 7:
+        fail(f"expected exactly 7 state-only decline terminals, found {len(declines)}")
+
+    objective_directives = (
+        "destination ",
+        "stopover ",
+        "waypoint ",
+        "npc ",
+        "cargo ",
+        "passenger ",
+        "deadline ",
+        "timer ",
+    )
+    for line in text.splitlines():
+        stripped = line.strip().lower()
+        if any(stripped.startswith(token) for token in objective_directives):
+            fail(f"state-only lifecycle assumption invalidated by objective directive: {line.strip()}")
+
     writes = re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, flags=re.MULTILINE)
     for raw in writes:
         if not raw.startswith(PREFIX):
@@ -162,6 +187,7 @@ def main() -> None:
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Engineer Remembers")
+    print("PASS: lifecycle=7 state-only terminal paths decline; accept=0")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: b1_inputs=Factory Deactivation Provenance Ledger + Autonomous Weapon Custody Record")
     print("PASS: continuity=machine evidence/provenance remains distinct from derived research claims")
