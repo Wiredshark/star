@@ -1,0 +1,80 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Republic Interagency Triage Archive"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: republic civic strain" >= 2
+		random < 1
+	on offer
+		conversation
+			`A public-administration exhibit displays copies of old queue cards from housing desks, travel-document offices, customs counters, school registries, and municipal aid bureaus. The cards all look slightly different, but penciled symbols in the margins show that overloaded offices had begun marking which cases depended on records held by another agency.`
+			`\tThe accompanying history explains that repeated periods of overlapping displacement and border review taught local governments that separate queues could conceal the same underlying bottleneck. A family waiting on temporary housing might also be waiting on identity records, transport authorization, school enrollment, or a customs hold. Administrators gradually adopted common triage notes so one office could see which unresolved dependency was actually keeping a case open.`
+			`\tThe archive does not present triage as a cure for shortages. Its curators emphasize that reordering work cannot create beds, clerks, inspectors, or transport capacity. What it can do is keep scarce staff from repeatedly processing the same incomplete case while another office holds the piece that would allow it to move.`
+				decline
+
+
+mission "Republic Temporary Staffing Compact Archive"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: republic civic strain" >= 3
+		random < 1
+	on offer
+		conversation
+			`A municipal-history terminal lists emergency staffing agreements between Republic worlds. Housing officers, records clerks, interpreters, benefits examiners, and port administrators appear beside temporary assignments that lasted anywhere from a few days to several months.`
+			`\tA note explains that early agreements were improvised whenever one district's administrative workload surged faster than its population or budget could adapt. Over time, neighboring governments began documenting which qualifications transferred cleanly, which records visiting staff could access, who paid travel and lodging, and how temporary workers returned to their original posts after the surge ended.`
+			`\tThe resulting compacts never erased local control. Instead, they made temporary reinforcement less chaotic. Historians point out that the same arrangements later proved useful after disasters, port closures, large evacuations, and other events in which public-service demand shifted between worlds faster than permanent hiring could respond.`
+				decline
+
+
+mission "Republic Service Queue Transparency Archive"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: republic civic strain" >= 2
+		random < 1
+	on offer
+		conversation
+			`An old civic-information display cycles through photographs of waiting rooms with handwritten signs announcing estimated processing times. Some estimates are crossed out repeatedly as shortages, document checks, or sudden arrivals made the original numbers impossible to keep.`
+			`\tThe exhibit describes a long-running argument over whether public offices should publish queue lengths and delay estimates during periods of heavy strain. Critics feared that visible backlogs would encourage people to travel elsewhere or make agencies look incompetent. Supporters argued that hiding delays simply moved the cost onto residents who had no way to plan work, lodging, childcare, or onward travel.`
+			`\tLater systems began publishing ranges, update times, and explanations of what kinds of cases were moving slowly rather than promising exact completion dates. The archive treats this as an administrative institution in its own right: uncertainty remained, but documenting that uncertainty made overloaded public services more predictable to the people depending on them.`
+				decline
+
+
+mission "Republic Civic Recovery Baseline Register"
+	minor
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 5
+	to offer
+		"world: republic civic strain" >= 4
+		random < 1
+	on offer
+		conversation
+			`A planning office has preserved a set of old recovery baselines from periods when several Republic public-service systems were overloaded at once. The records track unfinished housing cases, unresolved identity corrections, pending reviews, temporary staff assignments, and the number of residents who had abandoned one queue only to reappear in another.`
+			`\tThe historical commentary says administrators once declared recovery as soon as daily arrivals or inspections returned to normal. That repeatedly proved misleading. A quieter backlog could survive for weeks after the visible surge ended, especially when offices had deferred complicated cases in order to keep routine work moving.`
+			`\tModern recovery planning therefore distinguishes between the end of a new workload surge and the elimination of accumulated administrative debt. The register warns that a calm waiting room is not proof that the underlying system has recovered; sometimes it only means the people still waiting have learned not to stand in line.`
+				decline
