@@ -50,6 +50,29 @@ if text.count('"B2 Avgi Wandering Fleet Transfer Compact: reviewed" = 1') != 2:
 if text.count('"B2 Avgi Wandering Fleet Transfer Compact: aftermath seen" = 1') != 1:
     fail("aftermath one-shot state mismatch")
 
+# Lifecycle: these missions only persist state. They must close the conversation
+# instead of creating objective-less accepted missions.
+accept_terminals = len(re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE))
+decline_terminals = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+if accept_terminals != 0:
+    fail(f"state-only lifecycle must not use accept terminals: found {accept_terminals}")
+if decline_terminals != 7:
+    fail(f"expected exactly 7 state-only decline terminals, found {decline_terminals}")
+
+objective_directives = (
+    r'^\s*destination\b',
+    r'^\s*stopover\b',
+    r'^\s*waypoint\b',
+    r'^\s*npc\b',
+    r'^\s*cargo\b',
+    r'^\s*passenger\b',
+    r'^\s*deadline\b',
+    r'^\s*timer\b',
+)
+for pattern in objective_directives:
+    if re.search(pattern, text, flags=re.MULTILINE):
+        fail(f"state-only lifecycle assumption invalidated by objective directive: {pattern}")
+
 for gate in (
     '\t\thas "language: Avgi (Written)"',
     '\t\thas "avgi: wandering fleet refit 1"',
@@ -126,5 +149,6 @@ print("PASS: initial_routes=3 + refusal")
 print("PASS: review_routing=paired fallthrough + explicit reserve/repair branches")
 print("PASS: terminal_settlements=2")
 print("PASS: later_reader=Loadkeeper Remembers")
+print("PASS: lifecycle=7 decline terminals; 0 objective-less accepts")
 print("PASS: authority=B2 conditions only; Avgi/B1 state read-only")
 print("PASS: continuity=recipient repair != restored fleet resilience")
