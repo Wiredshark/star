@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native simulation/story/style and production build/save-load validation.
+READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -10,6 +10,7 @@ PARTIAL pending repository-native simulation/story/style and production build/sa
 - Branch: `agent/b2-avgi-wandering-fleet-lifecycle-20260822-1026`
 - Production repair: `1e8761f936764bb36c228efbb23684f2b70b68b3`
 - Validator hardening: `425d6f515038d06f922fc70d3712bb46130e3064`
+- Exact fully validated production/validator/handoff candidate: `f0680b1a6e813711b083fc73a730b4346642dec1`
 - Integration authority: A3 only; this branch must not self-integrate.
 
 ## Repair
@@ -18,12 +19,21 @@ PARTIAL pending repository-native simulation/story/style and production build/sa
 
 The production repair changes exactly those six objective-less positive terminals from `accept` to `decline`, leaving all dialogue, character continuity, routes, trust state, settlements, scope gates, persistence names/values, and B1/A1 ownership semantics unchanged. All seven terminal paths now close cleanly after persisting their existing state.
 
-The focused validator now enforces:
+The focused validator enforces:
 
 - zero terminal `accept` commands;
 - exactly seven terminal `decline` commands;
 - absence of destination, stopover, waypoint, NPC, cargo, passenger, deadline, and timer directives that would invalidate the state-only lifecycle assumption;
 - all prior route, settlement, state-ownership, provenance, compatibility, dependency-debt, and continuity checks.
+
+## Validation evidence
+
+Exact candidate `f0680b1a6e813711b083fc73a730b4346642dec1` is terminal green on both required repository-native gates:
+
+- `Fork simulation and story validation` run #406 / `32578789156`: SUCCESS.
+- `Fork save-load integration smoke` run #391 / `32578789189`: SUCCESS.
+
+The save-load workflow completed production configuration/build and the stock save-load smoke stage successfully. This candidate is suitable for A3 review under the existing integration protocol.
 
 ## Continuity and persistence
 
@@ -33,10 +43,6 @@ The focused validator now enforces:
 - No persistent condition names or values changed; no save migration is required.
 - Recipient repair success remains distinct from restored fleet resilience.
 - Component provenance/compatibility evidence remains distinct from donor reserve restoration and downstream dependency closure.
-
-## Validation required before READY
-
-Run the repository-native story/simulation/style workflow and the production build/save-load smoke workflow on the exact branch head. A3 should not integrate while either required workflow is non-green.
 
 ## A3/B3 integration notes
 
