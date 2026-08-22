@@ -1,0 +1,97 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 Hicemus Access Practice. Consumes B2 settlement state read-only.
+
+mission "A2 Hicemus Access Practice: Reflection"
+	landing
+	minor
+	invisible
+	source
+		government "Hicemus"
+	"offer precedence" 9
+	to offer
+		has "B2 Hicemus Access Compact: aftermath seen"
+		not "A2 Hicemus Access Practice: chosen"
+		not "A2 Hicemus Access Practice: refused"
+		random < 24
+	on offer
+		conversation
+			branch conflict
+				has "B2 Hicemus Access Compact: settlement shared conflict table"
+			`The temporary-route records you helped shape are now ordinary enough that nobody pauses over them. The Incipias you privately call the Dispatcher shows you a copied route notice: purpose, capacity, emergency priority, expiry, and reviewer all travel with the exception. What matters now is whether you treat that lesson as a rule for your own future decisions or as something that belongs only to this station.`
+			goto choose
+			label conflict
+			`The shared conflict table is now ordinary enough that operators consult it before temporary routes overlap. The Incipias you privately call the Maintainer shows you two harmless-looking exceptions whose combined load would have crossed a junction limit. What matters now is whether you carry that habit of checking interactions into your own future decisions or leave it here.`
+			label choose
+			choice
+				`Carry forward a bounded-record practice: temporary exceptions should remember purpose, limits, expiry, and who must review them.`
+					goto bounded
+				`Carry forward an interaction-first practice: individually reasonable exceptions must be checked for combined loads and shared emergency paths.`
+					goto interaction
+				`Keep the lesson local. This station's access compromises are not a universal rule.`
+					goto local
+				`Refuse to turn your participation into a standing practice.`
+					goto refuse
+			label bounded
+			`You keep the bounded-record lesson. Temporary access remains temporary only when purpose, limits, expiry, and review responsibility travel with the exception.`
+			action
+				"A2 Hicemus Access Practice: chosen" = 1
+				"A2 Hicemus Access Practice: bounded record" = 1
+			decline
+			label interaction
+			`You keep the interaction-first lesson. A safe exception in isolation can still become unsafe when it collides with another route, load, or emergency path.`
+			action
+				"A2 Hicemus Access Practice: chosen" = 1
+				"A2 Hicemus Access Practice: interaction first" = 1
+			decline
+			label local
+			`You keep the lesson local. The Hicemus station remains useful context, not borrowed authority for every later access dispute.`
+			action
+				"A2 Hicemus Access Practice: chosen" = 1
+				"A2 Hicemus Access Practice: local only" = 1
+			decline
+			label refuse
+			`You refuse to establish a standing practice. Participation in one settlement does not appoint you to carry its authority elsewhere.`
+			action
+				"A2 Hicemus Access Practice: refused" = 1
+			decline
+
+
+mission "A2 Hicemus Access Practice: Later Reflection"
+	landing
+	minor
+	invisible
+	"offer precedence" 9
+	to offer
+		has "A2 Hicemus Access Practice: chosen"
+		not "A2 Hicemus Access Practice: refused"
+		not "A2 Hicemus Access Practice: reflection seen"
+		random < 30
+	on offer
+		conversation
+			branch interaction
+				has "A2 Hicemus Access Practice: interaction first"
+			branch local
+				has "A2 Hicemus Access Practice: local only"
+			`A temporary operating exception crosses your desk. Because you kept the Hicemus lesson as a bounded-record practice, you notice that its purpose is clear but its expiry and reviewer are not. You send it back for those limits before treating the exception as permanent. The useful part of the lesson traveled without pretending Hicemus practice is universal.`
+			goto done
+			label interaction
+			`Two individually sensible temporary arrangements overlap in a way neither request mentions. Because you kept the interaction-first lesson, you compare their combined burden before accepting either at face value. The habit travels; the station's internal authority does not.`
+			goto done
+			label local
+			`A later access dispute reminds you of the Hicemus station, but the people, risks, and institutions are different. You deliberately resist importing its settlement as precedent. Remembering where an analogy stops proves as useful as remembering the analogy itself.`
+			label done
+			action
+				"A2 Hicemus Access Practice: reflection seen" = 1
+			decline
