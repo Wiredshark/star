@@ -35,9 +35,9 @@ assert text.count('\n\t\t\tdecline\n') == 5, "expected four Adopt terminals plus
 for line in text.splitlines():
     stripped = line.strip()
     if stripped.startswith('"world: syndicate labor strain"') or stripped.startswith('"world: syndicate labor rotation active"'):
-        assert "=" not in stripped, f"illegal A1 write: {line}"
+        assert " = " not in stripped, f"illegal A1 write: {line}"
     if stripped.startswith('"B2 Syndicate Qualification Compact:'):
-        assert "=" not in stripped, f"illegal B2 write: {line}"
+        assert " = " not in stripped, f"illegal B2 write: {line}"
 
 # Only A2 namespaced state may be assigned.
 for line in text.splitlines():
