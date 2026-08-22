@@ -55,7 +55,7 @@ mission "B2 Wanderer Machine Custody Compact: Offer"
 				"B2 Wanderer Machine Custody Compact: route custody" = 1
 				"B2 Wanderer Machine Custody Compact: curator trusts player" = 1
 				event "B2 Wanderer Machine Custody Compact: Review Ready" 7 11
-				accept
+				decline
 			label sandbox
 			`You side with the Engineer on bounded study. The research image is created inside an isolated system with no weapons, network links, or autonomous actuators attached. The Curator adds a record of every extraction and normalization step so that a convenient working image cannot later be mistaken for an untouched copy of the recovered core.`
 			action
@@ -63,7 +63,7 @@ mission "B2 Wanderer Machine Custody Compact: Offer"
 				"B2 Wanderer Machine Custody Compact: route sandbox" = 1
 				"B2 Wanderer Machine Custody Compact: engineer trusts player" = 1
 				event "B2 Wanderer Machine Custody Compact: Review Ready" 7 11
-				accept
+				decline
 			label paired
 			`You argue that evidence custody and research utility fail when they are forced into the same object. The original core remains sealed under the existing custody record. A separate research image carries its source identifier, extraction method, deleted or unreadable regions, every later transformation, and a warning that results produced from the derivative cannot silently rewrite the original record.`
 			action
@@ -72,7 +72,7 @@ mission "B2 Wanderer Machine Custody Compact: Offer"
 				"B2 Wanderer Machine Custody Compact: curator trusts player" = 1
 				"B2 Wanderer Machine Custody Compact: engineer trusts player" = 1
 				event "B2 Wanderer Machine Custody Compact: Review Ready" 7 11
-				accept
+				decline
 			label decline
 			`You tell them that a surviving institution should not turn a visitor's preference into a rule for dangerous machine evidence. The Curator keeps the core sealed, and the Engineer leaves the research request unresolved. Their disagreement remains part of the custody record instead of becoming policy through your authority.`
 			action
@@ -117,7 +117,7 @@ mission "B2 Wanderer Machine Custody Compact: Review"
 				"B2 Wanderer Machine Custody Compact: settlement transferable custody packet" = 1
 				"B2 Wanderer Machine Custody Compact: curator trusts player" = 1
 				"B2 Wanderer Machine Custody Compact: engineer trusts player" = 1
-				accept
+				decline
 			label twokey
 			`You argue that convenience should not decide when a derivative becomes authoritative. Research teams may use isolated working copies, but conclusions that could justify arming, activating, attributing, or transferring dangerous machine technology require an independent reexamination tied back to the sealed original. The second team does not have to agree, but disagreement remains visible instead of being erased by the newest copy.`
 			action
@@ -125,7 +125,7 @@ mission "B2 Wanderer Machine Custody Compact: Review"
 				"B2 Wanderer Machine Custody Compact: settlement two-key derivative review" = 1
 				"B2 Wanderer Machine Custody Compact: curator trusts player" = 1
 				"B2 Wanderer Machine Custody Compact: engineer trusts player" = 1
-				accept
+				decline
 
 
 mission "B2 Wanderer Machine Custody Compact: Engineer Remembers"
@@ -151,4 +151,4 @@ mission "B2 Wanderer Machine Custody Compact: Engineer Remembers"
 			label finish
 			action
 				"B2 Wanderer Machine Custody Compact: aftermath seen" = 1
-				accept
+				decline
