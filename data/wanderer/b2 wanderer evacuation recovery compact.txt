@@ -52,14 +52,14 @@ mission "B2 Wanderer Evacuation Recovery Compact: Offer"
 				"B2 Wanderer Evacuation Recovery Compact: introduced" = 1
 				"B2 Wanderer Evacuation Recovery Compact: route obligations" = 1
 				"B2 Wanderer Evacuation Recovery Compact: harbor keeper trusts player" = 1
-			accept
+			decline
 			label current
 			`You tell them an emergency record should not preserve every historical inconvenience forever. The Route Tender marks only the borrowed capacity that still constrains safe transport or shelter operation. The Harbor Keeper insists that resolved items be closed with evidence rather than silently disappearing.`
 			action
 				"B2 Wanderer Evacuation Recovery Compact: introduced" = 1
 				"B2 Wanderer Evacuation Recovery Compact: route current" = 1
 				"B2 Wanderer Evacuation Recovery Compact: route tender trusts player" = 1
-			accept
+			decline
 			label paired
 			`You separate the record into two layers: who reached safety and which borrowed capacities are still open. A refugee arrival cannot be undone by a late maintenance bill, but neither can the arrival erase an exhausted crew, missing shelter module, or damaged berth. Both coordinators begin linking the records without collapsing them.`
 			action
@@ -67,7 +67,7 @@ mission "B2 Wanderer Evacuation Recovery Compact: Offer"
 				"B2 Wanderer Evacuation Recovery Compact: route paired" = 1
 				"B2 Wanderer Evacuation Recovery Compact: harbor keeper trusts player" = 1
 				"B2 Wanderer Evacuation Recovery Compact: route tender trusts player" = 1
-			accept
+			decline
 			label decline
 			`You decline to impose a standing rule. The Harbor Keeper says, "Then let the record show that local judgment stayed local." The Route Tender closes the discussion without creating a review chain.`
 			action
@@ -118,7 +118,7 @@ mission "B2 Wanderer Evacuation Recovery Compact: Review"
 				"B2 Wanderer Evacuation Recovery Compact: settlement portable recovery packet" = 1
 				"B2 Wanderer Evacuation Recovery Compact: harbor keeper trusts player" = 1
 				"B2 Wanderer Evacuation Recovery Compact: route tender trusts player" = 1
-			accept
+			decline
 			label reconcile
 			`You recommend two lightweight ledgers: one for completed evacuation outcomes and one for borrowed-capacity recovery. A recurring reconciliation closes an obligation only when its restoration evidence exists, while resolved items stop propagating as active warnings. Neither ledger can silently close the other.`
 			action
@@ -126,7 +126,7 @@ mission "B2 Wanderer Evacuation Recovery Compact: Review"
 				"B2 Wanderer Evacuation Recovery Compact: settlement reconciliation cycle" = 1
 				"B2 Wanderer Evacuation Recovery Compact: harbor keeper trusts player" = 1
 				"B2 Wanderer Evacuation Recovery Compact: route tender trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Wanderer Evacuation Recovery Compact: Keeper Remembers"
@@ -151,4 +151,4 @@ mission "B2 Wanderer Evacuation Recovery Compact: Keeper Remembers"
 			label record
 			action
 				"B2 Wanderer Evacuation Recovery Compact: aftermath seen" = 1
-			accept
+			decline
