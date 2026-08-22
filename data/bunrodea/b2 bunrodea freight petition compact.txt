@@ -43,14 +43,14 @@ mission "B2 Bunrodea Freight Petition Compact: Offer"
 				"B2 Bunrodea Freight Petition Compact: introduced" = 1
 				"B2 Bunrodea Freight Petition Compact: route sedi" = 1
 				"B2 Bunrodea Freight Petition Compact: sedi trusts player" = 1
-			accept
+			decline
 			label iral
 			`You tell Sedi that a standardized manifest cannot by itself decide who has assumed an estate obligation. If liability transfers before the petition chain is complete, later clerks may inherit a decision that nobody actually made. Iral inclines his head. Sedi answers, "Then the petition chain needs a clock. A missing seal cannot freeze a dock forever."`
 			action
 				"B2 Bunrodea Freight Petition Compact: introduced" = 1
 				"B2 Bunrodea Freight Petition Compact: route iral" = 1
 				"B2 Bunrodea Freight Petition Compact: iral trusts player" = 1
-			accept
+			decline
 			label paired
 			`You suggest that the dispute exists because one document is being asked to do two jobs. The port can certify transport facts in a common freight record while a linked petition docket carries ownership, liability, missing signatures, and later rulings. Neither record silently answers the other's question. Sedi immediately begins marking the manifest fields that could be locked at delivery. Iral starts drafting the cross-reference that would bind those facts to the unresolved petition.`
 			action
@@ -58,7 +58,7 @@ mission "B2 Bunrodea Freight Petition Compact: Offer"
 				"B2 Bunrodea Freight Petition Compact: route paired" = 1
 				"B2 Bunrodea Freight Petition Compact: sedi trusts player" = 1
 				"B2 Bunrodea Freight Petition Compact: iral trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that a visiting captain is a poor substitute for a Bunrodea petition clerk. Sedi says that at least one person in the room understands jurisdiction. Iral replies that knowing when not to sign a record is itself a useful administrative skill.`
 			action
@@ -106,14 +106,14 @@ mission "B2 Bunrodea Freight Petition Compact: Review"
 				"B2 Bunrodea Freight Petition Compact: reviewed" = 1
 				"B2 Bunrodea Freight Petition Compact: settlement portable docket" = 1
 				"B2 Bunrodea Freight Petition Compact: sedi trusts player" = 1
-			accept
+			decline
 			label dual
 			`You recommend preserving two records. The freight ledger contains operational facts and transfer status; the petition ledger contains authority, liability, missing approvals, deadlines, and rulings. Permanent cross-references bind them together, and a petition that misses its review deadline must say why. Iral accepts that no estate signature has been demoted into a cargo field. Sedi accepts that no missing signature can make completed freight work vanish from the record.`
 			action
 				"B2 Bunrodea Freight Petition Compact: reviewed" = 1
 				"B2 Bunrodea Freight Petition Compact: settlement dual ledger" = 1
 				"B2 Bunrodea Freight Petition Compact: iral trusts player" = 1
-			accept
+			decline
 
 mission "B2 Bunrodea Freight Petition Compact: Sedi Remembers"
 	minor
@@ -137,4 +137,4 @@ mission "B2 Bunrodea Freight Petition Compact: Sedi Remembers"
 			label record
 			action
 				"B2 Bunrodea Freight Petition Compact: aftermath seen" = 1
-			accept
+			decline

@@ -59,6 +59,31 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("later reader must persist completion")
 
+    # This slice is dialogue/state-only. Accepting one of these missions would
+    # create an objective-less active mission, so every terminal path must close
+    # with decline after persisting its state.
+    accept_count = len(re.findall(r"^\s*accept\s*$", text, flags=re.MULTILINE))
+    decline_count = len(re.findall(r"^\s*decline\s*$", text, flags=re.MULTILINE))
+    if accept_count != 0:
+        fail(f"state-only slice must not use terminal accept; found {accept_count}")
+    if decline_count != 7:
+        fail(f"expected exactly 7 terminal decline commands, found {decline_count}")
+
+    objective_directives = (
+        "destination ",
+        "stopover ",
+        "waypoint ",
+        "npc ",
+        "cargo ",
+        "passenger ",
+        "deadline ",
+        "timer ",
+    )
+    for line in text.splitlines():
+        stripped = line.strip().lower()
+        if stripped.startswith(objective_directives):
+            fail(f"state-only lifecycle assumption invalidated by objective directive: {line.strip()}")
+
     # Every persistent write must remain inside this B2 namespace.
     for raw in re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, flags=re.MULTILINE):
         if not raw.startswith(PREFIX):
