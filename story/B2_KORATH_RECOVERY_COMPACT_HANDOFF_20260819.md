@@ -3,12 +3,14 @@
 ## Status
 
 **Stage:** B2 STORY CHARACTERS + DYNAMIC CONTENT  
-**Verdict:** PARTIAL pending exact-head repository-native simulation/story/style and production save-load validation.  
-**Authoritative `main` observed at slice selection:** `5928089939e8dc7806deb2775a9030a3ba5bf9bb`  
+**Verdict:** READY for A3 review/integration  
+**Authoritative `main` rechecked during lifecycle recovery:** `a17a89fb4779200a0634a6dade1811c4dc9cc2be`  
 **Required B1 parent:** `2a1ca58ac0dc1156b1409fff229e0fd4d3210f1c` (`agent/b1-korath-exile-institutions-20260819-1819`)  
 **B2 branch:** `agent/b2-korath-recovery-compact-20260819-1828`  
-**Production commit:** `d3faaf94071f98741a2292c0646587ad7a7d342d`  
-**Focused validator commit / pre-handoff head:** `f0c61068066e017493366b028127d63f393f6fb5`
+**Original production commit:** `d3faaf94071f98741a2292c0646587ad7a7d342d`  
+**Original pre-recovery head:** `5ac396ad823c74ca69c8af87e07730f1fe60ece1`  
+**Lifecycle production repair:** `700773a18d1357c22e61e8cc68ed48e532d761ba`  
+**Lifecycle validator / exact fully validated candidate:** `cf10da285217a18fdf4725dee0cf496ad6f923e5`
 
 ## Scope
 
@@ -19,93 +21,63 @@ Two recurring Remnant specialists are referred to only through player-private sh
 - **Medic** — prioritizes lifesaving treatment and the humanitarian obligations of recovery work.
 - **Analyst** — prioritizes provenance, evidence continuity, restitution, and preserving what was actually recovered.
 
-The first dispute concerns medical supplies recovered from a disabled Korath exile ship while a wounded Korath survivor is being treated. Some containers may also be stolen civilian property or evidence of earlier raids. The player may choose:
+The initial dispute supports treatment-first, provenance-first, paired recovery/humanitarian records, or refusal. The later Review resolves to either a linked recovery packet or reconciliation checkpoint. `Medic Remembers` is the one-shot aftermath reader.
 
-1. treatment-first emergency use;
-2. provenance-first emergency release records;
-3. paired recovery + humanitarian-use records;
-4. refusal.
+## Lifecycle recovery
 
-The later Review exposes a second-order records problem: medical and evidentiary copies can each remain individually accurate while becoming misleading when separated. The player resolves that into one of two persistent terminal settlements:
+The original content used six terminal `accept` commands in state-only dialogue paths: three positive Offer routes, two Review settlements, and the aftermath reader. Those missions create no destination, cargo, NPC, timer, waypoint, passenger, or other gameplay objective, so the accepted mission lifecycle could leave objective-less missions active.
 
-- **linked recovery packet** — downstream copies carry recovery origin, humanitarian releases, remaining quantity, unresolved ownership claims, and a source-ledger reference;
-- **reconciliation checkpoint** — medical and evidence records remain institutionally separate, but restitution/prosecution/technical-transfer closure requires both records to be compared and unresolved disagreement preserved.
+Commit `700773a18d1357c22e61e8cc68ed48e532d761ba` changes exactly those six terminals to `decline`. Refusal already declined, so the slice now has exactly seven clean state-only terminal paths.
 
-`Medic Remembers` is the one-shot later reader.
+`tools/story/validate_b2_korath_recovery_compact_lifecycle.py` was added to require:
+
+- zero terminal `accept` commands;
+- exactly seven terminal `decline` commands;
+- no objective-bearing destination/stopover/waypoint/NPC/cargo/passenger/deadline/timer directives;
+- preservation of the three-mission graph and both terminal settlements.
+
+The original focused structural validator remains in place.
 
 ## B1 / canon dependencies
 
-This slice requires:
+Requires:
 
 - `Remnant: Cognizance 2: done`;
 - `Remnant History: Korath Exile Raid Ledger: offered`;
 - `Remnant History: Korath Recovery and Containment Ledger: offered`.
 
-The B1 parent establishes two important continuity rules that B2 preserves:
+Preserve these boundaries:
 
 1. stolen mundane supplies can be evidence of material pressure without proving one universal Korath exile motive or excusing raid harm;
-2. rescue, evidence preservation, technical study, disposal, and restitution are distinct aftermath obligations.
-
-B2 does not invent a unified Korath exile command structure, a new Korath political institution, or a single centralized Remnant policy for every Korath encounter.
+2. rescue, evidence preservation, technical study, disposal, restitution, ownership claims, and medical use remain distinct aftermath facts;
+3. Medic/Analyst are player-private shorthand rather than formal Remnant offices;
+4. no centralized Remnant policy for every Korath encounter is implied.
 
 ## State ownership / persistence
 
-All new writes are namespaced under `B2 Korath Recovery Compact:*`.
+All writes remain namespaced under `B2 Korath Recovery Compact:*`.
 
-The slice does not write:
+B2 does not write B1 gates, `Remnant: Cognizance 2: done`, `world:*`, credits, reputation, cargo, outfits, ships, fleets, combat rating, or Korath campaign state. No persistent condition names or values changed during the lifecycle repair, so no save-state migration is required.
 
-- B1 history gates;
-- `Remnant: Cognizance 2: done`;
-- any `world:*` variable;
-- credits or reputation;
-- cargo, outfits, ships, fleets, or combat rating;
-- Korath campaign state.
+## Exact validation
 
-The B2 state is ordinary mission/global-condition state and therefore follows the existing persistence model; no save schema is introduced.
+Required B1 parent `2a1ca58ac0dc1156b1409fff229e0fd4d3210f1c` is terminal green:
 
-## Files
+- `Fork simulation and story validation` run `32308429839` / #136: **SUCCESS**
+- `Fork save-load integration smoke` run `32308429869` / #125: **SUCCESS**
 
-- `data/korath/b2 korath recovery compact.txt`
-- `tools/story/validate_b2_korath_recovery_compact.py`
-- `story/B2_KORATH_RECOVERY_COMPACT_HANDOFF_20260819.md`
+Original B2 head `5ac396ad823c74ca69c8af87e07730f1fe60ece1` also later reached green on both original workflows.
 
-## Focused validator contract
+Exact lifecycle-repaired candidate `cf10da285217a18fdf4725dee0cf496ad6f923e5` is terminal green:
 
-`tools/story/validate_b2_korath_recovery_compact.py` checks:
+- `Fork simulation and story validation` run `32593931814` / #421: **SUCCESS**
+- `Fork save-load integration smoke` run `32593931813` / #406: **SUCCESS**
 
-- exact three-mission graph;
-- Medic/Analyst private-shorthand continuity;
-- Remnant scoping and exact B1/campaign gates;
-- three persistent routes plus refusal;
-- exactly two terminal settlements;
-- one-shot later reader;
-- B2-only write ownership;
-- no direct material/reputation/world-state mutations;
-- local `goto`/`label` integrity;
-- presence of rescue/provenance/restitution/ownership/evidence concepts;
-- no universal unsupported Korath-motive claim;
-- decline path does not set `introduced`.
-
-## Concurrency / non-overlap
-
-Live open PRs and B2 branch inventory were inspected before authoring. No Korath-exile-specific B2 branch was present. The newly opened B1 Korath exile institutional-history branch is the intended dependency. Existing B2 work covers other human/alien institutional slices and is not modified here.
-
-The current A1 and A2 work on `main` was also inspected. This B2 slice does not touch Republic customs, Hicemus contact practice, or other active A-lane state.
-
-## Validation status
-
-At handoff creation time, repository-native exact-head workflows have not yet been observed on the B2 candidate. No PASS is claimed yet.
-
-Required before READY / A3 integration:
-
-1. `Fork simulation and story validation` must succeed on the exact B2 head, including focused-validator discovery and changed-content style.
-2. `Fork save-load integration smoke` must succeed on the exact B2 head, including production configure/build and stock persistence smoke.
-3. The required B1 parent must itself be accepted/green before B2 integration.
-4. A3 should still perform actual-game acceptance when practical: post-Cognizance/B1 gating, all three routes, refusal, both Review settlements, save/reload between stages, aftermath one-shot suppression, and Remnant/Korath offer-precedence regression.
+The repaired diff from the prior B2 head is isolated: six production `accept -> decline` replacements plus the focused lifecycle validator.
 
 ## A3 / B3 integration notes
 
-Integration order is **B1 Korath exile institutional history first, then B2 Korath Recovery Compact**.
+Integration order remains **B1 Korath exile institutional history first, then B2 Korath Recovery Compact**.
 
 Preserve these invariants:
 
@@ -113,6 +85,8 @@ Preserve these invariants:
 - provenance does not authorize delaying lifesaving care indefinitely;
 - evidence of material shortages does not prove a single Korath motive or erase raid harm;
 - a recovered-cargo record and a medical-use record can be linked without becoming the same record;
-- Medic/Analyst remain player-private shorthand, not formal Remnant offices.
+- dialogue/state-only B2 missions terminate with `decline`; `accept` is reserved for mission paths that create actual gameplay objectives.
+
+A3 should still perform actual-game acceptance when practical: post-Cognizance/B1 gating, all three routes, refusal, both Review settlements, save/reload between stages, aftermath one-shot suppression, and Remnant/Korath offer-precedence regression.
 
 Do not self-integrate from B2.
