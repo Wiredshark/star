@@ -33,6 +33,18 @@ test "A2 Republic Border Testimony Prepare"
 			"world: republic border pressure" == 0
 
 
+test "A2 Republic Border Testimony Trigger Earth Spaceport"
+	status partial
+	description "Refresh mission offer conditions by departing and landing on Earth before entering the spaceport."
+	sequence
+		call "Depart"
+		navigate
+			"travel destination" Earth
+		call "Land"
+		input
+			key p
+
+
 test "A2 Republic Border Testimony Persist And Recur"
 	status partial
 	description "Persist the chosen route through save/reload and exercise the production recurrence mission."
@@ -47,17 +59,20 @@ test "A2 Republic Border Testimony Persist And Recur"
 			"A2 Republic Border Testimony Practice: recurrence seen" == 0
 		apply
 			"world: republic border pressure" = 4
-		input
-			key p
+		# Mission offer conditions are refreshed on departure/landing, matching the
+		# established integration-test helpers instead of assuming apply() instantly
+		# rebuilds the landed spaceport offer list.
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
 		input
 			key "Return"
 		assert
 			"A2 Republic Border Testimony Practice: recurrence seen" == 1
 			"A2 Republic Border Testimony Practice: Recurrence: active" == 0
+		# Force another full offer refresh to prove the one-shot recurrence does not
+		# reappear after its persistent reader state has been recorded.
 		input
 			key l
-		input
-			key p
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
 		assert
 			"A2 Republic Border Testimony Practice: recurrence seen" == 1
 			"A2 Republic Border Testimony Practice: Recurrence: active" == 0
@@ -70,8 +85,7 @@ test "A2 Republic Border Testimony Lineage"
 		call "A2 Republic Border Testimony Prepare"
 		apply
 			"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
-		input
-			key p
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
 		input
 			key "Return"
 		input
@@ -92,8 +106,7 @@ test "A2 Republic Border Testimony Independence"
 		call "A2 Republic Border Testimony Prepare"
 		apply
 			"B2 Republic Border Testimony Compact: verran trusts player" = 1
-		input
-			key p
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
 		input
 			key "Return"
 		input
@@ -114,8 +127,7 @@ test "A2 Republic Border Testimony Closure"
 		call "A2 Republic Border Testimony Prepare"
 		apply
 			"B2 Republic Border Testimony Compact: settlement expiry and renewal" = 1
-		input
-			key p
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
 		input
 			key "Return"
 		# Independence is visible but disabled; expiry/renewal is the next choice.
@@ -138,8 +150,7 @@ test "A2 Republic Border Testimony Local"
 	description "Verify the visible trust-gated response rejects selection when trust is absent, then take the valid local route."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
-		input
-			key p
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
 		input
 			key "Return"
 		# With no B2 settlement and no Verran trust, the trust response remains
@@ -167,8 +178,7 @@ test "A2 Republic Border Testimony Refusal"
 	description "Exercise explicit refusal with the trust response visible-but-disabled and verify persistence without recurrence."
 	sequence
 		call "A2 Republic Border Testimony Prepare"
-		input
-			key p
+		call "A2 Republic Border Testimony Trigger Earth Spaceport"
 		input
 			key "Return"
 		# Displayed choices are disabled trust, local, refusal.
