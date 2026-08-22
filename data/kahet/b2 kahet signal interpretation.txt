@@ -56,7 +56,7 @@ mission "B2 Ka'het Signal Interpretation: Offer"
 				"B2 Ka'het Signal Interpretation: route translation" = 1
 				"B2 Ka'het Signal Interpretation: interpreter trusts player" = 1
 				event "B2 Ka'het Signal Interpretation: Review Ready" 7 11
-				accept
+				decline
 			label field
 			`You side with the Scout on operational decisions. A translated request can explain why a ruin matters, but a crew should not navigate toward an ancient instruction as though it were a current beacon. The Interpreter keeps the old traffic searchable and linked to candidate sites while the Scout labels each destination unverified until a modern observation establishes what remains.`
 			action
@@ -64,7 +64,7 @@ mission "B2 Ka'het Signal Interpretation: Offer"
 				"B2 Ka'het Signal Interpretation: route field" = 1
 				"B2 Ka'het Signal Interpretation: scout trusts player" = 1
 				event "B2 Ka'het Signal Interpretation: Review Ready" 7 11
-				accept
+				decline
 			label paired
 			`You suggest that the argument comes from forcing historical reconstruction and current navigation into one certainty scale. The Interpreter keeps the original signal, translation, and alternate readings. The Scout adds current observations, survey age, and whether a site still matches the translated description. Neither record overwrites the other when they conflict.`
 			action
@@ -73,7 +73,7 @@ mission "B2 Ka'het Signal Interpretation: Offer"
 				"B2 Ka'het Signal Interpretation: interpreter trusts player" = 1
 				"B2 Ka'het Signal Interpretation: scout trusts player" = 1
 				event "B2 Ka'het Signal Interpretation: Review Ready" 7 11
-				accept
+				decline
 			label decline
 			`You tell them that a living research program should not acquire its evidence rules from a visitor's preference. The Interpreter leaves the translation in the archive, and the Scout keeps the site off the current route board. Their disagreement remains visible rather than being converted into policy by your authority.`
 			action
@@ -118,7 +118,7 @@ mission "B2 Ka'het Signal Interpretation: Review"
 				"B2 Ka'het Signal Interpretation: settlement confidence atlas" = 1
 				"B2 Ka'het Signal Interpretation: interpreter trusts player" = 1
 				"B2 Ka'het Signal Interpretation: scout trusts player" = 1
-				accept
+				decline
 			label contradiction
 			`You argue that disagreement should remain portable instead of being resolved by whichever record was copied last. The archive stores the signal, translation, alternate readings, survey observation, and date as distinct linked entries. A route summary may prefer the newest field evidence for safety, but it must still disclose unresolved contradictions rather than deleting them. The Scout calls it a warning that survives copying. The Interpreter calls it a history that admits when it is unfinished.`
 			action
@@ -126,7 +126,7 @@ mission "B2 Ka'het Signal Interpretation: Review"
 				"B2 Ka'het Signal Interpretation: settlement contradiction register" = 1
 				"B2 Ka'het Signal Interpretation: interpreter trusts player" = 1
 				"B2 Ka'het Signal Interpretation: scout trusts player" = 1
-				accept
+				decline
 
 
 mission "B2 Ka'het Signal Interpretation: Scout Remembers"
@@ -152,4 +152,4 @@ mission "B2 Ka'het Signal Interpretation: Scout Remembers"
 			label finish
 			action
 				"B2 Ka'het Signal Interpretation: aftermath seen" = 1
-				accept
+				decline

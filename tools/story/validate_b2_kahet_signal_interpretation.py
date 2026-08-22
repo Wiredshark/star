@@ -71,6 +71,29 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("aftermath reader must persist completion")
 
+    # Lifecycle contract: this entire slice is dialogue/state-only. Terminal
+    # paths record persistence and close; they do not create mission objectives.
+    if re.search(r'^\s*accept\s*$', text, flags=re.MULTILINE):
+        fail("state-only dialogue terminals must not use accept")
+    decline_count = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+    if decline_count != 7:
+        fail(f"expected exactly 7 state-only decline terminals, found {decline_count}")
+
+    objective_patterns = (
+        r'^\s*destination\b',
+        r'^\s*stopover\b',
+        r'^\s*waypoint\b',
+        r'^\s*npc\b',
+        r'^\s*cargo\b',
+        r'^\s*passenger\b',
+        r'^\s*deadline\b',
+        r'^\s*timer\b',
+    )
+    for line in text.splitlines():
+        for pattern in objective_patterns:
+            if re.search(pattern, line, flags=re.IGNORECASE):
+                fail(f"objective-bearing directive invalidates state-only lifecycle: {line.strip()}")
+
     writes = re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, flags=re.MULTILINE)
     for raw in writes:
         if not raw.startswith(PREFIX):
@@ -116,9 +139,6 @@ def main() -> None:
         if phrase not in lower:
             fail(f"missing signal-interpretation/accountability concept: {phrase}")
 
-    # Preserve B1's epistemic boundary. Old automated traffic can establish that
-    # a connection or task was expected, not current site existence, Builder
-    # motive, exact collapse chronology, or omniscient Ka'het historical knowledge.
     forbidden_certainty_patterns = (
         r"the ka'het know exactly",
         r"the ka'het remember exactly",
@@ -158,6 +178,7 @@ def main() -> None:
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Scout Remembers")
+    print("PASS: lifecycle=0 accept + 7 decline state-only terminals")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: b1_inputs=Lost Network Register + Builder-Ka'het Distinction Ledger")
     print("PASS: continuity=historical signal evidence remains distinct from current field truth")
