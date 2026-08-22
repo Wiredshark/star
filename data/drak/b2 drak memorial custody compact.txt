@@ -47,21 +47,21 @@ mission "B2 Drak Memorial Custody Compact: Offer"
 				"B2 Drak Memorial Custody Compact: introduced" = 1
 				"B2 Drak Memorial Custody Compact: route intact" = 1
 				"B2 Drak Memorial Custody Compact: custodian trusts player" = 1
-			accept
+			decline
 			label sever
 			`You argue that preserving memory does not require preserving the ability to repeat every old harm. The dangerous routine can be disabled while its code, context, and the exact intervention remain documented. The Custodian answers with a memory of an ancient containment where a "temporary" alteration became permanent because later keepers forgot which parts had been changed.`
 			action
 				"B2 Drak Memorial Custody Compact: introduced" = 1
 				"B2 Drak Memorial Custody Compact: route sever" = 1
 				"B2 Drak Memorial Custody Compact: custodian questions player" = 1
-			accept
+			decline
 			label paired
 			`You reject the assumption that preservation and safe operation must share one state. Keep the original system intact but unable to act; expose a separately controlled reconstruction for study; record every boundary between the two. The Custodian replies not with approval but with a sequence of duplicated objects, each drifting apart in tiny ways until only a chain of custody makes clear which one still bears the original history.`
 			action
 				"B2 Drak Memorial Custody Compact: introduced" = 1
 				"B2 Drak Memorial Custody Compact: route paired" = 1
 				"B2 Drak Memorial Custody Compact: custodian trusts player" = 1
-			accept
+			decline
 			label decline
 			`You resist the pressure to turn one brief vision into a universal rule. The Custodian's presence recedes without hostility. The final image is simply a sealed boundary and a record left unfinished, as if declining to decide has itself become part of the evidence.`
 			action
@@ -111,7 +111,7 @@ mission "B2 Drak Memorial Custody Compact: Review"
 				"B2 Drak Memorial Custody Compact: reviewed" = 1
 				"B2 Drak Memorial Custody Compact: settlement bounded memorial" = 1
 				"B2 Drak Memorial Custody Compact: custodian trusts player" = 1
-			accept
+			decline
 			label archive
 			`You recommend a severed-function archive. Any public or research copy must remain unable to execute the dangerous behavior, but the disabled routine's original code, purpose, historical consequences, and exact intervention are stored beside the safe implementation. A later observer can know what the artifact was without being allowed to make it act that way again.`
 			`\tThe Custodian answers with two identical patterns, then marks one with a single bright interruption. The mark never disappears, even as the altered pattern is copied forward through time.`
@@ -119,7 +119,7 @@ mission "B2 Drak Memorial Custody Compact: Review"
 				"B2 Drak Memorial Custody Compact: reviewed" = 1
 				"B2 Drak Memorial Custody Compact: settlement severed function archive" = 1
 				"B2 Drak Memorial Custody Compact: custodian trusts player" = 1
-			accept
+			decline
 
 mission "B2 Drak Memorial Custody Compact: Custodian Remembers"
 	entering
@@ -143,4 +143,4 @@ mission "B2 Drak Memorial Custody Compact: Custodian Remembers"
 			label record
 			action
 				"B2 Drak Memorial Custody Compact: aftermath seen" = 1
-			accept
+			decline
