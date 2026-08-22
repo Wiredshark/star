@@ -56,14 +56,14 @@ mission "B2 Republic Border Testimony Compact: Offer"
 				"B2 Republic Border Testimony Compact: introduced" = 1
 				"B2 Republic Border Testimony Compact: route lineage" = 1
 				"B2 Republic Border Testimony Compact: rook trusts player" = 1
-			accept
+			decline
 			label independent
 			`You tell them that an operational decision should distinguish independent observations from repeated summaries. Rook keeps the older material as provenance rather than deleting it. Verran accepts that a real earlier observation remains part of the history, but not a fresh witness each time it is copied.`
 			action
 				"B2 Republic Border Testimony Compact: introduced" = 1
 				"B2 Republic Border Testimony Compact: route independent" = 1
 				"B2 Republic Border Testimony Compact: verran trusts player" = 1
-			accept
+			decline
 			label paired
 			`You separate the problem into two views. The evidence history preserves every source, summary, correction, and contradiction. The current-evidence view shows which observations are independent, how old they are, and whether they have been verified or challenged. Rook and Verran both agree that neither view should silently rewrite the other.`
 			action
@@ -71,7 +71,7 @@ mission "B2 Republic Border Testimony Compact: Offer"
 				"B2 Republic Border Testimony Compact: route paired" = 1
 				"B2 Republic Border Testimony Compact: rook trusts player" = 1
 				"B2 Republic Border Testimony Compact: verran trusts player" = 1
-			accept
+			decline
 			label decline
 			`You decline to establish a standing procedure from one case. Rook records that no general rule was adopted. Verran leaves without entering a later review chain.`
 			action
@@ -122,7 +122,7 @@ mission "B2 Republic Border Testimony Compact: Review"
 				"B2 Republic Border Testimony Compact: settlement portable provenance packet" = 1
 				"B2 Republic Border Testimony Compact: rook trusts player" = 1
 				"B2 Republic Border Testimony Compact: verran trusts player" = 1
-			accept
+			decline
 			label expiry
 			`You recommend an expiry-and-renewal rule. Resolved reports remain in the historical record, but they stop circulating as active warnings. Only a genuinely new observation can reopen the warning, and the reopened record must link back to the old disposition rather than pretending the history never existed.`
 			action
@@ -130,7 +130,7 @@ mission "B2 Republic Border Testimony Compact: Review"
 				"B2 Republic Border Testimony Compact: settlement expiry and renewal" = 1
 				"B2 Republic Border Testimony Compact: rook trusts player" = 1
 				"B2 Republic Border Testimony Compact: verran trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Republic Border Testimony Compact: Rook Remembers"
@@ -155,4 +155,4 @@ mission "B2 Republic Border Testimony Compact: Rook Remembers"
 			label record
 			action
 				"B2 Republic Border Testimony Compact: aftermath seen" = 1
-			accept
+			decline
