@@ -23,6 +23,24 @@ assert text.count('mission "B2 Merchant Diversion Compact:') == 3
 for person in ("Nessa Ward", "Cal Harker"):
     assert person in text, f"missing named character {person}"
 
+# These missions only persist dialogue/global state. They do not create gameplay
+# objectives, so accepting them would leave objective-less missions active.
+accept_count = len(re.findall(r'^\s*accept\s*$', text, re.M))
+decline_count = len(re.findall(r'^\s*decline\s*$', text, re.M))
+assert accept_count == 0, f"state-only lifecycle must not accept: {accept_count} accept terminals"
+assert decline_count == 7, f"expected seven clean state-only decline terminals, got {decline_count}"
+for objective in (
+    r'^\s*destination\b',
+    r'^\s*stopover\b',
+    r'^\s*waypoint\b',
+    r'^\s*npc\b',
+    r'^\s*cargo\b',
+    r'^\s*passenger\b',
+    r'^\s*deadline\b',
+    r'^\s*timer\b',
+):
+    assert not re.search(objective, text, re.M | re.I), f"objective-bearing directive invalidates state-only lifecycle: {objective}"
+
 # A1 route-diversion state is read-only and controls high/low-pressure phases.
 assert '"world: merchant route diversion pressure" >= 3' in text
 assert '"world: merchant route diversion pressure" <= 1' in text
@@ -96,5 +114,6 @@ print("PASS: missions=3")
 print("PASS: named_characters=2")
 print("PASS: initial_routes=3 + refusal")
 print("PASS: terminal_settlements=2")
+print("PASS: dialogue_lifecycle=7_declines_0_accepts")
 print("PASS: a1_route_diversion_state=read_only")
 print("PASS: mutation_surface=B2 conditions only")
