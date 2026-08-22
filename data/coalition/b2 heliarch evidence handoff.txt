@@ -48,14 +48,14 @@ mission "B2 Heliarch Evidence Handoff: Offer"
 				"B2 Heliarch Evidence Handoff: introduced" = 1
 				"B2 Heliarch Evidence Handoff: route custody" = 1
 				"B2 Heliarch Evidence Handoff: clerk trusts player" = 1
-			accept
+			decline
 			label field
 			`The Investigator signs an emergency release and carries the processor toward a waiting analysis team. The Clerk records the handoff, the stated urgency, and every person expected to touch the device. The investigation moves faster, but the original evidence is now exposed to more handling and more possible explanations for any later discrepancy.`
 			action
 				"B2 Heliarch Evidence Handoff: introduced" = 1
 				"B2 Heliarch Evidence Handoff: route field" = 1
 				"B2 Heliarch Evidence Handoff: investigator trusts player" = 1
-			accept
+			decline
 			label paired
 			`The Clerk keeps the original under seal while the Investigator brings in a second witness and a clean analysis system. A working image is produced immediately, but its record includes the source seal, extraction method, software used, and every later transformation. The field team gets something useful without pretending that a working copy is identical to untouched evidence.`
 			action
@@ -63,7 +63,7 @@ mission "B2 Heliarch Evidence Handoff: Offer"
 				"B2 Heliarch Evidence Handoff: route paired" = 1
 				"B2 Heliarch Evidence Handoff: clerk trusts player" = 1
 				"B2 Heliarch Evidence Handoff: investigator trusts player" = 1
-			accept
+			decline
 			label decline
 			`You leave the question to the Heliarchs. The Clerk keeps one hand on the transfer log while the Investigator keeps looking toward the departure board. Their argument continues without your judgment.`
 			action
@@ -105,13 +105,13 @@ mission "B2 Heliarch Evidence Handoff: Review"
 			action
 				"B2 Heliarch Evidence Handoff: reviewed" = 1
 				"B2 Heliarch Evidence Handoff: settlement provenance packet" = 1
-			accept
+			decline
 			label reexamine
 			`The Investigator accepts that field conclusions can remain provisional until a second team can reproduce the critical parts from sealed evidence. The Clerk adds a record linking the operational finding, the independent re-examination, and any disagreement between them. Speed still matters, but irreversible decisions gain a second evidentiary path.`
 			action
 				"B2 Heliarch Evidence Handoff: reviewed" = 1
 				"B2 Heliarch Evidence Handoff: settlement independent reexamination" = 1
-			accept
+			decline
 
 
 mission "B2 Heliarch Evidence Handoff: Clerk Remembers"
