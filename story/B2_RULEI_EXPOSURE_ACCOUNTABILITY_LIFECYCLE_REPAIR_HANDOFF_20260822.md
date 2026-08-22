@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native simulation/story/style and production build/save-load validation.
+READY for A3 review/integration. B2 does not self-integrate this branch.
 
 ## Authority and isolation
 
@@ -10,8 +10,9 @@ PARTIAL pending repository-native simulation/story/style and production build/sa
 - Authoritative integration base observed before work: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated branch: `agent/b2-rulei-exposure-lifecycle-20260822-0129`
 - Production repair commit: `9d5e5707cae5747eb0c6f36bf4105b695cdda14e`
-- Validator hardening commit / current code head before this handoff: `fd57fd40c3ff0ce90928170b8cc886ee50563460`
-- B2 does not self-integrate this branch.
+- Validator hardening commit: `fd57fd40c3ff0ce90928170b8cc886ee50563460`
+- Exact fully validated production/validator/handoff candidate: `1f073c6a575d37158ade4ebafbbacf46a81fab9f`
+- This READY update changes only this durable handoff; production and validator behavior are unchanged from the fully validated candidate.
 
 ## Defect repaired
 
@@ -43,21 +44,30 @@ No save-state migration is required.
 
 All pre-existing mission-graph, character, route, settlement, one-shot, state-ownership, mutation-surface, uncertainty, causation/motive, and local `goto`/`label` checks remain.
 
+## Validation evidence
+
+Exact candidate `1f073c6a575d37158ade4ebafbbacf46a81fab9f` passed both repository-native acceptance workflows:
+
+- `Fork simulation and story validation` run `32554604659` / #378: SUCCESS.
+  - Focused simulation and story contracts: SUCCESS.
+  - Compile focused Python validation code: SUCCESS.
+  - Run all focused story validators: SUCCESS, including the hardened Rulei validator.
+  - A1 simulation contract tests: SUCCESS.
+  - Changed fork content style: SUCCESS.
+- `Fork save-load integration smoke` run `32554604588` / #363: SUCCESS.
+  - Production configuration/build: SUCCESS.
+  - Stock save-load integration smoke: SUCCESS.
+
+The candidate comparison against the authoritative base is isolated: 3 commits ahead / 0 behind, with exactly three changed files. Production changes are six `accept` -> `decline` replacements; the remaining changes are validator hardening and this handoff.
+
 ## Process and concurrency safety
 
 Before editing, open pull requests were checked for a competing Rulei lifecycle repair; none was found. The private execution service reported four pre-existing service-owned processes. They were preserved; no process was killed or modified.
 
-## Required validation before READY
-
-Run the repository-native gates on the exact candidate head containing this handoff:
-
-1. Fork simulation and story validation, including changed-content style, focused story validators, and A1/state-ownership contracts.
-2. Fork save-load integration smoke, including production configure/build and stock save-load cases.
-
-Do not promote this handoff to READY unless both gates are terminal green on production/validator content equivalent to the candidate.
-
 ## A3 / B3 integration notes
 
-A3 should re-read current `main` before integrating and confirm ancestry remains clean. The intended diff is limited to the Rulei production slice, its focused validator, and this handoff. B3 should preserve the lifecycle invariant that dialogue-only B2 missions which merely persist state close with `decline`; `accept` is reserved for mission paths that actually create gameplay objectives.
+A3 should re-read current `main` before integrating and confirm ancestry remains clean. The intended diff is limited to the Rulei production slice, its focused validator, and this handoff.
+
+B3 should preserve the lifecycle invariant that dialogue-only B2 missions which merely persist state close with `decline`; `accept` is reserved for mission paths that actually create gameplay objectives.
 
 The Rulei-specific continuity invariant remains: direct observation, medical findings, witness testimony, interpretation, consent, operational fitness, and claims of causation or motive are distinct facts and must remain distinct downstream.
