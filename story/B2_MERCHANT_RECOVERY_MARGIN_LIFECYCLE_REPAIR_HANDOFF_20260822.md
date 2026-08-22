@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native validation.
+READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -10,6 +10,7 @@ PARTIAL pending repository-native validation.
 - Branch: `agent/b2-merchant-margin-lifecycle-20260822`
 - Production lifecycle repair: `8971501779d85fe0321d6af39d536852bec16f3d`
 - Focused validator hardening: `15d16a35626a557bf21477d07984659b9d923dfc`
+- Exact fully validated candidate: `42fa599439407e70263fb11794fd6a159567bf07`
 - A3 retains integration authority; this branch must not self-integrate.
 
 ## Repair
@@ -39,15 +40,15 @@ The pre-existing checks remain for the three missions, Imani Vale and Corin Beck
 - Participating Merchant ports retain local control; this does not create a centralized Merchant government.
 - Dialogue/state-only B2 missions terminate with `decline`; `accept` is reserved for mission paths that create actual gameplay objectives.
 
-## Validation
+## Exact validation evidence
 
-Pending repository-native branch validation:
+Exact candidate `42fa599439407e70263fb11794fd6a159567bf07` passed both required repository-native workflows:
 
-- `Fork simulation and story validation`
-- `Fork save-load integration smoke`
+- `Fork simulation and story validation` run #384 / `32559939330`: SUCCESS.
+- `Fork save-load integration smoke` run #369 / `32559939323`: SUCCESS.
 
-Promote to READY only if both required workflows are terminal green on an exact production/validator candidate. Do not claim build/save-load success before that evidence exists.
+The simulation/story gate covers focused story validation, the hardened Merchant recovery-margin validator, A1/state-ownership contracts, and changed-content style. The save-load gate covers production configure/build and the repository stock save-load smoke cases.
 
 ## A3 / B3 integration notes
 
-Review the exact candidate SHA and branch ancestry against current `main` before integration. Preserve every existing state name/value and the A1 read-only boundary. The expected production diff is lifecycle-only (`accept` -> `decline` on six positive state-only terminals); validator/handoff changes are acceptance infrastructure.
+Review the exact candidate SHA and branch ancestry against current `main` before integration. Preserve every existing state name/value and the A1 read-only boundary. The production diff is lifecycle-only (`accept` -> `decline` on six positive state-only terminals); validator/handoff changes are acceptance infrastructure.
