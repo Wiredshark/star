@@ -1,0 +1,115 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# A2 Ka'het Evidence Practice current-main restage.
+# Consumes the resolved B2 Ka'het Signal Interpretation aftermath read-only and
+# lets the player decide what evidence-handling practice, if any, should travel
+# beyond that specific Remnant research dispute. "Interpreter" and "Scout" remain
+# the player's private shorthand, not Remnant offices or Ka'het titles.
+
+
+event "A2 Ka'het Evidence Practice: Reflection Ready"
+	"A2 Ka'het Evidence Practice: reflection ready" = 1
+
+
+mission "A2 Ka'het Evidence Practice: Offer"
+	minor
+	name `What Travels With the Warning`
+	description `After the Ka'het signal review, the Interpreter and Scout ask which parts of the evidence discipline should follow future expeditions.`
+	source
+		government "Remnant"
+	"offer precedence" 9
+	to offer
+		has "B2 Ka'het Signal Interpretation: aftermath seen"
+		not "A2 Ka'het Evidence Practice: introduced"
+		not "A2 Ka'het Evidence Practice: declined"
+	on offer
+		conversation
+			branch contradiction
+				has "B2 Ka'het Signal Interpretation: settlement contradiction register"
+			`The Interpreter and Scout have turned your earlier advice into working practice. Their latest route packet preserves the old Ka'het signal, its translation, the current survey, and the disagreement between them. Now they are less interested in that one site than in what should happen when another expedition encounters an ancient instruction that still looks operational.`
+				goto discuss
+			`The Interpreter and Scout have turned your earlier advice into working practice. Their latest route packet carries dates, source types, translation confidence, and explicit review limits. Now they are less interested in that one site than in what should happen when another expedition encounters an ancient instruction that still looks operational.`
+			label discuss
+			`\tThe Scout says a field team needs a rule it can apply under time pressure. The Interpreter objects that a compact rule can erase exactly the uncertainty their review was meant to preserve. They ask what, if anything, should travel with future expeditions as a standing practice.`
+			choice
+				`\tCarry forward a bounded-hypothesis rule: translated traffic may guide where to look, but every operational use must retain source age, confidence, and an expiry or recheck condition.`
+					goto bounded
+				`\tCarry forward a contradiction-preserving rule: unresolved conflicts between translation and field evidence must travel with every downstream summary until new evidence closes them.`
+					goto contradiction_rule
+				`\tKeep this lesson local to the Ka'het archive. Future cases should build their own evidence rules instead of inheriting this one by analogy.`
+					goto local
+				`\tDecline to set a standing practice for Remnant researchers.`
+					goto decline
+			label bounded
+			`You argue that old signals are useful hypotheses, not present-tense commands. The Scout writes a field rule that any route derived from historical traffic must carry the age of its evidence, confidence in the translation, and a condition that forces rechecking before the assumption becomes permanent. The Interpreter agrees because the historical record remains visible instead of being replaced by the route decision.`
+			action
+				"A2 Ka'het Evidence Practice: introduced" = 1
+				"A2 Ka'het Evidence Practice: route bounded hypothesis" = 1
+				event "A2 Ka'het Evidence Practice: Reflection Ready" 9 14
+				decline
+			label contradiction_rule
+			`You argue that disagreement is itself operational information. The Scout writes a field rule that a contradiction between translated traffic and current observation cannot disappear merely because one side is more convenient for a summary. The Interpreter adds that alternate readings must remain linked to the original signal rather than being silently promoted into corrections.`
+			action
+				"A2 Ka'het Evidence Practice: introduced" = 1
+				"A2 Ka'het Evidence Practice: route contradiction preserved" = 1
+				event "A2 Ka'het Evidence Practice: Reflection Ready" 9 14
+				decline
+			label local
+			`You tell them the Ka'het case is valuable precisely because it exposed a specific failure mode. Turning that response into a universal rule could hide different problems elsewhere. The Interpreter records the practice as local context; the Scout keeps it available as an example without treating it as a field mandate.`
+			action
+				"A2 Ka'het Evidence Practice: introduced" = 1
+				"A2 Ka'het Evidence Practice: route local only" = 1
+				event "A2 Ka'het Evidence Practice: Reflection Ready" 9 14
+				decline
+			label decline
+			`You decline. A visitor's earlier advice does not make you the author of Remnant research doctrine. The Interpreter and Scout leave their local safeguards intact and continue arguing about how far those safeguards should travel.`
+			action
+				"A2 Ka'het Evidence Practice: declined" = 1
+				decline
+
+
+mission "A2 Ka'het Evidence Practice: Reflection"
+	minor
+	name `A Warning That Kept Its Edges`
+	description `A later Remnant field packet shows what your chosen evidence practice preserved, or deliberately refused to standardize.`
+	source
+		government "Remnant"
+	"offer precedence" 9
+	to offer
+		has "B2 Ka'het Signal Interpretation: aftermath seen"
+		has "A2 Ka'het Evidence Practice: introduced"
+		has "A2 Ka'het Evidence Practice: reflection ready"
+		not "A2 Ka'het Evidence Practice: reflection seen"
+	on offer
+		conversation
+			branch bounded
+				has "A2 Ka'het Evidence Practice: route bounded hypothesis"
+			branch contradiction
+				has "A2 Ka'het Evidence Practice: route contradiction preserved"
+			branch local
+				has "A2 Ka'het Evidence Practice: route local only"
+			label bounded
+			`The Scout shows you a new field packet built from a translated maintenance request that points toward a region of damaged machinery. The packet labels the route as a hypothesis, gives the signal's age and translation confidence, and expires the waypoint unless a fresh survey confirms it. The team found useful debris without mistaking the old request for proof that a working station still existed.`
+				goto finish
+			label contradiction
+			`The Interpreter shows you a copied expedition brief. A translated Ka'het patrol reference and a modern sensor sweep disagree about where a corridor begins. Because the contradiction had to travel with every summary, the downstream team saw both records instead of inheriting a false resolution. They changed the survey plan and returned with evidence that narrowed the disagreement without erasing either source.`
+				goto finish
+			label local
+			`The Scout shows you two expedition packets that handled old signals differently. One copied the Ka'het review's confidence tags; the other used a stricter local survey rule because its evidence problem was different. Neither claimed your earlier settlement as binding doctrine. The variation makes comparison harder, but it also makes clear which safeguards were chosen for which case.`
+			label finish
+			`Neither researcher calls the result a Ka'het rule. The signals are ancient evidence, the field observations are present evidence, and the practice belongs to the living people deciding how to compare them.`
+			action
+				"A2 Ka'het Evidence Practice: reflection seen" = 1
+				decline
