@@ -1,0 +1,101 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 Avgi Dissonance Evidence Practice. A player-facing practice layer grounded in
+# Dissonance archival history. It preserves political plurality, evidence/inference
+# boundaries, and the player's lack of authority to speak for Dissonance communities.
+
+mission "A2 Avgi Dissonance Evidence Practice: Offer"
+	minor
+	name `What the Archive Can Carry`
+	description `A Dissonance archivist asks what evidence-handling practice, if any, you mean to carry beyond the records you studied.`
+	source
+		government "Avgi (Dissonance)"
+	"offer precedence" 9
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		not "A2 Avgi Dissonance Evidence Practice: introduced"
+	on offer
+		conversation
+			`After several visits to Dissonance archives, a volunteer lays out a protest chronicle, tax ledger, tenure register, and service-burden archive. The records preserve disagreement inside Dissonance as carefully as they preserve grievances against Consonance.`
+			`"If anything travels with you," the volunteer says, "let it be a method, not a borrowed claim to speak for us."`
+			choice
+				`\tPreserve the complete underlying record, including corrections and evidence that weakens the claim you expected to make.`
+					goto full
+				`\tKeep documented burden separate from later arguments about blame, motive, or reform.`
+					goto burden
+				`\tKeep the lesson local. Dissonance history should remain context rather than portable authority.`
+					goto local
+				`\tDecline to turn these archives into a standing practice.`
+					goto refuse
+			label full
+			`You choose a full-record practice. An adverse correction does not become disposable because it complicates the argument you expected to make. The volunteer notes that preserving disagreement is different from endorsing every claim in the archive.`
+			action
+				"A2 Avgi Dissonance Evidence Practice: introduced" = 1
+				"A2 Avgi Dissonance Evidence Practice: full record" = 1
+				decline
+			label burden
+			`You choose to separate what the record establishes from what later advocates infer. A service burden can be documented without the same document proving motive, blame, or the correct reform. The volunteer records the distinction without treating it as a universal political rule.`
+			action
+				"A2 Avgi Dissonance Evidence Practice: introduced" = 1
+				"A2 Avgi Dissonance Evidence Practice: burden separate" = 1
+				decline
+			label local
+			`You keep the lesson bounded to its context. The Dissonance archive may inform how you read a dispute, but it does not become authority over unrelated communities. The volunteer accepts the boundary as seriously as any positive rule.`
+			action
+				"A2 Avgi Dissonance Evidence Practice: introduced" = 1
+				"A2 Avgi Dissonance Evidence Practice: local only" = 1
+				decline
+			label refuse
+			`You decline to establish a standing practice from someone else's political archive. The volunteer leaves the records where they are and does not treat your refusal as agreement with any faction.`
+			action
+				"A2 Avgi Dissonance Evidence Practice: introduced" = 1
+				"A2 Avgi Dissonance Evidence Practice: refused" = 1
+				decline
+
+mission "A2 Avgi Dissonance Evidence Practice: Reflection"
+	minor
+	name `A Record That Disagrees With Itself`
+	description `A later archive dispute tests the evidence-handling practice you chose to preserve.`
+	source
+		government "Avgi (Dissonance)"
+	"offer precedence" 9
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		has "A2 Avgi Dissonance Evidence Practice: introduced"
+		not "A2 Avgi Dissonance Evidence Practice: refused"
+		not "A2 Avgi Dissonance Evidence Practice: reflection seen"
+	on offer
+		conversation
+			branch full
+				has "A2 Avgi Dissonance Evidence Practice: full record"
+			branch burden
+				has "A2 Avgi Dissonance Evidence Practice: burden separate"
+			branch local
+				has "A2 Avgi Dissonance Evidence Practice: local only"
+			`The archive has no valid persisted practice route. The volunteer closes the discussion rather than inventing one.`
+				goto finish
+			label full
+			`Two advocates cite the same old assessment, but the archive preserved a later correction beside it. Because you kept the full-record rule, neither side can quietly present the first document as the whole history. Their political disagreement remains; the documentary sequence stays inspectable.`
+				goto finish
+			label burden
+			`A service roster supports a family's account of lost labor, but says nothing about why the deployment was ordered. Keeping burden separate from motive leaves the documented cost visible without converting it into an inference the source cannot support.`
+				goto finish
+			label local
+			`Someone proposes using an old Dissonance concession dispute as a ready-made verdict for an unrelated quarrel. You keep the analogy bounded. The archive remains useful context without becoming portable Dissonance authority.`
+			label finish
+			action
+				"A2 Avgi Dissonance Evidence Practice: reflection seen" = 1
+				decline
