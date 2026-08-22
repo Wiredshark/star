@@ -24,6 +24,31 @@ def main() -> None:
     text = path.read_text(encoding="utf-8")
     lower = text.lower()
 
+    # These three missions only record persistent dialogue state. They do not
+    # create a gameplay objective, so every terminal conversation path must
+    # close with decline rather than leaving an objective-less accepted mission.
+    accepts = re.findall(r"^\s*accept\s*$", text, flags=re.MULTILINE)
+    declines = re.findall(r"^\s*decline\s*$", text, flags=re.MULTILINE)
+    if accepts:
+        fail(f"state-only dialogue must not use terminal accept; found {len(accepts)}")
+    if len(declines) != 7:
+        fail(f"expected exactly 7 state-only decline terminals, found {len(declines)}")
+
+    objective_directives = (
+        "destination ",
+        "stopover ",
+        "waypoint ",
+        "npc ",
+        "cargo ",
+        "passenger ",
+        "deadline ",
+        "timer ",
+    )
+    for line in text.splitlines():
+        stripped = line.strip().lower()
+        if any(stripped.startswith(token) for token in objective_directives):
+            fail(f"state-only lifecycle assumption invalidated by objective directive: {line.strip()}")
+
     missions = re.findall(r'^mission "([^"]+)"$', text, flags=re.MULTILINE)
     expected = [
         f"{PREFIX} Offer",
@@ -154,6 +179,7 @@ def main() -> None:
     print("PASS: later_reader=Orlov Remembers")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: b1_inputs=Exposure Register + Testimony Protocol")
+    print("PASS: lifecycle=7 state-only dialogue terminals close with decline")
     print("PASS: continuity=observed exposure effects remain distinct from unsupported causation")
 
 
