@@ -66,6 +66,24 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("later reader must persist completion")
 
+    # These missions are dialogue/state-only. They do not create a destination,
+    # cargo/passenger job, NPC objective, waypoint, or timer, so accepting them
+    # would leave objective-less missions in the active mission list.
+    accepts = re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE)
+    declines = re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)
+    if accepts:
+        fail("state-only Heliarch missions must not use terminal accept")
+    if len(declines) != 7:
+        fail(f"expected exactly 7 state-only decline terminals, found {len(declines)}")
+
+    objective_directive = re.compile(
+        r'^\s*(destination|stopover|waypoint|npc|cargo|passengers?|deadline|timer)\b',
+        flags=re.MULTILINE | re.IGNORECASE,
+    )
+    match = objective_directive.search(text)
+    if match:
+        fail(f"unexpected gameplay-objective directive in state-only slice: {match.group(1)}")
+
     for raw in re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, flags=re.MULTILINE):
         if not raw.startswith(PREFIX):
             fail(f"out-of-scope persistent write: {raw}")
@@ -131,6 +149,7 @@ def main() -> None:
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Clerk Remembers")
+    print("PASS: lifecycle=7 state-only decline terminals, 0 accepts")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: b1_inputs=evidence custody + investigative review")
 
