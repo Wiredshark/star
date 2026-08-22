@@ -82,6 +82,23 @@ def main() -> None:
     if '"B2 Free Worlds Reserve Recovery Compact: aftermath seen" = 1' not in text:
         fail("missing one-shot aftermath state")
 
+    # These missions are dialogue/state-only. They create no objective that should
+    # remain active after the conversation, so every terminal path must decline.
+    terminal_accepts = len(re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE))
+    terminal_declines = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+    if terminal_accepts:
+        fail(f"state-only lifecycle must not use accept terminals; found {terminal_accepts}")
+    if terminal_declines != 7:
+        fail(f"expected exactly 7 state-only decline terminals, got {terminal_declines}")
+
+    objective_directives = re.compile(
+        r'^\s*(destination|stopover|waypoint|npc|cargo|passengers?|deadline|timer)\b',
+        flags=re.MULTILINE | re.IGNORECASE,
+    )
+    objective_hits = objective_directives.findall(text)
+    if objective_hits:
+        fail(f"unexpected objective-bearing directive(s) in state-only slice: {objective_hits}")
+
     # Guard ownership: every condition write must be B2-owned.
     condition_write = re.compile(r'^\s*"([^"]+)"\s*(?:=|\+=|-=)\s*\d+', re.MULTILINE)
     for cond in condition_write.findall(text):
@@ -127,6 +144,7 @@ def main() -> None:
     print("PASS: later_reader=Brenner Remembers")
     print("PASS: persistence_model=stock mission/global conditions")
     print("PASS: write_ownership=B2 namespace only")
+    print("PASS: dialogue_lifecycle=7 decline terminals, 0 accept terminals")
 
 
 if __name__ == "__main__":
