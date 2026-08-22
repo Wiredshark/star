@@ -1,0 +1,103 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "A2 Dirt Belt Resilience Practice"
+	minor
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		random < 1
+		not "A2 Dirt Belt Resilience Practice: decided"
+	on offer
+		conversation
+			`A cooperative clerk has laid four old records side by side: a water-share ledger, a machinery pool register, a drought-routing manifest, and a mutual-maintenance book. None describes abundance. Each describes a way to keep scarcity from becoming invisible until the next emergency.`
+			`\tThe clerk asks what lesson you would actually carry away from them. "Not what the Dirt Belt commands anyone else to do. Just what you would remember when another shortage turns up somewhere different."`
+			choice
+				`Keep obligations visible: emergency help should record what was borrowed, what remains owed, and what capacity is actually available.`
+					goto obligations
+				`Track usable capacity, not merely promised supply: delivery is incomplete until people can receive, move, store, and use it.`
+					goto capacity
+				`Preserve redundancy: shared seed, machinery, specialists, and parts are valuable because one failure need not erase the whole productive base.`
+					goto redundancy
+				`Keep the Dirt Belt lesson local. These arrangements grew from particular settlements and shortages.`
+					goto local
+			label obligations
+			`You decide that mutual aid stays honest when the record includes unfinished obligations as carefully as successful rescues. The clerk nods. "A favor can be generous and still have a cost worth remembering."`
+			action
+				"A2 Dirt Belt Resilience Practice: decided" = 1
+				"A2 Dirt Belt Resilience Practice: obligations" = 1
+				"A2 Dirt Belt Resilience Practice: reflection pending" = 1
+				decline
+			label capacity
+			`You decide that logistics should be judged by usable capacity rather than the moment cargo crosses a port boundary. The clerk taps the old routing ledger. "That distinction saved more harvests than the manifest totals ever showed."`
+			action
+				"A2 Dirt Belt Resilience Practice: decided" = 1
+				"A2 Dirt Belt Resilience Practice: capacity" = 1
+				"A2 Dirt Belt Resilience Practice: reflection pending" = 1
+				decline
+			label redundancy
+			`You decide that resilience comes from preserving alternatives before a single failure becomes catastrophic. The clerk gestures toward the cooperative inventories. "Redundancy looks wasteful right up until the only pump breaks."`
+			action
+				"A2 Dirt Belt Resilience Practice: decided" = 1
+				"A2 Dirt Belt Resilience Practice: redundancy" = 1
+				"A2 Dirt Belt Resilience Practice: reflection pending" = 1
+				decline
+			label local
+			`You decline to turn local history into a portable doctrine. The clerk accepts that without argument. "Context is part of the record too."`
+			action
+				"A2 Dirt Belt Resilience Practice: decided" = 1
+				"A2 Dirt Belt Resilience Practice: local" = 1
+				"A2 Dirt Belt Resilience Practice: reflection pending" = 1
+				decline
+
+
+mission "A2 Dirt Belt Resilience Practice Reflection"
+	minor
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Dirt Belt Resilience Practice: reflection pending"
+		not "A2 Dirt Belt Resilience Practice: reflection seen"
+	on offer
+		conversation
+			branch obligations
+				has "A2 Dirt Belt Resilience Practice: obligations"
+			branch capacity
+				has "A2 Dirt Belt Resilience Practice: capacity"
+			branch redundancy
+				has "A2 Dirt Belt Resilience Practice: redundancy"
+			branch local
+				has "A2 Dirt Belt Resilience Practice: local"
+			label obligations
+			`The clerk shows you a repair exchange whose emergency work is complete but whose replacement-stock obligation is still open. Because the debt stayed visible, the next request begins with a real capacity picture instead of a myth that the previous help was free.`
+				goto finish
+			label capacity
+			`A relief shipment arrived on schedule, but the receiving settlement lost warehouse space after a pump failure. The routing board changes destination before the cargo becomes a successful delivery on paper and a useless one on the ground.`
+				goto finish
+			label redundancy
+			`A cooperative harvester fails during a narrow planting window. The reserve machine is inefficient and expensive to move, but it exists. The clerk notes that redundancy bought time rather than abundance, exactly the distinction you chose to remember.`
+				goto finish
+			label local
+			`The clerk remembers that you kept the lesson local. A current shortage review cites the old records only as local history, not as a rule for other settlements. "Context traveled farther because nobody pretended authority traveled with it."`
+			label finish
+			action
+				"A2 Dirt Belt Resilience Practice: reflection pending" = 0
+				"A2 Dirt Belt Resilience Practice: reflection seen" = 1
+				decline
