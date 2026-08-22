@@ -51,14 +51,14 @@ mission "B2 Korath Recovery Compact: Offer"
 				"B2 Korath Recovery Compact: introduced" = 1
 				"B2 Korath Recovery Compact: route rescue" = 1
 				"B2 Korath Recovery Compact: medic trusts player" = 1
-			accept
+			decline
 			label provenance
 			`You ask the Analyst to establish a quick provenance entry before each seal is broken: recovery location, container mark, condition, intended use, and amount removed. The process slows the first few minutes of treatment, but the Medic soon has a clerk recording entries while supplies move. The chain survives, though the Medic makes it clear that a recordkeeping rule becomes dangerous if it ever turns into permission to delay care.`
 			action
 				"B2 Korath Recovery Compact: introduced" = 1
 				"B2 Korath Recovery Compact: route provenance" = 1
 				"B2 Korath Recovery Compact: analyst trusts player" = 1
-			accept
+			decline
 			label paired
 			`You suggest two linked records. The recovery ledger remains untouched as the statement of what was found and where. A second humanitarian-use record records what treatment consumed, why it was needed, who authorized the release, and what remains. The Medic gets immediate access; the Analyst keeps the original evidence chain intact without pretending the cargo was never used.`
 			action
@@ -66,7 +66,7 @@ mission "B2 Korath Recovery Compact: Offer"
 				"B2 Korath Recovery Compact: route paired" = 1
 				"B2 Korath Recovery Compact: medic trusts player" = 1
 				"B2 Korath Recovery Compact: analyst trusts player" = 1
-			accept
+			decline
 			label decline
 			`You step away from the argument. The Medic and Analyst continue working from the existing recovery rules, improvising a compromise crate by crate. When you leave, the survivor is still receiving care and the recovered cargo is still being catalogued, but no new shared procedure has been adopted on your advice.`
 			action
@@ -118,7 +118,7 @@ mission "B2 Korath Recovery Compact: Review"
 				"B2 Korath Recovery Compact: settlement linked recovery packet" = 1
 				"B2 Korath Recovery Compact: medic trusts player" = 1
 				"B2 Korath Recovery Compact: analyst trusts player" = 1
-			accept
+			decline
 			label checkpoint
 			`You recommend a reconciliation checkpoint. Medical records remain under the people responsible for care, and evidence records remain under the people responsible for provenance. But before anyone closes restitution, prosecution, or technical-transfer decisions, both records must be compared and disagreements left visible rather than silently resolved by whichever file arrived first.`
 			action
@@ -126,7 +126,7 @@ mission "B2 Korath Recovery Compact: Review"
 				"B2 Korath Recovery Compact: settlement reconciliation checkpoint" = 1
 				"B2 Korath Recovery Compact: medic trusts player" = 1
 				"B2 Korath Recovery Compact: analyst trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Korath Recovery Compact: Medic Remembers"
@@ -152,4 +152,4 @@ mission "B2 Korath Recovery Compact: Medic Remembers"
 			label done
 			action
 				"B2 Korath Recovery Compact: aftermath seen" = 1
-			accept
+			decline
