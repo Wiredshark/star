@@ -1,0 +1,158 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Unfettered Maintenance Compact production slice.
+#
+# This content consumes the B1 Unfettered Frontier Maintenance Ledger and turns
+# its history of scarce parts, emergency substitutions, and unfinished repair
+# obligations into a persistent character dispute. "Keeper" and "Mechanic" are
+# player-facing shorthand for recurring Unfettered Hai, not canonical titles or
+# formal offices.
+#
+# Stock mission/conversation/global-condition mechanisms only. This slice writes
+# only B2-owned conditions and does not alter reputation, cargo, credits, combat,
+# ships, outfits, or simulation-owned world state.
+
+mission "B2 Unfettered Maintenance Compact: Offer"
+	minor
+	name `The Part That Keeps Moving`
+	description `Two Unfettered Hai disagree over whether a scarce pressure regulator should remain with the settlement that has waited longest or move to the habitat whose failure is now most urgent.`
+	source
+		attributes "unfettered"
+	to offer
+		has "First Contact: Unfettered: offered"
+		not "event: wanderers: unfettered invasion starts"
+		not "B2 Unfettered Maintenance Compact: introduced"
+		not "B2 Unfettered Maintenance Compact: declined"
+	on offer
+		conversation
+			`A repair board covers most of one wall. Beside each failing system is a date, a promised part, and a chain of handwritten substitutions. Two Unfettered Hai are arguing over a pressure regulator whose entry has been crossed out and rewritten three times.`
+			`The older Hai, whom you privately think of as the Keeper because they keep returning to the ledger, taps the oldest entry. "This habitat surrendered its replacement twice because another settlement was closer to failure. If promises vanish every time danger becomes louder elsewhere, the ledger records sacrifice but never obligation."`
+			`The other, a Mechanic with sealant still drying on one sleeve, points to a newer failure report. "And if we honor the oldest promise while a pressure wall is failing now, the record will be correct and the habitat will be empty. A maintenance system that cannot change priority is only a memorial."`
+			choice
+				`\tBack the Keeper: emergency diversions may happen, but every diverted part must leave the original obligation visible until it is actually fulfilled.`
+					goto obligation
+				`\tBack the Mechanic: current failure risk should set priority, with each substitution recording why the earlier promise was displaced.`
+					goto risk
+				`\tSeparate the questions: one record tracks operational priority, while a linked obligation record tracks who is still owed a repair after each diversion.`
+					goto paired
+				`\tTell them a foreign captain should not decide which Unfettered settlement receives a scarce part.`
+					goto decline
+			label obligation
+			`You say an emergency can justify moving the regulator, but it should not erase the settlement that yielded it. The Keeper says, "Then a diversion changes the route of the part, not the existence of the debt." The Mechanic answers, "As long as the debt cannot force us to ignore a failing seal tomorrow."`
+			action
+				"B2 Unfettered Maintenance Compact: introduced" = 1
+				"B2 Unfettered Maintenance Compact: route obligation" = 1
+				"B2 Unfettered Maintenance Compact: keeper trusts player" = 1
+			decline
+			label risk
+			`You argue that maintenance priority has to follow present danger. The Mechanic immediately agrees. The Keeper does not object to the regulator moving, but points at the older entries. "Then every new priority must say what it displaced. Otherwise urgency becomes a machine for forgetting."`
+			action
+				"B2 Unfettered Maintenance Compact: introduced" = 1
+				"B2 Unfettered Maintenance Compact: route risk" = 1
+				"B2 Unfettered Maintenance Compact: mechanic trusts player" = 1
+			decline
+			label paired
+			`You suggest two linked records. The operational board can reprioritize parts whenever failure risk changes. A second obligation ledger records each promised repair, every diversion, and whether the displaced settlement later received an equivalent repair. The Keeper studies the idea. "Then sacrifice remains visible." The Mechanic nods. "And visibility does not become a veto on emergency work."`
+			action
+				"B2 Unfettered Maintenance Compact: introduced" = 1
+				"B2 Unfettered Maintenance Compact: route paired ledger" = 1
+				"B2 Unfettered Maintenance Compact: keeper trusts player" = 1
+				"B2 Unfettered Maintenance Compact: mechanic trusts player" = 1
+			decline
+			label decline
+			`You tell them that you do not know enough about the settlements, crews, or machinery to decide which promise should bend. The Keeper accepts that. The Mechanic says, "Then at least remember what the argument was. Outsiders usually remember only which habitat got the part."`
+			action
+				"B2 Unfettered Maintenance Compact: declined" = 1
+			decline
+
+
+mission "B2 Unfettered Maintenance Compact: Review"
+	minor
+	name `The Repair That Came Back`
+	description `Return after another emergency diversion tests whether the maintenance ledger can preserve both current priorities and old obligations.`
+	source
+		attributes "unfettered"
+	to offer
+		has "First Contact: Unfettered: offered"
+		not "event: wanderers: unfettered invasion starts"
+		has "B2 Unfettered Maintenance Compact: introduced"
+		not "B2 Unfettered Maintenance Compact: reviewed"
+	on offer
+		conversation
+			branch obligation
+				has "B2 Unfettered Maintenance Compact: route obligation"
+			branch risk
+				has "B2 Unfettered Maintenance Compact: route risk"
+			`The repair board has changed again. The regulator went to the habitat whose pressure wall was failing, but the settlement that yielded it now has a replacement date, a named repair crew, and a note linking the emergency diversion to the unfinished obligation. The Mechanic says the two-record approach worked until another workshop copied only the priority board and omitted the obligation ledger.`
+			choice
+				`\tRequire every maintenance transfer to carry a compact record of both current priority and any displaced obligation.`
+					goto portable
+				`\tKeep local priority boards flexible, but require a periodic reconciliation that cannot close a repair until displaced obligations are either fulfilled or explicitly renewed.`
+					goto reconcile
+			label obligation
+			`The old obligation stayed visible, exactly as you recommended. But a second settlement copied the promise without the reason for the original diversion, and now its residents read the delay as simple favoritism. The Keeper says, "A debt without its history can become another false story." The Mechanic adds, "And a history without a current risk assessment can freeze the next emergency."`
+			choice
+				`\tMake the obligation portable with the diversion reason, current status, replacement plan, and unresolved risk attached.`
+					goto portable
+				`\tRequire scheduled reconciliation between old promises and current failure priorities before obligations are closed.`
+					goto reconcile
+			label risk
+			`The risk-first board kept emergency work moving, but the Keeper shows you three repairs that were displaced repeatedly by newer failures. Every diversion was individually justified. Together they created a settlement that could never become the most urgent because its systems were failing slowly rather than dramatically. "Current danger is real," the Keeper says. "So is accumulated deferral."`
+			choice
+				`\tAttach displaced obligations to every priority transfer so repeated deferral remains visible wherever the part goes.`
+					goto portable
+				`\tUse a periodic reconciliation that compares current risk against accumulated deferral before the next maintenance cycle.`
+					goto reconcile
+			label portable
+			`You recommend a portable maintenance packet. Whenever a scarce part or repair crew is reassigned, the record travels with the current priority, the reason for diversion, the settlement whose work was displaced, the promised replacement or equivalent repair, and whether that obligation remains open. The Mechanic likes that emergency decisions stay reversible. The Keeper likes that copying the operational record can no longer silently discard the debt behind it.`
+			action
+				"B2 Unfettered Maintenance Compact: reviewed" = 1
+				"B2 Unfettered Maintenance Compact: settlement portable packet" = 1
+				"B2 Unfettered Maintenance Compact: keeper trusts player" = 1
+				"B2 Unfettered Maintenance Compact: mechanic trusts player" = 1
+			decline
+			label reconcile
+			`You recommend leaving local repair boards free to respond to immediate danger, but requiring a reconciliation before the next planning cycle. Repeatedly displaced work must be reviewed alongside present failure risk, and an old obligation cannot be marked complete merely because everyone involved has grown used to seeing it postponed. The Keeper calls that memory with a deadline. The Mechanic calls it a way to prevent yesterday's emergency from becoming tomorrow's permanent excuse.`
+			action
+				"B2 Unfettered Maintenance Compact: reviewed" = 1
+				"B2 Unfettered Maintenance Compact: settlement reconciliation" = 1
+				"B2 Unfettered Maintenance Compact: keeper trusts player" = 1
+			decline
+
+
+mission "B2 Unfettered Maintenance Compact: Keeper Remembers"
+	minor
+	name `Keeper Remembers`
+	description `The Keeper remembers how the maintenance compact changed after repeated emergency diversions.`
+	source
+		attributes "unfettered"
+	to offer
+		has "First Contact: Unfettered: offered"
+		not "event: wanderers: unfettered invasion starts"
+		not "B2 Unfettered Maintenance Compact: aftermath seen"
+		or
+			has "B2 Unfettered Maintenance Compact: settlement portable packet"
+			has "B2 Unfettered Maintenance Compact: settlement reconciliation"
+	on offer
+		conversation
+			branch reconciliation
+				has "B2 Unfettered Maintenance Compact: settlement reconciliation"
+			`The Keeper finds you beside the same repair wall. Several entries now carry small linked summaries showing where a part came from, why it moved, and which repair remained unfinished afterward. "A regulator crossed three settlements last month," they say. "Each move was necessary. None of the earlier promises disappeared just because the latest danger was louder." The Mechanic, working nearby, adds, "And nobody had to pretend the first plan was sacred in order to remember it."`
+			goto record
+			label reconciliation
+			`The Keeper points to a maintenance-cycle review posted beside the repair board. "Two slow failures finally received crews because the reconciliation showed how many times they had been displaced. No emergency was ignored. The old obligations simply became part of the next decision instead of background decoration." The Mechanic says, "Urgency still changes the plan. It just does not get to rewrite the past."`
+			label record
+			action
+				"B2 Unfettered Maintenance Compact: aftermath seen" = 1
+			decline
