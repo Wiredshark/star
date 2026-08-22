@@ -2,16 +2,17 @@
 
 ## Verdict
 
-PARTIAL — isolated production/validator lifecycle repair; promote to READY only after exact-head repository-native simulation/story/style and production build/save-load workflows are terminal green.
+READY for A3 review/integration. Exact production/validator/handoff candidate `364123ef48cc1c735f92293fc64d9df9d67b186e` passed both repository-native acceptance workflows. This final commit updates the durable handoff only; production and validator behavior are unchanged from that fully validated candidate.
 
 ## Authority and isolation
 
 - Stage: B2 STORY CHARACTERS + DYNAMIC CONTENT
 - Repository authority: `Wiredshark/star`
-- Authoritative base at branch creation: `main` (live integration head recovered before branching)
+- Authoritative base at branch creation: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated branch: `agent/b2-wanderer-evacuation-lifecycle-20260822-1123`
 - Production lifecycle repair: `a041a9801fb0a217d7c2a54433d99422328511c3`
-- Validator hardening / current candidate: `8bbbdb19ef1d431d7a5d7ee5c010f4619f06af55`
+- Validator hardening: `8bbbdb19ef1d431d7a5d7ee5c010f4619f06af55`
+- Exact fully validated production/validator/handoff candidate: `364123ef48cc1c735f92293fc64d9df9d67b186e`
 - No self-integration performed; A3 retains integration authority.
 
 ## Defect repaired
@@ -53,20 +54,20 @@ Before branching, live `main`, current open lifecycle PRs, and Wanderer-specific
 
 The private execution service reported four pre-existing service-owned processes. They were preserved; none were killed, cancelled, or modified.
 
-## Validation required before READY
+## Exact validation evidence
 
-Run/confirm both repository-native workflows on the exact candidate head:
+Exact candidate `364123ef48cc1c735f92293fc64d9df9d67b186e` passed both repository-native acceptance gates:
 
-1. `Fork simulation and story validation`
-   - focused story validator discovery/execution;
-   - hardened Wanderer evacuation lifecycle validator;
-   - A1 simulation/state-ownership contracts;
-   - changed-content style.
-2. `Fork save-load integration smoke`
-   - production configure/build;
-   - stock save-load smoke.
+1. `Fork simulation and story validation` run #408 / `32581811921`: **SUCCESS**
+   - focused story validator discovery/execution: SUCCESS;
+   - hardened Wanderer evacuation lifecycle validator: SUCCESS;
+   - A1 simulation/state-ownership contracts: SUCCESS;
+   - changed-content style: SUCCESS.
+2. `Fork save-load integration smoke` run #393 / `32581811930`: **SUCCESS**
+   - production configure/build: SUCCESS;
+   - stock save-load smoke: SUCCESS.
 
-Do not promote to READY if either exact-head gate fails.
+Exact base-to-candidate comparison: 3 commits ahead / 0 behind, exactly three changed files. The production diff is six `accept` -> `decline` replacements; the remaining changes are focused-validator hardening and this durable handoff.
 
 ## A3 / B3 integration notes
 
@@ -75,7 +76,8 @@ Do not promote to READY if either exact-head gate fails.
 - Preserve Harbor Keeper / Route Tender as player-private shorthand, not canonical offices.
 - Preserve the distinction among safe arrival, current operational effect, borrowed capacity, restoration responsibility, closure evidence, and historical emergency records.
 - Preserve the lifecycle invariant: dialogue/state-only B2 missions that merely persist state terminate with `decline`; `accept` is reserved for mission paths that actually create gameplay objectives.
+- The open A2 Wanderer evacuation recovery-practice restage owns separate A2 follow-up state; review ordering/ancestry normally at A3 without collapsing the ownership boundary.
 
 ## Current verdict
 
-PARTIAL pending exact-head repository-native workflows.
+READY for A3 review/integration. Keep this branch/PR unmerged until A3 rechecks current-main ancestry and continuity.
