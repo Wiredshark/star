@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native validation on the exact branch head.
+READY for A3 review/integration.
 
 ## Authoritative base
 
@@ -22,6 +22,7 @@ The production repair changes the five objective-less positive `accept` terminal
 
 - production lifecycle repair: `39d94c029d4c317edd25921734450e1754191a2b`
 - validator hardening: `3c5916f30005c79faab543b42c27d96af545b90f`
+- exact fully validated production/validator/handoff candidate: `c02ee27d3b40debb90cb8bf8fa040e128ad65951`
 
 ## Files changed
 
@@ -50,18 +51,26 @@ The focused validator now additionally requires:
 
 All existing mission graph, route, settlement, state-ownership, mutation-surface, continuity, and local `goto`/`label` checks remain.
 
-## Required validation before READY
+## Exact validation evidence
 
-Run the repository-native acceptance workflows on the exact candidate head:
+On exact candidate `c02ee27d3b40debb90cb8bf8fa040e128ad65951`:
 
-- `Fork simulation and story validation`
-- `Fork save-load integration smoke`
+- `Fork simulation and story validation` #370 / run `32546412265`: **SUCCESS**
+  - focused simulation/story contracts: SUCCESS
+  - hardened Heliarch focused validator through repository discovery: SUCCESS
+  - A1 simulation/state-ownership contracts: SUCCESS
+  - changed-content style: SUCCESS
+- `Fork save-load integration smoke` #355 / run `32546412260`: **SUCCESS**
+  - dependency installation: SUCCESS
+  - production configure: SUCCESS
+  - production build: SUCCESS
+  - stock save-load smoke: SUCCESS
 
-READY requires focused story validation, the hardened Heliarch validator, A1/state-ownership contracts, changed-content style, production configure/build, and stock save-load smoke to be terminal green.
+No manual interactive game acceptance is claimed beyond the repository-native production build/save-load smoke.
 
 ## A3 / B3 integration notes
 
-A3 retains integration authority. Do not self-merge this branch. Re-read current `main` and ancestry before integration.
+A3 retains integration authority. Do not self-merge this branch. Re-read current `main`, verify ancestry/mergeability, and integrate only if the lifecycle-only diff remains clean.
 
 Preserve the lifecycle invariant that dialogue/state-only B2 missions terminate with `decline`; reserve `accept` for mission paths that actually create gameplay objectives.
 
