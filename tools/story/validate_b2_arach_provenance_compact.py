@@ -68,6 +68,28 @@ def test_scope_and_lifecycle():
         assert '\ton offer\n\t\tconversation' in block
         assert '\ton complete' not in block
 
+    # These missions only persist dialogue/global state. They do not create a
+    # gameplay objective, so every terminal conversation path must close with
+    # decline rather than accepting an objective-less active mission.
+    assert not re.search(r'^\s*accept\s*$', TEXT, re.M), "state-only path uses accept"
+    declines = re.findall(r'^\s*decline\s*$', TEXT, re.M)
+    assert len(declines) == 7, f"expected 7 state-only decline terminals, got {len(declines)}"
+
+    objective_directives = (
+        "destination",
+        "stopover",
+        "waypoint",
+        "npc",
+        "cargo",
+        "passengers",
+        "deadline",
+        "timer",
+    )
+    for directive in objective_directives:
+        assert not re.search(rf'^\s*{re.escape(directive)}\b', TEXT, re.M | re.I), (
+            f"state-only lifecycle assumption invalidated by objective directive: {directive}"
+        )
+
 
 def test_local_gotos_resolve():
     for name in MISSIONS:
@@ -121,6 +143,7 @@ def main():
     print("PASS: recurring_characters=2 player-private shorthands")
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
+    print("PASS: dialogue_lifecycle=7/7 state-only terminals decline")
     print("PASS: write_surface=B2 prefix only")
     print("PASS: later_reader=Assayer Remembers")
 
