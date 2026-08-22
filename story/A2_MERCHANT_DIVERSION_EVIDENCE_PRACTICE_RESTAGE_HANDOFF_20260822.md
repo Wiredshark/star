@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native validation. Do not self-integrate; A3 retains integration authority.
+READY for A3 review/integration. Do not self-integrate; A3 retains integration authority.
 
 ## Exact repository state
 
@@ -12,13 +12,14 @@ PARTIAL pending exact-head repository-native validation. Do not self-integrate; 
 - Isolated branch: `agent/a2-merchant-diversion-evidence-practice-restage-20260822-0502`
 - Production restage commit: `1bf97436d2eab237c05b3cacf8bde4f3bd5dd089`
 - Strengthened validator commit: `9b0aeb1fff1c1f1d0945a16b75f24e8e29a10af1`
+- Validator wording repair / exact fully validated production+validator head: `eeae8b035de970277dba1e381cb8cba52f4e89c6`
 - Historical PR #156 remains untouched.
 
 ## Selection and concurrency
 
-Live `main` and open A2 work were recovered before branching. Current-main A2 coverage is extensive, but historical Merchant Diversion Evidence Practice PR #156 remains a distinct PARTIAL slice and no current-main restage of that route-evidence domain exists. The restage therefore avoids the active Republic Border Testimony runtime repair and does not duplicate the READY Merchant Repair Priority slice.
+Live `main` and open A2 work were recovered before branching. Current-main A2 coverage is extensive, but historical Merchant Diversion Evidence Practice PR #156 remains a distinct PARTIAL slice and no current-main restage of that route-evidence domain existed. The restage avoids the active Republic Border Testimony runtime repair and does not duplicate the READY Merchant Repair Priority slice.
 
-The exposed private execution host was checked. It reports four pre-existing service-owned processes, and its repository workspace remote is `Wiredshark/fallout-test`, not `Wiredshark/star`; that unrelated dirty workspace was left untouched and is not Endless Sky runtime evidence.
+The exposed private execution host was checked. It reports four pre-existing service-owned processes; no unrelated process was modified. Its workspace is not used as Endless Sky runtime evidence.
 
 ## RPG / dynamic narrative loop
 
@@ -77,16 +78,29 @@ The strengthened focused validator checks:
 - no gameplay-objective directives;
 - refusal not arming recurrence.
 
-## Validation status
+## Validation history and exact evidence
 
-Not yet claimed on this restage head:
+Initial exact head `98cf7007bdb86cc94adf26392d8444668570aa1f` produced:
 
-- exact-head `Fork simulation and story validation` success;
-- exact-head `Fork save-load integration smoke` success;
-- manual actual-game acceptance.
+- `Fork save-load integration smoke` run `32563966229` / #373: **SUCCESS**;
+- `Fork simulation and story validation` run `32563966327` / #388: **FAILURE**.
 
-A3 must not integrate until both repository-native exact-head gates are terminal green.
+The failed job `97009722440` showed a single focused-validator defect: the validator required the typo phrase `centralized Merchant route authority`, while the production invariant correctly says `centralized Merchant routing authority`. Changed-content style and repository-wide content contracts were already green.
+
+Commit `eeae8b035de970277dba1e381cb8cba52f4e89c6` fixes only that validator wording. Production RPG/state behavior is unchanged.
+
+On exact fully validated production+validator head `eeae8b035de970277dba1e381cb8cba52f4e89c6`:
+
+- `Fork simulation and story validation` run `32566820411` / #391: **SUCCESS**;
+  - focused story validators: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS;
+  - changed-content style: SUCCESS;
+- `Fork save-load integration smoke` run `32566820386` / #376: **SUCCESS**;
+  - production configure/build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
+
+No manual actual-game acceptance is claimed beyond those repository-native gates.
 
 ## A3 integration instructions
 
-Re-read current `main`, verify ancestry and mergeability, then review only the validated current-main restage. Preserve A1/B2 ownership, the route-evidence epistemic boundaries, refusal semantics, `offer precedence 9`, and the state-only `decline` lifecycle. Do not self-merge from A2.
+Re-read current `main`, verify ancestry and mergeability, then review the validated current-main restage. Preserve A1/B2 ownership, the route-evidence epistemic boundaries, refusal semantics, `offer precedence 9`, and the state-only `decline` lifecycle. The current branch tip may include only this READY handoff promotion after validated head `eeae8b035de970277dba1e381cb8cba52f4e89c6`; production and validator behavior must remain identical to that green SHA. Do not self-merge from A2.
