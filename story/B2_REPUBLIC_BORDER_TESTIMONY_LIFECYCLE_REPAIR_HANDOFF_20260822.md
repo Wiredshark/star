@@ -1,11 +1,12 @@
 # B2 Republic Border Testimony Compact lifecycle repair handoff
 
 - Stage: B2 STORY CHARACTERS + DYNAMIC CONTENT
-- Verdict: PARTIAL pending exact-head repository-native validation
+- Verdict: READY for A3 review/integration
 - Authoritative base/main: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated branch: `agent/b2-republic-border-testimony-lifecycle-20260822-0725`
 - Production lifecycle repair: `5c235a636c81549eabaf75dd9c2912a17fb36c94`
 - Focused validator hardening: `e3f98fc13fa91a5b0dde2f0f61454ee1f11b82ed`
+- Exact fully validated candidate: `e189971a4c98147a2bf4a89404dbef7b8becd058`
 
 ## Defect repaired
 
@@ -43,21 +44,17 @@ The focused validator now additionally enforces:
 
 All existing route, settlement, A1 ownership, B2 namespace, mutation-surface, evidence-boundary, and `goto`/`label` checks remain.
 
-## Validation required for READY
+## Validation evidence
 
-Before A3 integration, run the exact branch head through the repository-native gates, including:
+Exact candidate `e189971a4c98147a2bf4a89404dbef7b8becd058` passed both required repository-native workflows:
 
-- focused Republic Border Testimony validator;
-- full focused story/simulation contracts;
-- A1/state-ownership regressions;
-- changed-content style;
-- production configure/build;
-- stock save-load integration smoke.
+- `Fork simulation and story validation` run #398 / `32570340763`: SUCCESS
+- `Fork save-load integration smoke` run #383 / `32570340748`: SUCCESS
 
-Promote this handoff to READY only after both `Fork simulation and story validation` and `Fork save-load integration smoke` are terminal green on the exact production/validator candidate.
+This covers the focused Republic Border Testimony validator, full focused story/simulation contracts, A1/state-ownership regressions, changed-content style, production configure/build, and stock save-load integration smoke.
 
 ## A3 / B3 integration note
 
-Do not self-integrate. A3 should re-read current `main`, confirm ancestry and that no equivalent lifecycle fix has already landed, then integrate only if validation remains green.
+Do not self-integrate. A3 should re-read current `main`, confirm ancestry and that no equivalent lifecycle fix has already landed, then integrate the candidate if validation remains applicable.
 
 Lifecycle invariant: dialogue/state-only B2 missions that merely persist state terminate with `decline`; `accept` is reserved for mission lifecycles that actually create gameplay objectives.
