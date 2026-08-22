@@ -27,8 +27,15 @@ assert '\t\t\t\taccept\n' not in s, "state-only A2 missions must not remain acce
 assert s.count('\t\t\t\tdecline\n') == 5, "expected four decisions plus reflection to decline"
 assert s.count('"offer precedence" 9') == 2, "both missions must use current A2 precedence"
 assert s.count('\t\t\taction\n') == 5, "expected four decision actions plus reflection action"
-for forbidden in ('cargo ', 'passenger ', 'waypoint ', 'stopover ', 'destination ', 'deadline '):
-    assert forbidden not in s, f"unexpected gameplay objective directive: {forbidden.strip()}"
+
+# Reject actual objective directives without treating ordinary conversation prose as directives.
+objective_directives = ("cargo", "passenger", "waypoint", "stopover", "destination", "deadline")
+for line in s.splitlines():
+    stripped = line.lstrip("\t")
+    if line.startswith("\t") and not stripped.startswith("`"):
+        directive = stripped.split(maxsplit=1)[0] if stripped else ""
+        assert directive not in objective_directives, f"unexpected gameplay objective directive: {directive}"
+
 assert 'abundance' in s, "scarcity/abundance boundary missing"
 assert 'authority traveled with it' in s, "local authority boundary missing"
 print("PASS: Dirt Belt resilience persistence, explicit routes, lifecycle, and authority boundary")
