@@ -71,6 +71,25 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("later reader must persist completion")
 
+    # These missions are dialogue/state-only. Accepting them would leave
+    # objective-less missions active after the conversation closes. Every
+    # terminal path must persist its state and decline cleanly instead.
+    accept_terminals = re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE)
+    decline_terminals = re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)
+    if accept_terminals:
+        fail(f"state-only slice must not contain terminal accept commands: {len(accept_terminals)}")
+    if len(decline_terminals) != 7:
+        fail(f"expected exactly 7 state-only decline terminals, found {len(decline_terminals)}")
+
+    objective_directives = (
+        "destination ", "stopover ", "waypoint ", "npc ", "cargo ",
+        "passenger ", "deadline ", "timer ",
+    )
+    for line in text.splitlines():
+        stripped = line.strip().lower()
+        if any(stripped.startswith(token) for token in objective_directives):
+            fail(f"state-only lifecycle assumption invalidated by objective directive: {line.strip()}")
+
     for raw in re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, flags=re.MULTILINE):
         if not raw.startswith(PREFIX):
             fail(f"out-of-scope persistent write: {raw}")
@@ -128,6 +147,7 @@ def main() -> None:
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Tracker Remembers")
+    print("PASS: lifecycle=7 decline terminals, no objective-less accepts")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: b1_inputs=family reunification + passage contribution + voluntary resettlement")
 
