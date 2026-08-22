@@ -75,6 +75,23 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("aftermath reader must persist completion")
 
+    # These missions only persist state; none creates a gameplay objective.
+    # A terminal `accept` would therefore leave an objective-less mission active.
+    accepts = re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE)
+    declines = re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)
+    if accepts:
+        fail(f"state-only slice must not contain terminal accept commands: {len(accepts)} found")
+    if len(declines) != 7:
+        fail(f"expected exactly seven state-only decline terminals, found {len(declines)}")
+
+    objective_directive = re.compile(
+        r'^\s*(destination|stopover|waypoint|npc|cargo|passenger|deadline|timer)\b',
+        flags=re.MULTILINE | re.IGNORECASE,
+    )
+    match = objective_directive.search(text)
+    if match:
+        fail(f"state-only lifecycle assumption invalidated by objective directive: {match.group(1)}")
+
     writes = re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, flags=re.MULTILINE)
     for raw in writes:
         if not raw.startswith(PREFIX):
@@ -155,6 +172,7 @@ def main() -> None:
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Archivist Remembers")
+    print("PASS: lifecycle=0 accepts + 7 declines + no objective directives")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: b1_input=Pug Contact Testimony Archive")
     print("PASS: continuity=observed behavior remains distinct from inferred motive")
