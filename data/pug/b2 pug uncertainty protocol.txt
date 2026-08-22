@@ -55,7 +55,7 @@ mission "B2 Pug Uncertainty Protocol: Offer"
 				"B2 Pug Uncertainty Protocol: route observation" = 1
 				"B2 Pug Uncertainty Protocol: archivist trusts player" = 1
 				event "B2 Pug Uncertainty Protocol: Review Ready" 7 11
-				accept
+				decline
 			label interpretation
 			`You argue that uncertainty should not make a report useless. The Interpreter rewrites the sentence as a probable interpretation and adds a confidence marker plus the strongest competing explanation. The Archivist accepts the wording only after the original observations are linked directly beneath it. Crews will have guidance, but the guidance now admits what could prove it wrong.`
 			action
@@ -63,7 +63,7 @@ mission "B2 Pug Uncertainty Protocol: Offer"
 				"B2 Pug Uncertainty Protocol: route interpretation" = 1
 				"B2 Pug Uncertainty Protocol: interpreter trusts player" = 1
 				event "B2 Pug Uncertainty Protocol: Review Ready" 7 11
-				accept
+				decline
 			label paired
 			`You suggest treating observation and interpretation as linked records with different ownership. The Archivist freezes the sensor timeline and witness provenance. The Interpreter creates a second layer for possible motives, translation hypotheses, and confidence. A later analyst may revise the second layer without changing the first. Both specialists agree that disagreement becomes easier to preserve when it has somewhere explicit to live.`
 			action
@@ -72,7 +72,7 @@ mission "B2 Pug Uncertainty Protocol: Offer"
 				"B2 Pug Uncertainty Protocol: archivist trusts player" = 1
 				"B2 Pug Uncertainty Protocol: interpreter trusts player" = 1
 				event "B2 Pug Uncertainty Protocol: Review Ready" 7 11
-				accept
+				decline
 			label decline
 			`You tell them that uncertainty about the Pug is exactly why you should not become the deciding voice in someone else's archive. The Interpreter closes the draft report. The Archivist leaves the raw evidence untouched. Their disagreement continues without your name attached to either side.`
 			action
@@ -118,7 +118,7 @@ mission "B2 Pug Uncertainty Protocol: Review"
 				"B2 Pug Uncertainty Protocol: settlement provenance ladder" = 1
 				"B2 Pug Uncertainty Protocol: archivist trusts player" = 1
 				"B2 Pug Uncertainty Protocol: interpreter trusts player" = 1
-				accept
+				decline
 			label envelope
 			`You recommend treating uncertainty as part of the conclusion rather than optional metadata. Any exported statement about Pug intent must carry the confidence level, the strongest surviving alternative, and an explicit note when the source proves behavior but not motive. The Interpreter says the summary remains useful. The Archivist points out that copying it incorrectly now requires deleting a visible warning instead of merely forgetting an invisible field.`
 			action
@@ -126,7 +126,7 @@ mission "B2 Pug Uncertainty Protocol: Review"
 				"B2 Pug Uncertainty Protocol: settlement uncertainty envelope" = 1
 				"B2 Pug Uncertainty Protocol: archivist trusts player" = 1
 				"B2 Pug Uncertainty Protocol: interpreter trusts player" = 1
-				accept
+				decline
 
 
 mission "B2 Pug Uncertainty Protocol: Archivist Remembers"
@@ -153,4 +153,4 @@ mission "B2 Pug Uncertainty Protocol: Archivist Remembers"
 			label finish
 			action
 				"B2 Pug Uncertainty Protocol: aftermath seen" = 1
-				accept
+				decline
