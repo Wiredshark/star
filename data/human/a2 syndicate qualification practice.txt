@@ -1,0 +1,103 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 Syndicate Qualification Practice.
+# Consumes the resolved B2 qualification compact and later A1 labor pressure.
+# B2 and A1 state are read-only; A2 writes only its own namespaced conditions.
+
+
+mission "A2 Syndicate Qualification Practice: Adopt"
+	minor
+	name `What Travels With the Worker`
+	description `Mara Venn asks what lesson from the qualification compact should guide your future advice when labor pressure returns.`
+	offer precedence 9
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		has "B2 Syndicate Qualification Compact: aftermath seen"
+		not "A2 Syndicate Qualification Practice: adopted"
+		not "A2 Syndicate Qualification Practice: refused"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Syndicate Qualification Compact: settlement renewal"
+			`Mara Venn lays a portable qualification packet beside a fresh berth roster. "The compact settled one emergency," she says. "I want to know what part of that lesson you would carry into the next one."`
+			goto choose
+			label renewal
+			`Mara Venn lays an endorsement-renewal record beside a fresh berth roster. "The compact settled one emergency," she says. "I want to know what part of that lesson you would carry into the next one."`
+			label choose
+			choice
+				`\tStart from carried evidence, then review only the job-specific gap.`
+					goto evidence
+				`\tMake every transferred qualification carry scope, exclusions, and expiry context.`
+					goto boundaries
+				`\tKeep the compact local; do not turn one yard network's solution into a standing rule.`
+					goto local
+				`\tRefuse to establish a personal qualification doctrine.`
+					goto refuse
+			label evidence
+			`You tell Venn that prior evidence should be the starting point, not a substitute for local job authority. A yard should identify the specific gap between demonstrated competence and the berth in front of it. "Review the difference," Venn says, "not the worker's entire history."`
+			action
+				"A2 Syndicate Qualification Practice: adopted" = 1
+				"A2 Syndicate Qualification Practice: evidence first" = 1
+			decline
+			label boundaries
+			`You tell Venn that portability is only useful when boundaries travel with it: equipment family, supervision level, exclusions, and the assumptions that make an endorsement current. "A clearance without its limits is a rumor with a stamp," she says.`
+			action
+				"A2 Syndicate Qualification Practice: adopted" = 1
+				"A2 Syndicate Qualification Practice: boundaries travel" = 1
+			decline
+			label local
+			`You tell Venn the compact should remain evidence of what worked among participating yards, not become borrowed authority elsewhere. She nods. "A precedent can be useful without pretending it is jurisdiction."`
+			action
+				"A2 Syndicate Qualification Practice: adopted" = 1
+				"A2 Syndicate Qualification Practice: local only" = 1
+			decline
+			label refuse
+			`You decline to turn the compact into a standing personal doctrine. Venn accepts the boundary. "Then the record stays a record, and future yards make their own case."`
+			action
+				"A2 Syndicate Qualification Practice: refused" = 1
+			decline
+
+
+mission "A2 Syndicate Qualification Practice: Pressure Test"
+	minor
+	name `Qualification Under Pressure`
+	description `A later labor rotation tests whether the qualification practice you carried forward still distinguishes evidence from local job authority.`
+	offer precedence 9
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		has "A2 Syndicate Qualification Practice: adopted"
+		"world: syndicate labor strain" >= 2
+		has "world: syndicate labor rotation active"
+		not "A2 Syndicate Qualification Practice: pressure test seen"
+	on offer
+		conversation
+			branch boundaries
+				has "A2 Syndicate Qualification Practice: boundaries travel"
+			branch local
+				has "A2 Syndicate Qualification Practice: local only"
+			`A borrowed technician arrives during another strained rotation. Their prior packet covers the reactor family and supervised maintenance history, but not one local shielding modification. Venn points to the gap instead of reopening every old qualification. "Carried evidence got us to the real question quickly," she says. "Local authority still answers that question."`
+			goto record
+			label boundaries
+			`A transferred qualification arrives with an exclusion that would have vanished from a one-line clearance summary. The yard assigns supervised work around that exclusion rather than treating the worker as either universally cleared or wholly unqualified. Venn says, "The boundary traveled, so the useful part could travel too."`
+			goto record
+			label local
+			`Another yard asks whether Venn's compact proves how it should clear a borrowed technician. She sends the evidence format and the old reasoning, but not a command. "They can inspect what worked here," she says. "Their berth and their authority are still theirs."`
+			label record
+			action
+				"A2 Syndicate Qualification Practice: pressure test seen" = 1
+			decline
