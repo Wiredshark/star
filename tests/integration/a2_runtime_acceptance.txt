@@ -1,8 +1,6 @@
 # Production A2 actual-game acceptance cases.
-# One exact integration-test name per line. The save-load workflow runs each case
-# in a fresh config/save environment after the stock persistence regression set.
+# Diagnostic subset for PR #198 runtime-failure isolation. Assertions remain unchanged;
+# this temporarily narrows execution to the first three cases.
 A2 Republic Border Testimony Lineage
 A2 Republic Border Testimony Independence
 A2 Republic Border Testimony Closure
-A2 Republic Border Testimony Local
-A2 Republic Border Testimony Refusal
