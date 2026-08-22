@@ -103,6 +103,25 @@ def main() -> None:
         if stripped.startswith(forbidden_commands):
             fail(f"unexpected direct gameplay mutation command: {stripped}")
 
+    # These three missions are dialogue/state-only. Accepting them would leave an
+    # objective-less mission active, so every terminal path must persist state and
+    # then decline. If a real objective is ever added, this lifecycle assertion
+    # must be deliberately revised rather than silently weakened.
+    accept_terminals = len(re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE))
+    decline_terminals = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+    if accept_terminals != 0:
+        fail(f"state-only dialogue missions must not accept; found {accept_terminals} terminal accept(s)")
+    if decline_terminals != 7:
+        fail(f"expected exactly 7 state-only decline terminals, got {decline_terminals}")
+
+    objective_directives = re.compile(
+        r'^\s*(?:destination|stopover|waypoint|npc|cargo|passengers?|deadline|timer)\b',
+        flags=re.MULTILINE | re.IGNORECASE,
+    )
+    objective_hits = objective_directives.findall(text)
+    if objective_hits:
+        fail(f"state-only lifecycle assumption invalidated by objective directive(s): {objective_hits}")
+
     # The continuity contract must keep successful arrival separate from restored capacity.
     required_fragments = (
         "successful arrival is an event",
@@ -130,6 +149,7 @@ def main() -> None:
     print("PASS: later_reader=Keeper Remembers")
     print("PASS: persistence_model=stock mission/global conditions")
     print("PASS: write_ownership=B2 namespace only")
+    print("PASS: dialogue_lifecycle=7 decline terminals / 0 accept terminals / no objectives")
 
 
 if __name__ == "__main__":
