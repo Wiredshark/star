@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native simulation/story/style and production build/save-load validation on the exact branch head.
+READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -11,6 +11,7 @@ PARTIAL pending repository-native simulation/story/style and production build/sa
 - Isolated branch: `agent/b2-free-worlds-reserve-recovery-lifecycle-20260822-0629`
 - Production repair commit: `9068fe5f7d0d32eb68b2e65c8f631c0ad7b1d99d`
 - Validator hardening commit: `8d95910dfef9609dc6ac0fb25496793740de5f36`
+- Exact fully validated production/validator/handoff candidate: `aa95261c8fe7a955c3f55b4f4e034788e0104e5f`
 
 No integration into `main` was performed.
 
@@ -38,22 +39,17 @@ The reserve-recovery continuity invariant is unchanged: visible stock replenishm
 
 All prior mission graph, character, route, settlement, A1 read-only ownership, B2-only write ownership, mutation-surface, continuity, and `goto`/`label` checks remain.
 
-## Required validation before READY
+## Validation evidence
 
-Run the repository-native acceptance gates on the exact candidate head:
+Exact candidate `aa95261c8fe7a955c3f55b4f4e034788e0104e5f` passed both required repository-native workflows:
 
-1. `Fork simulation and story validation`
-2. changed-content style
-3. focused story validators including `validate_b2_free_worlds_reserve_recovery_compact.py`
-4. A1 simulation/state-ownership contracts
-5. `Fork save-load integration smoke`
-6. production configure/build
-7. stock save/load smoke
+- `Fork simulation and story validation` run #393 / `32567807603`: SUCCESS
+- `Fork save-load integration smoke` run #378 / `32567807650`: SUCCESS
 
-Do not promote to READY if either required workflow is non-green.
+The validation workflow covers focused story validators, A1 simulation/state-ownership contracts, and changed-content style. The save-load workflow covers production configure/build and stock save/load smoke.
 
 ## A3 / B3 integration notes
 
-A3 should integrate only after exact-head validation is terminal green and after confirming `main` ancestry has not invalidated the isolated diff.
+A3 may integrate after confirming current `main` ancestry still permits a clean application of this isolated repair. No save-state migration is required because persistent condition names and values are unchanged.
 
 B3 should preserve the lifecycle rule: dialogue/state-only B2 missions that merely persist state terminate with `decline`; `accept` is reserved for mission lifecycles that actually create gameplay objectives.
