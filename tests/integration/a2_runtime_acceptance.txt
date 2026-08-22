@@ -1,6 +1,3 @@
 # Production A2 actual-game acceptance cases.
-# Diagnostic subset for PR #198 runtime-failure isolation. Assertions remain unchanged;
-# this temporarily narrows execution to the first three cases.
+# Diagnostic single-case run for PR #198 runtime-failure isolation. Assertions remain unchanged.
 A2 Republic Border Testimony Lineage
-A2 Republic Border Testimony Independence
-A2 Republic Border Testimony Closure
