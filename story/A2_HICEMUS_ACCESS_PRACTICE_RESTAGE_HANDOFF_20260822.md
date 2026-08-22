@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**PARTIAL pending exact-head repository-native validation.**
+**READY for A3 review/integration.**
 
 ## Authority
 
@@ -10,6 +10,7 @@
 - Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/a2-hicemus-access-practice-restage-20260822-0132`
 - Historical source candidate: PR #121 / `agent/a2-hicemus-access-practice-20260819-1906`
+- Exact validated production/validator head: `44c1dc94d526f9ead02355435386e1a6f9dbb1ac`
 
 ## Why this restage
 
@@ -47,15 +48,15 @@ The three positive choices persist `A2 Hicemus Access Practice: chosen` plus the
 - `tools/story/validate_a2_hicemus_access_practice.py`
 - `story/A2_HICEMUS_ACCESS_PRACTICE_RESTAGE_HANDOFF_20260822.md`
 
-## Validation contract
+## Exact validation evidence
+
+On exact production/validator head `44c1dc94d526f9ead02355435386e1a6f9dbb1ac`:
+
+1. `Fork simulation and story validation` #379 / run `32554679249`: **SUCCESS**.
+2. `Fork save-load integration smoke` #364 / run `32554679267`: **SUCCESS**.
+3. Current authoritative `main` was re-read at `a17a89fb4779200a0634a6dade1811c4dc9cc2be`; PR #239 remains isolated, open, draft, unmerged, and GitHub reports it mergeable.
 
 The focused validator enforces both mission identities, B2 read-only consumption, A2-only writes, all three positive routes plus refusal, refusal suppression of the later reader, one-shot reflection, offer precedence 9, and state-only decline lifecycle.
-
-Required before READY:
-
-1. `Fork simulation and story validation` succeeds on the exact production/validator head.
-2. `Fork save-load integration smoke` succeeds on the same exact head.
-3. Re-read current `main` and verify the candidate remains isolated/mergeable.
 
 No manual actual-game acceptance is claimed by this handoff unless separately executed and recorded.
 
