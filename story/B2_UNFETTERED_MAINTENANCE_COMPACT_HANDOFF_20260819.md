@@ -1,120 +1,114 @@
-# B2 Unfettered Maintenance Compact handoff — 2026-08-19
+# B2 Unfettered Maintenance Compact handoff — 2026-08-22 recovery pass
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native save-load/build and changed-content style completion. Focused simulation/story validators have already executed successfully on the production+validator head.
+READY for A3 review/integration. This hourly B2 recovery pass fixed the dialogue-only mission lifecycle and revalidated the exact production/validator candidate through both repository-native acceptance workflows.
 
 ## Repository state
 
 - Repository authority: `Wiredshark/star`
-- Authoritative integration base observed at slice start: `2f12f0e3026c0c502fb4c686677167d385cfb106`
-- Base commit message: `Integrate B1 Unfettered institutional history`
+- Original B1-integrated base used by this isolated branch: `2f12f0e3026c0c502fb4c686677167d385cfb106`
+- Authoritative `main` rechecked during recovery: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated branch: `agent/b2-unfettered-maintenance-compact-20260819-2128`
-- Production commit: `6717f14fdf55d079ceac442771842dfaf64ebac8`
-- Focused-validator / production-data head: `f14e81e547fae1504dc8d7b1d753b55e0a864872`
-- Draft PR: #130 (`B2 Unfettered Maintenance Compact`), targeting `main`
+- Original production commit: `6717f14fdf55d079ceac442771842dfaf64ebac8`
+- Original validator head: `f14e81e547fae1504dc8d7b1d753b55e0a864872`
+- Original handoff head: `ba49f8900a8005992f017835d47e31c072aae53f`
+- Lifecycle production repair: `624e0b5b1213c3f272b93a1b629f17c3d439dc3b`
+- Exact fully validated production/validator candidate: `c4b6be0c4a7c39643820bf0569701ef32b7ec515`
+- Draft PR: #130 (`B2 Unfettered Maintenance Compact`)
 - No self-integration performed.
 
 ## B1 dependency consumed
 
-The authoritative base integrates B1's `Unfettered Frontier Maintenance Ledger`. B1 establishes that aging frontier worlds use durable maintenance records to preserve:
+The branch is built on the B1 `Unfettered Frontier Maintenance Ledger`, which establishes durable records for failing infrastructure, scarce parts, emergency substitutions/diversions, and unfinished obligations that should survive changes in crews and local leaders.
 
-- failing infrastructure and current repair priorities;
-- scarce replacement parts and technician availability;
-- emergency substitutions/diversions;
-- unfinished obligations that should survive changes in crews and local leaders.
+B2 preserves that institutional history and turns it into a recurring character conflict.
 
-B2 does not change that history. It turns the institutional tension into a recurring character problem.
-
-## Character/dynamic-content slice
+## Character and dynamic-content behavior
 
 Production file: `data/hai/b2 unfettered maintenance compact.txt`
 
-Recurring characters are deliberately player-facing shorthand rather than new canonical Unfettered offices:
+Recurring characters are deliberately player-facing shorthand rather than canonical Unfettered offices:
 
-- **Keeper** — repeatedly returns to the maintenance ledger and argues that emergency diversions must not erase the settlement whose repair was displaced.
-- **Mechanic** — argues that present failure risk has to be able to reprioritize parts and crews or the ledger becomes a memorial rather than an operational tool.
+- **Keeper** — argues that emergency diversions must not erase the settlement whose repair was displaced.
+- **Mechanic** — argues that present failure risk must remain able to reprioritize parts and crews.
 
 ### Offer — `The Part That Keeps Moving`
 
-A scarce pressure regulator has already been diverted repeatedly. The player may support:
+The player may choose:
 
-1. **obligation-first** — diversions are allowed, but the displaced obligation remains open until actually fulfilled;
-2. **risk-first** — current failure severity determines priority, with explicit recording of what prior promise was displaced;
-3. **paired ledger** — operational priority and unfinished obligations remain separate linked records;
-4. **refusal** — the player declines to impose a foreign decision.
-
-All substantive routes persist under `B2 Unfettered Maintenance Compact:*`.
+1. obligation-first handling;
+2. current-risk-first handling;
+3. paired operational-priority and unfinished-obligation records;
+4. refusal.
 
 ### Review — `The Repair That Came Back`
 
-The next emergency exposes second-order failures: copied records can retain either the current priority or the old obligation while losing the history connecting them; repeated individually justified diversions can also create accumulated deferral that is never dramatic enough to become the top emergency.
+The Review exposes the second-order failure modes of copied maintenance records and repeated individually justified deferrals. It resolves to exactly one of:
 
-The player resolves the practice into exactly one of two terminal settlements:
-
-- **portable maintenance packet** — every reassignment carries current priority, diversion reason, displaced repair, replacement/equivalent plan, and open/closed obligation status;
-- **reconciliation** — local boards retain emergency flexibility, but each maintenance cycle must reconcile present failure risk against accumulated deferral before old obligations may be closed.
+- **portable maintenance packet** — current priority, diversion reason, displaced repair, replacement/equivalent plan, and open/closed obligation status travel together;
+- **reconciliation** — local boards retain emergency flexibility, but each cycle reconciles current risk against accumulated deferral before obligations close.
 
 ### Later reader — `Keeper Remembers`
 
-A one-shot aftermath reader demonstrates the chosen model operating in practice.
+A one-shot aftermath reader demonstrates the chosen model in practice.
 
-## State ownership / invariants
+## Lifecycle repair completed in this recovery pass
 
-- Every B2 write is namespaced under `B2 Unfettered Maintenance Compact:*`.
-- B2 reads `First Contact: Unfettered: offered` and the pre-invasion campaign boundary but does not write them.
-- No `world:*` simulation state is written.
-- No credits, reputation, cargo, outfit, ship, fleet, or combat state is mutated.
-- `Keeper` and `Mechanic` are private player shorthand, not canonical titles, offices, or evidence of centralized Unfettered bureaucracy.
-- Current operational priority, the reason for a diversion, and the unfinished obligation displaced by that diversion remain distinct concepts.
-- A justified emergency diversion does not by itself erase the prior repair obligation.
-- Preserving an old obligation does not create a veto over a genuinely more urgent failure.
+The three missions are dialogue/state-only and create no gameplay objective. The prior production slice nevertheless used terminal `accept` on the three positive Offer routes, two Review settlements, and the aftermath reader. Those six terminal commands were changed to `decline`; refusal already declined.
 
-## Focused validator
+Result: all **7/7 state-only terminal paths** now persist their existing state and close cleanly instead of risking objective-less active missions.
+
+No dialogue, route selection, trust state, settlement state, persistent condition name/value, source scope, or story continuity semantics changed.
+
+## Focused validator hardening
 
 Validator: `tools/story/validate_b2_unfettered_maintenance_compact.py`
 
-It checks:
+In addition to its prior mission graph, character, route, settlement, ownership, mutation-surface, continuity, and `goto`/`label` checks, it now enforces:
 
-- exact three-mission graph;
-- Keeper/Mechanic recurring-character shorthand;
-- three persistent routes plus refusal;
-- exactly two terminal settlements;
-- Unfettered + first-contact + pre-invasion source scope;
-- B2-only write ownership;
-- absence of material/reputation/world-state mutation;
-- local `goto`/`label` integrity;
-- explicit priority/diversion/obligation/replacement continuity concepts;
-- one-shot aftermath consumption.
+- zero terminal `accept` commands;
+- exactly seven terminal `decline` commands;
+- no destination, stopover, waypoint, NPC, cargo, passenger, deadline, or timer directive that would invalidate the dialogue/state-only lifecycle assumption.
 
-## Validation evidence
+## State ownership and canon invariants
 
-On production+validator head `f14e81e547fae1504dc8d7b1d753b55e0a864872`:
+- Every B2 write remains namespaced under `B2 Unfettered Maintenance Compact:*`.
+- `First Contact: Unfettered: offered` and the pre-invasion campaign boundary are read-only.
+- No `world:*` simulation state is written.
+- No credits, reputation, cargo, outfit, ship, fleet, or combat state is mutated.
+- `Keeper` and `Mechanic` remain private player shorthand, not canonical titles or evidence of centralized Unfettered bureaucracy.
+- Current operational priority, diversion reason, and the unfinished obligation displaced by that diversion remain distinct facts.
+- A justified emergency diversion does not erase an older obligation.
+- Preserving an obligation does not grant it an automatic veto over a genuinely more urgent failure.
 
-- GitHub Actions `Fork simulation and story validation` run #151 started successfully.
-- The `Focused simulation and story contracts` job completed these steps successfully before handoff creation:
-  - compile focused Python validation code;
-  - run all focused story validators;
-  - run A1 simulation contract tests.
-- Changed-content style was still running at handoff creation.
-- GitHub Actions `Fork save-load integration smoke` run #140 was still running at handoff creation.
+## Exact validation evidence
 
-The final handoff commit triggers exact-head workflows again. A3 must use terminal exact-head workflow results rather than treating an in-progress job as a pass.
+Exact fully validated candidate: `c4b6be0c4a7c39643820bf0569701ef32b7ec515`.
 
-The available private Fallout execution host was inspected but not used for Endless Sky validation: its repository workspace remote is `Wiredshark/fallout-test`, not `Wiredshark/star`, and that workspace was already dirty. Existing host processes were preserved.
+### Fork simulation and story validation
 
-## Remaining acceptance gates
+- workflow run #435 / run id `32605369442`: **SUCCESS**
+- focused Python validation compilation: **SUCCESS**
+- all focused story validators, including the hardened Unfettered validator: **SUCCESS**
+- A1 simulation contract tests: **SUCCESS**
+- changed fork content style: **SUCCESS**
 
-Before promotion to READY or integration, require terminal green results for the branch's exact candidate head:
+### Fork save-load integration smoke
 
-1. `Fork simulation and story validation`, including changed-content style and the focused Unfettered validator;
-2. `Fork save-load integration smoke`, including production configure/build and stock persistence smoke cases.
+- workflow run #420 / run id `32605369429`: **SUCCESS**
+- production configure: **SUCCESS**
+- production build: **SUCCESS**
+- stock save-load smoke cases: **SUCCESS**
 
-If CI reports a content/validator defect, repair on this isolated branch and rerun exact-head validation. Do not weaken the continuity invariants merely to satisfy a validator.
+## Process safety
+
+The private execution-service process inventory reported four pre-existing service-owned processes. They were preserved; no unrelated process was killed or modified. The private Fallout repository workspace was not used as Endless Sky validation authority.
 
 ## A3 / B3 integration notes
 
-- A3 should integrate only after exact-head required workflows are green.
-- The B1 Unfettered institutional history is already in the authoritative base used by this branch, so no separate dependency cherry-pick is required if A3 integrates from a descendant of base `2f12f0e...`.
-- B3 continuity review should preserve the distinction among present failure priority, emergency diversion rationale, and accumulated unfinished repair obligation.
-- Do not convert Keeper/Mechanic shorthand into formal Unfettered institutions without separate canon evidence.
+- PR #130 is suitable for A3 review/integration after rechecking current-main ancestry.
+- The B1 Unfettered institutional-history dependency is already in the historical base of this branch.
+- Do not self-integrate this B2 branch from a B2 run.
+- B3 should preserve the distinction among present failure priority, emergency-diversion rationale, accumulated deferral, and explicit closure evidence.
+- Keep all seven dialogue/state-only terminal paths as `decline` unless future content adds a real gameplay objective.
