@@ -63,14 +63,14 @@ mission "B2 Free Worlds Doctrine Revalidation Compact: Offer"
 				"B2 Free Worlds Doctrine Revalidation Compact: introduced" = 1
 				"B2 Free Worlds Doctrine Revalidation Compact: route baseline" = 1
 				"B2 Free Worlds Doctrine Revalidation Compact: ro trusts player" = 1
-			accept
+			decline
 			label current
 			`Keel opens a clean readiness sheet and records the earlier doctrine as one comparison point. Ro says, "Keep the old result visible. Forgetting the last crisis is as dangerous as obeying it blindly."`
 			action
 				"B2 Free Worlds Doctrine Revalidation Compact: introduced" = 1
 				"B2 Free Worlds Doctrine Revalidation Compact: route current" = 1
 				"B2 Free Worlds Doctrine Revalidation Compact: keel trusts player" = 1
-			accept
+			decline
 			label paired
 			`You pair the inherited doctrine with current readiness, repair backlog, traffic, threat evidence, and changed assumptions. Ro keeps institutional memory; Keel keeps the present fleet visible.`
 			action
@@ -78,7 +78,7 @@ mission "B2 Free Worlds Doctrine Revalidation Compact: Offer"
 				"B2 Free Worlds Doctrine Revalidation Compact: route paired" = 1
 				"B2 Free Worlds Doctrine Revalidation Compact: ro trusts player" = 1
 				"B2 Free Worlds Doctrine Revalidation Compact: keel trusts player" = 1
-			accept
+			decline
 			label decline
 			`Ro nods. Keel says, "A useful record does not have to become a central order."`
 			action
@@ -123,7 +123,7 @@ mission "B2 Free Worlds Doctrine Revalidation Compact: Review"
 				"B2 Free Worlds Doctrine Revalidation Compact: settlement portable doctrine packet" = 1
 				"B2 Free Worlds Doctrine Revalidation Compact: ro trusts player" = 1
 				"B2 Free Worlds Doctrine Revalidation Compact: keel trusts player" = 1
-			accept
+			decline
 			label cycle
 			`The doctrine remains durable historical guidance, but every activation records current readiness, repair margin, traffic, threat evidence, inherited assumptions, deviations, and the evidence used to renew or reject the pattern. One successful reuse closes only that activation.`
 			action
@@ -131,7 +131,7 @@ mission "B2 Free Worlds Doctrine Revalidation Compact: Review"
 				"B2 Free Worlds Doctrine Revalidation Compact: settlement revalidation cycle" = 1
 				"B2 Free Worlds Doctrine Revalidation Compact: ro trusts player" = 1
 				"B2 Free Worlds Doctrine Revalidation Compact: keel trusts player" = 1
-			accept
+			decline
 
 mission "B2 Free Worlds Doctrine Revalidation Compact: Keel Remembers"
 	minor
@@ -155,4 +155,4 @@ mission "B2 Free Worlds Doctrine Revalidation Compact: Keel Remembers"
 			label record
 			action
 				"B2 Free Worlds Doctrine Revalidation Compact: aftermath seen" = 1
-			accept
+			decline
