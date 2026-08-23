@@ -1,6 +1,6 @@
 # B2 Coalition Rescue Handoff Compact handoff
 
-Verdict: PARTIAL pending repository-native validation.
+Verdict: READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -9,6 +9,7 @@ Verdict: PARTIAL pending repository-native validation.
 - Branch: `agent/b2-coalition-rescue-handoff-compact-20260823`
 - Production commit: `266fb6466409a223a783b0a1f86575ef0dc008fd`
 - Focused validator commit: `cb4a139ee1cc002f8444ff3f500c7e147aba325e`
+- Exact fully validated production/validator/handoff candidate: `d2c3cc5518b98dd19ccc2b2ec92ad234c5a014c6`
 - Integration authority remains A3. Do not self-integrate.
 
 ## Character / dynamic-content behavior
@@ -46,16 +47,21 @@ Each substantive route schedules a delayed Review after 7-11 days. The Review re
 - Copied emergency information can expire; consent or unresolved-care state does not silently expire with it.
 - Shared rescue procedure remains distributed Coalition interoperability, not a centralized rescue government.
 
-## Validation required before READY
+## Exact validation evidence
 
-Run repository-native validation on the exact branch head:
+On exact candidate `d2c3cc5518b98dd19ccc2b2ec92ad234c5a014c6`:
 
-- `python3 tools/story/validate_b2_coalition_rescue_handoff_compact.py`
-- fork simulation/story validation workflow, including changed-content style and A1/state-ownership regressions;
-- production Endless Sky configure/build;
-- stock save-load integration smoke.
+- `Fork simulation and story validation` #496 / run `32661394572`: SUCCESS.
+  - focused Python validation compiled;
+  - all focused story validators passed, including `validate_b2_coalition_rescue_handoff_compact.py`;
+  - A1 simulation/state-ownership contract tests passed;
+  - changed-content style passed.
+- `Fork save-load integration smoke` #481 / run `32661394654`: SUCCESS.
+  - production configuration passed;
+  - production executable build passed;
+  - stock save-load smoke passed.
 
-Promote to READY only after both repository-native workflows are terminal green on an exact production/validator candidate.
+The final commit after this candidate changes this durable handoff only; production and validator behavior remain the exact fully validated candidate.
 
 ## A3 / B3 notes
 
