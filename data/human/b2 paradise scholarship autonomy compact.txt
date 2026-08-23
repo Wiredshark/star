@@ -1,0 +1,158 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Paradise Scholarship Autonomy Compact.
+# Primary domain: education / patronage / personal ambition.
+# Consumes the B1 Paradise Scholarship Trust Archive while keeping recipient
+# consent, academic judgment, donor conditions, and public recognition distinct.
+
+
+event "B2 Paradise Scholarship Autonomy Compact: Review Ready"
+	"B2 Paradise Scholarship Autonomy Compact: review ready" = 1
+
+
+mission "B2 Paradise Scholarship Autonomy Compact: Offer"
+	minor
+	name `The Name on the Grant`
+	description `A scholarship recipient and an admissions officer disagree over how much authority a donor condition should carry after an award is made.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "Paradise Scholarship Trust Archive: offered"
+		not "B2 Paradise Scholarship Autonomy Compact: introduced"
+		not "B2 Paradise Scholarship Autonomy Compact: declined"
+	on offer
+		conversation
+			`Leonie Harrow, an admissions officer from a Paradise university, asks you to join a conversation that has already become more personal than administrative. Across from her sits Darin Vale, a scholarship recipient whose grant pays for orbital engineering study.`
+			`The endowment that funds Darin's award was created by a prominent family. Its published terms favor engineering students, but a later donor representative has begun asking recipients to appear at foundation events, accept assigned mentors, and publicly credit the family network when discussing their work. Darin says none of those expectations were part of the award he accepted.`
+			`Leonie says the university needs donor support and cannot pretend founder intent is meaningless. Darin says a scholarship can recognize a donor without purchasing a student's future voice. Both ask where the boundary belongs.`
+			choice
+				`\tBack recipient autonomy: the award may fund a field of study, but new speech, career, or publicity obligations require fresh consent.`
+					goto autonomy
+				`\tAllow bounded donor conditions: specific, disclosed, prospective terms can matter, but they cannot be added retroactively or enforced through unrelated academic penalties.`
+					goto bounded
+				`\tSeparate the layers: keep academic selection, financial award terms, donor recognition, mentorship, and publicity consent as distinct records.`
+					goto layered
+				`\tDecline to turn one scholarship dispute into a general rule.`
+					goto decline
+			label autonomy
+			`You tell Leonie that accepting tuition support is not blanket consent to become a spokesperson. Darin agrees to acknowledge the endowment in ordinary university records, but says public appearances and career-network obligations should remain voluntary unless a future award states them clearly before acceptance.`
+			action
+				"B2 Paradise Scholarship Autonomy Compact: introduced" = 1
+				"B2 Paradise Scholarship Autonomy Compact: route autonomy" = 1
+				"B2 Paradise Scholarship Autonomy Compact: darin trusts player" = 1
+				event "B2 Paradise Scholarship Autonomy Compact: Review Ready" 7 11
+				decline
+			label bounded
+			`You tell Darin that a donor may define the purpose of a future award, but the terms must be specific enough to accept or reject knowingly. Leonie adds that no donor condition should quietly become a grade, admissions, or disciplinary rule after the fact. Darin does not love the compromise, but he says at least it has an edge he can see.`
+			action
+				"B2 Paradise Scholarship Autonomy Compact: introduced" = 1
+				"B2 Paradise Scholarship Autonomy Compact: route bounded" = 1
+				"B2 Paradise Scholarship Autonomy Compact: leonie trusts player" = 1
+				event "B2 Paradise Scholarship Autonomy Compact: Review Ready" 7 11
+				decline
+			label layered
+			`You suggest that the university stop compressing several kinds of authority into one scholarship file. Admissions can remain an academic judgment. The award can state financial terms. Donor recognition can be recorded separately. Mentorship and public appearances can each carry their own consent and expiry. Leonie begins rewriting the form before the conversation ends.`
+			action
+				"B2 Paradise Scholarship Autonomy Compact: introduced" = 1
+				"B2 Paradise Scholarship Autonomy Compact: route layered" = 1
+				"B2 Paradise Scholarship Autonomy Compact: darin trusts player" = 1
+				"B2 Paradise Scholarship Autonomy Compact: leonie trusts player" = 1
+				event "B2 Paradise Scholarship Autonomy Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that one visiting captain should not define the relationship between every donor, university, and student on Paradise. Leonie accepts that. Darin says he would rather keep arguing locally than win a rule nobody consented to.`
+			action
+				"B2 Paradise Scholarship Autonomy Compact: declined" = 1
+				decline
+
+
+mission "B2 Paradise Scholarship Autonomy Compact: Review"
+	minor
+	name `When the Template Travels`
+	description `Return after Leonie and Darin test whether scholarship conditions can survive copying without becoming broader authority than anyone accepted.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Paradise Scholarship Autonomy Compact: introduced"
+		has "B2 Paradise Scholarship Autonomy Compact: review ready"
+		not "B2 Paradise Scholarship Autonomy Compact: reviewed"
+	on offer
+		conversation
+			branch autonomy
+				has "B2 Paradise Scholarship Autonomy Compact: route autonomy"
+			branch bounded
+				has "B2 Paradise Scholarship Autonomy Compact: route bounded"
+			`Leonie shows you three scholarship forms copied by different departments. Each is technically based on the same arrangement, yet one treats donor recognition as mandatory publicity, another treats an assigned mentor as academic supervision, and a third has turned a voluntary networking event into a renewal expectation. Darin says the wording did not become more legitimate merely because it was copied.`
+				goto settle
+			label autonomy
+			`The university respected Darin's refusal to appear at donor events, but another department copied the award template and removed the line explaining that publicity was voluntary. Leonie says the problem is no longer the donor's request; it is that a downstream form preserved the obligation and lost the consent boundary.`
+				goto settle
+			label bounded
+			`A new recipient accepted a clearly stated mentorship condition, but a department chair later treated the same condition as authority over course selection. Darin points out that a bounded condition only stays bounded if copies preserve its scope, duration, and the decisions it does not control.`
+			label settle
+			choice
+				`\tCreate a portable scholarship charter: funding source, academic criteria, donor conditions, consent, duration, review points, and excluded authorities travel together.`
+					goto charter
+				`\tCreate an admissions firewall with periodic renewal: academic selection remains independent, while donor conditions expire unless a recipient knowingly renews them for the next award period.`
+					goto firewall
+			label charter
+			`You recommend a scholarship charter that cannot be reduced to the donor's name and a list of obligations. Every copy carries who selected the student, what the award funds, which conditions were disclosed before acceptance, what the recipient actually consented to, when those conditions expire, and which academic or career decisions remain outside donor authority.`
+			action
+				"B2 Paradise Scholarship Autonomy Compact: reviewed" = 1
+				"B2 Paradise Scholarship Autonomy Compact: settlement portable scholarship charter" = 1
+				"B2 Paradise Scholarship Autonomy Compact: darin trusts player" = 1
+				decline
+			label firewall
+			`You recommend a harder separation. Admissions boards decide academic eligibility without donor instructions. Award conditions are attached only after selection, remain visible to the recipient, and expire at the end of the stated period unless renewed by fresh agreement. A donor can stop funding a future award, but cannot quietly convert yesterday's gift into permanent authority over a student's education.`
+			action
+				"B2 Paradise Scholarship Autonomy Compact: reviewed" = 1
+				"B2 Paradise Scholarship Autonomy Compact: settlement admissions firewall and renewal" = 1
+				"B2 Paradise Scholarship Autonomy Compact: leonie trusts player" = 1
+				"B2 Paradise Scholarship Autonomy Compact: darin trusts player" = 1
+				decline
+
+
+mission "B2 Paradise Scholarship Autonomy Compact: Darin Remembers"
+	minor
+	name `Darin Remembers`
+	description `Darin Vale remembers whether a scholarship remained support for his education or became authority over choices he never agreed to surrender.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Paradise Scholarship Autonomy Compact: aftermath seen"
+		or
+			has "B2 Paradise Scholarship Autonomy Compact: settlement portable scholarship charter"
+			has "B2 Paradise Scholarship Autonomy Compact: settlement admissions firewall and renewal"
+	on offer
+		conversation
+			branch firewall
+				has "B2 Paradise Scholarship Autonomy Compact: settlement admissions firewall and renewal"
+			`Darin shows you a new scholarship notice. The donor's name is still prominent, but so are the academic selection criteria, the conditions he accepted, the conditions he refused, and the date each consent expires. "They can still ask," he says. "Now asking does not look like authority just because the paper has a famous name on it."`
+				goto finish
+			label firewall
+			`Darin has renewed the financial award but declined the foundation's mentorship program for the next term. The university recorded both decisions without touching his academic standing. Leonie later tells you that some donors dislike the separation, but applicants finally know which institution is making which decision.`
+			label finish
+			action
+				"B2 Paradise Scholarship Autonomy Compact: aftermath seen" = 1
+				decline
