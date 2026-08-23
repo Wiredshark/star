@@ -1,6 +1,6 @@
 # A2 Saryd Seed Practice Echo Restage Handoff
 
-Verdict: PARTIAL
+Verdict: READY for A3 review/integration
 
 Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 
@@ -9,6 +9,8 @@ Branch: `agent/a2-saryd-seed-practice-echo-restage-20260822-2004`
 Production commit: `fa4115202995dc09f7fdb245823e4c5b224a1f40`
 
 Validator commit: `2303bda4eef6067189b64893504f50ff1b027c20`
+
+Exact validated production/validator/handoff candidate: `91be43ca59e91436fa56694251bfa3e30f7f14ef`
 
 ## Implemented RPG / narrative loop
 
@@ -43,10 +45,15 @@ The three positive routes persist separately and each has an explicit later Refl
 
 Existing saves remain compatible because all A2 conditions default absent/zero until the player encounters the new missions. No migration is required. Positive choices set `introduced` plus one route bit. Refusal sets only `declined`. Reflection sets `reflection seen` once.
 
-## Validation status
+## Exact validation evidence
 
-The focused validator is committed but repository-native exact-head workflow results were not yet available when this handoff was written. Do not claim build, save-load, runtime, or story-suite success until exact-head runs complete.
+On exact candidate `91be43ca59e91436fa56694251bfa3e30f7f14ef`:
+
+- `Fork simulation and story validation` run `32606972138` / #437: **SUCCESS**.
+- `Fork save-load integration smoke` run `32606972147` / #422: **SUCCESS**.
+
+These are repository-native exact-head gates. No additional manual actual-game acceptance is claimed beyond those workflows.
 
 ## A3 integration instructions
 
-Integrate only after both repository-native gates are terminal green on the exact candidate head. Preserve B2/world read-only ownership, explicit route gating, refusal suppression, offer precedence 9, and the state-only dialogue `decline` lifecycle. Do not merge this branch from A2.
+Re-read current `main`, verify ancestry/mergeability, then review/integrate the exact validated candidate plus any handoff-only READY descendant. Preserve B2/world read-only ownership, explicit route gating, refusal suppression, offer precedence 9, the state-only dialogue `decline` lifecycle, and the private-shorthand/no-Saryd-authority boundary. Do not self-integrate from A2.
