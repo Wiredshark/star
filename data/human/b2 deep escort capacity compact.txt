@@ -1,0 +1,157 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Deep Escort Capacity Compact.
+#
+# Consumes B1's Deep Research Convoy Reserve Ledger. The compact preserves the
+# historical distinction between a convoy arriving safely and the patrol, rescue,
+# inspection, or maintenance capacity borrowed to make that escort possible.
+# It remains practical coordination among Deep Security, laboratories, and
+# civilian captains rather than evidence of unlimited reserve capacity.
+
+
+mission "B2 Deep Escort Capacity Compact: Offer"
+	minor
+	name `The Escort That Came From Somewhere Else`
+	description `Deep Security liaison Mara Kest and civilian convoy coordinator Elias Trent disagree over how research escorts should account for the work displaced when scarce ships are reassigned.`
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	to offer
+		has "Deep Research Convoy Reserve Ledger: offered"
+		not "B2 Deep Escort Capacity Compact: introduced"
+		not "B2 Deep Escort Capacity Compact: declined"
+	on offer
+		conversation
+			`Mara Kest, a Deep Security liaison, is comparing an escort roster against a stack of delayed patrol and inspection reports. Beside her, Elias Trent, who coordinates civilian convoy captains, has marked several research shipments as delivered on time.`
+			`Trent taps the completed convoy list. "The laboratories got what they needed. That matters."`
+			`Kest points to the other screen. "So does the rescue patrol that sailed short-handed, the inspection that moved two days, and the maintenance window we borrowed from next week."`
+			`The old Deep convoy reserve records treated borrowed escort capacity as an obligation rather than free reinforcement. Kest and Trent agree on the history; they disagree on what a present-day dispatch record should make impossible to forget.`
+			choice
+				`\tBack Kest: every reassigned escort should preserve the displaced patrol, rescue, inspection, or maintenance obligation until it is restored.`
+					goto obligation
+				`\tBack Trent: prioritize the immediate convoy outcome, but record the actual replacement plan and deadline for restoring the borrowed capacity.`
+					goto outcome
+				`\tPair both: carry convoy result, borrowed source, displaced duty, replacement plan, and restoration status in one linked record.`
+					goto paired
+				`\tTell them escort allocation should remain case-by-case rather than becoming another standing compact.`
+					goto decline
+			label obligation
+			`You side with Kest. A successful convoy should not erase the patrol, rescue, inspection, or maintenance duty that was displaced to make it possible. Trent accepts the rule so long as the record can distinguish a genuinely restored obligation from one that merely changed hands again.`
+			action
+				"B2 Deep Escort Capacity Compact: introduced" = 1
+				"B2 Deep Escort Capacity Compact: route obligation" = 1
+				"B2 Deep Escort Capacity Compact: kest trusts player" = 1
+			decline
+			label outcome
+			`You side with Trent. The immediate mission still matters: a time-sensitive research convoy cannot be treated as a failure merely because it consumed scarce capacity. Kest agrees, provided each reassignment names what was borrowed, who now owns the displaced duty, and when restoration is due.`
+			action
+				"B2 Deep Escort Capacity Compact: introduced" = 1
+				"B2 Deep Escort Capacity Compact: route outcome" = 1
+				"B2 Deep Escort Capacity Compact: trent trusts player" = 1
+			decline
+			label paired
+			`You recommend a paired record. Each escorted research shipment carries its outcome, the unit or civilian capacity borrowed, the patrol or rescue work displaced, the replacement plan, and whether that capacity was actually restored afterward. Kest says, "Then success stays visible without making its cost disappear." Trent nods. "And cost stays visible without pretending the convoy was a mistake."`
+			action
+				"B2 Deep Escort Capacity Compact: introduced" = 1
+				"B2 Deep Escort Capacity Compact: route paired" = 1
+				"B2 Deep Escort Capacity Compact: kest trusts player" = 1
+				"B2 Deep Escort Capacity Compact: trent trusts player" = 1
+			decline
+			label decline
+			`You tell them Deep captains and security officers have always survived by adapting to the immediate problem, and a formal compact could become stale faster than the threat picture changes. Kest accepts the objection. Trent adds, "Then at least don't let a completed convoy become proof that nothing else was postponed."`
+			action
+				"B2 Deep Escort Capacity Compact: declined" = 1
+			decline
+
+
+mission "B2 Deep Escort Capacity Compact: Review"
+	minor
+	name `When the Borrowed Patrol Never Comes Back`
+	description `Return after several research convoys and decide how Deep records should distinguish a successful escort from a fully restored reserve.`
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	to offer
+		has "B2 Deep Escort Capacity Compact: introduced"
+		not "B2 Deep Escort Capacity Compact: reviewed"
+	on offer
+		conversation
+			branch obligation
+				has "B2 Deep Escort Capacity Compact: route obligation"
+			branch outcome
+				has "B2 Deep Escort Capacity Compact: route outcome"
+			`Kest and Trent have compared several copied escort records. The paired format survived, but some downstream copies kept the convoy result and dropped the displaced duty; others kept the obligation but lost whether the replacement patrol was ever staffed. A chain of individually reasonable reassignments has started to look like reserve capacity that exists only on paper.`
+			`Kest says, "A convoy arriving safely is an event. A restored reserve is a condition." Trent adds, "And a replacement promise is not the same thing as a patrol actually sailing."`
+			choice
+				`\tUse a portable capacity packet that carries outcome, borrowed source, displaced duty, replacement owner, deadline, and verified restoration status together.`
+					goto packet
+				`\tUse a reconciliation cycle that periodically compares completed escorts against patrol, rescue, inspection, and maintenance obligations still left open.`
+					goto reconcile
+			label obligation
+			`The obligation-first approach preserved displaced duties, but copied records sometimes accumulated obligations without showing that some had already been restored. Trent points to three entries for what turned out to be the same patrol deficit passed between different units.`
+			choice
+				`\tCarry outcome, obligation identity, replacement owner, and verified restoration in one portable capacity packet.`
+					goto packet
+				`\tKeep dispatch and reserve records separate, but reconcile them on a recurring cycle before old obligations can be closed.`
+					goto reconcile
+			label outcome
+			`The outcome-first approach kept urgent science moving, but some copied convoy summaries made borrowed capacity look like free capacity once the shipment was complete. Kest points to a rescue rotation that was deferred three times because each replacement assumed the previous one had restored it.`
+			choice
+				`\tUse a portable capacity packet so every successful convoy carries the reserve debt and verified restoration state downstream.`
+					goto packet
+				`\tUse a recurring reconciliation cycle so completed convoys and open reserve obligations are compared before the system declares itself recovered.`
+					goto reconcile
+			label packet
+			`You recommend a portable capacity packet. Every copied escort record carries the convoy outcome, the source of the borrowed capacity, the displaced patrol or rescue duty, the responsible replacement owner, the restoration deadline, and whether the capacity was actually restored. Kest says, "Then a safe arrival cannot counterfeit a healthy reserve." Trent replies, "And a reserve debt cannot erase the fact that the convoy succeeded."`
+			action
+				"B2 Deep Escort Capacity Compact: reviewed" = 1
+				"B2 Deep Escort Capacity Compact: settlement packet" = 1
+				"B2 Deep Escort Capacity Compact: kest trusts player" = 1
+			decline
+			label reconcile
+			`You recommend a reconciliation cycle. Convoy results remain in the dispatch record; patrol, rescue, inspection, and maintenance deficits remain in a separate reserve ledger. At fixed review points the two are compared, and an obligation closes only when replacement capacity is verified rather than merely reassigned again. Trent says, "That keeps today's success honest." Kest answers, "And tomorrow's readiness real."`
+			action
+				"B2 Deep Escort Capacity Compact: reviewed" = 1
+				"B2 Deep Escort Capacity Compact: settlement reconcile" = 1
+				"B2 Deep Escort Capacity Compact: trent trusts player" = 1
+			decline
+
+
+mission "B2 Deep Escort Capacity Compact: Kest Remembers"
+	minor
+	name `Kest Remembers`
+	description `Mara Kest remembers how the Deep learned to keep convoy success and restored reserve capacity from collapsing into the same claim.`
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	to offer
+		not "B2 Deep Escort Capacity Compact: aftermath seen"
+		or
+			has "B2 Deep Escort Capacity Compact: settlement packet"
+			has "B2 Deep Escort Capacity Compact: settlement reconcile"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Deep Escort Capacity Compact: settlement reconcile"
+			`Kest shows you a research convoy record that traveled through four offices. The shipment arrived on time. Beside that success are the escort source, one deferred inspection, a borrowed rescue slot, the replacement owner, and the date both obligations were actually restored. "Nothing here says the escort was free," she says. "It says what it cost, and whether we paid that cost back."`
+			goto record
+			label reconcile
+			`Kest shows you two linked summaries from the latest review cycle. One lists completed research escorts. The other lists patrol, rescue, inspection, and maintenance deficits still open after those escorts. Several have cleared; one has not. "A finished convoy is not the same thing as a recovered reserve," she says.`
+			label record
+			action
+				"B2 Deep Escort Capacity Compact: aftermath seen" = 1
+			decline
