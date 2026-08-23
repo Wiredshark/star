@@ -1,0 +1,179 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Career Principle Stress Test.
+#
+# This character sequel consumes A2 Career Review memory and A1's authoritative
+# Republic border-pressure signal read-only. It treats a prior command principle
+# as remembered evidence about the player, not permanent doctrine or authority.
+
+
+event "B2 Career Principle Stress Test: Review Ready"
+	"B2 Career Principle Stress Test: review ready" = 1
+
+
+mission "B2 Career Principle Stress Test: Offer"
+	minor
+	name `Pilot Guild: A Principle Under Pressure`
+	description `Nia Calder asks you to help a newer independent captain decide how much weight an earlier command principle should carry during a Republic border slowdown.`
+	source
+		government "Republic"
+		not attributes "station"
+	to offer
+		has "A2 Career Review: later reader seen"
+		or
+			has "A2 Career Review: principle margin"
+			has "A2 Career Review: principle force"
+			has "A2 Career Review: principle options"
+		"world: republic border pressure" >= 4
+		not "B2 Career Principle Stress Test: introduced"
+		not "B2 Career Principle Stress Test: declined"
+	on offer
+		conversation
+			`Nia Calder spots you near a departure board that has been revised often enough to show pale rectangles where older notices were removed. Beside her is Rafi Sorn, a younger independent captain whose ship has spent three days cycling through inspections, route changes, and uncertain departure windows.`
+			`"I remembered what you told me about command," Calder says. "Rafi has read the same line in one of my anonymized teaching notes. The problem is that a principle which sounded useful in a quiet room can become an excuse when conditions get noisy."`
+			branch margin
+				has "A2 Career Review: principle margin"
+			branch force
+				has "A2 Career Review: principle force"
+			`Sorn turns the note toward you. The copied line says: keep options open. "I understand the sentence," he says. "I do not know when preserving options becomes indecision."`
+				goto question
+			label margin
+			`Sorn turns the note toward you. The copied line says: protect the margin. "I understand the sentence," he says. "I do not know whether a reserve is still a reserve when every delay is consuming it."`
+				goto question
+			label force
+			`Sorn turns the note toward you. The copied line says that force is justified when it prevents a worse loss. "I understand the sentence," he says. "I do not know how to use it when the pressure is administrative rather than hostile."`
+			label question
+			`Calder says, "That is the test. Your old answer is evidence about how one experienced captain thinks. It is not an order for another captain, and the current border pressure is not the same situation in which you first described it."`
+			choice
+				`\tKeep the original principle as the default unless current evidence clearly shows that it no longer fits.`
+					goto default
+				`\tKeep the principle, but attach an explicit exception and review trigger whenever current conditions force a departure from it.`
+					goto exception
+				`\tTreat the principle as a hypothesis: record what the present situation actually rewards or punishes, then revise the principle if the evidence warrants it.`
+					goto hypothesis
+				`\tRefuse to let one captain's old self-description become a template for somebody else's decisions.`
+					goto decline
+			label default
+			`You tell Sorn that a principle is useful partly because it prevents every stressful day from becoming a new personality. Keep it as the default, you say, but do not confuse familiarity with proof. Calder writes "default, not command" beside the old note.`
+			action
+				"B2 Career Principle Stress Test: introduced" = 1
+				"B2 Career Principle Stress Test: route default" = 1
+				"B2 Career Principle Stress Test: calder trusts player" = 1
+				event "B2 Career Principle Stress Test: Review Ready" 7 11
+			decline
+			label exception
+			`You tell Sorn to preserve the principle and make every exception legible: what changed, who decided, what risk justified the deviation, and when the exception should be reviewed. Sorn says that sounds less like abandoning a principle and more like preventing a temporary workaround from rewriting it silently.`
+			action
+				"B2 Career Principle Stress Test: introduced" = 1
+				"B2 Career Principle Stress Test: route explicit exception" = 1
+				"B2 Career Principle Stress Test: sorn trusts player" = 1
+				event "B2 Career Principle Stress Test: Review Ready" 7 11
+			decline
+			label hypothesis
+			`You tell Sorn the principle should earn its continued use. Record the current pressure, the available options, the decision, and what happened next. Calder nods. "A principle can be durable without being immune to evidence."`
+			action
+				"B2 Career Principle Stress Test: introduced" = 1
+				"B2 Career Principle Stress Test: route hypothesis" = 1
+				"B2 Career Principle Stress Test: calder trusts player" = 1
+				"B2 Career Principle Stress Test: sorn trusts player" = 1
+				event "B2 Career Principle Stress Test: Review Ready" 7 11
+			decline
+			label decline
+			`You tell Calder that your old answer belonged to your record, not Sorn's. Calder closes the teaching note. "Fair. If the lesson cannot survive the difference between two captains, it was never a lesson."`
+			action
+				"B2 Career Principle Stress Test: declined" = 1
+			decline
+
+
+mission "B2 Career Principle Stress Test: Review"
+	minor
+	name `Pilot Guild: What the Principle Missed`
+	description `Return after Republic border pressure recedes and decide how Calder should preserve the relationship between remembered command principles and current evidence.`
+	source
+		government "Republic"
+		not attributes "station"
+	to offer
+		has "B2 Career Principle Stress Test: introduced"
+		has "B2 Career Principle Stress Test: review ready"
+		"world: republic border pressure" <= 2
+		not "B2 Career Principle Stress Test: reviewed"
+	on offer
+		conversation
+			branch default
+				has "B2 Career Principle Stress Test: route default"
+			branch exception
+				has "B2 Career Principle Stress Test: route explicit exception"
+			`Calder and Sorn have compared the original teaching note against Sorn's actual decisions during the slowdown. The border pressure has eased, but their records disagree in useful ways: one copied summary preserves the principle without the conditions that limited it, while another preserves the exception without explaining what it was an exception to.`
+			`Sorn says, "Nothing in either copy is false. Put them together and the missing context matters more than the sentence that survived." Calder adds, "That is exactly how advice hardens into doctrine by accident."`
+			choice
+				`\tUse a portable command-rationale packet: principle, source, present conditions, exception or revision, observed outcome, uncertainty, and review point travel together.`
+					goto packet
+				`\tUse a revalidation cycle: old principles remain historical evidence, but every major pressure phase requires a current decision record before the principle is treated as active guidance.`
+					goto revalidate
+			label default
+			`The default kept Sorn from improvising wildly, but one copied assessment now reads as though the old principle itself proved the later decision correct. Calder underlines the problem: a useful default became stronger on paper simply because its source conditions were omitted.`
+			choice
+				`\tCarry the principle and the evidence that bounded its use as one portable rationale packet.`
+					goto packet
+				`\tKeep the old principle in history and require explicit revalidation before each new high-pressure use.`
+					goto revalidate
+			label exception
+			`The explicit exception worked operationally, but one downstream copy retained only the exception and not the principle it temporarily displaced. Sorn says that an exception without its baseline is just another unexplained rule.`
+			choice
+				`\tCarry baseline, exception, reason, outcome, and review point together.`
+					goto packet
+				`\tRequire current revalidation so neither baseline nor exception inherits authority automatically.`
+					goto revalidate
+			label packet
+			`You recommend a portable command-rationale packet. Calder keeps the original principle and who said it, the current conditions that made it relevant, any exception or revision, the evidence observed afterward, unresolved uncertainty, and the point at which the guidance should be reviewed again. A copied conclusion can no longer travel farther than the context that gives it meaning.`
+			action
+				"B2 Career Principle Stress Test: reviewed" = 1
+				"B2 Career Principle Stress Test: settlement portable rationale" = 1
+				"B2 Career Principle Stress Test: calder trusts player" = 1
+				"B2 Career Principle Stress Test: sorn trusts player" = 1
+			decline
+			label revalidate
+			`You recommend a revalidation cycle. Calder keeps old principles as historical evidence, not standing orders. When a new period of serious pressure begins, the current captain records the present facts, decides whether the old principle still fits, and states any revision explicitly. Repetition of one old note never counts as independent corroboration.`
+			action
+				"B2 Career Principle Stress Test: reviewed" = 1
+				"B2 Career Principle Stress Test: settlement revalidation cycle" = 1
+				"B2 Career Principle Stress Test: calder trusts player" = 1
+				"B2 Career Principle Stress Test: sorn trusts player" = 1
+			decline
+
+
+mission "B2 Career Principle Stress Test: Sorn Remembers"
+	minor
+	name `Sorn Remembers`
+	description `Rafi Sorn remembers what he learned about using another captain's command principle without turning it into inherited authority.`
+	source
+		government "Republic"
+		not attributes "station"
+	to offer
+		not "B2 Career Principle Stress Test: aftermath seen"
+		or
+			has "B2 Career Principle Stress Test: settlement portable rationale"
+			has "B2 Career Principle Stress Test: settlement revalidation cycle"
+	on offer
+		conversation
+			branch cycle
+				has "B2 Career Principle Stress Test: settlement revalidation cycle"
+			`Sorn shows you a later decision record. The first line contains the principle he started from. The lines beneath it record why the current situation was similar, where it differed, what he changed, and what evidence would make him revisit the choice. "It is still useful," he says. "It just is not allowed to become true because somebody copied it."`
+				goto record
+			label cycle
+			`Sorn shows you two records from different months. The same old principle appears in both, but each begins with a fresh statement of current conditions and a separate decision about whether the principle still applies. "Calder stopped calling them answers," he says. "She calls them things worth testing again."`
+			label record
+			action
+				"B2 Career Principle Stress Test: aftermath seen" = 1
+			decline
