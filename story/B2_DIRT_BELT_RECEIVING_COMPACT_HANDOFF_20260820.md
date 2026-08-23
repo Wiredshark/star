@@ -2,18 +2,18 @@
 
 ## Verdict
 
-PARTIAL pending terminal repository-native validation on the lifecycle-repaired candidate.
+READY for A3 review/integration.
 
 ## Authority and isolation
 
 - Repository: `Wiredshark/star`
 - Historical branch base: `fdaf94f18aaa02abd4e7269196375572cd0fdf9b`
-- Current authoritative `main` must be re-read by A3 before integration.
+- Current authoritative `main` observed/rechecked during this recovery: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated branch: `agent/b2-dirt-belt-receiving-compact-20260820-0527`
 - Original production commit: `d47f6d2de4c351e27c0d4bdd703afbf73558432f`
 - Original focused-validator commit: `2fe61838d4995777bd3cec8b4a3ac0c98d5a1fb9`
 - Lifecycle production repair: `6062d9966677790eb2d67d2dfd43dbde9543dadb`
-- Lifecycle validator hardening / exact candidate before this handoff update: `ac87e85eb614c546f57b3a2db8b9535924f498c7`
+- Lifecycle validator hardening / exact fully validated candidate: `ac87e85eb614c546f57b3a2db8b9535924f498c7`
 
 B2 does not self-integrate. A3 retains integration authority.
 
@@ -46,7 +46,7 @@ These three missions only persist story state and create no destination, cargo, 
 
 The lifecycle repair changes the six positive terminal paths to `decline`; refusal already used `decline`. All **7/7 state-only terminal paths** now persist the exact same existing state and close cleanly.
 
-The focused validator now requires:
+The focused validator requires:
 
 - zero terminal `accept` commands;
 - exactly seven terminal `decline` commands;
@@ -73,16 +73,18 @@ The focused validator now requires:
 
 ## Validation state
 
-Exact lifecycle-repaired candidate `ac87e85eb614c546f57b3a2db8b9535924f498c7` automatically triggered the repository-native validation workflows. At this handoff update:
+Exact lifecycle-repaired candidate `ac87e85eb614c546f57b3a2db8b9535924f498c7` is terminal green on the required repository-native gates:
 
-- `Fork simulation and story validation` run `32625569036` / #462: IN PROGRESS;
-- `Fork save-load integration smoke` run `32625569032` / #447: PENDING.
+- `Fork simulation and story validation` run `32625569036` / #462: **SUCCESS**;
+- `Fork save-load integration smoke` run `32625569032` / #447, rerun attempt 2: **SUCCESS**;
+- production configure/build inside the save-load workflow: **SUCCESS**;
+- stock save-load smoke cases: **SUCCESS**.
 
-Do not promote to READY until both exact-candidate workflows reach terminal SUCCESS.
+The first save-load attempt was cancelled during dependency installation; the cancelled job was rerun directly and the second attempt completed successfully. No test PASS is inferred from the cancelled attempt.
 
 ## A3/B3 integration notes
 
-This branch is historical relative to current integration state. Even if GitHub reports it mergeable, A3 must recover current `main`, inspect ancestry/conflicts, and integrate conservatively.
+This branch is historical relative to current integration state. Exact comparison against current `main` `a17a89fb4779200a0634a6dade1811c4dc9cc2be` shows the branch is 6 commits ahead / 51 behind, with merge base `fdaf94f18aaa02abd4e7269196375572cd0fdf9b`. Even though GitHub currently reports the PR mergeable, A3 must recover current `main`, inspect ancestry/conflicts, and integrate conservatively.
 
 Preserve this core semantic boundary during later edits:
 
