@@ -1,0 +1,106 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+mission "A2 Sheragi Evidence Practice: Reflection"
+	landing
+	minor
+	invisible
+	source
+		government "Republic"
+	offer precedence 9
+	to offer
+		has "Sheragi Archaeology: Epilogue: done"
+		not "A2 Sheragi Evidence Practice: resolved"
+		not "A2 Sheragi Evidence Practice: refused"
+		random < 30
+	on offer
+		conversation
+			`A university terminal summarizes several procedures that grew around the long Sheragi investigation: preserve where evidence came from, keep interpretation separate from observation, record the context around an artifact, and distinguish an original object from copies, scans, translations, and later reconstructions.`
+			`The summary does not present these habits as Sheragi doctrine. They are modern human and Hai responses to the difficulty of studying a vanished civilization whose surviving evidence often changed hands, meanings, and contexts before anyone understood its importance.`
+			choice
+				`Carry forward a provenance-first practice: ask where a claim came from and what happened to the evidence on the way.`
+					goto provenance
+				`Carry forward a context-first practice: preserve surroundings, competing readings, and uncertainty before compressing them into a conclusion.`
+					goto context
+				`Carry forward a revision-first practice: keep originals and earlier interpretations available so later evidence can overturn you cleanly.`
+					goto revision
+				`Keep the Sheragi case local. Do not turn one archaeological history into a universal rule.`
+					goto local
+				`Refuse to adopt a standing evidence practice from this case.`
+					goto refuse
+			label provenance
+			`You make a private note that a persuasive claim is weaker when its chain of custody, transformations, or source record cannot be reconstructed.`
+			action
+				"A2 Sheragi Evidence Practice: resolved" = 1
+				"A2 Sheragi Evidence Practice: provenance" = 1
+			decline
+			label context
+			`You make a private note that evidence can lose meaning when detached from place, competing translations, or the uncertainty surrounding its discovery.`
+			action
+				"A2 Sheragi Evidence Practice: resolved" = 1
+				"A2 Sheragi Evidence Practice: context" = 1
+			decline
+			label revision
+			`You make a private note that revision works best when new conclusions do not erase the observations and interpretations they replaced.`
+			action
+				"A2 Sheragi Evidence Practice: resolved" = 1
+				"A2 Sheragi Evidence Practice: revision" = 1
+			decline
+			label local
+			`You leave the procedures attached to their own archaeological history rather than borrowing them as a general rule.`
+			action
+				"A2 Sheragi Evidence Practice: resolved" = 1
+				"A2 Sheragi Evidence Practice: local" = 1
+			decline
+			label refuse
+			`You decline to turn this archaeological history into a standing practice. The record remains available as evidence and context, not as authority you have accepted.`
+			action
+				"A2 Sheragi Evidence Practice: refused" = 1
+			decline
+
+mission "A2 Sheragi Evidence Practice: Later Reflection"
+	landing
+	minor
+	invisible
+	source
+		government "Republic"
+	offer precedence 9
+	to offer
+		has "Sheragi Archaeology: Epilogue: done"
+		has "A2 Sheragi Evidence Practice: resolved"
+		not "A2 Sheragi Evidence Practice: reflection seen"
+		not "A2 Sheragi Evidence Practice: refused"
+		random < 36
+	on offer
+		conversation
+			branch provenance
+				has "A2 Sheragi Evidence Practice: provenance"
+				`Later, a research brief reaches you with a striking conclusion assembled from copied scans and several layers of transcription. Your private practice does not tell you the conclusion is wrong; it tells you to ask which source produced each layer and whether the path between them can still be reconstructed.`
+				goto done
+			branch context
+				has "A2 Sheragi Evidence Practice: context"
+				`Later, two researchers agree about an artifact's composition but disagree about what it meant. Your private practice keeps you from treating the object in isolation: its location, neighboring material, and competing translations become part of the evidence rather than background detail.`
+				goto done
+			branch revision
+				has "A2 Sheragi Evidence Practice: revision"
+				`Later, a confident interpretation is challenged by a newly recovered record. Your private practice makes the dispute easier to inspect because the earlier observation, old interpretation, and new evidence can remain visible together instead of one silently replacing another.`
+				goto done
+			branch local
+				has "A2 Sheragi Evidence Practice: local"
+				`Later, a researcher invokes the Sheragi investigation as a reason to adopt a particular archival procedure. Because you kept that history local, you treat the analogy as context rather than borrowed authority and judge the new case on its own evidence.`
+				goto done
+			label done
+			`Nothing in the exchange makes you an archaeologist, curator, Hai official, or representative of the people who developed these modern practices. The lesson remains a private habit, and every new claim remains answerable to its own evidence.`
+			action
+				"A2 Sheragi Evidence Practice: reflection seen" = 1
+			decline
