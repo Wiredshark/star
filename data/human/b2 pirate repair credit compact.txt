@@ -44,14 +44,14 @@ mission "B2 Pirate Repair Credit Compact: Offer"
 				"B2 Pirate Repair Credit Compact: introduced" = 1
 				"B2 Pirate Repair Credit Compact: route provenance" = 1
 				"B2 Pirate Repair Credit Compact: quell trusts player" = 1
-			accept
+			decline
 			label current
 			`You allow the marker to be traded at a current settlement value, provided the transfer records what changed from the original bargain and does not pretend a new price was the old promise. Daro likes the flexibility; Quell insists the old terms remain visible.`
 			action
 				"B2 Pirate Repair Credit Compact: introduced" = 1
 				"B2 Pirate Repair Credit Compact: route current" = 1
 				"B2 Pirate Repair Credit Compact: daro trusts player" = 1
-			accept
+			decline
 			label paired
 			`You split the problem. The original repair obligation remains an immutable provenance record. A separate current settlement record can change hands, value, or repayment method, but every copy links back to the bargain that created it.`
 			action
@@ -59,7 +59,7 @@ mission "B2 Pirate Repair Credit Compact: Offer"
 				"B2 Pirate Repair Credit Compact: route paired" = 1
 				"B2 Pirate Repair Credit Compact: quell trusts player" = 1
 				"B2 Pirate Repair Credit Compact: daro trusts player" = 1
-			accept
+			decline
 			label decline
 			`You leave the dispute to the yard and crew. No standing procedure is adopted, and the case does not enter the later review chain.`
 			action
@@ -108,7 +108,7 @@ mission "B2 Pirate Repair Credit Compact: Review"
 				"B2 Pirate Repair Credit Compact: settlement portable obligation packet" = 1
 				"B2 Pirate Repair Credit Compact: quell trusts player" = 1
 				"B2 Pirate Repair Credit Compact: daro trusts player" = 1
-			accept
+			decline
 			label reconcile
 			`You recommend reconciliation. Yards and crews may keep their own local settlement records, but no copy may close the obligation until the original promise and the current settlement record agree on what was actually delivered, substituted, forgiven, or still owed.`
 			action
@@ -116,7 +116,7 @@ mission "B2 Pirate Repair Credit Compact: Review"
 				"B2 Pirate Repair Credit Compact: settlement reconciliation" = 1
 				"B2 Pirate Repair Credit Compact: quell trusts player" = 1
 				"B2 Pirate Repair Credit Compact: daro trusts player" = 1
-			accept
+			decline
 
 mission "B2 Pirate Repair Credit Compact: Quell Remembers"
 	minor
@@ -140,4 +140,4 @@ mission "B2 Pirate Repair Credit Compact: Quell Remembers"
 			label record
 			action
 				"B2 Pirate Repair Credit Compact: aftermath seen" = 1
-			accept
+			decline
