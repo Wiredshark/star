@@ -81,6 +81,22 @@ labels = set(re.findall(r'^\s*label\s+([A-Za-z0-9_-]+)\s*$', text, re.M))
 missing = sorted(gotos - labels)
 assert not missing, f"missing labels for gotos: {missing}"
 
+# Dialogue/state-only lifecycle: these missions persist conditions but create no
+# gameplay objective, so every terminal must close with decline rather than accept.
+assert not re.search(r'^\s*accept\s*$', text, re.M), "state-only mission contains terminal accept"
+assert len(re.findall(r'^\s*decline\s*$', text, re.M)) == 7, "expected exactly seven decline terminals"
+for objective in (
+    r'^\s*destination\b',
+    r'^\s*stopover\b',
+    r'^\s*waypoint\b',
+    r'^\s*npc\b',
+    r'^\s*cargo\b',
+    r'^\s*passenger\b',
+    r'^\s*deadline\b',
+    r'^\s*timer\b',
+):
+    assert not re.search(objective, text, re.M | re.I), f"objective-bearing directive found: {objective}"
+
 # Core continuity invariants from B1's relief-routing history.
 assert "a completed shipment is an event" in low
 assert "a satisfied need is a condition" in low
@@ -98,3 +114,4 @@ print("PASS: initial_routes=3 + refusal")
 print("PASS: terminal_settlements=2")
 print("PASS: dirt_belt_scope=3 missions")
 print("PASS: mutation_surface=B2 conditions only")
+print("PASS: lifecycle=7 state-only decline terminals")
