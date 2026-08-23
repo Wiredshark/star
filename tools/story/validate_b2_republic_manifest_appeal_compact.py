@@ -65,6 +65,30 @@ def main() -> None:
     if text.count(f'"{PREFIX} aftermath seen" = 1') != 1:
         fail("aftermath must be one-shot")
 
+    # These three missions are dialogue/state-only. They create no gameplay
+    # objective, so every terminal path must persist state and close with decline
+    # rather than leaving an objective-less accepted mission active.
+    terminal_accepts = len(re.findall(r'^\s*accept\s*$', text, re.M))
+    terminal_declines = len(re.findall(r'^\s*decline\s*$', text, re.M))
+    if terminal_accepts:
+        fail(f"state-only lifecycle must have zero accept terminals, got {terminal_accepts}")
+    if terminal_declines != 7:
+        fail(f"state-only lifecycle must have exactly 7 decline terminals, got {terminal_declines}")
+
+    objective_directives = (
+        "destination",
+        "stopover",
+        "waypoint",
+        "npc",
+        "cargo",
+        "passenger",
+        "deadline",
+        "timer",
+    )
+    for directive in objective_directives:
+        if re.search(rf'^\t+{re.escape(directive)}(?:\s|$)', text, re.M | re.I):
+            fail(f"unexpected gameplay-objective directive in state-only slice: {directive}")
+
     # All explicit condition writes in this file must remain B2-owned.
     for match in re.finditer(r'^\s*"([^"]+)"\s*=\s*[-0-9]+\s*$', text, re.M):
         condition = match.group(1)
@@ -105,6 +129,7 @@ def main() -> None:
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Varo Remembers")
     print("PASS: writes=B2-prefixed only")
+    print("PASS: lifecycle=0 accept + 7 decline terminals")
 
 
 if __name__ == "__main__":
