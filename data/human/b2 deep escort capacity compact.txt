@@ -53,14 +53,14 @@ mission "B2 Deep Escort Capacity Compact: Offer"
 				"B2 Deep Escort Capacity Compact: introduced" = 1
 				"B2 Deep Escort Capacity Compact: route obligation" = 1
 				"B2 Deep Escort Capacity Compact: kest trusts player" = 1
-			accept
+			decline
 			label outcome
 			`You side with Trent. The immediate mission still matters: a time-sensitive research convoy cannot be treated as a failure merely because it consumed scarce capacity. Kest agrees, provided each reassignment names what was borrowed, who now owns the displaced duty, and when restoration is due.`
 			action
 				"B2 Deep Escort Capacity Compact: introduced" = 1
 				"B2 Deep Escort Capacity Compact: route outcome" = 1
 				"B2 Deep Escort Capacity Compact: trent trusts player" = 1
-			accept
+			decline
 			label paired
 			`You recommend a paired record. Each escorted research shipment carries its outcome, the unit or civilian capacity borrowed, the patrol or rescue work displaced, the replacement plan, and whether that capacity was actually restored afterward. Kest says, "Then success stays visible without making its cost disappear." Trent nods. "And cost stays visible without pretending the convoy was a mistake."`
 			action
@@ -68,7 +68,7 @@ mission "B2 Deep Escort Capacity Compact: Offer"
 				"B2 Deep Escort Capacity Compact: route paired" = 1
 				"B2 Deep Escort Capacity Compact: kest trusts player" = 1
 				"B2 Deep Escort Capacity Compact: trent trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them Deep captains and security officers have always survived by adapting to the immediate problem, and a formal compact could become stale faster than the threat picture changes. Kest accepts the objection. Trent adds, "Then at least don't let a completed convoy become proof that nothing else was postponed."`
 			action
@@ -120,14 +120,14 @@ mission "B2 Deep Escort Capacity Compact: Review"
 				"B2 Deep Escort Capacity Compact: reviewed" = 1
 				"B2 Deep Escort Capacity Compact: settlement packet" = 1
 				"B2 Deep Escort Capacity Compact: kest trusts player" = 1
-			accept
+			decline
 			label reconcile
 			`You recommend a reconciliation cycle. Convoy results remain in the dispatch record; patrol, rescue, inspection, and maintenance deficits remain in a separate reserve ledger. At fixed review points the two are compared, and an obligation closes only when replacement capacity is verified rather than merely reassigned again. Trent says, "That keeps today's success honest." Kest answers, "And tomorrow's readiness real."`
 			action
 				"B2 Deep Escort Capacity Compact: reviewed" = 1
 				"B2 Deep Escort Capacity Compact: settlement reconcile" = 1
 				"B2 Deep Escort Capacity Compact: trent trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Deep Escort Capacity Compact: Kest Remembers"
@@ -154,4 +154,4 @@ mission "B2 Deep Escort Capacity Compact: Kest Remembers"
 			label record
 			action
 				"B2 Deep Escort Capacity Compact: aftermath seen" = 1
-			accept
+			decline
