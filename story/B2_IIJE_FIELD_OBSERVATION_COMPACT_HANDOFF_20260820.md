@@ -1,104 +1,114 @@
-# B2 Iije Field Observation Compact handoff — 2026-08-20
+# B2 Iije Field Observation Compact handoff — lifecycle recovery 2026-08-23
 
 ## Verdict
-READY for A3 review/integration after the validated B1 dependency is accepted.
+READY for A3 review/integration after the validated B1 dependency is accepted or reconciled.
 
 ## Authority and isolation
 - Stage: B2 STORY CHARACTERS + DYNAMIC CONTENT
 - Repository: `Wiredshark/star`
-- Authoritative `main` observed at run start and rechecked before final handoff: `85ecbd74ba8fdff055d5151707c3550b24e915e2`
-- Required B1 dependency branch: `agent/b1-iije-natural-history-20260820-0016`
+- Current authoritative `main` rechecked before recovery: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
+- Required historical B1 dependency branch: `agent/b1-iije-natural-history-20260820-0016`
 - Required B1 dependency exact head: `f118ed2e50c31ab03b5658af89907f81783e8b7d`
-- B1 dependency validation: repository-native simulation/story workflow #172 SUCCESS; save-load workflow #161 SUCCESS
+- B1 dependency validation: simulation/story #172 SUCCESS; save-load #161 SUCCESS
 - B2 isolated branch: `agent/b2-iije-field-observation-20260820-0027`
-- Production commit: `2f29e159ce6315e4b3a6d0ff0426bde85b46edda`
-- Initial focused validator commit: `f0be82db3bd34863d6cb6a4777e1d133cd65b9bf`
-- Validator repair / exact fully validated production+validator candidate: `fe1069471bfb90d04a93ae0e50a8023b175fd393`
+- Original production commit: `2f29e159ce6315e4b3a6d0ff0426bde85b46edda`
+- Original validated candidate before lifecycle recovery: `fe1069471bfb90d04a93ae0e50a8023b175fd393`
+- Lifecycle production repair: `c08a8479e4c1e060e86d84e2f5a1c98b87eb088d`
+- Lifecycle validator hardening / exact fully validated candidate: `1ef5e1323b364d54a8b9369b8563f3dac23ca45e`
 
 B2 must not self-integrate. A3 owns integration.
 
 ## Character / dynamic-content behavior
-This slice consumes B1's Iije natural-history records and turns the B1 Stellar Feeding Survey's navigation/science tension into a persistent character dispute.
-
-Two recurring human specialists are identified only through the player's private shorthand:
+The slice remains the same persistent Iije field-science character arc. Two recurring human specialists are identified only through the player's private shorthand:
 - **Observer** — a field biologist who prioritizes baseline conditions and unprovoked behavior.
 - **Pilot** — an expedition pilot who wants controlled tests that answer practical navigation questions.
 
-These are not canonical names, formal titles, new offices, or new institutional authority.
+These remain player-private shorthand, not canonical names, formal titles, offices, credentials, or representative authority.
 
-Initial routes:
+Initial routes remain:
 1. **passive** — natural/baseline observation first; interventions create an explicit boundary in the record;
-2. **stimulus** — controlled light trials are allowed, but every response must remain labeled stimulus-elicited;
+2. **stimulus** — controlled light trials are allowed, but every response remains labeled stimulus-elicited;
 3. **paired** — baseline observation and measured stimulus trial remain linked but separately identifiable;
-4. **refusal** — the player declines to define a protocol; B2 records refusal and schedules no Review.
+4. **refusal** — the player declines to define a protocol and no Review is scheduled.
 
-Each substantive route schedules a delayed Review after 7–11 days.
+Each substantive route still schedules a delayed Review after 7–11 days. The Review still resolves to exactly one of:
+- **stimulus provenance packet** — ambient conditions, human intervention, instrument limits, timing, and unresolved uncertainty travel with observations;
+- **reversible field model** — predictions remain replaceable interpretations over separately preserved baseline observations and stimulus trials.
 
-The Review exposes the second-order problem that copied navigation/science summaries can preserve the observed reaction while dropping the conditions that caused or constrained it. The player chooses one of two terminal settlements:
-- **stimulus provenance packet** — every behavioral observation carries ambient conditions, human intervention, instrument limits, timing, and unresolved uncertainty;
-- **reversible field model** — predictions/interpretations remain replaceable layers over separately preserved baseline observations and stimulus trials.
+`Pilot Remembers` remains the one-shot aftermath reader.
 
-`Pilot Remembers` is the one-shot later reader of either terminal settlement.
+## Lifecycle recovery
+The original three missions are dialogue/state-only. They create no destination, cargo, NPC, waypoint, timer, passenger, deadline, or other gameplay objective, but six positive terminal paths used `accept`:
+- three Offer routes;
+- two Review settlements;
+- the `Pilot Remembers` aftermath.
 
-## Dependencies / canon invariants
+That could leave objective-less accepted missions active after conversation completion.
+
+Commit `c08a8479e4c1e060e86d84e2f5a1c98b87eb088d` changes only those six positive terminal commands from `accept` to `decline`. The refusal path already used `decline`, so all **7/7 state-only terminal paths** now persist the same existing story state and close cleanly.
+
+No dialogue, route, settlement, trust condition, delayed-event timing, persistence name/value, source location, B1 gate, or canon assumption changed.
+
+## Validator hardening
+Commit `1ef5e1323b364d54a8b9369b8563f3dac23ca45e` extends `tools/story/validate_b2_iije_field_observation_compact.py` to require:
+- zero terminal `accept` commands;
+- exactly seven terminal `decline` commands;
+- no gameplay-objective directives in this state-only slice.
+
+All previous checks remain, including:
+- exact three-mission graph;
+- three substantive routes plus refusal;
+- exactly three 7–11 day Review schedules and none on refusal;
+- exactly two terminal settlements;
+- one-shot aftermath;
+- B2-only writes;
+- no `world:*` or material/reputation/combat mutation;
+- local `goto` / `label` integrity;
+- Midgard/Mirrorlake and B1 gating;
+- Observer/Pilot private-shorthand continuity;
+- baseline/stimulus/provenance/uncertainty concepts;
+- guards against unsupported Iije motive claims.
+
+## Ownership / canon invariants
 - Requires `Rulei: Umbral Reach: offered`.
 - Requires B1 `Iije History: Stellar Feeding Survey: offered`.
-- Offer and Review are on Midgard; aftermath is on Mirrorlake, both locations already used by B1 Iije natural-history content.
-- Preserves B1's distinction between observed Iije behavior and inferred purpose.
-- Preserves the fact that bright work lights can alter Jje movement without turning attraction to light into evidence of hostility, curiosity, communication, or intent.
-- Does not invent Iije language, society, motives, political structure, or a directly witnessed Jje-to-Ayym transformation.
-- Observer/Pilot remain player-private shorthand.
-- All persistent writes are namespaced `B2 Iije Field Observation Compact:*`.
+- All persistent writes remain `B2 Iije Field Observation Compact:*`.
 - No `world:*`, credits, reputation, cargo, outfit, ship, fleet, combat, Rulei campaign, or B1-state writes.
+- Bright work lights may alter Jje movement without proving hostility, curiosity, communication, intent, or any other motive.
+- The slice does not invent Iije language, society, politics, motive, or a directly observed Jje-to-Ayym transformation.
+- Baseline/spontaneous behavior remains distinct from behavior elicited by human intervention.
+- A copied conclusion does not become stronger evidence merely because stimulus parameters or evidence limitations were dropped.
 
 ## Files
 - `data/rulei/b2 iije field observation compact.txt`
 - `tools/story/validate_b2_iije_field_observation_compact.py`
 - `story/B2_IIJE_FIELD_OBSERVATION_COMPACT_HANDOFF_20260820.md`
 
-## Exact validation evidence
-The first repository-native simulation/story run on head `28ad9e832b2674af0d336c2ee6ef9922ea76eda1` correctly failed because the focused validator compared one recurring-character continuity phrase case-sensitively. Production content was not at fault. The validator was repaired in `fe1069471bfb90d04a93ae0e50a8023b175fd393` to evaluate those phrases case-insensitively; no production behavior changed in that repair.
+## Exact lifecycle-recovery validation
+On exact candidate `1ef5e1323b364d54a8b9369b8563f3dac23ca45e`:
+- `Fork simulation and story validation` run `32645633825` / #486: **SUCCESS**.
+- focused story validators, including the hardened Iije lifecycle validator: **SUCCESS**.
+- A1 simulation/state-ownership contracts: **SUCCESS**.
+- changed-content style: **SUCCESS**.
+- `Fork save-load integration smoke` run `32645633834` / #471: **SUCCESS**.
+- production configure/build: **SUCCESS**.
+- stock save-load smoke: **SUCCESS**.
 
-On exact candidate `fe1069471bfb90d04a93ae0e50a8023b175fd393`:
-- `Fork simulation and story validation` run #174 / `32332184100`: SUCCESS.
-- changed fork content style: SUCCESS.
-- focused simulation and story contracts: SUCCESS.
-- all discovered focused story validators, including `validate_b2_iije_field_observation_compact.py`: SUCCESS.
-- A1 simulation/state-ownership contract tests: SUCCESS.
-- `Fork save-load integration smoke` run #163 / `32332184098`: SUCCESS.
-- production configure/build: SUCCESS.
-- stock save-load smoke cases: SUCCESS.
+No manual actual-game acceptance is claimed beyond repository-native production build/save-load and structural/state-ownership validation.
 
-The focused validator covers:
-- exact three-mission graph;
-- delayed Review and no Review scheduling on refusal;
-- Observer/Pilot private-shorthand continuity;
-- Midgard/Mirrorlake and B1 gating;
-- three persistent routes plus refusal;
-- exactly two terminal settlements;
-- one-shot aftermath reader;
-- B2-only persistent mutation surface;
-- local goto/label integrity;
-- baseline/stimulus/provenance/uncertainty concepts;
-- guards against unsupported Iije motive claims.
+## Process / concurrency safety
+Before recovery, live `main`, recent/open B2 work, and the existing Iije branch were inspected. No competing Iije lifecycle repair was active. The existing Iije branch was advanced rather than duplicating its scope.
 
-Actual-game acceptance can still exercise offer precedence and presentation, but the repository-native production build/save-load and focused structural/state-ownership gates are green on the exact candidate.
-
-## Concurrency / non-overlap
-Live `main`, recent PRs, and the full discovered `agent/b2-*` inventory were inspected before selection. No existing Iije-specific B2 branch was present. Existing Rulei/Pug/Ka'het and other xenobiology/evidence B2 slices focus on contact testimony, translation, machine provenance, or route evidence; this candidate is specifically about experimental intervention in living-Iije observation and the operational consequences of losing stimulus context.
-
-The latest B1 Iije candidate was checked before B2 authoring. Both exact B1 repository-native workflows are green, so this B2 slice is based on a validated dependency even though A3 has not yet integrated that B1 branch into `main`.
+The private service process inventory reported four pre-existing service-owned processes. None were killed or modified.
 
 ## A3 / B3 integration notes
-Integration order: B1 Iije natural-history institutions first, then B2 Iije Field Observation Compact.
+This is a historical B2 branch whose original dependency chain predates current authoritative `main`. A3 must re-read current `main`, verify ancestry/mergeability, and reconcile/accept B1 Iije natural-history institutions before or with this B2 slice as appropriate. Do not infer readiness solely from GitHub's mergeable flag.
 
-A3 must re-read current `main` because concurrent work is expected. Integrate/reconcile the exact validated candidate `fe1069471bfb90d04a93ae0e50a8023b175fd393` plus this final handoff-only commit, or equivalently preserve the production and validator commits in order and rerun integrated-head validation if ancestry changes.
-
-B3 should preserve the distinction among:
+Preserve the distinction among:
 - baseline/spontaneous behavior;
-- behavior elicited by human light or other intervention;
-- instrument limitations and environmental context;
+- human-elicited response;
+- environmental and instrument context;
 - downstream interpretation/prediction;
-- unresolved uncertainty.
+- uncertainty and contradiction.
 
-A copied behavioral conclusion must not become more certain merely because the stimulus parameters or evidence limitations were dropped.
+Preserve the lifecycle invariant that dialogue/state-only B2 missions close with `decline`; reserve `accept` for paths that create actual gameplay objectives.
