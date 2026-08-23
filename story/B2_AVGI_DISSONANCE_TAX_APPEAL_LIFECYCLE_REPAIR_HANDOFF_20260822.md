@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native validation on the exact lifecycle-repair head.
+READY for A3 review/integration. Exact production/validator candidate `b80e0d06c8d7120fa70573185e2fe56f1bef033c` passed both required repository-native workflows.
 
 ## Authority and isolation
 
@@ -12,6 +12,7 @@ PARTIAL pending repository-native validation on the exact lifecycle-repair head.
 - Original B2 candidate/handoff head: `956f94169c848b5255ea66141165c01fd3af87da`
 - Lifecycle production repair: `c19d5eb534a0680e19e3182d0e5a042cb25c6fe8`
 - Lifecycle validator hardening: `048eb96c5141ca3be18ba0735f2fefad0da42d0b`
+- Exact fully validated production/validator/handoff candidate: `b80e0d06c8d7120fa70573185e2fe56f1bef033c`
 - Integration authority remains A3. B2 must not self-integrate.
 
 ## Defect repaired
@@ -41,7 +42,7 @@ No save-state migration is required.
 
 ## Focused validator hardening
 
-`tools/story/validate_b2_avgi_dissonance_tax_appeal_compact.py` now additionally enforces:
+`tools/story/validate_b2_avgi_dissonance_tax_appeal_compact.py` additionally enforces:
 
 - zero terminal `accept` commands;
 - exactly seven terminal `decline` commands;
@@ -57,18 +58,18 @@ All prior route, settlement, state-ownership, mutation-surface, Dissonance scope
 - Dissonance remains politically plural. The compact is a records practice, not a centralized tax code or new Avgi-wide bureaucracy.
 - A historical objection is not fresh evidence. Resolved objections may remain historical without propagating forever as active accusations.
 
-## Validation required before READY
+## Exact validation evidence
 
-Run/confirm on the exact branch head containing production repair, validator hardening, and this handoff:
+On exact candidate `b80e0d06c8d7120fa70573185e2fe56f1bef033c`:
 
-1. `Fork simulation and story validation` — focused story validators, A1/state-ownership contracts, changed-content style.
-2. `Fork save-load integration smoke` — production configure/build and stock save-load smoke.
+- `Fork simulation and story validation` #445 / run `32610310223`: **SUCCESS**
+- `Fork save-load integration smoke` #430 / run `32610310229`: **SUCCESS**
 
-Promote to READY only if both are terminal green. If either fails, repair or reject rather than integrating around the failure.
+The first workflow covers focused story validation, A1/state-ownership contracts, and changed-content style. The second covers production configure/build and stock save-load smoke.
 
 ## A3 / B3 guidance
 
-A3 should re-read current `main` because this branch is historical relative to the live integration head. Verify ancestry and semantic compatibility before integration even if GitHub reports the PR mergeable.
+A3 must re-read current `main` because this branch is historical relative to the live integration head. Verify ancestry and semantic compatibility before integration even though GitHub reports the PR mergeable.
 
 B3 should preserve the distinction among grievance history, evidence actually considered, current verified assessment, copied record lineage, final disposition, and open/closed status.
 
