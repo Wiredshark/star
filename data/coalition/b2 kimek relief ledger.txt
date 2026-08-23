@@ -47,14 +47,14 @@ mission "B2 Kimek Relief Ledger: Offer"
 				"B2 Kimek Relief Ledger: introduced" = 1
 				"B2 Kimek Relief Ledger: route ledger" = 1
 				"B2 Kimek Relief Ledger: coordinator trusts player" = 1
-			accept
+			decline
 			label carrier
 			`You point to the route clock and the cargo categories already verified by the depot. The Courier starts loading immediately. The Coordinator records the departure, but leaves several request fields unresolved until the receiving world reports back. The aid will arrive sooner, but the network now depends on a later reconciliation that busy ports have historically been tempted to postpone.`
 			action
 				"B2 Kimek Relief Ledger: introduced" = 1
 				"B2 Kimek Relief Ledger: route carrier" = 1
 				"B2 Kimek Relief Ledger: courier trusts player" = 1
-			accept
+			decline
 			label paired
 			`You separate the crates by urgency. Winter medicine and heating equipment are cleared against the verified categories already on file, while less urgent amenities remain linked to the unfinished request record. The Courier gets a departure window and the Coordinator adds a condition: before this route draws again, the receiving depot must close the delivery record and note substitutions. Both Kimek look dissatisfied enough that the compromise may be workable.`
 			action
@@ -62,7 +62,7 @@ mission "B2 Kimek Relief Ledger: Offer"
 				"B2 Kimek Relief Ledger: route paired" = 1
 				"B2 Kimek Relief Ledger: coordinator trusts player" = 1
 				"B2 Kimek Relief Ledger: courier trusts player" = 1
-			accept
+			decline
 			label decline
 			`You step away from the terminal. The Coordinator and Courier return to the manifest, each making small concessions without actually settling the principle. The shipment remains scheduled, but the argument about what the network owes its own future records continues.`
 			action
@@ -113,7 +113,7 @@ mission "B2 Kimek Relief Ledger: Review"
 				"B2 Kimek Relief Ledger: settlement transferable receipt" = 1
 				"B2 Kimek Relief Ledger: coordinator trusts player" = 1
 				"B2 Kimek Relief Ledger: courier trusts player" = 1
-			accept
+			decline
 			label obligation
 			`You recommend a rolling obligation ledger. A shipment closes only the needs it actually satisfies. If cargo is redirected for a greater emergency, the network records that choice immediately and carries the abandoned portion forward as a visible cooperative obligation rather than pretending the original request vanished. The system becomes less elegant on paper, but shortages can no longer disappear merely because a successful shipment went somewhere else.`
 			action
@@ -121,7 +121,7 @@ mission "B2 Kimek Relief Ledger: Review"
 				"B2 Kimek Relief Ledger: settlement rolling obligation" = 1
 				"B2 Kimek Relief Ledger: coordinator trusts player" = 1
 				"B2 Kimek Relief Ledger: courier trusts player" = 1
-			accept
+			decline
 
 mission "B2 Kimek Relief Ledger: Courier Remembers"
 	landing
@@ -146,4 +146,4 @@ mission "B2 Kimek Relief Ledger: Courier Remembers"
 			label done
 			action
 				"B2 Kimek Relief Ledger: aftermath seen" = 1
-			accept
+			decline
