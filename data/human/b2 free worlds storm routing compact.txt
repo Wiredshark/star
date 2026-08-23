@@ -55,14 +55,14 @@ mission "B2 Free Worlds Storm Routing Compact: Offer"
 				"B2 Free Worlds Storm Routing Compact: introduced" = 1
 				"B2 Free Worlds Storm Routing Compact: route verification" = 1
 				"B2 Free Worlds Storm Routing Compact: edden trusts player" = 1
-			accept
+			decline
 			label field
 			`You tell Edden that storm routing changes faster than a paperwork chain can close. Rusk nods. Edden answers, "Then field reports need provenance too. A pilot saying 'my instruments were clean' is useful, but only if the next port knows when, where, and with what calibration."`
 			action
 				"B2 Free Worlds Storm Routing Compact: introduced" = 1
 				"B2 Free Worlds Storm Routing Compact: route field" = 1
 				"B2 Free Worlds Storm Routing Compact: rusk trusts player" = 1
-			accept
+			decline
 			label paired
 			`You suggest keeping the operational instruction short while attaching a small confidence record that survives copying: which beacons were checked, when they were calibrated, what reports disagreed, and when the recommendation expires. Rusk says, "That I can fly with." Edden says, "And I can revise it without pretending the old version was never uncertain."`
 			action
@@ -70,7 +70,7 @@ mission "B2 Free Worlds Storm Routing Compact: Offer"
 				"B2 Free Worlds Storm Routing Compact: route paired" = 1
 				"B2 Free Worlds Storm Routing Compact: edden trusts player" = 1
 				"B2 Free Worlds Storm Routing Compact: rusk trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them a cooperative network should not turn an outsider's preference into a regional rule. Edden accepts that immediately. Rusk says, "Fair. Just make sure the next version is written by people who have both calibrated a beacon and missed a docking window."`
 			action
@@ -123,14 +123,14 @@ mission "B2 Free Worlds Storm Routing Compact: Review"
 				"B2 Free Worlds Storm Routing Compact: reviewed" = 1
 				"B2 Free Worlds Storm Routing Compact: settlement confidence packet" = 1
 				"B2 Free Worlds Storm Routing Compact: edden trusts player" = 1
-			accept
+			decline
 			label challenge
 			`You recommend a shared challenge record rather than a single authoritative route. Ports and pilots can publish operational recommendations quickly, but a materially contradictory observation remains attached until another independent check resolves it. The original recommendation, the challenge, and the resolution all remain visible. Rusk likes that pilots can contest stale advice without becoming the new unquestioned authority. Edden likes that disagreement becomes evidence instead of disappearing into radio traffic.`
 			action
 				"B2 Free Worlds Storm Routing Compact: reviewed" = 1
 				"B2 Free Worlds Storm Routing Compact: settlement challenge board" = 1
 				"B2 Free Worlds Storm Routing Compact: rusk trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Free Worlds Storm Routing Compact: Edden Remembers"
@@ -155,4 +155,4 @@ mission "B2 Free Worlds Storm Routing Compact: Edden Remembers"
 			label record
 			action
 				"B2 Free Worlds Storm Routing Compact: aftermath seen" = 1
-			accept
+			decline
