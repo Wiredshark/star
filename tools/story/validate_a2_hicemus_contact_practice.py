@@ -17,6 +17,11 @@ required = [
     'set "A2 Hicemus Contact Practice: decided"',
     'set "A2 Hicemus Contact Practice: reflection seen"',
     'not "A2 Hicemus Contact Practice: refused"',
+    'label done',
+    'label observation',
+    'label revision',
+    'label local',
+    'label finish',
 ]
 for needle in required:
     assert needle in text, f"missing required contract: {needle}"
@@ -27,6 +32,8 @@ assert text.count('offer precedence 9') == 2
 assert text.count('\n\t\t\tdecline') == 2, "expected one converged Review terminal plus one Reflection terminal"
 assert '\n\t\t\taccept' not in text, "state-only missions must not accept"
 assert 'branch refused' not in text, "refusal must not arm Reflection"
+assert text.count('goto done') == 4, "all four Review choices must converge on the declared done label"
+assert text.count('goto finish') == 2, "observation and revision reflections must converge on the declared finish label"
 assert 'world:' not in text
 assert 'set "Incipias:' not in text
 assert 'clear "Incipias:' not in text
@@ -54,4 +61,4 @@ for line in lines:
 assert len(writes) == 6, writes
 assert 'complete Hicemus language' in text
 assert 'Hicemus office, linguistic credential, endorsement, or authority' in text
-print("PASS: A2 Hicemus contact practice restage: 2 missions, 4 choices, 3 explicit reflections, refusal suppression, current lifecycle, read-only upstream state")
+print("PASS: A2 Hicemus contact practice restage: 2 missions, 4 choices, declared local labels, 3 explicit reflections, refusal suppression, current lifecycle, read-only upstream state")
