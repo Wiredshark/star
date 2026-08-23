@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**PARTIAL pending repository-native validation.** The production slice and focused validator are committed on an isolated B2 branch. Do not integrate until the simulation/story/style workflow and production build/save-load workflow are terminal green on the exact candidate head.
+**READY for A3 review/integration.** The exact production/validator/handoff candidate passed both repository-native acceptance workflows. The final commit after that validated candidate changes this durable handoff only; production content and validator behavior are unchanged.
 
 ## Authority and branch
 
@@ -10,7 +10,8 @@
 - Authoritative base: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-free-worlds-volunteer-command-20260823`
 - Production commit: `a609d3b657e4056c6e6677278e705f2322edd7d8`
-- Focused-validator commit / pre-handoff candidate: `0485d63b00a6b0dc8be43879402b7bd44f1ec185`
+- Focused-validator commit: `0485d63b00a6b0dc8be43879402b7bd44f1ec185`
+- Exact fully validated production/validator/handoff candidate: `73840c2c7a1570e0cf3ceb335a24754fa3fc9afa`
 
 ## What B2 adds
 
@@ -68,20 +69,17 @@ All seven dialogue/state-only terminal branches use `decline`; there are no `acc
 
 A focused private-host scratch clone was attempted before opening the PR. The clone failed inside Git object-pack creation (`fetch-pack: invalid index-pack output`), so no host-side PASS is claimed from that attempt and no unrelated repository/process state was touched.
 
-Required acceptance gates on the exact candidate head:
+Repository-native validation on exact candidate `73840c2c7a1570e0cf3ceb335a24754fa3fc9afa` is terminal green:
 
-```text
-python3 tools/story/validate_b2_free_worlds_volunteer_command_compact.py
-python3 tools/story/validate_story_repo.py
-python3 tools/story/test_b2_character_packets.py
-Fork simulation and story validation
-Fork save-load integration smoke
-```
+- `Fork simulation and story validation` #492 / run `32655302087`: **SUCCESS**
+- `Fork save-load integration smoke` #477 / run `32655302156`: **SUCCESS**
+
+Those workflows cover focused story validators (including `validate_b2_free_worlds_volunteer_command_compact.py`), A1 simulation/state-ownership contracts, changed-content style, production configure/build, and stock save-load integration smoke.
 
 The focused validator additionally enforces 3 missions, both named characters, A1 read-only ownership, three routes plus refusal, exactly two settlements, one-shot aftermath, seven `decline` / zero `accept` terminals, B2-only persistent writes, local `goto` integrity, and the temporary-versus-permanent command boundary.
 
 ## A3 / B3 integration notes
 
-A3 should re-read current `main` before integration. Integrate only if the exact candidate's repository-native workflows are terminal green and the branch remains cleanly based on the recorded authoritative base.
+The validated candidate is exactly 3 commits ahead / 0 behind the recorded authoritative base. A3 should still re-read current `main` before integration, verify ancestry has not changed, and preserve A1/A2 ownership boundaries. Do not self-integrate from B2.
 
 B3 should preserve the distinction among historical tasking, live authority, captain consent, volunteered scope, safety authority, refusal/substitution, release condition, and closure status. Repeated copies of a historical order do not make it live authority again.
