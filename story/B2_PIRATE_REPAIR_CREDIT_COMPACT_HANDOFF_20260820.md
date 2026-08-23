@@ -1,54 +1,70 @@
 # B2 Pirate Repair Credit Compact Handoff
 
 ## Verdict
-PARTIAL pending exact-head repository-native simulation/story/style and production build/save-load validation.
+PARTIAL pending exact-head repository-native simulation/story/style and production build/save-load validation after lifecycle repair.
 
 ## Repository authority
-- authoritative base: `27b5ddc9cbb084c4751ef52d185f13f62e825c27`
+- current authoritative `main` observed during recovery: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
+- historical branch base: `27b5ddc9cbb084c4751ef52d185f13f62e825c27`
 - branch: `agent/b2-pirate-repair-credit-compact-20260820-1628`
-- production commit: `65ab321360841d788183ba38bb82d9618bb9bfaf`
-- focused validator commit: `0c6a7c5ac17037c92cc90ed6d5f19876130fbc3a`
+- original production commit: `65ab321360841d788183ba38bb82d9618bb9bfaf`
+- original focused validator commit: `0c6a7c5ac17037c92cc90ed6d5f19876130fbc3a`
+- lifecycle production repair: `c7c3b1cd701d375b29dae0043fd069a6395669ca`
+- lifecycle validator hardening: `dfe18eb3be3e63bbecbf9f85bfb84fbf1878d6b4`
 
 ## Scope
-Adds a three-mission Pirate character/dynamic-content arc consuming the already-integrated B1 `Pirate Repair Debt Archive` institutional history.
+Three-mission Pirate character/dynamic-content arc consuming the B1 `Pirate Repair Debt Archive` institutional history.
 
 Recurring characters:
 - Mara Quell, a dock mechanic;
 - Venn Daro, a courier who moves between yards and crews.
 
-The initial dispute concerns whether a repair-debt marker may be transferred after the original captain dies without silently changing the original bargain. Player routes are:
+The initial dispute concerns whether a repair-debt marker may be transferred after the original captain dies without silently changing the original bargain. Player routes remain:
 - provenance-first transfer;
 - current-value transfer with explicit change record;
 - paired immutable original obligation + current settlement record;
 - refusal.
 
-The Review exposes copied-record divergence after a marker circulates through multiple yards/fences. It resolves into exactly one of:
+The Review still resolves copied-record divergence into exactly one of:
 - portable obligation packet;
 - reconciliation between the original obligation and current settlement record.
 
-`Quell Remembers` is the one-shot later reader.
+`Quell Remembers` remains the one-shot later reader.
+
+## Lifecycle repair
+These missions are dialogue/state-only and create no destination, cargo, NPC, waypoint, passenger, deadline, timer, or other gameplay objective. Historically, the three positive Offer routes, two Review settlements, and `Quell Remembers` aftermath used terminal `accept`, which could leave objective-less accepted missions active.
+
+Lifecycle production repair `c7c3b1cd...` converts exactly those six positive terminals to `decline`; refusal already declined. All 7/7 state-only terminal paths now persist the same existing state and close cleanly.
+
+Validator hardening `dfe18eb3...` now requires:
+- zero terminal `accept` commands;
+- exactly seven terminal `decline` commands;
+- no objective-bearing mission directives in this state-only slice.
+
+All prior mission-graph, recurring-character, route, settlement, one-shot aftermath, B2-only state ownership, material-mutation, provenance/obligation, pirate-authority, and local `goto`/`label` checks remain.
 
 ## Continuity / ownership
 - B1 Pirate history remains read-only.
-- Every new persistent write is `B2 Pirate Repair Credit Compact:*`.
+- Every persistent write remains `B2 Pirate Repair Credit Compact:*`.
 - No `world:*`, credits, reputation, cargo, outfit, ship, fleet, or combat mutations.
 - Original repair promise, substitutions, partial repayment, current holder, transfer value, and closure evidence remain distinct concepts.
 - Market/transfer value does not retroactively redefine the original repair obligation.
 - A copied or traded marker does not become fresh independent evidence merely by changing hands.
 - The compact remains local/reputation-based Pirate practice; it does not create a pirate bank, universal legal code, or centralized pirate authority.
+- No persistent condition names or values changed; no save-state migration is required.
 
-## Non-overlap / concurrency
-Before branching, live `main`, recent commits, open B2 PRs, and B1 branch/PR inventory were inspected. Current/recent B2 work heavily covers Republic, Free Worlds, Wanderer, Southern Rim, Gegno, Lunarium, Remnant, and other faction-specific slices. No active Pirate repair-credit B2 branch/PR was found. This slice is distinct from South convoy/rescue and Merchant repair/recovery arcs because it focuses on transferable personal repair debt and obligation provenance in Pirate ports.
+## Concurrency / process safety
+Current authoritative `main`, recent B2 work, and open PRs were inspected before recovery. No competing Pirate Repair Credit lifecycle branch was found. Existing unrelated branches/PRs were left untouched. The recovery advances the existing stalled PR rather than creating a duplicate slice.
 
-## Validation required
-Run on the exact candidate head:
-- `python3 tools/story/validate_b2_pirate_repair_credit_compact.py`
-- repository-focused validator discovery / story-state ownership suite;
-- changed-content style gate;
-- production Endless Sky configure/build;
-- stock save-load smoke.
+## Required exact-head validation
+Run/confirm on the exact post-handoff candidate head:
+- `Fork simulation and story validation`;
+- focused `validate_b2_pirate_repair_credit_compact.py` discovery;
+- A1/story state-ownership contracts;
+- changed-content style;
+- `Fork save-load integration smoke` including production configure/build and stock save-load smoke.
 
-A3 should not integrate unless the exact candidate is terminal green. If a validator catches a real content defect, repair it on this branch and re-run both repository-native workflows.
+Do not promote to READY or integrate unless both repository-native workflows are terminal green.
 
 ## A3 / B3 guidance
-A3 retains integration authority; do not self-integrate. B3 should preserve the distinction between original obligation, later transfer terms, current market value, substitutions, partial repayment, and explicit closure evidence. Do not reinterpret local Pirate repair-credit conventions as centralized law or banking.
+A3 retains integration authority; do not self-integrate. This branch is historical relative to current `main`, so A3 must re-read ancestry/continuity even if GitHub reports it mergeable. B3 should preserve the distinction between original obligation, later transfer terms, current market value, substitutions, partial repayment, and explicit closure evidence. Do not reinterpret local Pirate repair-credit conventions as centralized law or banking.
