@@ -53,6 +53,23 @@ if text.count('\t\thas "language: Avgi (Written)"') != 3:
 if text.count('\t\tnot "avgi: lost in twilight"') != 3:
     fail("all three missions must preserve lost-in-twilight gating")
 
+# These three missions only persist dialogue state. They do not create a gameplay
+# objective, so accepting them would leave objective-less missions active.
+accept_count = len(re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE))
+decline_count = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+if accept_count != 0:
+    fail(f"state-only lifecycle must not contain terminal accept commands: {accept_count}")
+if decline_count != 7:
+    fail(f"expected exactly seven state-only decline terminals, found {decline_count}")
+
+objective_directives = re.findall(
+    r'^\t+(?:destination|stopover|waypoint|npc|cargo|passenger|deadline|timer)\b',
+    text,
+    flags=re.MULTILINE | re.IGNORECASE,
+)
+if objective_directives:
+    fail(f"state-only lifecycle unexpectedly contains gameplay objectives: {objective_directives}")
+
 labels = set(re.findall(r'^\s*label ([A-Za-z0-9_-]+)\s*$', text, flags=re.MULTILINE))
 gotos = re.findall(r'^\s*goto ([A-Za-z0-9_-]+)\s*$', text, flags=re.MULTILINE)
 missing = sorted(set(gotos) - labels)
@@ -100,5 +117,6 @@ print("PASS: initial_routes=3 + refusal")
 print("PASS: review_routing=paired fallthrough + explicit Indigo/Sienna branches")
 print("PASS: terminal_settlements=2")
 print("PASS: later_reader=Indigo Remembers")
+print("PASS: lifecycle=7 state-only dialogue terminals close with decline")
 print("PASS: authority=B2 conditions only; Avgi campaign/world state read-only")
 print("PASS: continuity=challenge history remains distinct from current verified assessment and disposition")
