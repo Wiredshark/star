@@ -1,0 +1,105 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# A2 Wanderer Machine Evidence Practice.
+# Consumes the resolved B2 custody compact read-only. Curator and Engineer remain
+# player-private shorthand, not Wanderer offices or titles.
+
+
+mission "A2 Wanderer Machine Evidence Practice: Choice"
+	minor
+	name `What Travels With the Copy`
+	description `The Curator and Engineer ask what lesson, if any, you will carry from their machine-evidence compact into later decisions.`
+	source
+		government "Wanderer"
+	"offer precedence" 9
+	to offer
+		has "B2 Wanderer Machine Custody Compact: aftermath seen"
+		not "A2 Wanderer Machine Evidence Practice: chosen"
+		not "A2 Wanderer Machine Evidence Practice: refused"
+	on offer
+		conversation
+			branch twokey
+				has "B2 Wanderer Machine Custody Compact: settlement two-key derivative review"
+			`The Wanderer you privately think of as the Curator shows you a derivative machine-analysis packet. Recovery site, damaged regions, transformations, and unresolved interpretation all travel beside the useful result. The Engineer asks a narrower question: when you encounter dangerous technical evidence elsewhere, what part of this practice should follow you?`
+				goto choose
+			label twokey
+			`The Wanderer you privately think of as the Engineer shows you two independent reconstructions that still disagree. Neither has become authoritative merely by being newer. The Curator asks a narrower question: when you encounter dangerous technical evidence elsewhere, what part of this practice should follow you?`
+			label choose
+			choice
+				`\tCarry provenance with every derivative: source, transformations, missing regions, and uncertainty remain part of the evidence.`
+					goto provenance
+				`\tCarry independent challenge: consequential claims from a derivative should survive a second reconstruction tied to the source.`
+					goto challenge
+				`\tKeep this lesson local. A machine-war custody practice should not become a universal rule just because it worked here.`
+					goto local
+				`\tRefuse to adopt a standing practice from the Wanderers' settlement.`
+					goto refuse
+			label provenance
+			`You decide that a useful copy is still evidence with a history. Elsewhere, you will ask what was observed directly, what was reconstructed, what changed in translation or processing, and which uncertainty survived the trip.`
+			action
+				"A2 Wanderer Machine Evidence Practice: chosen" = 1
+				"A2 Wanderer Machine Evidence Practice: provenance" = 1
+				decline
+			label challenge
+			`You decide that dangerous conclusions should remain challengeable. A derivative can guide work, but claims that justify activation, attribution, or transfer should be reproducible from the source by someone who did not inherit the first team's assumptions.`
+			action
+				"A2 Wanderer Machine Evidence Practice: chosen" = 1
+				"A2 Wanderer Machine Evidence Practice: challenge" = 1
+				decline
+			label local
+			`You keep the lesson attached to its history. The Wanderers' machine war gives this custody practice weight here, not automatic authority over every archive, laboratory, or recovered device you may encounter.`
+			action
+				"A2 Wanderer Machine Evidence Practice: chosen" = 1
+				"A2 Wanderer Machine Evidence Practice: local" = 1
+				decline
+			label refuse
+			`You decline to turn their settlement into your standing rule. The Curator and Engineer accept that learning from a practice is not the same as claiming authority to export it.`
+			action
+				"A2 Wanderer Machine Evidence Practice: refused" = 1
+				decline
+
+
+mission "A2 Wanderer Machine Evidence Practice: Reflection"
+	minor
+	name `A Result With a History`
+	description `A later technical dispute tests the evidence practice you carried away from the Wanderers' machine-custody compact.`
+	source
+		government "Wanderer"
+	"offer precedence" 9
+	to offer
+		has "B2 Wanderer Machine Custody Compact: aftermath seen"
+		has "A2 Wanderer Machine Evidence Practice: chosen"
+		not "A2 Wanderer Machine Evidence Practice: refused"
+		not "A2 Wanderer Machine Evidence Practice: reflection seen"
+	on offer
+		conversation
+			branch provenance
+				has "A2 Wanderer Machine Evidence Practice: provenance"
+			branch challenge
+				has "A2 Wanderer Machine Evidence Practice: challenge"
+			branch local
+				has "A2 Wanderer Machine Evidence Practice: local"
+			label provenance
+			`A technician presents a compact diagnostic copied through several tools. The conclusion is plausible, but the packet still identifies the damaged source region, two normalization steps, and the point where reconstruction replaced direct observation. Because you kept provenance attached, the team can use the result without quietly upgrading it into certainty.`
+				goto finish
+			label challenge
+			`A technician presents a confident reconstruction from damaged control data. You ask for an independent pass from the source material. The second reconstruction agrees on the safe operating limit but not on the proposed cause, leaving the useful conclusion intact while preventing an unsupported attribution from hardening into fact.`
+				goto finish
+			label local
+			`A technician asks you to apply the Wanderers' machine-custody precedent to a very different archive. You decline the shortcut and first ask what risks, institutions, and evidence actually exist here. The old case remains useful context without becoming borrowed authority.`
+			label finish
+			action
+				"A2 Wanderer Machine Evidence Practice: reflection seen" = 1
+				decline
