@@ -2,7 +2,9 @@
 
 ## Status
 
-**PARTIAL — production and validator repair are isolated; repository-native CI is still required before A3 integration.**
+**READY for A3 review/integration.**
+
+The production and validator repair are isolated, exact-head repository-native simulation/story/style validation passed, and exact-head production build/save-load smoke passed.
 
 ## Authority and branch
 
@@ -11,6 +13,7 @@
 - Isolated branch: `agent/b2-remnant-continuity-lifecycle-20260821-1228`
 - Production lifecycle repair: `8f8c3ac5f9c6a98d8581a3a65073d776616ef4e8`
 - Validator hardening: `85ea4dcb7893914467d321fb09e123848d6e717d`
+- Exact fully validated production/validator/handoff candidate: `b6a9193ed65ebfd232530d46509c3ec49285c04b`
 
 ## Defect repaired
 
@@ -42,20 +45,30 @@ The repair does **not** change:
 
 All pre-existing mission, character, route, settlement, later-reader, mutation-surface, and local goto/label checks remain.
 
-## Validation required before READY
+## Exact validation evidence
 
-Run repository-native acceptance on the exact candidate head:
+On exact candidate `b6a9193ed65ebfd232530d46509c3ec49285c04b`:
 
-- focused story validator discovery including `validate_b2_remnant_continuity_compact.py`;
-- changed-content style;
-- A1 simulation/state-ownership regressions;
-- production configure/build;
-- stock save-load smoke.
+- `Fork simulation and story validation` run `32503327019` / #338: **SUCCESS**;
+- focused story validator discovery including `validate_b2_remnant_continuity_compact.py`: **SUCCESS**;
+- changed-content style: **SUCCESS**;
+- A1 simulation/state-ownership regressions: **SUCCESS**;
+- `Fork save-load integration smoke` run `32503327116` / #323: **SUCCESS**;
+- production configure/build: **SUCCESS**;
+- stock save-load smoke: **SUCCESS**.
 
-Do not promote to READY unless both the fork simulation/story workflow and production save-load workflow reach terminal green on an exact head containing the production and validator repairs.
+Exact base-to-candidate comparison is 3 commits ahead / 0 behind, with exactly three changed files: the production slice, its focused validator, and this durable handoff.
+
+## Persistence and canon assumptions
+
+No persistent condition names or values changed, so no save-state migration is required. This repair is lifecycle-only.
+
+Preserve the existing Remnant continuity boundary: emergency transfers, provenance uncertainty, custody responsibility, and later reconciliation are separate facts. Neither urgency nor provenance caution should silently erase the other.
 
 ## A3/B3 integration note
 
-This is a lifecycle-only repair. A3 should review/integrate it without changing the established Remnant continuity/provenance semantics. The durable lifecycle invariant is:
+A3 should re-read current `main`, verify ancestry/mergeability, and integrate this exact lifecycle repair without changing the established Remnant continuity/provenance semantics. B2 does not self-integrate.
+
+The durable lifecycle invariant is:
 
 > Dialogue-only B2 missions that merely persist state terminate with `decline`; `accept` is reserved for mission lifecycles that actually create gameplay objectives.
