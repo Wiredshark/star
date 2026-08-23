@@ -48,14 +48,14 @@ mission "B2 Acheron Observation Provenance: Offer"
 				"B2 Acheron Observation Provenance: introduced" = 1
 				"B2 Acheron Observation Provenance: route baseline" = 1
 				"B2 Acheron Observation Provenance: sol trusts player" = 1
-			accept
+			decline
 			label stimulus
 			`You side with Pell. Controlled changes in light, course, or power can produce useful field evidence, but the report must state exactly what the ship did before the animals responded. Sol adds that a reaction still does not establish hostility, communication, or motive.`
 			action
 				"B2 Acheron Observation Provenance: introduced" = 1
 				"B2 Acheron Observation Provenance: route stimulus" = 1
 				"B2 Acheron Observation Provenance: pell trusts player" = 1
-			accept
+			decline
 			label paired
 			`You recommend paired evidence. One layer preserves what the animals did before interference; the second preserves the ship's exact maneuver, timing, distance, and the subsequent response. Sol says, "Then a later summary can compare them without silently merging them." Pell nods. "And pilots still get the reaction data they need."`
 			action
@@ -63,7 +63,7 @@ mission "B2 Acheron Observation Provenance: Offer"
 				"B2 Acheron Observation Provenance: route paired" = 1
 				"B2 Acheron Observation Provenance: sol trusts player" = 1
 				"B2 Acheron Observation Provenance: pell trusts player" = 1
-			accept
+			decline
 			label decline
 			`You decline to turn the dispute into a shared compact. Sol accepts the boundary. Pell says the reports will still circulate, and copied summaries will still lose context unless individual crews are unusually careful.`
 			action
@@ -113,14 +113,14 @@ mission "B2 Acheron Observation Provenance: Review"
 				"B2 Acheron Observation Provenance: reviewed" = 1
 				"B2 Acheron Observation Provenance: settlement packet" = 1
 				"B2 Acheron Observation Provenance: sol trusts player" = 1
-			accept
+			decline
 			label ladder
 			`You recommend an evidence ladder. Passive observation, controlled stimulus response, relayed report, operational inference, and later contradiction remain distinct even when a short summary is copied downstream. Pell says, "Five repeats no longer become five sightings." Sol replies, "And an interpretation can change without rewriting what was actually observed."`
 			action
 				"B2 Acheron Observation Provenance: reviewed" = 1
 				"B2 Acheron Observation Provenance: settlement ladder" = 1
 				"B2 Acheron Observation Provenance: pell trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Acheron Observation Provenance: Sol Remembers"
@@ -144,4 +144,4 @@ mission "B2 Acheron Observation Provenance: Sol Remembers"
 			label record
 			action
 				"B2 Acheron Observation Provenance: aftermath seen" = 1
-			accept
+			decline
