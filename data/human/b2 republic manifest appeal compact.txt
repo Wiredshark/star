@@ -55,7 +55,7 @@ mission "B2 Republic Manifest Appeal Compact: Offer"
 				"B2 Republic Manifest Appeal Compact: route correction chain" = 1
 				"B2 Republic Manifest Appeal Compact: varo trusts player" = 1
 				event "B2 Republic Manifest Appeal Compact: Review Ready" 6 9
-				accept
+				decline
 			label current
 			`You recommend one operational manifest: the corrected declaration. The prior version remains reviewable through a provenance link, but it does not ride forward as if it were still an active fact. Pike nods. Varo warns that the link must preserve who changed the record and on what basis.`
 			action
@@ -63,7 +63,7 @@ mission "B2 Republic Manifest Appeal Compact: Offer"
 				"B2 Republic Manifest Appeal Compact: route current record" = 1
 				"B2 Republic Manifest Appeal Compact: pike trusts player" = 1
 				event "B2 Republic Manifest Appeal Compact: Review Ready" 6 9
-				accept
+				decline
 			label linked
 			`You suggest three linked layers: observed cargo facts, declared corrections, and unresolved challenges. A later office may inherit all three without pretending they have equal evidentiary weight. Varo says that preserves reviewability. Pike says it also makes clear which information should actually drive the next inspection.`
 			action
@@ -72,7 +72,7 @@ mission "B2 Republic Manifest Appeal Compact: Offer"
 				"B2 Republic Manifest Appeal Compact: varo trusts player" = 1
 				"B2 Republic Manifest Appeal Compact: pike trusts player" = 1
 				event "B2 Republic Manifest Appeal Compact: Review Ready" 6 9
-				accept
+				decline
 			label decline
 			`You tell them one disputed shipment is not enough basis for a durable rule. Varo records that no recommendation was made. Pike folds both copies together and says the next office will have to judge this one on its own.`
 			action
@@ -118,14 +118,14 @@ mission "B2 Republic Manifest Appeal Compact: Review"
 				"B2 Republic Manifest Appeal Compact: settlement disposition packet" = 1
 				"B2 Republic Manifest Appeal Compact: varo trusts player" = 1
 				"B2 Republic Manifest Appeal Compact: pike trusts player" = 1
-				accept
+				decline
 			label expiry
 			`You recommend a narrower rule. Once a challenge is resolved, it stops reproducing as an active warning. A later office may reopen the matter only by recording new evidence and a fresh reason for review. Varo says that preserves accountability without letting administrative history become self-sustaining suspicion. Pike agrees to carry the archived record behind the current manifest instead of inside it.`
 			action
 				"B2 Republic Manifest Appeal Compact: reviewed" = 1
 				"B2 Republic Manifest Appeal Compact: settlement expiry renewal" = 1
 				"B2 Republic Manifest Appeal Compact: pike trusts player" = 1
-				accept
+				decline
 
 
 mission "B2 Republic Manifest Appeal Compact: Varo Remembers"
@@ -152,4 +152,4 @@ mission "B2 Republic Manifest Appeal Compact: Varo Remembers"
 			label finish
 			action
 				"B2 Republic Manifest Appeal Compact: aftermath seen" = 1
-				accept
+				decline
