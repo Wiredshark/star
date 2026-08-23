@@ -1,6 +1,6 @@
 # B2 Unfettered Lineage Memory Compact — handoff
 
-VERDICT: PARTIAL pending exact-head repository-native validation.
+VERDICT: READY for A3 review/integration.
 
 LOOP_ID: B2
 RUN_TYPE: CONTENT
@@ -19,7 +19,8 @@ CROSS_SYSTEM_CONNECTION: B1 Unfettered Lineage Recitation Archive + Unfettered c
 - Branch: `agent/b2-unfettered-lineage-memory-compact-20260823`.
 - Production commit: `384dd46491f1875b2b49d09cb5d4fda8f17ec2fc`.
 - Focused-validator commit: `1ffd2ab61a47ea1723a8a21faf4110380a02c682`.
-- Current handoff commit: recorded by the commit that adds this document.
+- Exact fully validated candidate: `e122e5a3b08a75d1783db6d903cf847e7fea17aa`.
+- This READY promotion changes only this durable handoff; production and validator behavior are unchanged from the fully validated candidate.
 - No self-integration.
 
 ## Character / dynamic-content slice
@@ -62,23 +63,24 @@ Each substantive route persists distinct trust/relationship state and schedules 
 - `Reciter` / `Descendant` are player-private shorthand, not Unfettered titles, offices, or centralized archival authority.
 - One lineage's compromise does not become universal Unfettered archive law.
 
-## Validation contract
+## Exact validation evidence
 
-Focused validator:
+Exact candidate `e122e5a3b08a75d1783db6d903cf847e7fea17aa` passed both repository-native acceptance workflows:
+
+- `Fork simulation and story validation` #494 / run `32658368261`: **SUCCESS**.
+  - focused Python validation compilation: SUCCESS;
+  - all focused story validators, including `validate_b2_unfettered_lineage_memory_compact.py`: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS;
+  - changed-content style: SUCCESS.
+- `Fork save-load integration smoke` #479 / run `32658368244`: **SUCCESS**.
+  - dependency installation: SUCCESS;
+  - production configure: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
+
+Focused validator command:
 
 `python3 tools/story/validate_b2_unfettered_lineage_memory_compact.py "data/hai/b2 unfettered lineage memory compact.txt"`
-
-Repository acceptance gates expected on the exact PR head:
-
-- `Fork simulation and story validation`
-- changed-content style
-- focused story validators
-- A1 simulation/state-ownership contracts
-- `Fork save-load integration smoke`
-- production configure/build
-- stock save-load smoke
-
-READY must not be claimed until both repository-native workflows are terminal green on the exact production/validator candidate or on an exact later head whose only change is this handoff's READY promotion.
 
 ## DIVERSITY_CHECK
 
