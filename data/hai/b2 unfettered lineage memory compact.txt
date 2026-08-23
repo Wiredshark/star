@@ -1,0 +1,163 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Unfettered Lineage Memory Compact.
+#
+# This cultural / family-memory slice consumes the B1 Unfettered Lineage
+# Recitation Archive and campaign state without creating an Unfettered archive
+# authority. "Reciter" and "Descendant" are the player's private shorthand for
+# two relatives from one extended lineage, not canonical Unfettered offices.
+
+
+event "B2 Unfettered Lineage Memory Compact: Review Ready"
+	"B2 Unfettered Lineage Memory Compact: review ready" = 1
+
+
+mission "B2 Unfettered Lineage Memory Compact: Offer"
+	minor
+	name `The Story Inside the Story`
+	description `Two relatives from one Unfettered lineage disagree over whether an inherited recitation should travel unchanged, travel with contradictions attached, or remain partly private.`
+	source
+		attributes "unfettered"
+	"offer precedence" 8
+	to offer
+		has "First Contact: Unfettered: offered"
+		has "Unfettered Lineage Recitation Archive: offered"
+		not "event: wanderers: unfettered invasion starts"
+		not "B2 Unfettered Lineage Memory Compact: introduced"
+		not "B2 Unfettered Lineage Memory Compact: declined"
+	on offer
+		conversation
+			`The archive hall is nearly empty when two Unfettered Hai call you over. They are relatives from the same extended lineage. You privately think of the older one as the Reciter and the younger one as the Descendant; neither offers those words as a title.`
+			`The Reciter has just finished a family account about an ancestor who led survivors away from a ruined settlement. The Descendant has found an older recording in which the same ancestor sounds less like a leader and more like one survivor among many. The difference does not erase the family's memory, but it changes what the story can honestly prove.`
+			`"If every child hears the contradiction before they hear the inheritance," the Reciter says, "the lineage becomes a footnote to itself." The Descendant answers, "If every child hears the inheritance without the contradiction, the footnote becomes history by repetition."`
+			choice
+				`\tKeep the recitation intact as living inheritance, but attach speaker, lineage, date, and evidence class whenever it leaves the family circle.`
+					goto inheritance
+				`\tPreserve conflicting versions side by side and refuse to designate one retelling as the master record without stronger evidence.`
+					goto contradiction
+				`\tLet the lineage decide what becomes public: the archive may index that a version exists without copying private words beyond the permission given.`
+					goto consent
+				`\tRefuse to turn one family's disagreement into a general rule for Unfettered memory.`
+					goto decline
+			label inheritance
+			`You tell the Reciter that a living inheritance can remain whole without pretending to be a surviving sensor log. The Descendant accepts the distinction after you insist that every public copy carry who spoke it, when, from which lineage, and whether the claim descends from another recitation rather than physical evidence.`
+			action
+				"B2 Unfettered Lineage Memory Compact: introduced" = 1
+				"B2 Unfettered Lineage Memory Compact: route living inheritance" = 1
+				"B2 Unfettered Lineage Memory Compact: reciter trusts player" = 1
+				event "B2 Unfettered Lineage Memory Compact: Review Ready" 7 11
+			decline
+			label contradiction
+			`You ask them to keep both versions visible. The Reciter dislikes the symmetry of the display, but agrees when you point out that preserving disagreement is not the same thing as declaring the family story false. The Descendant starts drafting notes that distinguish the shared core from the points where the retellings diverge.`
+			action
+				"B2 Unfettered Lineage Memory Compact: introduced" = 1
+				"B2 Unfettered Lineage Memory Compact: route contradiction preserved" = 1
+				"B2 Unfettered Lineage Memory Compact: descendant trusts player" = 1
+				event "B2 Unfettered Lineage Memory Compact: Review Ready" 7 11
+			decline
+			label consent
+			`You separate preservation from publication. The archive can record that a recitation exists, who controls permission to reproduce it, and which excerpts may be cited. The full family recording does not become public merely because the archive has the technical ability to copy it. Both relatives agree that memory can be preserved without every memory becoming common property.`
+			action
+				"B2 Unfettered Lineage Memory Compact: introduced" = 1
+				"B2 Unfettered Lineage Memory Compact: route lineage consent" = 1
+				"B2 Unfettered Lineage Memory Compact: reciter trusts player" = 1
+				"B2 Unfettered Lineage Memory Compact: descendant trusts player" = 1
+				event "B2 Unfettered Lineage Memory Compact: Review Ready" 7 11
+			decline
+			label decline
+			`You tell them that a family argument should not become an archival constitution simply because an outsider was present. The Reciter accepts the rebuke more easily than the Descendant, but both agree to keep the disagreement inside the lineage for now.`
+			action
+				"B2 Unfettered Lineage Memory Compact: declined" = 1
+			decline
+
+
+mission "B2 Unfettered Lineage Memory Compact: Review"
+	minor
+	name `When the Older Voice Returns`
+	description `A newly recovered recording sharpens the lineage dispute and forces a decision about how memory, contradiction, and permission should travel.`
+	source
+		attributes "unfettered"
+	"offer precedence" 8
+	to offer
+		has "B2 Unfettered Lineage Memory Compact: introduced"
+		has "B2 Unfettered Lineage Memory Compact: review ready"
+		not "B2 Unfettered Lineage Memory Compact: reviewed"
+	on offer
+		conversation
+			branch wartime
+				has "event: wanderers: unfettered invasion starts"
+			`The Reciter and Descendant have found another recording. It preserves the same migration, but gives the disputed ancestor yet another role: neither sole leader nor passive survivor. The family now has three related memories and no honest way to compress them into one sentence without losing who said what.`
+				goto routes
+			label wartime
+			`The invasion has made the argument harder rather than less important. The Reciter and Descendant have found another recording while families are repeating old lineage stories with new urgency. This version gives the disputed ancestor yet another role: neither sole leader nor passive survivor. The pressure to turn a useful memory into a single rallying story is suddenly much stronger.`
+			label routes
+			branch inheritance
+				has "B2 Unfettered Lineage Memory Compact: route living inheritance"
+			branch contradiction
+				has "B2 Unfettered Lineage Memory Compact: route contradiction preserved"
+			`Because you chose lineage consent, the new recording has not been copied outside the family. That protected the speakers, but the Descendant worries that later researchers may know only that a contradiction existed, not what the contradiction actually was.`
+				goto choice
+			label inheritance
+			`The intact recitation has remained powerful, but several listeners now quote it without the provenance note that distinguished inheritance from direct evidence. The Reciter admits that a label attached only at the archive can vanish once a story is repeated elsewhere.`
+				goto choice
+			label contradiction
+			`The side-by-side versions preserved disagreement, but copied summaries have started listing the contradiction without preserving which speaker, generation, and source chain produced each claim. The Descendant says that contradiction without provenance can become confusion rather than honesty.`
+			label choice
+			choice
+				`\tUse a layered recitation record: literal recording or transcript, speaker and lineage, source chain, later retellings, contradictions, and evidence class remain separable instead of being flattened into one version.`
+					goto layered
+				`\tUse a consent-and-citation ledger: every public excerpt carries origin, permission scope, allowed uses, and whether the underlying full recitation remains private.`
+					goto permission
+			label layered
+			`You recommend a layered record. A child can hear the family recitation as inheritance, a historian can see which claims descend from older retellings, and neither must pretend the emotional meaning of the story is identical to its evidentiary weight. Contradictions remain attached to the speakers and source chains that created them.`
+			action
+				"B2 Unfettered Lineage Memory Compact: reviewed" = 1
+				"B2 Unfettered Lineage Memory Compact: settlement layered recitation" = 1
+				"B2 Unfettered Lineage Memory Compact: reciter trusts player" = 1
+				"B2 Unfettered Lineage Memory Compact: descendant trusts player" = 1
+			decline
+			label permission
+			`You recommend a consent-and-citation ledger. Public summaries may say what a lineage has permitted them to say, but each excerpt carries who authorized it, for what purpose, and whether later reuse requires renewed permission. The existence of an archive does not silently turn intimate family memory into public property.`
+			action
+				"B2 Unfettered Lineage Memory Compact: reviewed" = 1
+				"B2 Unfettered Lineage Memory Compact: settlement consent citation" = 1
+				"B2 Unfettered Lineage Memory Compact: reciter trusts player" = 1
+				"B2 Unfettered Lineage Memory Compact: descendant trusts player" = 1
+			decline
+
+
+mission "B2 Unfettered Lineage Memory Compact: Descendant Remembers"
+	minor
+	name `Descendant Remembers`
+	description `The younger relative remembers whether the lineage learned to preserve meaning without turning repetition into proof or preservation into automatic publication.`
+	source
+		attributes "unfettered"
+	"offer precedence" 8
+	to offer
+		not "B2 Unfettered Lineage Memory Compact: aftermath seen"
+		or
+			has "B2 Unfettered Lineage Memory Compact: settlement layered recitation"
+			has "B2 Unfettered Lineage Memory Compact: settlement consent citation"
+	on offer
+		conversation
+			branch permission
+				has "B2 Unfettered Lineage Memory Compact: settlement consent citation"
+			`The Descendant recognizes you beside a listening alcove. A younger member of the lineage is hearing the old migration recitation while a display beside it identifies the speaker, the source chain, and the points where later versions disagree. "They can inherit the story without inheriting certainty we do not possess," the Descendant says.`
+				goto record
+			label permission
+			`The Descendant shows you a public index entry. It names the lineage, says which themes may be cited, and plainly marks the full recording as private. "People can know that our memory exists without assuming they own every word of it," the Descendant says. "That boundary survived being useful."`
+			label record
+			action
+				"B2 Unfettered Lineage Memory Compact: aftermath seen" = 1
+			decline
