@@ -1,0 +1,82 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "A2 Hicemus Contact Practice: Review"
+	minor
+	invisible
+	offer precedence 9
+	source
+		government "Hicemus"
+	to offer
+		has "Incipias: Help The Stranded 2: done"
+		not "A2 Hicemus Contact Practice: decided"
+	on offer
+		conversation
+			`An Incipias attendant has assembled several entries from the Hicemus contact testimony register: a rescue gesture mistaken for a warning, a color sequence whose meaning changed after later encounters, and a docking instruction that only became clear when the witness sketch was compared with the ship's actual position.`
+			`\tThe attendant stresses that these are records of modern contact practice, not a claim that outsiders have decoded a complete Hicemus language. What mattered was the habit of keeping observation, interpretation, and later correction separate.`
+			`\tYou are asked what lesson you would carry into your own future encounters.`
+			choice
+				`Record observations before assigning meaning.`
+					`You decide that future contact notes should preserve what was actually seen or heard before attaching an interpretation. A later translation can revise the meaning without rewriting the observation.`
+					set "A2 Hicemus Contact Practice: observation first"
+					goto done
+				`Treat every interpretation as revisable when new evidence arrives.`
+					`You decide to carry forward an explicit revision rule: a translation or inferred intent remains provisional when later contact supplies better evidence.`
+					set "A2 Hicemus Contact Practice: revision first"
+					goto done
+				`Keep this lesson local to the Hicemus contact record.`
+					`You decide that the archive is useful context without turning one difficult contact history into a universal rule for every species.`
+					set "A2 Hicemus Contact Practice: local only"
+					goto done
+				`Do not adopt a standing practice from this archive.`
+					`You decline to turn the Hicemus record into a rule for your own future encounters.`
+					set "A2 Hicemus Contact Practice: refused"
+					goto done
+			done
+			`The attendant records none of this as Hicemus policy or endorsement. It is your own handling of evidence from a contact history whose language barrier still matters.`
+			set "A2 Hicemus Contact Practice: decided"
+			decline
+
+
+mission "A2 Hicemus Contact Practice: Reflection"
+	minor
+	invisible
+	offer precedence 9
+	source
+		government "Hicemus"
+	to offer
+		has "Incipias: Help The Stranded 2: done"
+		has "A2 Hicemus Contact Practice: decided"
+		not "A2 Hicemus Contact Practice: refused"
+		not "A2 Hicemus Contact Practice: reflection seen"
+	on offer
+		conversation
+			branch observation
+				has "A2 Hicemus Contact Practice: observation first"
+			branch revision
+				has "A2 Hicemus Contact Practice: revision first"
+			branch local
+				has "A2 Hicemus Contact Practice: local only"
+			observation
+			`A new testimony entry preserves a crew's observed light pattern separately from the meaning first assigned to it. When another witness offers a different interpretation, the underlying observation remains intact instead of being quietly rewritten.`
+			goto finish
+			revision
+			`A translated warning in the register now carries a visible amendment. The earlier interpretation is retained, but a later encounter has narrowed what the archivists think the signal meant. The correction is treated as evidence of a functioning record, not an embarrassment to erase.`
+			goto finish
+			local
+			`The attendant points out a case where a method useful in Hicemus contact would have been misleading elsewhere. Keeping the lesson local preserved the archive's value without pretending one species' communication problem supplied a universal doctrine.`
+			finish
+			`Nothing in the exchange grants you a Hicemus office, linguistic credential, endorsement, or authority to speak for their government.`
+			set "A2 Hicemus Contact Practice: reflection seen"
+			decline
