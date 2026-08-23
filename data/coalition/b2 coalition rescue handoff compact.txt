@@ -1,0 +1,156 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Coalition Rescue Handoff Compact.
+#
+# This character slice consumes the institutional premise established by the B1
+# Coalition Rescue Compact Archive: rescue can cross local jurisdictions through
+# shared distress categories, medical summaries, towing conventions, and survivor
+# transfer procedures without creating a single centralized Coalition rescue office.
+#
+# The present-day dispute is narrower and personal: a survivor can be physically
+# transferred while consent, medication context, family contact, or unresolved
+# responsibility is lost in the handoff. All writes are B2-prefixed.
+
+
+event "B2 Coalition Rescue Handoff Compact: Review Ready"
+	"B2 Coalition Rescue Handoff Compact: review ready" = 1
+
+
+mission "B2 Coalition Rescue Handoff Compact: Offer"
+	minor
+	name `The Passenger Between Ports`
+	description `Rescue coordinator Lira Senn and tug captain Oren Vale disagree over what must travel with an injured survivor when care crosses Coalition jurisdictions.`
+	source
+		government "Coalition"
+	"offer precedence" 8
+	to offer
+		not "B2 Coalition Rescue Handoff Compact: introduced"
+		not "B2 Coalition Rescue Handoff Compact: declined"
+	on offer
+		conversation
+			`Lira Senn, a rescue coordinator, is reviewing a transfer summary beside Oren Vale, the captain of a civilian tug. Their last rescue went well in the narrowest sense: the survivor reached a hospital alive. The trouble began afterward. One port copied the injury summary but not the medication change. Another recorded a family contact without noting that the survivor had asked staff not to share their location yet.`
+			`Oren says, "A rescue crew needs something short enough to read under pressure." Lira answers, "Short is fine. Short cannot mean we silently invent consent or erase unfinished care."`
+			choice
+				`\tUse continuity-first handoffs: consent, current treatment, unresolved care, and contact limits must travel with the survivor.`
+					goto continuity
+				`\tUse operational-first handoffs: keep the emergency summary brief, but require a durable link to the full source record and its limits.`
+					goto operational
+				`\tUse paired records: one emergency transfer sheet and one survivor-continuity record, explicitly linked but never treated as the same thing.`
+					goto paired
+				`\tRefuse to turn one difficult rescue into a general Coalition rule.`
+					goto decline
+			label continuity
+			`You argue that transfer should preserve the survivor as a person, not just the injury as a problem. The receiving team needs current treatment, consent limits, unresolved care, and any contact restriction that still matters. Oren accepts the burden if the first page remains operationally readable. Lira says that is exactly the boundary she wanted.`
+			action
+				"B2 Coalition Rescue Handoff Compact: introduced" = 1
+				"B2 Coalition Rescue Handoff Compact: route continuity first" = 1
+				"B2 Coalition Rescue Handoff Compact: lira trusts player" = 1
+				event "B2 Coalition Rescue Handoff Compact: Review Ready" 7 11
+				decline
+			label operational
+			`You side with Oren on the first page: rescue crews need a compact operational summary. But the summary must identify its source record, its update time, and the facts it does not carry. Lira agrees that a short document can be safe if nobody mistakes it for the whole case.`
+			action
+				"B2 Coalition Rescue Handoff Compact: introduced" = 1
+				"B2 Coalition Rescue Handoff Compact: route operational first" = 1
+				"B2 Coalition Rescue Handoff Compact: oren trusts player" = 1
+				event "B2 Coalition Rescue Handoff Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You recommend two linked records. The emergency sheet carries immediate risks and treatment. The continuity record carries consent, family-contact limits, unresolved care, and responsibility for the next action. One can be copied quickly without pretending it replaces the other. Lira and Oren both begin editing the sample handoff.`
+			action
+				"B2 Coalition Rescue Handoff Compact: introduced" = 1
+				"B2 Coalition Rescue Handoff Compact: route paired records" = 1
+				"B2 Coalition Rescue Handoff Compact: lira trusts player" = 1
+				"B2 Coalition Rescue Handoff Compact: oren trusts player" = 1
+				event "B2 Coalition Rescue Handoff Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that local rescue teams should learn from the case without treating your answer as Coalition-wide authority. Lira records the disagreement. Oren says that is better than a rule neither of them can defend yet.`
+			action
+				"B2 Coalition Rescue Handoff Compact: declined" = 1
+				decline
+
+
+mission "B2 Coalition Rescue Handoff Compact: Review"
+	minor
+	name `Alive Is Not the End of the Record`
+	description `Lira Senn and Oren Vale return after several cross-port transfers expose what emergency summaries lose when they are copied downstream.`
+	source
+		government "Coalition"
+	"offer precedence" 8
+	to offer
+		has "B2 Coalition Rescue Handoff Compact: introduced"
+		has "B2 Coalition Rescue Handoff Compact: review ready"
+		not "B2 Coalition Rescue Handoff Compact: reviewed"
+	on offer
+		conversation
+			branch continuity
+				has "B2 Coalition Rescue Handoff Compact: route continuity first"
+			branch operational
+				has "B2 Coalition Rescue Handoff Compact: route operational first"
+			`Lira and Oren have tested the paired approach through several transfers. It mostly worked, but one receiving port copied only the emergency sheet and later treated a family-contact note as if the survivor had personally authorized disclosure. The records were linked; the copied fragment no longer carried that fact.`
+				goto settle
+			label continuity
+			`The continuity-first record preserved consent and follow-up care, but one emergency crew copied the whole packet into its dispatch log. A survivor's private family note became visible to people who only needed the medical warning. Lira says continuity without scope can become another kind of harm.`
+				goto settle
+			label operational
+			`The operational-first summary kept crews fast, but one downstream clinic copied an old medication note after treatment had changed. The source link still existed; nobody checked whether the summary had expired. Oren says that a compact record needs an equally compact way to say when it is no longer current.`
+			label settle
+			choice
+				`\tAdopt a portable survivor-status packet: treatment state, consent scope, contact limits, responsible team, update time, and unresolved follow-up travel together.`
+					goto packet
+				`\tAdopt expiry-and-reconciliation: emergency summaries expire unless renewed, while consent and unresolved-care records reconcile separately before closure.`
+					goto reconcile
+			label packet
+			`You recommend a portable survivor-status packet whose fields are explicit about scope. A medical team can see treatment state and next responsibility. A rescue crew can see immediate risks. Contact permissions travel only where authorized, and every copied packet carries its update time and unresolved follow-up. Lira says the survivor no longer disappears behind the transfer. Oren says the first page is still usable.`
+			action
+				"B2 Coalition Rescue Handoff Compact: reviewed" = 1
+				"B2 Coalition Rescue Handoff Compact: settlement portable survivor packet" = 1
+				"B2 Coalition Rescue Handoff Compact: lira trusts player" = 1
+				"B2 Coalition Rescue Handoff Compact: oren trusts player" = 1
+				decline
+			label reconcile
+			`You recommend giving emergency summaries explicit expiry and keeping survivor continuity in separate linked records. A copied dispatch sheet stops being current unless someone renews it from the source. Consent, contact limits, and unresolved care stay open until the responsible team explicitly reconciles and closes them. Lira calls that safer than pretending one document can serve every audience.`
+			action
+				"B2 Coalition Rescue Handoff Compact: reviewed" = 1
+				"B2 Coalition Rescue Handoff Compact: settlement expiry reconciliation" = 1
+				"B2 Coalition Rescue Handoff Compact: lira trusts player" = 1
+				"B2 Coalition Rescue Handoff Compact: oren trusts player" = 1
+				decline
+
+
+mission "B2 Coalition Rescue Handoff Compact: Oren Remembers"
+	minor
+	name `Oren Remembers`
+	description `Oren Vale remembers whether the rescue handoff preserved both emergency clarity and the survivor's continuing choices.`
+	source
+		government "Coalition"
+	"offer precedence" 8
+	to offer
+		not "B2 Coalition Rescue Handoff Compact: aftermath seen"
+		or
+			has "B2 Coalition Rescue Handoff Compact: settlement portable survivor packet"
+			has "B2 Coalition Rescue Handoff Compact: settlement expiry reconciliation"
+	on offer
+		conversation
+			branch reconcile
+				has "B2 Coalition Rescue Handoff Compact: settlement expiry reconciliation"
+			`Oren shows you a transfer sheet clipped to a much smaller continuity reference. The emergency page is short, timestamped, and explicit about what it does not authorize. "The receiving crew knew what mattered in the first minute," he says. "And they did not mistake that minute for the survivor's entire life."`
+				goto finish
+			label reconcile
+			`Oren shows you an expired emergency summary stamped beside a still-open follow-up record. "The warning stopped circulating when it stopped being current. The survivor's contact restriction stayed open until they changed it themselves. We finally stopped treating those two clocks as one."`
+			label finish
+			action
+				"B2 Coalition Rescue Handoff Compact: aftermath seen" = 1
+				decline
