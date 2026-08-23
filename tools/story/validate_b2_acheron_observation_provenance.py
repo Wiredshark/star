@@ -50,6 +50,24 @@ if missing:
 if text.count('settlement packet" = 1') != 1 or text.count('settlement ladder" = 1') != 1:
     raise SystemExit("expected exactly two terminal settlement writes")
 
+# Dialogue/state-only lifecycle invariant. These missions persist state but create
+# no gameplay objective, so accepting them would leave objective-less missions
+# active. Every terminal path must close with decline instead.
+accepts = len(re.findall(r'^\s*accept\s*$', text, re.M))
+declines = len(re.findall(r'^\s*decline\s*$', text, re.M))
+if accepts:
+    raise SystemExit(f"state-only Acheron slice must have zero terminal accept commands, found {accepts}")
+if declines != 7:
+    raise SystemExit(f"expected exactly 7 terminal decline commands, found {declines}")
+
+objective_directives = re.findall(
+    r'^\t+(destination|stopover|waypoint|npc|cargo|passenger|deadline|timer)\b',
+    text,
+    re.M | re.I,
+)
+if objective_directives:
+    raise SystemExit(f"state-only lifecycle assumption invalidated by objective directives: {objective_directives}")
+
 # Semantic continuity is intentionally checked using exact language that appears
 # in the production dialogue rather than brittle prose fragments from one branch.
 # The required phrases above prove that responsiveness != intention and danger !=
@@ -63,4 +81,5 @@ print("PASS: initial_routes=3 + refusal")
 print("PASS: terminal_settlements=2")
 print("PASS: later_reader=Sol Remembers")
 print("PASS: persistence_writes=B2 namespace only")
+print("PASS: lifecycle=7 state-only decline terminals, 0 accept terminals")
 print("PASS: continuity=observation/stimulus/hazard/motive kept distinct")
