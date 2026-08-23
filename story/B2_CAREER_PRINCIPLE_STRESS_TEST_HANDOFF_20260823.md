@@ -1,21 +1,24 @@
 # B2 Career Principle Stress Test Handoff — 2026-08-23
 
-Verdict: **PARTIAL — pending repository-native simulation/story/style and production save-load validation**
+Verdict: **READY for A3 review/integration**
 
 ## Authority and isolation
 
 - Repository: `Wiredshark/star`
-- Authoritative integration branch: `main`
+- Authoritative integration branch observed/rechecked: `main`
 - Exact authoritative base SHA: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Isolated B2 branch: `agent/b2-career-principle-stress-test-20260823`
 - Production commit: `5ff24eda401d7ac22cb419f0814e4dc63b597b45`
 - Focused-validator commit: `def7406d276b350a03a9435b62ff2bc4a29847cd`
+- Exact fully validated production/validator/handoff candidate: `ec93d63496cbf3162e8d63ee8a5596b921d5b4f0`
 
 ## Non-overlap / concurrency
 
-This slice deliberately avoids the active global B2 dialogue-lifecycle audit and does not modify an existing B2 arc. It is new additive character/dynamic content built directly on current authoritative `main`.
+This slice deliberately avoided the active global B2 dialogue-lifecycle audit and does not modify an existing B2 arc. It is new additive character/dynamic content built directly on authoritative `main`.
 
 Existing B2 coverage already handles Republic border testimony, displacement, tracing, customs mentorship, manifest appeal, and civic case continuity. This slice uses a separate player-character axis: **whether an earlier self-described command principle should acquire authority when a newer captain copies it under different conditions**.
+
+The private execution-service process inventory reported four pre-existing service-owned processes; none were killed or modified.
 
 ## Character and dynamic-content behavior
 
@@ -69,20 +72,33 @@ A remembered player command principle is **evidence about one captain's prior se
 - `tools/story/validate_b2_career_principle_stress_test.py`
 - `story/B2_CAREER_PRINCIPLE_STRESS_TEST_HANDOFF_20260823.md`
 
-## Required validation
+## Validation evidence
 
-Before READY/A3 integration:
+Exact candidate `ec93d63496cbf3162e8d63ee8a5596b921d5b4f0` passed both repository-native acceptance workflows:
 
-1. `python3 tools/story/validate_b2_career_principle_stress_test.py "data/human/b2 career principle stress test.txt"`
-2. repository focused story validators / state-ownership contracts;
-3. changed-content style;
-4. production Endless Sky configure/build;
-5. stock save-load integration smoke;
-6. verify all three A2 principle framings, three substantive routes, refusal, both settlements, and Sorn aftermath after reload.
+- `Fork simulation and story validation` #490 / run `32651868253`: **SUCCESS**
+  - focused story validators: passed;
+  - `validate_b2_career_principle_stress_test.py`: passed as part of focused validator discovery;
+  - A1 simulation/state-ownership contracts: passed;
+  - changed-content style: passed.
+- `Fork save-load integration smoke` #475 / run `32651868245`: **SUCCESS**
+  - production configuration: passed;
+  - production build: passed;
+  - stock save-load integration smoke: passed.
+
+Isolation against the selected base was also verified:
+
+- status: ahead;
+- ahead by: 3;
+- behind by: 0;
+- changed files: exactly 3;
+- additions: 440;
+- deletions: 0.
 
 ## A3/B3 integration notes
 
-- Branch is based directly on current authoritative `main`; re-read `main` before integration in case it advances.
+- Re-read current `main` before integration in case it advances after this handoff.
 - Preserve A1/A2 ownership boundaries exactly.
 - Do not collapse the prior command principle into a binding rule.
 - Preserve the distinction among source principle, present conditions, exception/revision, outcome, uncertainty, and current authority.
+- This candidate is suitable for A3 review/integration under the documented process; B2 did not self-integrate.
