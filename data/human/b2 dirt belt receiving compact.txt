@@ -52,14 +52,14 @@ mission "B2 Dirt Belt Receiving Compact: Offer"
 				"B2 Dirt Belt Receiving Compact: introduced" = 1
 				"B2 Dirt Belt Receiving Compact: route claim" = 1
 				"B2 Dirt Belt Receiving Compact: ives trusts player" = 1
-			accept
+			decline
 			label capacity
 			`You side with Thorne. Relief that rots on a landing pad helps nobody. Ives accepts practical rerouting, provided the record distinguishes a temporary receiving constraint from a reduced need claim and automatically reopens whatever part of the original request was not satisfied.`
 			action
 				"B2 Dirt Belt Receiving Compact: introduced" = 1
 				"B2 Dirt Belt Receiving Compact: route capacity" = 1
 				"B2 Dirt Belt Receiving Compact: thorne trusts player" = 1
-			accept
+			decline
 			label paired
 			`You recommend a paired record. The shipment keeps the original request, the latest reservoir and receiving-capacity report, the reason for any substitute destination, what quantity was actually usable there, and the remainder still owed to the original settlement. Ives says, "Need stays visible." Thorne adds, "And capacity stops being imaginary."`
 			action
@@ -67,7 +67,7 @@ mission "B2 Dirt Belt Receiving Compact: Offer"
 				"B2 Dirt Belt Receiving Compact: route paired" = 1
 				"B2 Dirt Belt Receiving Compact: ives trusts player" = 1
 				"B2 Dirt Belt Receiving Compact: thorne trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them the Dirt Belt has survived because settlements can improvise, and a standing rule might become another layer of paperwork during a drought. Ives nods. Thorne says, "Fair. But if the paperwork stays informal, somebody still has to remember which 'completed' delivery left half the need behind."`
 			action
@@ -119,14 +119,14 @@ mission "B2 Dirt Belt Receiving Compact: Review"
 				"B2 Dirt Belt Receiving Compact: reviewed" = 1
 				"B2 Dirt Belt Receiving Compact: settlement packet" = 1
 				"B2 Dirt Belt Receiving Compact: ives trusts player" = 1
-			accept
+			decline
 			label reconcile
 			`You recommend a reconciliation ledger. Need records and logistics records remain separate: one says what people still require, the other says what the port, roads, storage, labor, and carriers can actually move. A relief obligation closes only when both records agree on what was satisfied and what remains open. Thorne says, "That keeps logistics honest." Ives replies, "And keeps scarcity visible."`
 			action
 				"B2 Dirt Belt Receiving Compact: reviewed" = 1
 				"B2 Dirt Belt Receiving Compact: settlement reconcile" = 1
 				"B2 Dirt Belt Receiving Compact: thorne trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Dirt Belt Receiving Compact: Ives Remembers"
@@ -153,4 +153,4 @@ mission "B2 Dirt Belt Receiving Compact: Ives Remembers"
 			label record
 			action
 				"B2 Dirt Belt Receiving Compact: aftermath seen" = 1
-			accept
+			decline
