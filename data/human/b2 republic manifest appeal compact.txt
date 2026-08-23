@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Republic Manifest Appeal Compact.
+#
+# This slice consumes the integrated B1 Republic customs history and turns its
+# manifest-provenance / challenge-ledger principles into persistent characters.
+# B2 writes only B2-prefixed state. It does not write A1 world state, A2 review
+# state, credits, reputation, cargo, outfits, ships, fleets, or combat state.
+
+
+event "B2 Republic Manifest Appeal Compact: Review Ready"
+	"B2 Republic Manifest Appeal Compact: review ready" = 1
+
+
+mission "B2 Republic Manifest Appeal Compact: Offer"
+	minor
+	name `A Correction That Traveled`
+	description `Customs adjudicator Lena Varo and freight clerk Orren Pike disagree over how a corrected cargo declaration should follow a ship between Republic ports.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Republic Manifest Appeal Compact: introduced"
+		not "B2 Republic Manifest Appeal Compact: declined"
+	on offer
+		conversation
+			`A customs adjudicator named Lena Varo is arguing quietly with freight clerk Orren Pike over two versions of the same cargo manifest. One carries an old amendment copied through three ports; the other carries a newer correction, but only one office recorded why the correction was made.`
+			`Varo says, "The challenge ledger exists so a correction can be reviewed, not merely substituted. If we erase the old declaration, the next office cannot tell what changed or why." Pike taps the newer sheet. "If every port preserves every superseded statement at equal weight, a corrected error keeps following the captain forever."`
+			`The problem is familiar from the Republic customs-history archives: provenance matters, but repetition must not turn inherited suspicion into new evidence.`
+			choice
+				`\tCarry the whole correction chain forward, but clearly mark which statement is current and which claims were superseded.`
+					goto chain
+				`\tCarry only the current declaration operationally, with a review link back to the older record if another office needs it.`
+					goto current
+				`\tSeparate facts, corrections, and unresolved challenges into linked records so no layer silently overwrites another.`
+					goto linked
+				`\tDecline to choose a Republic-wide rule from one disputed manifest.`
+					goto decline
+			label chain
+			`You recommend a visible correction chain. The current declaration stays obvious, while every superseded claim remains dated, attributed, and explicitly marked as no longer controlling. Varo approves of the provenance. Pike says he can work with it if old claims stop appearing as active warnings.`
+			action
+				"B2 Republic Manifest Appeal Compact: introduced" = 1
+				"B2 Republic Manifest Appeal Compact: route correction chain" = 1
+				"B2 Republic Manifest Appeal Compact: varo trusts player" = 1
+				event "B2 Republic Manifest Appeal Compact: Review Ready" 6 9
+				decline
+			label current
+			`You recommend one operational manifest: the corrected declaration. The prior version remains reviewable through a provenance link, but it does not ride forward as if it were still an active fact. Pike nods. Varo warns that the link must preserve who changed the record and on what basis.`
+			action
+				"B2 Republic Manifest Appeal Compact: introduced" = 1
+				"B2 Republic Manifest Appeal Compact: route current record" = 1
+				"B2 Republic Manifest Appeal Compact: pike trusts player" = 1
+				event "B2 Republic Manifest Appeal Compact: Review Ready" 6 9
+				decline
+			label linked
+			`You suggest three linked layers: observed cargo facts, declared corrections, and unresolved challenges. A later office may inherit all three without pretending they have equal evidentiary weight. Varo says that preserves reviewability. Pike says it also makes clear which information should actually drive the next inspection.`
+			action
+				"B2 Republic Manifest Appeal Compact: introduced" = 1
+				"B2 Republic Manifest Appeal Compact: route linked records" = 1
+				"B2 Republic Manifest Appeal Compact: varo trusts player" = 1
+				"B2 Republic Manifest Appeal Compact: pike trusts player" = 1
+				event "B2 Republic Manifest Appeal Compact: Review Ready" 6 9
+				decline
+			label decline
+			`You tell them one disputed shipment is not enough basis for a durable rule. Varo records that no recommendation was made. Pike folds both copies together and says the next office will have to judge this one on its own.`
+			action
+				"B2 Republic Manifest Appeal Compact: declined" = 1
+				decline
+
+
+mission "B2 Republic Manifest Appeal Compact: Review"
+	minor
+	name `The Appeal That Outlived the Error`
+	description `Varo and Pike return after discovering that a corrected manifest can still leave an unresolved challenge circulating between ports.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Republic Manifest Appeal Compact: introduced"
+		has "B2 Republic Manifest Appeal Compact: review ready"
+		not "B2 Republic Manifest Appeal Compact: reviewed"
+	on offer
+		conversation
+			branch chain
+				has "B2 Republic Manifest Appeal Compact: route correction chain"
+			branch current
+				has "B2 Republic Manifest Appeal Compact: route current record"
+			`Varo and Pike have found the weakness in the linked-record approach. A downstream office copied the unresolved challenge but not the later notation that the disputed declaration had already been corrected. "The pieces survived," Varo says. "Their relationship did not."`
+				goto settle
+			label chain
+			`Varo shows you a manifest where the superseded declaration is properly marked, but a later office copied only the old challenge reference. Pike says, "The error is dead. The argument about the error is still traveling as though nothing changed."`
+				goto settle
+			label current
+			`Pike shows you a clean current manifest. The operational record is correct, but another port opened the provenance link and copied the old challenge without copying its resolution status. Varo says a review record that loses its disposition can recreate the very suspicion it was supposed to bound.`
+			label settle
+			choice
+				`\tAdopt a portable disposition packet: every copied challenge must carry its trigger, current status, correction basis, and whether the issue remains open.`
+					goto packet
+				`\tAdopt an expiry-and-renewal rule: resolved challenges stop propagating unless new evidence explicitly reopens them.`
+					goto expiry
+			label packet
+			`You recommend that a challenge cannot travel by itself. Any downstream copy must carry the original trigger, the verified facts, the correction basis, the office that resolved or limited it, and whether any question remains open. Varo calls it a portable disposition packet. Pike says it makes inherited records heavier, but much harder to misread.`
+			action
+				"B2 Republic Manifest Appeal Compact: reviewed" = 1
+				"B2 Republic Manifest Appeal Compact: settlement disposition packet" = 1
+				"B2 Republic Manifest Appeal Compact: varo trusts player" = 1
+				"B2 Republic Manifest Appeal Compact: pike trusts player" = 1
+				decline
+			label expiry
+			`You recommend a narrower rule. Once a challenge is resolved, it stops reproducing as an active warning. A later office may reopen the matter only by recording new evidence and a fresh reason for review. Varo says that preserves accountability without letting administrative history become self-sustaining suspicion. Pike agrees to carry the archived record behind the current manifest instead of inside it.`
+			action
+				"B2 Republic Manifest Appeal Compact: reviewed" = 1
+				"B2 Republic Manifest Appeal Compact: settlement expiry renewal" = 1
+				"B2 Republic Manifest Appeal Compact: pike trusts player" = 1
+				decline
+
+
+mission "B2 Republic Manifest Appeal Compact: Varo Remembers"
+	minor
+	name `Varo Remembers`
+	description `Lena Varo remembers whether Republic ports learned to carry a customs challenge with its disposition instead of merely carrying its suspicion.`
+	source
+		government "Republic"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Republic Manifest Appeal Compact: aftermath seen"
+		or
+			has "B2 Republic Manifest Appeal Compact: settlement disposition packet"
+			has "B2 Republic Manifest Appeal Compact: settlement expiry renewal"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Republic Manifest Appeal Compact: settlement expiry renewal"
+			`Varo recognizes you beside a customs terminal. "The disposition packets are dull, which is useful. A later port can see why a challenge began, what changed, and whether anything remains unresolved. We finally stopped copying an argument as though the existence of the argument were evidence."`
+				goto finish
+			label expiry
+			`Varo recognizes you beside a customs terminal. "Resolved challenges now age out of active routing unless somebody records fresh evidence and a new basis. Inspectors can still reopen a real problem. They just cannot use yesterday's decision to investigate as today's new fact."`
+			label finish
+			action
+				"B2 Republic Manifest Appeal Compact: aftermath seen" = 1
+				decline
