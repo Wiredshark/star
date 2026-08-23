@@ -38,7 +38,17 @@ for phrase in ('historical evidence','repair backlog','source lineage','revalida
 if 'repetition of one source is not several sources' not in low: fail('missing source-independence safeguard')
 labels=set(re.findall(r'^\s*label ([A-Za-z0-9_-]+)$',T,re.M)); gotos=set(re.findall(r'^\s*goto ([A-Za-z0-9_-]+)$',T,re.M))
 if gotos-labels: fail('missing labels '+repr(sorted(gotos-labels)))
+# These three missions are dialogue/state-only. Accept would leave an objective-less
+# mission active, so every terminal conversation path must decline after persisting state.
+accepts=len(re.findall(r'^\s*accept\s*$',T,re.M))
+declines=len(re.findall(r'^\s*decline\s*$',T,re.M))
+if accepts: fail(f'state-only lifecycle contains {accepts} terminal accept(s)')
+if declines != 7: fail(f'expected exactly 7 terminal declines, found {declines}')
+for directive in ('destination','stopover','waypoint','npc','cargo','passengers','deadline','timer'):
+ if re.search(r'^\s+'+re.escape(directive)+r'(?:\s|$)',T,re.M|re.I):
+  fail('unexpected gameplay objective directive: '+directive)
 print('PASS: B2 Free Worlds Doctrine Revalidation Compact structure validated')
 print('PASS: missions=3; named_characters=2; routes=3+refusal; settlements=2')
 print('PASS: A1 patrol surge/repair backlog read-only; A2 doctrine memory read-only')
 print('PASS: write ownership=B2 namespace only; source lineage/revalidation explicit')
+print('PASS: lifecycle=state-only; accepts=0; declines=7; gameplay objectives=0')
