@@ -17,6 +17,7 @@ CROSS_SYSTEM_CONNECTION: durable STORY_CANON character records -> production mis
 - Branch: `agent/b2-dirt-belt-family-reckoning-20260823`
 - Production commit: `88b7d4a32b386b6f608879a01b86115a91fb3c33`
 - Focused-validator commit: `12b0fce6fad9ff947eaf58454f8b16d7d20f6732`
+- Exact fully validated production/validator/handoff candidate: `30d5e60483a5c0b2868b02eb74aeb4fe50fd4d1d`
 - Integration authority: A3; B2 must not self-integrate.
 
 ## Character/dynamic-content behavior
@@ -53,21 +54,20 @@ All seven dialogue/state-only terminal paths use `decline`; the slice creates no
 - `tools/story/validate_b2_dirt_belt_family_reckoning.py`
 - `story/B2_DIRT_BELT_FAMILY_RECKONING_HANDOFF_20260823.md`
 
-## Validation contract
+## Validation evidence
 
-Focused validator:
+Exact candidate `30d5e60483a5c0b2868b02eb74aeb4fe50fd4d1d` is repository-native green:
 
-`python3 tools/story/validate_b2_dirt_belt_family_reckoning.py`
+- `Fork simulation and story validation` #498 / run `32664599499`: **SUCCESS**
+- changed-content style: **SUCCESS**
+- focused Python validation compilation: **SUCCESS**
+- all focused story validators, including `validate_b2_dirt_belt_family_reckoning.py`: **SUCCESS**
+- A1 simulation/state-ownership contract tests: **SUCCESS**
+- `Fork save-load integration smoke` #483 / run `32664599490`: **SUCCESS**
+- production configure/build: **SUCCESS**
+- stock save-load smoke: **SUCCESS**
 
-Repository acceptance should also run:
-
-- `python3 tools/story/validate_story_repo.py`
-- changed-content style validation
-- repository-wide story/state-ownership contracts
-- normal production configure/build
-- stock save/load smoke
-
-Current verdict: **PARTIAL** pending repository-native CI on the exact candidate head after PR creation.
+Verdict: **READY for A3 review/integration**. This handoff update is documentation-only; production and validator behavior are unchanged from the fully validated candidate.
 
 ## Persistence/canon assumptions
 
