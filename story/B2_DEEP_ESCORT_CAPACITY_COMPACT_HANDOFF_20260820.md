@@ -2,16 +2,19 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native simulation/story/style and production build/save-load validation.
+PARTIAL pending exact-head repository-native simulation/story/style and production build/save-load validation for the lifecycle-repaired candidate.
 
 ## Authority and isolation
 
 - Repository: `Wiredshark/star`
-- Authoritative `main` observed at stage selection: `fdaf94f18aaa02abd4e7269196375572cd0fdf9b`
+- Current authoritative `main` rechecked during lifecycle recovery: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
+- Historical stage-selection main: `fdaf94f18aaa02abd4e7269196375572cd0fdf9b`
 - Required B1 parent: `1d4a10429d3e3bfffe7ae78acb58902be8e60b80` (`B1: Deep research logistics institutional history`)
 - Isolated branch: `agent/b2-deep-escort-capacity-20260820-0624`
-- Production commit: `62d1b48e9e222f12d9c5b3ea935c83bfcb4f224c`
-- Focused-validator commit: `78ec119836643ff2e2c61bd571e9163fa7ec3926`
+- Original production commit: `62d1b48e9e222f12d9c5b3ea935c83bfcb4f224c`
+- Original focused-validator commit: `78ec119836643ff2e2c61bd571e9163fa7ec3926`
+- Lifecycle production repair: `be4beb30a4000d6d68cb3561720a52a7a67aa660`
+- Lifecycle validator hardening: `523edcd88229c018b19890a2906cde161631d5f7`
 
 B2 does not self-integrate. A3 retains integration authority.
 
@@ -35,6 +38,22 @@ Review outcomes:
 - **reconciliation cycle** — dispatch outcomes and reserve deficits remain separate records that are periodically compared before an obligation may be closed.
 
 `Kest Remembers` is the one-shot aftermath reader.
+
+## Lifecycle repair
+
+The three missions are dialogue/state-only. They create no destination, cargo, NPC, waypoint, timer, passenger, or other gameplay objective.
+
+The original production used terminal `accept` on six positive paths: the three Offer routes, both Review settlements, and `Kest Remembers`. That can leave objective-less accepted missions in the player's active mission list.
+
+Lifecycle repair commit `be4beb30a4000d6d68cb3561720a52a7a67aa660` changes exactly those six positive terminals from `accept` to `decline`. Refusal already used `decline`, so all seven state-only terminal paths now persist their existing state and close cleanly.
+
+Validator hardening commit `523edcd88229c018b19890a2906cde161631d5f7` now enforces:
+
+- zero terminal `accept` commands;
+- exactly seven terminal `decline` commands;
+- absence of destination/stopover/waypoint/NPC/cargo/passenger/deadline/timer directives that would invalidate the state-only lifecycle assumption.
+
+No route, settlement, character, trust condition, persistent condition name/value, Deep scope, or story semantics changed.
 
 ## B1 dependency / continuity
 
@@ -64,22 +83,24 @@ The slice does not write `world:*`, B1 history state, credits, reputation, cargo
 
 ## Validation
 
-Implemented focused structural/state-ownership validator:
+Focused validator command:
 
 `python3 tools/story/validate_b2_deep_escort_capacity_compact.py "data/human/b2 deep escort capacity compact.txt"`
 
 Required repository-native acceptance before READY:
 
-- `Fork simulation and story validation` succeeds on the exact final candidate head;
+- `Fork simulation and story validation` succeeds on the exact lifecycle-repaired final candidate head;
 - changed-content style succeeds;
-- focused validator is discovered/executed successfully by the story suite;
+- the hardened focused validator is discovered/executed successfully by the story suite;
 - A1/state-ownership contracts remain green;
 - `Fork save-load integration smoke` succeeds, including production configure/build and stock persistence smoke.
 
-No PASS is claimed until those exact-head workflows are terminal green.
+No PASS is claimed for the repaired head until those exact-head workflows are terminal green.
 
 ## A3 / B3 notes
 
 A3 should re-read current `main`, verify B1 dependency ancestry, review the exact diff, and integrate only if both B1 and B2 validation are green.
 
 B3 should preserve the core continuity invariant: **a convoy arriving safely is an event; a restored reserve is a condition.** A successful research shipment must not silently erase deferred patrol, rescue, inspection, or maintenance obligations.
+
+Dialogue/state-only B2 missions that merely persist state should terminate with `decline`; `accept` is reserved for mission paths that actually create gameplay objectives.
