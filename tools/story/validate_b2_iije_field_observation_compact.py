@@ -101,6 +101,23 @@ def main() -> None:
         if " = " in stripped and any(token in stripped for token in forbidden_write_tokens):
             fail(f"forbidden direct state mutation: {line.strip()}")
 
+    # These missions only record persistent story state. They create no gameplay
+    # objective, so every terminal conversation path must close with decline.
+    accept_count = len(re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE))
+    decline_count = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+    if accept_count != 0:
+        fail(f"state-only missions must not leave accepted objectives: accept={accept_count}")
+    if decline_count != 7:
+        fail(f"expected exactly seven state-only decline terminals, found {decline_count}")
+
+    objective_directives = re.findall(
+        r'^\s*(destination|stopover|waypoint|npc|cargo|passenger|deadline|timer)\b',
+        text,
+        flags=re.MULTILINE | re.IGNORECASE,
+    )
+    if objective_directives:
+        fail(f"unexpected gameplay-objective directives in state-only slice: {objective_directives}")
+
     blocks = re.split(r'(?=^mission ")', text, flags=re.MULTILINE)
     for block in blocks:
         if not block.startswith("mission "):
@@ -168,6 +185,7 @@ def main() -> None:
     print("PASS: later_reader=Pilot Remembers")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: b1_input=Iije History: Stellar Feeding Survey")
+    print("PASS: lifecycle=7 state-only terminals close with decline")
     print("PASS: continuity=spontaneous behavior remains distinct from human-elicited response")
 
 
