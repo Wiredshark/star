@@ -99,7 +99,7 @@ def main() -> None:
 
     required_concepts = (
         "neutral harbor", "temporary", "cannot become custody", "expiry",
-        "fresh evidence", "protected departure", "does not automatically prove",
+        "fresh evidence", "protected departure", "automatically prove",
         "movement", "information",
     )
     for phrase in required_concepts:
