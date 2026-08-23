@@ -2,16 +2,17 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native validation. This branch is intentionally isolated and unmerged for A3 authority.
+READY for A3 review/integration. The exact production/validator/handoff candidate passed both repository-native acceptance workflows. This branch remains isolated and unmerged for A3 authority.
 
 ## Authority and exact branch state
 
 - Stage: B2 STORY CHARACTERS + DYNAMIC CONTENT
-- Authoritative integration base recovered before branching: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
+- Authoritative integration base recovered before branching and rechecked after validation: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-dirt-belt-irrigation-compact-20260823`
 - Production commit: `3c22345aaf66c25acbc9572779a1dd056ac538f5`
 - Focused validator commit: `25fb9a2c17388a00a6241c63fa009627d5fc6fcf`
-- This handoff commit: use the branch head containing this file.
+- Exact fully validated production/validator/handoff candidate: `6510f70fe4761c1abcf219c52bdefe7e04ac3e28`
+- Final READY handoff-only head: use the branch head containing this update.
 
 ## Concurrency and non-overlap
 
@@ -103,19 +104,20 @@ Preserve these distinctions during A3/B3 integration and downstream work:
 - local `goto` / `label` integrity;
 - claim-vs-capacity / transfer-vs-restoration continuity concepts.
 
-## Validation still required before READY
+## Exact validation evidence
 
-Run and require terminal green on the exact candidate head:
+Exact candidate `6510f70fe4761c1abcf219c52bdefe7e04ac3e28` passed both repository-native workflows:
 
-1. `python3 tools/story/validate_b2_dirt_belt_irrigation_reserve_compact.py`
-2. repository focused story validator suite / Python compile
-3. A1 simulation and state-ownership contracts
-4. changed-content style
-5. production configure/build
-6. stock save-load integration smoke
+- `Fork simulation and story validation` run #488 / `32648629429`: **SUCCESS**
+  - focused story validators including the new Dirt Belt irrigation validator: PASS;
+  - A1 simulation/state-ownership contracts: PASS;
+  - changed-content style: PASS.
+- `Fork save-load integration smoke` run #473 / `32648629393`: **SUCCESS**
+  - production configure/build: PASS;
+  - stock save-load integration smoke: PASS.
 
-A3 should also inspect current `main` again immediately before integration because concurrent A/B work is expected.
+The authoritative `main` SHA was rechecked after those workflows and remained `a17a89fb4779200a0634a6dade1811c4dc9cc2be`.
 
 ## A3/B3 integration guidance
 
-Do not self-integrate from B2. A3 should verify exact ancestry, current-main conflicts, validator results, and A1 ownership before accepting the candidate. B3 should preserve the central distinction between entitlement and physical capacity and reject later continuity that treats recovered aggregate strain as proof every individual water/maintenance obligation was fulfilled.
+Do not self-integrate from B2. A3 should verify exact ancestry/current-main conflicts one more time immediately before integration and preserve A1 ownership of both live resource signals. B3 should preserve the central distinction between entitlement and physical capacity and reject later continuity that treats recovered aggregate strain as proof every individual water/maintenance obligation was fulfilled.
