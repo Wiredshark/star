@@ -103,6 +103,24 @@ for forbidden in (
 ):
     assert forbidden not in text, f"forbidden direct mutation token: {forbidden!r}"
 
+# These missions are dialogue/state-only. They must not remain accepted without
+# objectives after the conversation closes.
+assert re.search(r"^\s*accept\s*$", text, re.MULTILINE) is None, \
+    "state-only dialogue must not use terminal accept"
+assert len(re.findall(r"^\s*decline\s*$", text, re.MULTILINE)) == 7, \
+    "expected exactly seven state-only decline terminals"
+for objective in (
+    "\tdestination ",
+    "\tstopover ",
+    "\twaypoint ",
+    "\tnpc ",
+    "\tcargo ",
+    "\tpassenger ",
+    "\tdeadline ",
+    "\ttimer ",
+):
+    assert objective not in text, f"unexpected gameplay objective token: {objective!r}"
+
 # Every goto target resolves to a local label.
 gotos = set(re.findall(r"^\s*goto ([A-Za-z0-9_ -]+)\s*$", text, re.MULTILINE))
 labels = set(re.findall(r"^\s*label ([A-Za-z0-9_ -]+)\s*$", text, re.MULTILINE))
@@ -125,6 +143,7 @@ print("PASS: missions=3")
 print("PASS: named_characters=Mara Edden + Colm Rusk")
 print("PASS: initial_routes=3 + refusal")
 print("PASS: terminal_settlements=2")
+print("PASS: dialogue_lifecycle=7 decline terminals, 0 accept terminals")
 print("PASS: A1 geomagnetic storm/navigation state=read only")
 print("PASS: authority=distributed Free Worlds coordination, no central navigation office")
 print("PASS: mutation_surface=B2 conditions only")
