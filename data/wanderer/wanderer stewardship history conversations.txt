@@ -1,0 +1,68 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+mission "Wanderer Renewal Survey Archive"
+	minor
+	source
+		government "Wanderer"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A public ecological archive near the spaceport displays layered maps of the same valleys and coastlines at different stages of settlement. Each map is crowded with notes on plant cover, nesting ranges, soil chemistry, water use, and species that were introduced, removed, or carefully re-established.`
+			`\tAn accompanying explanation says that the Wanderers learned to treat renewal as a process that must be measured across generations. Before farms, roads, or new settlements are expanded, survey teams compare present conditions with older records so that restoring useful land does not quietly erase the living systems they meant to preserve.`
+				decline
+
+
+mission "Wanderer Seed Exchange Register"
+	minor
+	source
+		government "Wanderer"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`Rows of sealed containers fill a small agricultural exhibit, each marked with the name of a crop, a wild relative, or a symbiotic species used to keep fields productive. Beside them are shipping records showing seeds and biological samples moving repeatedly between Wanderer worlds.`
+			`\tThe exhibit describes these exchanges as both farm infrastructure and ecological insurance. Settlements share productive varieties, but they also preserve older strains and associated species so that a blight, failed harvest, or overused field does not force every world toward the same fragile solution. The register became a record of what could be shared without making every ecosystem identical.`
+				decline
+
+
+mission "Wanderer Extraction Exception Ledger"
+	minor
+	source
+		government "Wanderer"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`A civic display contains old permits for oil wells, quarries, and other disruptive industries. Each permit is paired with inspection notes, spill reports, habitat surveys, and restoration obligations that often continue long after the original work was completed.`
+			`\tThe notes explain that the Wanderers never eliminated every activity that damages a landscape. Instead, such work gradually came to be recorded as an exception requiring a public account of necessity, containment, and repair. Inspectors compare new damage against those records, while later projects inherit obligations that earlier crews could not finish.`
+				decline
+
+
+mission "Wanderer Expedition Return Archive"
+	minor
+	source
+		government "Wanderer"
+	"offer precedence" 5
+	to offer
+		random < 1
+	on offer
+		conversation
+			`An exploration hall contains route charts beside pressed plants, shell fragments, atmospheric readings, and sketches of unfamiliar animals. The displays are organized by expedition rather than by world, with later annotations showing which observations were confirmed, corrected, or superseded.`
+			`\tA curator explains that exploration became valuable not merely because Wanderers reached new places, but because returning crews were expected to add what they learned to a shared record. Ecologists, linguists, navigators, and merchants all contributed different observations, allowing later travelers to distinguish a genuine discovery from a dangerous misunderstanding or a species already known under another name.`
+				decline
