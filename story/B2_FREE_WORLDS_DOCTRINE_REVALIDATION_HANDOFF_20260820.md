@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL. The doctrine-revalidation content is structurally validated and the lifecycle repair is green in the simulation/story workflow, but the exact-head production build/save-load workflow is still in progress. B2 does not self-integrate.
+READY for A3 review/integration. B2 does not self-integrate.
 
 ## Repository state
 
@@ -11,7 +11,7 @@ PARTIAL. The doctrine-revalidation content is structurally validated and the lif
 - Original production commit: `31b9ecb85245e3a95e225a00c7bad7a2cc3d8108`.
 - Original validated production + focused-validator candidate: `a3f9268bcf92908a35e25672b6d6a395ae8353ca`.
 - Lifecycle production repair: `e702efd960a10cdeea5d97574484480a0f041504`.
-- Lifecycle validator hardening / exact current candidate: `fd68072f079498a0f5ea6018771a66d4bb085a22`.
+- Lifecycle validator hardening / exact fully validated candidate: `fd68072f079498a0f5ea6018771a66d4bb085a22`.
 - Draft PR: #201.
 
 ## Character / dynamic-content behavior
@@ -60,23 +60,22 @@ Exact lifecycle candidate `fd68072f079498a0f5ea6018771a66d4bb085a22`:
   - lifecycle validator — SUCCESS;
   - A1 simulation/state-ownership contracts — SUCCESS;
   - changed-content style — SUCCESS.
-- `Fork save-load integration smoke` run #459 / `32636539927` — **IN PROGRESS** at handoff time.
+- `Fork save-load integration smoke` run #459 / `32636539927` — **SUCCESS**.
   - dependency install — SUCCESS;
   - production configure — SUCCESS;
-  - production build — still running;
-  - stock save-load smoke — pending.
+  - production build — SUCCESS;
+  - stock save-load smoke — SUCCESS.
 
-The original pre-lifecycle candidate and final pre-lifecycle head had already passed both repository-native workflows. The lifecycle patch itself changes only terminal mission disposition plus validator enforcement, but READY is withheld until the exact lifecycle candidate's build/save-load workflow is terminal green.
+The original pre-lifecycle candidate and final pre-lifecycle head had also passed both repository-native workflows.
 
 ## A3 / B3 integration notes
 
-- Do not integrate while this handoff remains PARTIAL.
 - Re-read current `main` before integration.
 - Preserve A1 sole ownership of patrol-surge and repair-backlog world state.
 - Preserve A2 ownership of original patrol-doctrine history.
 - Preserve all current route, settlement, trust, and aftermath condition names/values.
 - Keep every state-only dialogue terminal as `decline` unless a future change adds a real gameplay objective.
 
-## Current candidate
+## Exact integration candidate
 
-A3 should review `fd68072f079498a0f5ea6018771a66d4bb085a22` after exact-head save-load/build becomes terminal green.
+A3 should review exact fully validated lifecycle candidate `fd68072f079498a0f5ea6018771a66d4bb085a22` plus this handoff-only READY commit.
