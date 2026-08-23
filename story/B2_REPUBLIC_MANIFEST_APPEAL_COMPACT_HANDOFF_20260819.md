@@ -9,7 +9,8 @@
 - Original candidate head: `bf95d5e9191e4e21450cb7fff1d81987f143b600`
 - Dialogue-lifecycle production repair: `3b6a114613d1b0d1a0bd13e06344b151a6401910`
 - Lifecycle validator hardening: `fd17f239613878cfe785da3a266fdd5c20a4485b`
-- Current verdict: PARTIAL pending terminal exact-head repository-native validation.
+- Exact fully validated production/validator/handoff candidate: `3ab00a324be854b40f98123fd1ac7f8523932dc6`
+- Current verdict: READY for A3 review/integration.
 
 ## Character / dynamic-content behavior
 
@@ -57,18 +58,20 @@ No dialogue, route, settlement, character, trust state, condition name/value, so
 - `tools/story/validate_b2_republic_manifest_appeal_compact.py`
 - `story/B2_REPUBLIC_MANIFEST_APPEAL_COMPACT_HANDOFF_20260819.md`
 
-## Exact validation state
+## Exact validation evidence
 
-Repository-native workflows were triggered automatically on exact production/validator head `fd17f239613878cfe785da3a266fdd5c20a4485b`:
+Exact candidate `3ab00a324be854b40f98123fd1ac7f8523932dc6` is terminal green on both repository-native acceptance workflows:
 
-- `Fork simulation and story validation` run `32608008477` / #439: in progress at handoff update time.
-- `Fork save-load integration smoke` run `32608008487` / #424: queued at handoff update time.
+- `Fork simulation and story validation` run `32608040281` / #440: SUCCESS.
+- `Fork save-load integration smoke` run `32608040285` / #425: SUCCESS.
 
-Do not promote this handoff to READY until both exact-head workflows are terminal green. If either fails, repair the exact failure without weakening the lifecycle, state-ownership, or evidence boundaries.
+These gates cover the focused Republic Manifest Appeal validator, changed-content style, story/state-ownership contracts, A1 simulation regressions, production configure/build, and stock save-load smoke.
+
+The preceding production/validator candidate `fd17f239613878cfe785da3a266fdd5c20a4485b` also passed simulation/story validation; its save-load run was cancelled only because the later handoff commit superseded that run. The exact current candidate `3ab00a324...` independently passed both workflows.
 
 ## A3 / B3 notes
 
-No self-integration has been performed. The historical branch is old relative to current `main`, so A3 must re-read current authoritative `main`, verify ancestry/mergeability, and integrate conservatively rather than assuming the original base remains current authority.
+No self-integration has been performed. The historical branch is old relative to current `main`; exact compare against current authoritative `main` showed 6 commits ahead / 85 behind with merge base `8785f25572b65d66c6181a39d1ef2b28ca6dda83`. GitHub currently reports the PR mergeable, but A3 must re-read current authoritative `main`, verify ancestry/continuity, and integrate conservatively rather than assuming the original base remains current authority.
 
 B3 should preserve the continuity boundary that an inherited challenge or prior decision to investigate cannot silently become new evidence merely because it was copied through multiple ports.
 
