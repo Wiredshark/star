@@ -1,0 +1,171 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Dirt Belt Irrigation Reserve Compact.
+#
+# This character slice consumes the integrated B1 Dirt Belt Water Share Archive
+# and A1's authoritative drought / irrigation-reserve signals read-only. It keeps
+# water claims, emergency minimums, physical pump/canal capacity, temporary
+# transfers, and unfinished maintenance obligations as separate facts.
+
+
+event "B2 Dirt Belt Irrigation Reserve Compact: Review Ready"
+	"B2 Dirt Belt Irrigation Reserve Compact: review ready" = 1
+
+
+mission "B2 Dirt Belt Irrigation Reserve Compact: Offer"
+	minor
+	name `The Water That Exists on Paper`
+	description `Mae Calder and Tobin Shaw disagree over how Dirt Belt water-share claims should change while drought is drawing down irrigation reserves and shared pump capacity.`
+	source
+		government "Republic"
+		attributes "dirt belt"
+		attributes "farming"
+		not attributes "station"
+	to offer
+		has "Dirt Belt Water Share Archive: offered"
+		"world: dirt belt drought pressure" >= 3
+		"world: dirt belt irrigation reserve strain" >= 3
+		not "B2 Dirt Belt Irrigation Reserve Compact: introduced"
+		not "B2 Dirt Belt Irrigation Reserve Compact: declined"
+	on offer
+		conversation
+			`Mae Calder is standing beside a water-share board covered in old allocation marks and new emergency annotations. She coordinates transfers between several farming settlements. Tobin Shaw, a pump mechanic with mud still dried on his sleeves, is pointing at a second sheet that lists failed impellers, cracked pressure lines, and irrigation branches running below rated flow.`
+			`"The ledgers say three settlements have water they can temporarily share," Mae says. "The pumps say two of them cannot move as much as the ledgers promise." Tobin taps a damaged branch line. "And if we run this one at emergency pressure again, next week's spare capacity may become another repair job."`
+			`The old Water Share Archive gave them a language for ordinary claims, emergency minimums, temporary transfers, and maintenance obligations. The present drought has made the distinction immediate: a valid claim is not the same thing as water that can physically be delivered today.`
+			choice
+				`\tProtect an emergency floor first: every settlement keeps a minimum household and crop-survival allocation before discretionary transfers are counted.`
+					goto floor
+				`\tRestore physical capacity first: prioritize the pump and canal repairs that can return the most usable water, while preserving every temporarily displaced claim.`
+					goto repair
+				`\tKeep paired records: one ledger for claims and temporary transfers, another for actual irrigation capacity and maintenance debt, permanently cross-linked.`
+					goto paired
+				`\tRefuse to turn one drought surge into a permanent allocation rule.`
+					goto decline
+			label floor
+			`You recommend an emergency floor before anyone counts spare capacity. Mae likes having a clear minimum that cannot vanish into a chain of transfers. Tobin agrees on one condition: the board must also show when a pump cannot physically deliver the quantity that the emergency floor assumes.`
+			action
+				"B2 Dirt Belt Irrigation Reserve Compact: introduced" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: route emergency floor" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: mae trusts player" = 1
+				event "B2 Dirt Belt Irrigation Reserve Compact: Review Ready" 7 11
+			decline
+			label repair
+			`You recommend repairing the highest-leverage bottlenecks first, even if some valid claims must wait. Tobin starts ranking failures by restored flow rather than by which settlement owns the hardware. Mae agrees only after adding a rule that every displaced claim keeps its original amount, reason for delay, and next review point.`
+			action
+				"B2 Dirt Belt Irrigation Reserve Compact: introduced" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: route capacity repair" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: tobin trusts player" = 1
+				event "B2 Dirt Belt Irrigation Reserve Compact: Review Ready" 7 11
+			decline
+			label paired
+			`You separate entitlement from machinery. Mae keeps the water-share ledger: ordinary claims, emergency minimums, temporary transfers, and unresolved obligations. Tobin keeps the capacity ledger: current flow, failed equipment, borrowed parts, maintenance limits, and what has actually been restored. Each entry points to the other instead of pretending either ledger is the whole truth.`
+			action
+				"B2 Dirt Belt Irrigation Reserve Compact: introduced" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: route paired records" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: mae trusts player" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: tobin trusts player" = 1
+				event "B2 Dirt Belt Irrigation Reserve Compact: Review Ready" 7 11
+			decline
+			label decline
+			`You tell them a severe season is the worst time to make a temporary compromise look like permanent law. Mae records that no standing compact was adopted from this dispute. Tobin returns to the pump schedule.`
+			action
+				"B2 Dirt Belt Irrigation Reserve Compact: declined" = 1
+			decline
+
+
+mission "B2 Dirt Belt Irrigation Reserve Compact: Review"
+	minor
+	name `After the Gauges Fall`
+	description `Return after drought and irrigation-reserve strain recover and decide how temporary water transfers and maintenance obligations should be closed.`
+	source
+		government "Republic"
+		attributes "dirt belt"
+		attributes "farming"
+		not attributes "station"
+	to offer
+		has "B2 Dirt Belt Irrigation Reserve Compact: introduced"
+		has "B2 Dirt Belt Irrigation Reserve Compact: review ready"
+		"world: dirt belt drought pressure" <= 1
+		"world: dirt belt irrigation reserve strain" <= 1
+		not "B2 Dirt Belt Irrigation Reserve Compact: reviewed"
+	on offer
+		conversation
+			branch floor
+				has "B2 Dirt Belt Irrigation Reserve Compact: route emergency floor"
+			branch repair
+				has "B2 Dirt Belt Irrigation Reserve Compact: route capacity repair"
+			`The regional gauges have eased back toward normal. Mae's board says most emergency transfers have ended. Tobin's board is less tidy: one borrowed pump assembly has not been replaced, two pressure lines are still operating under temporary limits, and a settlement whose water was diverted during the worst week never received the full amount that its claim recorded.`
+			`Mae says, "The reserve strain recovered. That is real." Tobin points at the open repair entries. "So are these. Normal gauges do not prove every obligation created during the drought was closed."`
+			choice
+				`\tUse a portable water-share packet that carries the original claim, emergency minimum, temporary transfers, actual delivered capacity, maintenance debt, responsible party, and closure evidence together.`
+					goto packet
+				`\tUse a dual-closure reconciliation cycle: claims and physical capacity stay separate, but neither side can call an obligation restored until the two records agree.`
+					goto reconcile
+			label floor
+			`The emergency floor protected survival allocations, but one settlement's ledger says its minimum was met while Tobin's flow record shows the last portion never moved through the damaged line. Mae admits that a promised minimum and a physically delivered minimum became two different facts during the surge.`
+			choice
+				`\tMake the claim, delivered amount, temporary transfer, and maintenance obligation travel as one portable packet.`
+					goto packet
+				`\tKeep entitlement and capacity separate, but require explicit reconciliation before either is marked closed.`
+					goto reconcile
+			label repair
+			`The repair-first approach restored more flow quickly, but Mae shows you two valid claims that were repeatedly postponed while high-leverage repairs took priority. Every delay was defensible on its own. Together, they created an obligation that the recovered pressure gauge cannot describe.`
+			choice
+				`\tCarry the full claim, transfer, repair, delivery, and closure history forward together.`
+					goto packet
+				`\tReconcile the claim ledger against the capacity ledger before declaring the drought obligations closed.`
+					goto reconcile
+			label packet
+			`You recommend a portable water-share packet. It keeps the original claim, emergency minimum, each temporary transfer, what the infrastructure could actually deliver, any borrowed equipment or deferred repair, who now owns the next action, and the evidence that finally closes the obligation. A later reader can tell the difference between promised water and delivered water without discarding either record.`
+			action
+				"B2 Dirt Belt Irrigation Reserve Compact: reviewed" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: settlement portable water share" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: mae trusts player" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: tobin trusts player" = 1
+			decline
+			label reconcile
+			`You recommend a dual-closure reconciliation cycle. Mae's claim ledger remains authoritative about entitlement, transfers, and unmet remainder. Tobin's capacity ledger remains authoritative about pumps, flow, repairs, borrowed equipment, and physical restoration. A periodic comparison is the only place an obligation can be marked closed, and disagreement remains visible instead of being forced into one number.`
+			action
+				"B2 Dirt Belt Irrigation Reserve Compact: reviewed" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: settlement dual closure" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: mae trusts player" = 1
+				"B2 Dirt Belt Irrigation Reserve Compact: tobin trusts player" = 1
+			decline
+
+
+mission "B2 Dirt Belt Irrigation Reserve Compact: Calder Remembers"
+	minor
+	name `Calder Remembers`
+	description `Mae Calder remembers whether the end of a drought surge also closed the water-share and irrigation obligations created during it.`
+	source
+		government "Republic"
+		attributes "dirt belt"
+		not attributes "station"
+	to offer
+		not "B2 Dirt Belt Irrigation Reserve Compact: aftermath seen"
+		or
+			has "B2 Dirt Belt Irrigation Reserve Compact: settlement portable water share"
+			has "B2 Dirt Belt Irrigation Reserve Compact: settlement dual closure"
+	on offer
+		conversation
+			branch dual
+				has "B2 Dirt Belt Irrigation Reserve Compact: settlement dual closure"
+			`Mae shows you a water-share packet from a later dry spell. The first page says the emergency transfer ended. The next pages say how much water was actually delivered, which pump was borrowed, who still owes the replacement assembly, and which claim was closed only after the final delivery. "The shortage ended before the paperwork did," she says. "That turned out to be the honest order of events."`
+			goto record
+			label dual
+			`Mae has two boards open side by side. The claim ledger shows no emergency transfer in force. Tobin's capacity ledger still carries one borrowed pump and a derated line. "The drought is over," Mae says. "The obligation is not. We can finally say both things without one erasing the other."`
+			label record
+			action
+				"B2 Dirt Belt Irrigation Reserve Compact: aftermath seen" = 1
+			decline
