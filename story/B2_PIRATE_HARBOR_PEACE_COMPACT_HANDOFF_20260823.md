@@ -1,15 +1,16 @@
 # B2 Pirate Harbor Peace Compact Handoff — 2026-08-23
 
 ## Verdict
-PARTIAL pending repository-native exact-head validation.
+READY for A3 review/integration.
 
 ## Authority
 - Repository: `Wiredshark/star`
 - Authoritative base: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-pirate-harbor-peace-compact-20260823`
 - Production commit: `c46ce020039e5754e0837ce51785ec93304129cf`
-- Focused-validator commit: `6bb813d89e8e572086c87b7e186b8a155392ee45`
-- Current candidate/handoff head: filled by this commit
+- Initial focused-validator commit: `6bb813d89e8e572086c87b7e186b8a155392ee45`
+- Validator wording repair / exact fully validated candidate: `937104d6274e304e4c374bb1055da6f20e23e590`
+- Final READY handoff-only commit: this document update; PR #271 records the exact final tip.
 
 ## PRIMARY_DOMAIN
 Law / personal autonomy / feud boundaries.
@@ -55,18 +56,24 @@ All 7 state-only terminal paths use `decline`; no objective-less `accept` missio
 - A temporary precaution does not prove guilt and must not become permanent inherited suspicion after its trigger expires.
 - Movement restrictions, information obligations, accusations, evidence, and disposition remain separate facts.
 
+## Validation
+The first simulation/story run on the pre-repair candidate failed only because the focused validator demanded the literal phrase `does not automatically prove`; production already expressed the intended invariant as `None of those entries automatically proves another.` The validator wording was repaired without changing production behavior.
+
+Exact fully validated candidate `937104d6274e304e4c374bb1055da6f20e23e590`:
+- `Fork simulation and story validation` #501 / run `32667727732`: SUCCESS.
+- focused story validators: SUCCESS.
+- A1 simulation/state-ownership contracts: SUCCESS.
+- changed-content style: SUCCESS.
+- `Fork save-load integration smoke` #486 / run `32667727729`: SUCCESS.
+- production configure/build: SUCCESS.
+- stock save-load integration smoke: SUCCESS.
+
+Exact base-to-validated-candidate comparison: 4 commits ahead / 0 behind, with exactly three changed files and no deletions.
+
 ## Files changed
 - `data/human/b2 pirate harbor peace compact.txt`
 - `tools/story/validate_b2_pirate_harbor_peace_compact.py`
 - `story/B2_PIRATE_HARBOR_PEACE_COMPACT_HANDOFF_20260823.md`
-
-## Validation required before READY
-- focused validator discovery/pass;
-- changed-content style;
-- repository story/state-ownership contracts;
-- A1 regression contracts;
-- production configure/build;
-- stock save-load integration smoke.
 
 ## Risks / deferred work
 No manual actual-game narrative walkthrough is claimed beyond repository-native validation. The characters are new B2 local Pirate characters and do not create a central pirate office or universal legal authority.
