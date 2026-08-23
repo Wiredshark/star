@@ -56,14 +56,14 @@ mission "B2 Southern Rim Overflow Recovery Compact: Offer"
 				"B2 Southern Rim Overflow Recovery Compact: introduced" = 1
 				"B2 Southern Rim Overflow Recovery Compact: route obligation" = 1
 				"B2 Southern Rim Overflow Recovery Compact: kessler trusts player" = 1
-			accept
+			decline
 			label restoration
 			`You tell Kessler that emergency routing cannot wait for a perfect cost ledger, but every borrowed resource needs an owner and a point at which somebody checks whether it was restored. Solano begins adding restoration dates beside the diversion orders. Kessler says, "Good. A deadline is at least harder to hide than a promise to catch up later."`
 			action
 				"B2 Southern Rim Overflow Recovery Compact: introduced" = 1
 				"B2 Southern Rim Overflow Recovery Compact: route restoration" = 1
 				"B2 Southern Rim Overflow Recovery Compact: solano trusts player" = 1
-			accept
+			decline
 			label paired
 			`You propose a paired record. The traffic side can say why a ship was diverted and whether the route worked; the receiving side can record berth use, tug time, repairs, fuel, crew load, deferred maintenance, and what remains unresolved. Solano nods. Kessler says, "That lets both records stay honest without pretending every port has the same priorities."`
 			action
@@ -71,7 +71,7 @@ mission "B2 Southern Rim Overflow Recovery Compact: Offer"
 				"B2 Southern Rim Overflow Recovery Compact: route paired" = 1
 				"B2 Southern Rim Overflow Recovery Compact: solano trusts player" = 1
 				"B2 Southern Rim Overflow Recovery Compact: kessler trusts player" = 1
-			accept
+			decline
 			label decline
 			`You decline to turn one overflow dispute into a Southern Rim rule. Solano accepts the boundary. Kessler says, "Fair. Shared records are useful only if they do not become a quiet way for somebody else to run the port."`
 			action
@@ -126,7 +126,7 @@ mission "B2 Southern Rim Overflow Recovery Compact: Review"
 				"B2 Southern Rim Overflow Recovery Compact: settlement portable capacity packet" = 1
 				"B2 Southern Rim Overflow Recovery Compact: solano trusts player" = 1
 				"B2 Southern Rim Overflow Recovery Compact: kessler trusts player" = 1
-			accept
+			decline
 			label reconcile
 			`You recommend keeping berth, tug, repair, fuel, crew, and maintenance records under local control, while adding a periodic reconciliation pass across ports that participated in overflow routing. The network can say traffic recovered when ships move normally again, but it cannot say borrowed capacity was restored until the participating ports agree that the remaining deficits have actually closed.`
 			action
@@ -134,7 +134,7 @@ mission "B2 Southern Rim Overflow Recovery Compact: Review"
 				"B2 Southern Rim Overflow Recovery Compact: settlement reconciliation cycle" = 1
 				"B2 Southern Rim Overflow Recovery Compact: solano trusts player" = 1
 				"B2 Southern Rim Overflow Recovery Compact: kessler trusts player" = 1
-			accept
+			decline
 
 
 mission "B2 Southern Rim Overflow Recovery Compact: Kessler Remembers"
@@ -160,4 +160,4 @@ mission "B2 Southern Rim Overflow Recovery Compact: Kessler Remembers"
 			label record
 			action
 				"B2 Southern Rim Overflow Recovery Compact: aftermath seen" = 1
-			accept
+			decline
