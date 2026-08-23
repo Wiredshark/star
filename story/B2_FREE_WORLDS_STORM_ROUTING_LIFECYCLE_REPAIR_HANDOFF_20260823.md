@@ -2,7 +2,7 @@
 
 **Stage:** B2 STORY CHARACTERS + DYNAMIC CONTENT
 
-**Verdict:** PARTIAL pending exact repaired-head repository-native simulation/story/style and production build/save-load validation.
+**Verdict:** READY for A3 review/integration.
 
 **Authoritative integration head observed before repair:** `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 
@@ -13,6 +13,8 @@
 **Lifecycle production repair:** `1e691103220b4ff58808f93ae39ec0c2a955190c`
 
 **Lifecycle validator hardening:** `d43c31f00ae1d5de1d50f854d3e7291fb577e800`
+
+**Exact fully validated lifecycle candidate:** `229348fbe39e7913b79904caf4225c3962d9bf73`
 
 ## Repair
 
@@ -32,7 +34,9 @@ No dialogue, Mara Edden / Colm Rusk characterization, player route, trust state,
 
 All existing mission graph, route, settlement, A1 read-only ownership, B2-only write, mutation-surface, distributed-authority, continuity, and `goto` / `label` checks remain.
 
-## Validation already executed in an isolated `Wiredshark/star` scratch checkout
+## Validation
+
+Local isolated `Wiredshark/star` scratch checkout:
 
 - focused Storm Routing validator: PASS;
 - Python compile of focused validator: PASS;
@@ -40,7 +44,14 @@ All existing mission graph, route, settlement, A1 read-only ownership, B2-only w
 - `tools/story/test_b2_character_packets.py`: PASS;
 - `git diff --check`: PASS.
 
-Direct private-host `utils/check_content_style.py` could not start because that host lacks the Python `regex` package. No style PASS is claimed from that host. Repository-native CI is the authoritative style/build/save-load gate.
+Direct private-host `utils/check_content_style.py` could not start because that host lacks the Python `regex` package. No style PASS is claimed from that host.
+
+Repository-native validation on exact candidate `229348fbe39e7913b79904caf4225c3962d9bf73`:
+
+- `Fork simulation and story validation` #483 / run `32642620054`: SUCCESS;
+- `Fork save-load integration smoke` #468 / run `32642620075`: SUCCESS.
+
+These exact-head gates cover the authoritative changed-content style, focused story/simulation contracts, production configure/build, and stock save-load smoke.
 
 ## Ownership / continuity
 
@@ -55,6 +66,6 @@ The settlement remains distributed Free Worlds coordination, not a centralized n
 
 ## A3 / B3 integration notes
 
-This is a historical specialist branch and is not part of current `main`. A3 must re-read current-main ancestry and reconcile/accept the B1 storm-navigation dependency before integrating B2, even if GitHub reports the PR mergeable. Do not self-integrate.
+This is a historical specialist branch and is not part of current `main`. Compared with current main `a17a89fb4779200a0634a6dade1811c4dc9cc2be`, exact validated candidate `229348fbe39e7913b79904caf4225c3962d9bf73` is 8 commits ahead and 77 commits behind, with merge base `8c61fb377068f6f8cc0d43876fbc15b99f95d6c0`.
 
-Promote this handoff to READY only after both exact repaired-head repository-native workflows are terminal green.
+A3 must re-read current-main ancestry and reconcile/accept the B1 storm-navigation dependency before integrating B2, even if GitHub reports the PR mergeable. Do not self-integrate.
