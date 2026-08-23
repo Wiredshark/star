@@ -1,0 +1,149 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Kimek Relief Ledger production slice.
+# Consumes B1 Kimek mutual-aid, winter-adaptation, amenities-cooperative, and
+# inter-species relief history without inventing canonical Kimek personal names
+# or formal offices. The player privately uses Coordinator and Courier as shorthand
+# for two recurring Kimek encountered around relief freight.
+
+mission "B2 Kimek Relief Ledger: Offer"
+	landing
+	minor
+	invisible
+	source
+		attributes "kimek"
+	to offer
+		not "B2 Kimek Relief Ledger: introduced"
+		not "B2 Kimek Relief Ledger: declined"
+		random < 18
+	on offer
+		conversation
+			`Near a relief terminal, two Kimek are arguing over a manifest whose cargo lines are already translated into several species-specific categories. You have seen both around aid depots before. One is usually comparing request lists and receiving capacity, so in your own head you have started calling that one the Coordinator. The other is usually beside a battered freighter and checking route times, so you privately think of that one as the Courier. Neither word is a name or title they have given you.`
+			`\tThe disputed shipment contains winter medicine, insulation kits, and ordinary household equipment. The receiving world needs all three, but not with equal urgency. The Coordinator wants each crate tied to a public need record so later donors can see why it moved. The Courier argues that the route will close before every receiving office finishes its paperwork, and points to a long history of trusted carriers moving aid first and reconciling records later.`
+			choice
+				`\tKeep the needs ledger authoritative. Emergency trust matters, but future donors need to know which requests were actually satisfied.`
+					goto ledger
+				`\tLet trusted carriers move verified aid immediately. A perfect record that arrives after the route closes helps no one.`
+					goto carrier
+				`\tSplit the decision: authorize urgent categories now, but require a linked delivery record before the same route can draw from the cooperative again.`
+					goto paired
+				`\tDecline to judge a relief network whose local relationships you only partly understand.`
+					goto decline
+			label ledger
+			`You point first to the receiving requests, then to the shipment. The Coordinator visibly relaxes and begins matching crates to public need entries. The Courier waits, impatient but not dismissive. The resulting record will be clear, but some of the cargo may miss the best departure window while the depot proves what everyone here already believes it needs.`
+			action
+				"B2 Kimek Relief Ledger: introduced" = 1
+				"B2 Kimek Relief Ledger: route ledger" = 1
+				"B2 Kimek Relief Ledger: coordinator trusts player" = 1
+			decline
+			label carrier
+			`You point to the route clock and the cargo categories already verified by the depot. The Courier starts loading immediately. The Coordinator records the departure, but leaves several request fields unresolved until the receiving world reports back. The aid will arrive sooner, but the network now depends on a later reconciliation that busy ports have historically been tempted to postpone.`
+			action
+				"B2 Kimek Relief Ledger: introduced" = 1
+				"B2 Kimek Relief Ledger: route carrier" = 1
+				"B2 Kimek Relief Ledger: courier trusts player" = 1
+			decline
+			label paired
+			`You separate the crates by urgency. Winter medicine and heating equipment are cleared against the verified categories already on file, while less urgent amenities remain linked to the unfinished request record. The Courier gets a departure window and the Coordinator adds a condition: before this route draws again, the receiving depot must close the delivery record and note substitutions. Both Kimek look dissatisfied enough that the compromise may be workable.`
+			action
+				"B2 Kimek Relief Ledger: introduced" = 1
+				"B2 Kimek Relief Ledger: route paired" = 1
+				"B2 Kimek Relief Ledger: coordinator trusts player" = 1
+				"B2 Kimek Relief Ledger: courier trusts player" = 1
+			decline
+			label decline
+			`You step away from the terminal. The Coordinator and Courier return to the manifest, each making small concessions without actually settling the principle. The shipment remains scheduled, but the argument about what the network owes its own future records continues.`
+			action
+				"B2 Kimek Relief Ledger: declined" = 1
+			decline
+
+mission "B2 Kimek Relief Ledger: Review"
+	landing
+	minor
+	invisible
+	source
+		attributes "kimek"
+	to offer
+		has "B2 Kimek Relief Ledger: introduced"
+		not "B2 Kimek Relief Ledger: reviewed"
+		random < 24
+	on offer
+		conversation
+			branch ledger
+				has "B2 Kimek Relief Ledger: route ledger"
+			branch carrier
+				has "B2 Kimek Relief Ledger: route carrier"
+			`The Coordinator and Courier find you beside another relief board. Your earlier paired approach has spread to several depots. Urgent cargo usually moves quickly, and most receiving worlds eventually close their records. The problem is substitution: one port reports that a medical shipment satisfied a request, while the receiving depot records that half the crates were redirected to a colder settlement with greater need.`
+			`\tBoth records are honest. Together, they make it difficult to answer a basic question later: did the cooperative satisfy the original request, or did it make a justified emergency choice that created a new unmet obligation?`
+			choice
+				`\tUse a transferable relief receipt: preserve the original request, every substitution, the receiving confirmation, and any unmet remainder as one linked record.`
+					goto receipt
+				`\tUse a rolling obligation ledger: close delivered needs immediately, but carry any redirected or unmet portion forward as a visible cooperative obligation.`
+					goto obligation
+			label ledger
+			`Your earlier insistence on complete need records produced unusually clear manifests. The Coordinator shows you several deliveries whose paperwork is exemplary. The Courier points to a different problem: when a receiving world redirected cargo during a local emergency, the original record had no clean way to distinguish justified substitution from failure to deliver.`
+			choice
+				`\tMake every substitution part of a transferable relief receipt that preserves the original request and the final destination.`
+					goto receipt
+				`\tClose what was actually delivered and carry the unmet portion forward as an explicit cooperative obligation.`
+					goto obligation
+			label carrier
+			`Your earlier support for trusted-carrier discretion kept several shipments moving through closing routes. The Courier proudly shows the delivery logs. The Coordinator has spent weeks reconciling them. Most decisions were sensible, but a few receiving depots now disagree over whether redirected cargo completed the original request or merely changed which shortage came first.`
+			choice
+				`\tBind the carrier log, original request, substitutions, and receiving confirmation into one transferable relief receipt.`
+					goto receipt
+				`\tTreat each redirection as a new ledger event and keep any unmet portion visible as an obligation until somebody actually fulfills it.`
+					goto obligation
+			label receipt
+			`You recommend a transferable relief receipt. The original request never disappears when cargo changes hands or destinations. Each substitution records who redirected it, why, what the receiving depot confirmed, and what need remains unmet. Future donors can see both the aid that moved and the obligation it failed to erase. The Courier keeps room for emergency judgment; the Coordinator keeps a history that cannot be made tidy by forgetting inconvenient intermediate decisions.`
+			action
+				"B2 Kimek Relief Ledger: reviewed" = 1
+				"B2 Kimek Relief Ledger: settlement transferable receipt" = 1
+				"B2 Kimek Relief Ledger: coordinator trusts player" = 1
+				"B2 Kimek Relief Ledger: courier trusts player" = 1
+			decline
+			label obligation
+			`You recommend a rolling obligation ledger. A shipment closes only the needs it actually satisfies. If cargo is redirected for a greater emergency, the network records that choice immediately and carries the abandoned portion forward as a visible cooperative obligation rather than pretending the original request vanished. The system becomes less elegant on paper, but shortages can no longer disappear merely because a successful shipment went somewhere else.`
+			action
+				"B2 Kimek Relief Ledger: reviewed" = 1
+				"B2 Kimek Relief Ledger: settlement rolling obligation" = 1
+				"B2 Kimek Relief Ledger: coordinator trusts player" = 1
+				"B2 Kimek Relief Ledger: courier trusts player" = 1
+			decline
+
+mission "B2 Kimek Relief Ledger: Courier Remembers"
+	landing
+	minor
+	invisible
+	source
+		attributes "kimek"
+	to offer
+		not "B2 Kimek Relief Ledger: aftermath seen"
+		or
+			has "B2 Kimek Relief Ledger: settlement transferable receipt"
+			has "B2 Kimek Relief Ledger: settlement rolling obligation"
+		random < 28
+	on offer
+		conversation
+			branch obligation
+				has "B2 Kimek Relief Ledger: settlement rolling obligation"
+			`The Courier recognizes you beside a loading ramp and brings up a completed relief receipt. It begins with a request for winter medicine on one Kimek world, records a weather diversion, shows part of the cargo reaching a mixed-species settlement, and ends with the original world confirming the later replacement shipment. The Coordinator's annotations are visible beside the carrier logs. The route changed twice, but the history stayed intact enough that nobody had to pretend the first plan succeeded exactly as written.`
+			goto done
+			label obligation
+			`The Courier recognizes you beside a loading ramp and shows you a relief ledger full of small unresolved balances. Several are crossed out by later deliveries. One old heating request remains open because its original shipment was diverted during an emergency, and a new carrier has volunteered capacity after seeing the obligation on the public board. The Coordinator has stopped treating an untidy ledger as a failure. The Courier has stopped treating a successful diversion as the end of the story.`
+			label done
+			action
+				"B2 Kimek Relief Ledger: aftermath seen" = 1
+			decline
