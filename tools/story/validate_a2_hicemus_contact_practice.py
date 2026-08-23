@@ -24,7 +24,7 @@ for needle in required:
 assert text.count('mission "A2 Hicemus Contact Practice:') == 2
 assert text.count('government "Hicemus"') == 2
 assert text.count('offer precedence 9') == 2
-assert text.count('\n\t\t\tdecline') == 5, "expected four Review terminals plus one Reflection terminal"
+assert text.count('\n\t\t\tdecline') == 2, "expected one converged Review terminal plus one Reflection terminal"
 assert '\n\t\t\taccept' not in text, "state-only missions must not accept"
 assert 'branch refused' not in text, "refusal must not arm Reflection"
 assert 'world:' not in text
