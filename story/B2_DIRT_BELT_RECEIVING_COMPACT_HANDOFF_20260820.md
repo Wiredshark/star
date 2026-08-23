@@ -1,16 +1,19 @@
-# B2 Dirt Belt Receiving Compact handoff — 2026-08-20
+# B2 Dirt Belt Receiving Compact handoff — 2026-08-23
 
 ## Verdict
 
-PARTIAL pending repository-native simulation/story/style and production build/save-load validation on the exact candidate head.
+PARTIAL pending terminal repository-native validation on the lifecycle-repaired candidate.
 
 ## Authority and isolation
 
 - Repository: `Wiredshark/star`
-- Authoritative base: `fdaf94f18aaa02abd4e7269196375572cd0fdf9b`
+- Historical branch base: `fdaf94f18aaa02abd4e7269196375572cd0fdf9b`
+- Current authoritative `main` must be re-read by A3 before integration.
 - Isolated branch: `agent/b2-dirt-belt-receiving-compact-20260820-0527`
-- Production commit: `d47f6d2de4c351e27c0d4bdd703afbf73558432f`
-- Focused-validator commit / candidate before handoff: `2fe61838d4995777bd3cec8b4a3ac0c98d5a1fb9`
+- Original production commit: `d47f6d2de4c351e27c0d4bdd703afbf73558432f`
+- Original focused-validator commit: `2fe61838d4995777bd3cec8b4a3ac0c98d5a1fb9`
+- Lifecycle production repair: `6062d9966677790eb2d67d2dfd43dbde9543dadb`
+- Lifecycle validator hardening / exact candidate before this handoff update: `ac87e85eb614c546f57b3a2db8b9535924f498c7`
 
 B2 does not self-integrate. A3 retains integration authority.
 
@@ -37,6 +40,19 @@ Review outcomes:
 
 `Ives Remembers` is the later one-shot reader.
 
+## Lifecycle repair
+
+These three missions only persist story state and create no destination, cargo, NPC, waypoint, deadline, timer, or other gameplay objective. The original positive paths used terminal `accept`, which could leave objective-less accepted missions active.
+
+The lifecycle repair changes the six positive terminal paths to `decline`; refusal already used `decline`. All **7/7 state-only terminal paths** now persist the exact same existing state and close cleanly.
+
+The focused validator now requires:
+
+- zero terminal `accept` commands;
+- exactly seven terminal `decline` commands;
+- no objective-bearing mission directives that would invalidate the state-only lifecycle assumption;
+- all previous route, settlement, ownership, mutation, continuity, and goto/label checks remain.
+
 ## Continuity and ownership invariants
 
 - B1's central distinction is preserved: a shipment can be delivered without the relief need being fully satisfied.
@@ -47,6 +63,7 @@ Review outcomes:
 - The compact remains voluntary coordination among Dirt Belt settlements, not a centralized Republic/Dirt Belt relief authority.
 - Every persistent write is namespaced under `B2 Dirt Belt Receiving Compact:*`.
 - No `world:*`, credits, reputation, cargo, outfit, ship, fleet, or combat state is mutated.
+- Dialogue/state-only B2 missions terminate with `decline`; `accept` is reserved for objective-bearing mission lifecycles.
 
 ## Files
 
@@ -54,21 +71,18 @@ Review outcomes:
 - `tools/story/validate_b2_dirt_belt_receiving_compact.py`
 - `story/B2_DIRT_BELT_RECEIVING_COMPACT_HANDOFF_20260820.md`
 
-## Required validation before READY
+## Validation state
 
-Run on the exact candidate/handoff head:
+Exact lifecycle-repaired candidate `ac87e85eb614c546f57b3a2db8b9535924f498c7` automatically triggered the repository-native validation workflows. At this handoff update:
 
-- `python3 tools/story/validate_b2_dirt_belt_receiving_compact.py "data/human/b2 dirt belt receiving compact.txt"`
-- repository focused story/simulation validator suite
-- changed-content style validation
-- production Endless Sky configure/build
-- stock persistence/save-load smoke (`Saving during conversation`, `Loading and Reloading`, `Loading and Saving`)
+- `Fork simulation and story validation` run `32625569036` / #462: IN PROGRESS;
+- `Fork save-load integration smoke` run `32625569032` / #447: PENDING.
 
-Do not claim READY if any required workflow remains non-terminal or fails.
+Do not promote to READY until both exact-candidate workflows reach terminal SUCCESS.
 
 ## A3/B3 integration notes
 
-The B1 Dirt Belt resilience history is already integrated in the authoritative base used here. This B2 slice should be reviewed as a direct child of that integration.
+This branch is historical relative to current integration state. Even if GitHub reports it mergeable, A3 must recover current `main`, inspect ancestry/conflicts, and integrate conservatively.
 
 Preserve this core semantic boundary during later edits:
 
