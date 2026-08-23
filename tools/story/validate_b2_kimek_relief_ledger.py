@@ -64,6 +64,26 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("later reader must persist completion")
 
+    # These missions only persist state and create no gameplay objective. Using
+    # `accept` would leave an objective-less mission active after the dialogue.
+    accepts = re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE)
+    declines = re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)
+    if accepts:
+        fail(f"state-only missions must not use terminal accept; found {len(accepts)}")
+    if len(declines) != 7:
+        fail(f"expected exactly 7 state-only decline terminals, found {len(declines)}")
+
+    objective_directives = re.findall(
+        r'^\t+(destination|stopover|waypoint|npc|cargo|passenger|deadline|timer)\b',
+        text,
+        flags=re.MULTILINE | re.IGNORECASE,
+    )
+    if objective_directives:
+        fail(
+            "state-only lifecycle assumption invalidated by objective directives: "
+            f"{sorted(set(token.lower() for token in objective_directives))}"
+        )
+
     for raw in re.findall(r'^\s*"([^"]+)"\s*=\s*1\s*$', text, flags=re.MULTILINE):
         if not raw.startswith(PREFIX):
             fail(f"out-of-scope persistent write: {raw}")
@@ -122,6 +142,7 @@ def main() -> None:
     print("PASS: initial_routes=3 + refusal")
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Courier Remembers")
+    print("PASS: lifecycle=7 state-only decline terminals; 0 accepts")
     print("PASS: mutation_surface=B2 conditions only")
     print("PASS: b1_inputs=mutual aid + winter adaptation + inter-species relief")
 
