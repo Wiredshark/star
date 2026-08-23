@@ -14,6 +14,7 @@ CROSS_SYSTEM_CONNECTION: B1 Paradise Scholarship Trust Archive -> persistent B2 
 - Repository: `Wiredshark/star`
 - Authoritative base: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-paradise-scholarship-autonomy-20260823`
+- Exact fully validated production/validator candidate: `ae9e6f8de2728034e0cabf73160ab75ddb90e444`
 - B1 dependency: `Paradise Scholarship Trust Archive: offered`
 - No self-integration; A3 retains integration authority.
 
@@ -52,14 +53,24 @@ The B1 archive establishes Paradise scholarship trusts as opportunity-widening i
 - Persistent/player-visible capability added: three durable approaches, two terminal institutional compromises, trust flags, and one-shot aftermath.
 - Concentration exception: N/A.
 
-## Validation plan / evidence
-Focused validator: `python3 tools/story/validate_b2_paradise_scholarship_autonomy.py`
-Repository validation: `python3 tools/story/validate_story_repo.py`, focused validator discovery, A1 state-ownership contracts, changed-content style, production build, and stock save-load smoke through repository-native workflows.
+## Exact validation evidence
+Exact candidate `ae9e6f8de2728034e0cabf73160ab75ddb90e444` is terminal green on both repository-native acceptance workflows.
 
-Exact validation results and final candidate SHA must be added before READY. Until both repository-native workflows are terminal green on the exact production/validator candidate, verdict is **PARTIAL**.
+- `Fork simulation and story validation` #503 / run `32670614410`: **SUCCESS**
+  - compile focused Python validation code: PASS;
+  - run all focused story validators: PASS;
+  - run A1 simulation contract tests: PASS;
+  - changed fork content style: PASS.
+- `Fork save-load integration smoke` #488 / run `32670614309`: **SUCCESS**
+  - install build/headless dependencies: PASS;
+  - configure production executable: PASS;
+  - build production executable: PASS;
+  - run stock save-load smoke cases: PASS.
+
+No production or validator changes are required after this fully green candidate. The final READY commit is handoff-only.
 
 ## A3 / B3 notes
 A3 should re-read current `main` immediately before integration and verify clean ancestry. Preserve the B1 read-only gate and all B2 persistence names. B3 should reject any later reuse that turns one donor-recipient compromise into universal Paradise law, or that treats repeated copies of a scholarship form as fresh consent.
 
 ## Verdict
-PARTIAL pending repository-native exact-head simulation/story/style and production build/save-load validation.
+**READY for A3 review/integration.** Production, focused validation, A1/state-ownership contracts, changed-content style, production build, and stock save-load smoke are terminal green on the exact candidate above. B2 remains unmerged; A3 retains integration authority.
