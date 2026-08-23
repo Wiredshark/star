@@ -1,0 +1,97 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 Kor Efret Reconstruction Echo.
+# Reads resolved B2 reconstruction state and lets the player bound how its lesson
+# should be reused. B2 state remains read-only.
+
+mission "A2 Kor Efret Reconstruction Echo: Practice"
+	landing
+	minor
+	invisible
+	offer precedence 9
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		has "B2 Kor Efret Reconstruction Compact: aftermath seen"
+		not "A2 Kor Efret Reconstruction Echo: practice seen"
+		random < 30
+	on offer
+		conversation
+			branch priority
+				has "B2 Kor Efret Reconstruction Compact: settlement restoration priority"
+			`The Recorder and Repairer are studying a new transfer board. You recognize the paired marks from the earlier reconstruction dispute, but this board belongs to a different district. The question is no longer what happened to one recycler. It is whether the lesson you helped shape should become a habit others can copy.`
+			goto choose
+			label priority
+			`The Recorder and Repairer are studying a new restoration board. Measurements of air, soil, remaining systems, and replacement prospects sit beside several proposed transfers. The earlier priority rule is clearly being reused. The question is whether your part in that reasoning should carry any weight beyond the case that produced it.`
+			label choose
+			choice
+				`\tKeep the precedent local. A useful settlement does not make me an authority over other Kor Efret reconstruction disputes.`
+					goto local
+				`\tCarry forward only the method: preserve provenance, measure recovery, and leave each new decision to the people responsible for that district.`
+					goto method
+				`\tLet the earlier settlement be cited as a bounded example, provided every new case records where the analogy stops.`
+					goto example
+			label local
+			`You point to the old entry, then to yourself, and finally draw a hard boundary around that one record. The Recorder copies the gesture into the margin. The Repairer nods and turns back to the new district's measurements. Whatever your earlier advice meant, it will not become borrowed authority.`
+			action
+				"A2 Kor Efret Reconstruction Echo: practice seen" = 1
+				"A2 Kor Efret Reconstruction Echo: route local" = 1
+			decline
+			label method
+			`You trace the sequence rather than the conclusion: origin, present need, measured recovery, destination, remaining obligation. Then you push the board back toward the two Kor Efreti. The method can travel without pretending that one old answer settles a new district's future.`
+			action
+				"A2 Kor Efret Reconstruction Echo: practice seen" = 1
+				"A2 Kor Efret Reconstruction Echo: route method" = 1
+			decline
+			label example
+			`You point to the old settlement, then mark a smaller box beside the new case and deliberately leave part of it open. The Recorder adds a comparison mark followed by several differences. The Repairer adds the new district's measurements. The precedent survives as evidence, not command.`
+			action
+				"A2 Kor Efret Reconstruction Echo: practice seen" = 1
+				"A2 Kor Efret Reconstruction Echo: route example" = 1
+			decline
+
+mission "A2 Kor Efret Reconstruction Echo: Reflection"
+	landing
+	minor
+	invisible
+	offer precedence 9
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		has "B2 Kor Efret Reconstruction Compact: aftermath seen"
+		has "A2 Kor Efret Reconstruction Echo: practice seen"
+		not "A2 Kor Efret Reconstruction Echo: reflection seen"
+		random < 34
+	on offer
+		conversation
+			branch local
+				has "A2 Kor Efret Reconstruction Echo: route local"
+			branch method
+				has "A2 Kor Efret Reconstruction Echo: route method"
+			branch example
+				has "A2 Kor Efret Reconstruction Echo: route example"
+			label local
+			`A later reconstruction board contains no mark for you at all. The old settlement remains in its own place while a new district's workers record their own transfer decision. The boundary held: your earlier participation became neither title nor standing authority.`
+			goto done
+			label method
+			`A later reconstruction board repeats the sequence you demonstrated: provenance, measured recovery, destination, remaining obligation. The final decision differs from the old case. The method traveled; the answer did not.`
+			goto done
+			label example
+			`A later reconstruction board cites the earlier settlement beside a new transfer, then lists the differences between the two districts. The new workers reach a different result and preserve both records. The example informed the decision without becoming a rule that erased local judgment.`
+			label done
+			action
+				"A2 Kor Efret Reconstruction Echo: reflection seen" = 1
+			decline
