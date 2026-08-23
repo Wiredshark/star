@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native validation of the lifecycle repair. Do not integrate until both required workflows are terminal green on the repaired candidate.
+READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -15,6 +15,7 @@ PARTIAL pending exact-head repository-native validation of the lifecycle repair.
 - Original validated production/data/validator head: `025fd168b2912f87ac98f9de41451e1c5cc95b49`
 - Lifecycle production repair: `4df617b3e9a9e0323dfb430263555bfc151b96fd`
 - Lifecycle validator hardening: `6e0ee71e64c64f7803028830a998232d65469727`
+- Exact fully validated lifecycle candidate: `e3948d190f0ad482fa033f7947e0e655bba1fce8`
 - Draft PR: #88
 - Integration authority remains A3. B2 must not self-integrate.
 
@@ -53,7 +54,7 @@ The three missions are dialogue/state-only. They create no destination, cargo, N
 
 Lifecycle repair `4df617b3e9a9e0323dfb430263555bfc151b96fd` changes exactly those six positive terminals to `decline`; refusal already used `decline`. All seven terminal paths now persist their existing state and close cleanly.
 
-Validator hardening `6e0ee71e64c64f7803028830a998232d65469727` now requires:
+Validator hardening `6e0ee71e64c64f7803028830a998232d65469727` requires:
 
 - zero terminal `accept` commands;
 - exactly seven terminal `decline` commands;
@@ -74,14 +75,17 @@ B2 does not write `world:*`, credits, reputation, combat rating, cargo, outfits,
 - `tools/story/validate_b2_kimek_relief_ledger.py`
 - `story/B2_KIMEK_RELIEF_LEDGER_HANDOFF_20260819.md`
 
-## Validation evidence
+## Exact validation evidence
 
-The original pre-lifecycle candidate `025fd168b2912f87ac98f9de41451e1c5cc95b49` passed both repository-native acceptance workflows, including changed-content style, focused story validation, A1 simulation/state-ownership contracts, production configure/build, and stock save-load smoke.
+The original pre-lifecycle candidate `025fd168b2912f87ac98f9de41451e1c5cc95b49` was already green. The repaired exact candidate `e3948d190f0ad482fa033f7947e0e655bba1fce8` independently passed both current repository-native acceptance gates:
 
-The lifecycle repair must be validated again on its exact repaired head. Required gates:
-
-- `Fork simulation and story validation`: pending on repaired exact head;
-- `Fork save-load integration smoke`: pending on repaired exact head.
+- `Fork simulation and story validation` #468 / run `32630986480`: **SUCCESS**;
+- focused story validator discovery, including the hardened Kimek lifecycle validator: **SUCCESS**;
+- A1 simulation/state-ownership contracts: **SUCCESS**;
+- changed-content style: **SUCCESS**;
+- `Fork save-load integration smoke` #453 / run `32630986420`: **SUCCESS**;
+- production configure/build: **SUCCESS**;
+- stock save-load smoke: **SUCCESS**.
 
 Focused validator command:
 
@@ -89,11 +93,9 @@ Focused validator command:
 python3 tools/story/validate_b2_kimek_relief_ledger.py "data/coalition/b2 kimek relief ledger.txt"
 ```
 
-Promote this handoff to READY only after both repaired-head workflows are terminal green.
-
 ## A3 / B3 integration notes
 
-Integration order is B1 Kimek relief institutions first, then this B2 branch. Because this branch is historical relative to current `main`, A3 must re-read current-main ancestry and continuity before integrating even if GitHub reports the PR mergeable.
+Integration order is B1 Kimek relief institutions first, then this B2 branch. The branch is historical relative to current `main`: comparison at recovery showed it diverged from merge base `67203cc6d170f4961fd7cfe2374881453296fa04` and was 135 commits behind current `main` before the lifecycle handoff update. A3 must therefore re-read current-main ancestry and continuity before integrating even though GitHub reports the PR mergeable.
 
 Preserve these invariants:
 
