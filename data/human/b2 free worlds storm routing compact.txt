@@ -1,0 +1,158 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Free Worlds Storm Routing Compact.
+#
+# This slice consumes the B1 storm-navigation institutional history plus the
+# authoritative A1 geomagnetic-storm/navigation-strain signals. It turns the
+# distributed Free Worlds warning, calibration, route-verification, and traffic-
+# priority practices into a recurring character dispute about what pilots should
+# be told when sensors disagree during a regional disturbance.
+#
+# B2 reads A1 state but never writes or clears it. The eventual settlement is a
+# practical inter-world procedure, not a centralized Free Worlds navigation office.
+
+
+mission "B2 Free Worlds Storm Routing Compact: Offer"
+	minor
+	name `Static on the Board`
+	description `Beacon engineer Mara Edden and independent pilot Colm Rusk disagree over how uncertain route advisories should be published during a Free Worlds geomagnetic storm.`
+	source
+		government "Free Worlds"
+	to offer
+		has "world: free worlds geomagnetic storm active"
+		"world: free worlds geomagnetic navigation strain" >= 3
+		not "B2 Free Worlds Storm Routing Compact: introduced"
+		not "B2 Free Worlds Storm Routing Compact: declined"
+	on offer
+		conversation
+			`The local traffic board is covered in amber route notices. Several agree on the broad shape of the geomagnetic disturbance, but two nearby beacon chains disagree about which approach corridor is degrading fastest.`
+			`Mara Edden, a beacon engineer helping compare calibration records, points to the conflicting timestamps. "One chain was recalibrated yesterday. The other has more ships reporting clean fixes, but its reference check is older. Publishing one route as simply 'safe' would hide the part we do not know."`
+			`Independent pilot Colm Rusk folds his arms. "And publishing six pages of uncertainty while ships are already holding outside the lane is not guidance. Captains need a usable route, not an archive lecture."`
+			`Edden answers, "A usable route that forgets why it was chosen becomes a rumor the moment somebody copies it to the next port."`
+			choice
+				`\tBack Edden: publish only routes that pass a fresh verification threshold, even if that means longer holds.`
+					goto verify
+				`\tBack Rusk: publish the best current route quickly and let experienced pilots report corrections from the field.`
+					goto field
+				`\tPair the route with a compact confidence record: source, calibration age, contrary reports, and an expiry time.`
+					goto paired
+				`\tTell them the Free Worlds should settle its own storm-routing practice.`
+					goto decline
+			label verify
+			`You tell Rusk that a slower departure is cheaper than a confident instruction built on stale calibration. Edden nods. Rusk replies, "Then make the threshold visible. If I am held, I want to know which check failed instead of hearing that somebody in another system decided the weather felt uncertain."`
+			action
+				"B2 Free Worlds Storm Routing Compact: introduced" = 1
+				"B2 Free Worlds Storm Routing Compact: route verification" = 1
+				"B2 Free Worlds Storm Routing Compact: edden trusts player" = 1
+			decline
+			label field
+			`You tell Edden that storm routing changes faster than a paperwork chain can close. Rusk nods. Edden answers, "Then field reports need provenance too. A pilot saying 'my instruments were clean' is useful, but only if the next port knows when, where, and with what calibration."`
+			action
+				"B2 Free Worlds Storm Routing Compact: introduced" = 1
+				"B2 Free Worlds Storm Routing Compact: route field" = 1
+				"B2 Free Worlds Storm Routing Compact: rusk trusts player" = 1
+			decline
+			label paired
+			`You suggest keeping the operational instruction short while attaching a small confidence record that survives copying: which beacons were checked, when they were calibrated, what reports disagreed, and when the recommendation expires. Rusk says, "That I can fly with." Edden says, "And I can revise it without pretending the old version was never uncertain."`
+			action
+				"B2 Free Worlds Storm Routing Compact: introduced" = 1
+				"B2 Free Worlds Storm Routing Compact: route paired" = 1
+				"B2 Free Worlds Storm Routing Compact: edden trusts player" = 1
+				"B2 Free Worlds Storm Routing Compact: rusk trusts player" = 1
+			decline
+			label decline
+			`You tell them a cooperative network should not turn an outsider's preference into a regional rule. Edden accepts that immediately. Rusk says, "Fair. Just make sure the next version is written by people who have both calibrated a beacon and missed a docking window."`
+			action
+				"B2 Free Worlds Storm Routing Compact: declined" = 1
+			decline
+
+
+mission "B2 Free Worlds Storm Routing Compact: Review"
+	minor
+	name `After the Static`
+	description `Return after navigation strain has recovered and see what survived from the storm-routing argument.`
+	source
+		government "Free Worlds"
+	to offer
+		has "B2 Free Worlds Storm Routing Compact: introduced"
+		not "world: free worlds geomagnetic storm active"
+		"world: free worlds geomagnetic navigation strain" <= 1
+		not "B2 Free Worlds Storm Routing Compact: reviewed"
+	on offer
+		conversation
+			branch verify
+				has "B2 Free Worlds Storm Routing Compact: route verification"
+			branch field
+				has "B2 Free Worlds Storm Routing Compact: route field"
+			`The storm notices have mostly vanished, but Edden and Rusk are still arguing over the archived copies. Ports that received the short paired notices kept the operational route, the calibration age, and the expiry together. Ports that rewrote the notices by hand sometimes kept only the route line.`
+			`Edden taps two copies that now look identical even though one came from a fresh calibration and the other from three contradictory field reports. "The next storm will start with these records. If the uncertainty disappears, old advice becomes false certainty."`
+			`Rusk says, "Then do not make every pilot carry the whole archive. Give copied advice enough context to know when to distrust it, and give us somewhere to push back when our instruments disagree."`
+			choice
+				`\tAdopt a portable confidence packet that must travel with every copied storm-route advisory.`
+					goto packet
+				`\tAdopt a distributed challenge board where contradictory field reports stay attached until independently resolved.`
+					goto challenge
+			label verify
+			`Fresh-verification thresholds reduced contradictory route notices, but several ports kept ships waiting because the verification result traveled without the reason a check had failed. Rusk says, "A red light with no explanation is only centralized guesswork with better paint." Edden agrees that the evidence for the threshold needs to travel with the threshold.`
+			choice
+				`\tMake source, calibration age, uncertainty, and expiry part of a portable confidence packet.`
+					goto packet
+				`\tKeep the threshold but attach an open challenge record whenever field reports materially disagree.`
+					goto challenge
+			label field
+			`Fast field corrections kept traffic moving, but one optimistic report was copied through three ports after later pilots had already contradicted it. Rusk grimaces at the timeline. "That one was useful for twenty minutes and dangerous for six hours." Edden says the network needs a way for contradictions to travel as reliably as the original recommendation.`
+			choice
+				`\tRequire field-derived advisories to carry source, confidence, and expiry in a portable packet.`
+					goto packet
+				`\tKeep rapid field reports but maintain a distributed challenge record until conflicting observations are reconciled.`
+					goto challenge
+			label packet
+			`You recommend a compact record that remains inseparable from every copied operational advisory: observation source, last calibration or verification, known contradictory reports, confidence level, and an expiry after which the route must be checked again. Each Free Worlds port may still choose its own traffic response. The record only prevents a copied recommendation from becoming more certain than the evidence that created it.`
+			action
+				"B2 Free Worlds Storm Routing Compact: reviewed" = 1
+				"B2 Free Worlds Storm Routing Compact: settlement confidence packet" = 1
+				"B2 Free Worlds Storm Routing Compact: edden trusts player" = 1
+			decline
+			label challenge
+			`You recommend a shared challenge record rather than a single authoritative route. Ports and pilots can publish operational recommendations quickly, but a materially contradictory observation remains attached until another independent check resolves it. The original recommendation, the challenge, and the resolution all remain visible. Rusk likes that pilots can contest stale advice without becoming the new unquestioned authority. Edden likes that disagreement becomes evidence instead of disappearing into radio traffic.`
+			action
+				"B2 Free Worlds Storm Routing Compact: reviewed" = 1
+				"B2 Free Worlds Storm Routing Compact: settlement challenge board" = 1
+				"B2 Free Worlds Storm Routing Compact: rusk trusts player" = 1
+			decline
+
+
+mission "B2 Free Worlds Storm Routing Compact: Edden Remembers"
+	minor
+	name `Edden Remembers`
+	description `Mara Edden remembers how the last geomagnetic storm changed the way uncertain route advice travels between Free Worlds ports.`
+	source
+		government "Free Worlds"
+	to offer
+		not "B2 Free Worlds Storm Routing Compact: aftermath seen"
+		or
+			has "B2 Free Worlds Storm Routing Compact: settlement confidence packet"
+			has "B2 Free Worlds Storm Routing Compact: settlement challenge board"
+	on offer
+		conversation
+			branch challenge
+				has "B2 Free Worlds Storm Routing Compact: settlement challenge board"
+			`Edden catches you beside a newly recalibrated beacon display. "We used the confidence packet during a smaller disturbance last week. The route recommendation still fit on one line, but the copied notice kept its source, calibration age, uncertainty, and expiry all the way to the next system. Nobody had to pretend one port was in charge of the others." She smiles. "The useful part was not making everyone agree. It was keeping the reasons attached when they did."`
+			goto record
+			label challenge
+			`Edden points to a route notice with two attached field challenges and a later verification mark. "That would have been three incompatible rumors before. Now the contradiction stayed visible until another beacon check resolved it." Rusk is not here, but somebody has written beneath the final entry: 'challenging a route is not the same as replacing it with your own certainty.' Edden says, "He will deny writing that."`
+			label record
+			action
+				"B2 Free Worlds Storm Routing Compact: aftermath seen" = 1
+			decline
