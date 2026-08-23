@@ -95,6 +95,24 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("missing one-shot aftermath state")
 
+    # Dialogue-only lifecycle contract: these missions only persist conditions and
+    # create no gameplay objective. Every terminal path must close with decline so
+    # no objective-less accepted mission can remain active in the mission list.
+    terminal_accepts = len(re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE))
+    terminal_declines = len(re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE))
+    if terminal_accepts != 0:
+        fail(f"state-only slice must contain zero terminal accept commands, found {terminal_accepts}")
+    if terminal_declines != 7:
+        fail(f"expected exactly seven state-only decline terminals, found {terminal_declines}")
+
+    objective_directives = re.compile(
+        r'^\s*(destination|stopover|waypoint|npc|cargo|passenger|deadline|timer)\b',
+        flags=re.MULTILINE,
+    )
+    match = objective_directives.search(text)
+    if match:
+        fail(f"state-only lifecycle assumption invalidated by objective directive: {match.group(1)}")
+
     # Every condition write must remain inside the B2 namespace.
     condition_write = re.compile(r'^\s*"([^"]+)"\s*(?:=|\+=|-=)\s*\d+', re.MULTILINE)
     for cond in condition_write.findall(text):
@@ -147,6 +165,7 @@ def main() -> None:
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Kessler Remembers")
     print("PASS: persistence_model=stock mission/global conditions")
+    print("PASS: lifecycle=state-only, terminal_accepts=0, terminal_declines=7")
     print("PASS: write_ownership=B2 namespace only")
 
 
