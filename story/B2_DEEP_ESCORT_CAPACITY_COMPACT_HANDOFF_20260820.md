@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native simulation/story/style and production build/save-load validation for the lifecycle-repaired candidate.
+READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -15,6 +15,7 @@ PARTIAL pending exact-head repository-native simulation/story/style and producti
 - Original focused-validator commit: `78ec119836643ff2e2c61bd571e9163fa7ec3926`
 - Lifecycle production repair: `be4beb30a4000d6d68cb3561720a52a7a67aa660`
 - Lifecycle validator hardening: `523edcd88229c018b19890a2906cde161631d5f7`
+- Exact fully validated lifecycle-repair candidate: `f54d3549f1cabe62baa39b2b35f3d4b341c2978e`
 
 B2 does not self-integrate. A3 retains integration authority.
 
@@ -43,11 +44,11 @@ Review outcomes:
 
 The three missions are dialogue/state-only. They create no destination, cargo, NPC, waypoint, timer, passenger, or other gameplay objective.
 
-The original production used terminal `accept` on six positive paths: the three Offer routes, both Review settlements, and `Kest Remembers`. That can leave objective-less accepted missions in the player's active mission list.
+The original production used terminal `accept` on six positive paths: the three Offer routes, both Review settlements, and `Kest Remembers`. That could leave objective-less accepted missions in the player's active mission list.
 
 Lifecycle repair commit `be4beb30a4000d6d68cb3561720a52a7a67aa660` changes exactly those six positive terminals from `accept` to `decline`. Refusal already used `decline`, so all seven state-only terminal paths now persist their existing state and close cleanly.
 
-Validator hardening commit `523edcd88229c018b19890a2906cde161631d5f7` now enforces:
+Validator hardening commit `523edcd88229c018b19890a2906cde161631d5f7` enforces:
 
 - zero terminal `accept` commands;
 - exactly seven terminal `decline` commands;
@@ -87,20 +88,24 @@ Focused validator command:
 
 `python3 tools/story/validate_b2_deep_escort_capacity_compact.py "data/human/b2 deep escort capacity compact.txt"`
 
-Required repository-native acceptance before READY:
+Required B1 parent validation is terminal green:
 
-- `Fork simulation and story validation` succeeds on the exact lifecycle-repaired final candidate head;
-- changed-content style succeeds;
-- the hardened focused validator is discovered/executed successfully by the story suite;
-- A1/state-ownership contracts remain green;
-- `Fork save-load integration smoke` succeeds, including production configure/build and stock persistence smoke.
+- `Fork simulation and story validation` #205 / `32358703153`: SUCCESS
+- `Fork save-load integration smoke` #194 / `32358703170`: SUCCESS
 
-No PASS is claimed for the repaired head until those exact-head workflows are terminal green.
+Exact lifecycle-repaired candidate `f54d3549f1cabe62baa39b2b35f3d4b341c2978e` is terminal green:
+
+- `Fork simulation and story validation` #449 / `32612986600`: SUCCESS
+- changed-content style: SUCCESS through that workflow
+- hardened focused validator: SUCCESS through the focused story suite
+- A1/state-ownership contracts: SUCCESS through that workflow
+- `Fork save-load integration smoke` #434 / `32612986602`: SUCCESS
+- production configure/build and stock save-load smoke: SUCCESS through that workflow
 
 ## A3 / B3 notes
 
-A3 should re-read current `main`, verify B1 dependency ancestry, review the exact diff, and integrate only if both B1 and B2 validation are green.
+A3 should re-read current `main`, verify B1 dependency ancestry, review the exact diff, and integrate conservatively. The branch is historical relative to current `main`, so mergeability is not a substitute for an ancestry/continuity review.
 
 B3 should preserve the core continuity invariant: **a convoy arriving safely is an event; a restored reserve is a condition.** A successful research shipment must not silently erase deferred patrol, rescue, inspection, or maintenance obligations.
 
-Dialogue/state-only B2 missions that merely persist state should terminate with `decline`; `accept` is reserved for mission paths that actually create gameplay objectives.
+Dialogue/state-only B2 missions that merely persist state terminate with `decline`; `accept` is reserved for mission paths that actually create gameplay objectives.
