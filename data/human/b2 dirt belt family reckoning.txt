@@ -1,0 +1,148 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Dirt Belt Family Reckoning production slice.
+# Deepens STORY_CANON characters Imani Velez and Tomas Rhyne from ES-STORY-0001
+# without repeating the freight-shock premise. The primary conflict is family,
+# truth, privacy, and ownership of a difficult personal history.
+
+
+event "B2 Dirt Belt Family Reckoning: Review Ready"
+	"B2 Dirt Belt Family Reckoning: review ready" = 1
+
+
+mission "B2 Dirt Belt Family Reckoning: Offer"
+	minor
+	name `The Story Nobody Owns Alone`
+	description `Imani Velez and Tomas Rhyne disagree over what Tomas owes his daughter when an old family story no longer matches the truth.`
+	source "New Wales"
+	"offer precedence" 8
+	to offer
+		not "B2 Dirt Belt Family Reckoning: introduced"
+		not "B2 Dirt Belt Family Reckoning: declined"
+	on offer
+		conversation
+			`Imani Velez catches you near the New Wales spaceport archives. She is not carrying a freight board or a contract slate. Instead, she has an old maintenance envelope in one hand and the expression she wears when a number has finally become a person.`
+			`Tomas Rhyne stands beside her, arms folded. With him is his adult daughter, Lena Rhyne, who has been assembling a family history from ship logs, old recordings, and stories told by relatives who disagree about nearly everything except that Tomas always survived.`
+			`Lena found a gap. Years ago, Tomas took an unofficial high-risk job to cover a repair bill, and Imani quietly covered missed cooperative payments afterward. The family version says the ship simply had a bad season. Tomas says the rest is nobody's business. Lena says a family history that protects the living by inventing the past is not a history.`
+			choice
+				`\tBack disclosure: Lena should hear the full account, including Tomas's choice and Imani's part in covering the consequences.`
+					goto disclose
+				`\tBack Tomas's privacy: he should decide which personal failures become part of a family record while he is alive.`
+					goto private
+				`\tSeparate fact from publication: preserve a complete sealed account now, but let Tomas and Lena negotiate what may be shared beyond the immediate family.`
+					goto layered
+				`\tDecline to decide who owns a family's difficult history.`
+					goto decline
+			label disclose
+			`You tell Tomas that refusing to name the risk does not erase the effect it had on Lena's inheritance of the family story. Tomas looks angry, then tired. Imani says, "If we are telling it, we tell my part too. I made choices because I thought I was protecting people." Lena closes her recorder and says she wants the account from both of them, not a confession staged for her benefit.`
+			action
+				"B2 Dirt Belt Family Reckoning: introduced" = 1
+				"B2 Dirt Belt Family Reckoning: route disclose" = 1
+				"B2 Dirt Belt Family Reckoning: lena trusts player" = 1
+				event "B2 Dirt Belt Family Reckoning: Review Ready" 7 11
+				decline
+			label private
+			`You tell Lena that truthful history does not require every living person to surrender all control over their private failures. She does not like the answer, but Tomas uncrosses his arms. Imani adds that privacy cannot become permission to manufacture a false version for everyone else. Lena writes that distinction down.`
+			action
+				"B2 Dirt Belt Family Reckoning: introduced" = 1
+				"B2 Dirt Belt Family Reckoning: route private" = 1
+				"B2 Dirt Belt Family Reckoning: tomas trusts player" = 1
+				event "B2 Dirt Belt Family Reckoning: Review Ready" 7 11
+				decline
+			label layered
+			`You suggest that preservation and publication are different decisions. Imani can help preserve a complete account with dates, sources, and contradictions. Tomas can state what he refuses to publish while he is alive. Lena can record that a fuller sealed account exists without pretending the public version is complete.`
+			action
+				"B2 Dirt Belt Family Reckoning: introduced" = 1
+				"B2 Dirt Belt Family Reckoning: route layered" = 1
+				"B2 Dirt Belt Family Reckoning: tomas trusts player" = 1
+				"B2 Dirt Belt Family Reckoning: lena trusts player" = 1
+				event "B2 Dirt Belt Family Reckoning: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a visitor should not become the authority on what one family owes itself. Lena nods first. Tomas says, "Good. Then at least if we get this wrong, it will be our mistake." Imani keeps the envelope instead of destroying it.`
+			action
+				"B2 Dirt Belt Family Reckoning: declined" = 1
+				decline
+
+
+mission "B2 Dirt Belt Family Reckoning: Review"
+	minor
+	name `A Truth With More Than One Owner`
+	description `Return after Tomas, Lena, and Imani have had time to test whether honesty and privacy can coexist in the same family record.`
+	source "New Wales"
+	"offer precedence" 8
+	to offer
+		has "B2 Dirt Belt Family Reckoning: introduced"
+		has "B2 Dirt Belt Family Reckoning: review ready"
+		not "B2 Dirt Belt Family Reckoning: reviewed"
+	on offer
+		conversation
+			branch disclose
+				has "B2 Dirt Belt Family Reckoning: route disclose"
+			branch private
+				has "B2 Dirt Belt Family Reckoning: route private"
+			`Lena has built two timelines: one containing events everyone agrees happened, and another containing statements about why they happened. Imani has added her own recollection of covering the missed payments, including a note that she cannot prove what Tomas intended when he accepted the risky job. Tomas has corrected two details and refused to comment on three others.`
+				goto settle
+			label disclose
+			`Tomas told Lena the whole story, but the first draft made his version sound definitive. Imani objected that her decision to cover the payments was independent and that some of Tomas's remembered motives are explanations offered years later, not facts recorded at the time. Lena now wants a record that can contain a full disclosure without pretending one speaker owns every interpretation.`
+				goto settle
+			label private
+			`Tomas kept several details private, but Lena discovered that relatives began filling the gaps with guesses. She says a blank space is honest only if the record marks it as a deliberate privacy boundary rather than inviting rumor to masquerade as fact. Tomas agrees more readily than either of you expected.`
+			label settle
+			choice
+				`\tCreate a layered family record: verified events, attributed memories, disputed interpretations, and deliberate privacy boundaries remain separate.`
+					goto layered
+				`\tCreate a consent-and-release record: preserve the complete source material where possible, but attach explicit rules for who may see or publish each part and when those rules should be reviewed.`
+					goto consent
+			label layered
+			`You recommend a record that never needs one speaker to become the final narrator. Dates, ship records, payments, and other verifiable events form one layer. Tomas, Imani, Lena, and other relatives keep attributed recollections in another. Disagreements remain visible. A privacy boundary says only that material is intentionally withheld, not that nothing happened.`
+			action
+				"B2 Dirt Belt Family Reckoning: reviewed" = 1
+				"B2 Dirt Belt Family Reckoning: settlement layered family record" = 1
+				"B2 Dirt Belt Family Reckoning: lena trusts player" = 1
+				decline
+			label consent
+			`You recommend separating preservation from circulation. The family can keep source material without treating possession as publication permission. Each recording or statement carries its speaker, intended audience, consent scope, and a later review point. Lena can preserve the history; Tomas can retain meaningful privacy; Imani's account cannot be edited into someone else's confession.`
+			action
+				"B2 Dirt Belt Family Reckoning: reviewed" = 1
+				"B2 Dirt Belt Family Reckoning: settlement consent and release" = 1
+				"B2 Dirt Belt Family Reckoning: tomas trusts player" = 1
+				"B2 Dirt Belt Family Reckoning: lena trusts player" = 1
+				decline
+
+
+mission "B2 Dirt Belt Family Reckoning: Lena Remembers"
+	minor
+	name `Lena Remembers`
+	description `Lena Rhyne remembers the rule your advice placed between family truth, privacy, and ownership of a difficult history.`
+	source "New Wales"
+	"offer precedence" 8
+	to offer
+		not "B2 Dirt Belt Family Reckoning: aftermath seen"
+		or
+			has "B2 Dirt Belt Family Reckoning: settlement layered family record"
+			has "B2 Dirt Belt Family Reckoning: settlement consent and release"
+	on offer
+		conversation
+			branch consent
+				has "B2 Dirt Belt Family Reckoning: settlement consent and release"
+			`Lena shows you a new family entry about a different disagreement. The archive lists a repair date, three conflicting memories, and one section marked private at the speaker's request. Nobody filled the private section with speculation. "That may be the part I was missing," she says. "A gap can be honest if you admit it is a gap."`
+				goto finish
+			label consent
+			`Lena shows you a set of recordings with different access notes. One is family-only. One may be quoted after its speaker's death. One may be summarized now but not copied. "I used to think preservation meant I should be allowed to hear everything," she says. "Now I know an archive can protect a story without taking ownership away from the people inside it."`
+			label finish
+			action
+				"B2 Dirt Belt Family Reckoning: aftermath seen" = 1
+				decline
