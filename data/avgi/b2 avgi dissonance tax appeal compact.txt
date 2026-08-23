@@ -45,14 +45,14 @@ mission "B2 Avgi Dissonance Tax Appeal Compact: Offer"
 				"B2 Avgi Dissonance Tax Appeal Compact: introduced" = 1
 				"B2 Avgi Dissonance Tax Appeal Compact: route indigo" = 1
 				"B2 Avgi Dissonance Tax Appeal Compact: indigo trusts player" = 1
-			accept
+			decline
 			label sienna
 			`You argue that current operations need a current verified figure, not a permanent warning banner. Sienna approves. Indigo accepts the operational point but warns that the link to the challenge record must remain durable enough that a later dispute can reconstruct how the number changed.`
 			action
 				"B2 Avgi Dissonance Tax Appeal Compact: introduced" = 1
 				"B2 Avgi Dissonance Tax Appeal Compact: route sienna" = 1
 				"B2 Avgi Dissonance Tax Appeal Compact: sienna trusts player" = 1
-			accept
+			decline
 			label paired
 			`You suggest separating the current verified assessment from the history that produced it while making the link mandatory. Each copied record would carry the assessment, the challenge basis, the evidence used, the disposition, and whether anything remains open. Indigo calls it protest memory that cannot impersonate a verdict. Sienna calls it a ledger she can actually use.`
 			action
@@ -60,7 +60,7 @@ mission "B2 Avgi Dissonance Tax Appeal Compact: Offer"
 				"B2 Avgi Dissonance Tax Appeal Compact: route paired" = 1
 				"B2 Avgi Dissonance Tax Appeal Compact: indigo trusts player" = 1
 				"B2 Avgi Dissonance Tax Appeal Compact: sienna trusts player" = 1
-			accept
+			decline
 			label decline
 			`You tell them that Dissonance communities should decide how their own grievance records travel. Indigo says that refusal is at least better than pretending an outsider's preference is neutral. Sienna returns to the copied assessments.`
 			action
@@ -110,14 +110,14 @@ mission "B2 Avgi Dissonance Tax Appeal Compact: Review"
 				"B2 Avgi Dissonance Tax Appeal Compact: reviewed" = 1
 				"B2 Avgi Dissonance Tax Appeal Compact: settlement disposition packet" = 1
 				"B2 Avgi Dissonance Tax Appeal Compact: indigo trusts player" = 1
-			accept
+			decline
 			label expiry
 			`You recommend an expiry-and-renewal rule. A resolved challenge remains in historical records but stops propagating as an active warning. Reopening requires fresh evidence or a newly identified inconsistency, not the mere existence of the old objection. Indigo calls it memory with a burden of renewal. Sienna calls it the difference between history and a permanent accusation.`
 			action
 				"B2 Avgi Dissonance Tax Appeal Compact: reviewed" = 1
 				"B2 Avgi Dissonance Tax Appeal Compact: settlement expiry renewal" = 1
 				"B2 Avgi Dissonance Tax Appeal Compact: sienna trusts player" = 1
-			accept
+			decline
 
 mission "B2 Avgi Dissonance Tax Appeal Compact: Indigo Remembers"
 	minor
@@ -143,4 +143,4 @@ mission "B2 Avgi Dissonance Tax Appeal Compact: Indigo Remembers"
 			label record
 			action
 				"B2 Avgi Dissonance Tax Appeal Compact: aftermath seen" = 1
-			accept
+			decline
