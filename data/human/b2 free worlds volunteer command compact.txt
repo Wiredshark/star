@@ -1,0 +1,152 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Free Worlds Volunteer Command Compact.
+#
+# This slice consumes A1-owned Free Worlds defense strain and patrol-surge state
+# read-only. It turns the Mutual Defense Registry's historical compromise into a
+# present-day character dispute: temporary militia coordination must be useful in
+# an emergency without silently becoming permanent command over independent ships.
+
+
+mission "B2 Free Worlds Volunteer Command Compact: Offer"
+	minor
+	name `The Order That Ends`
+	description `Defense liaison Elia Venn and independent tug captain Mara Quill disagree over how temporary Free Worlds militia authority should apply to volunteer civilian ships.`
+	source
+		government "Free Worlds"
+	to offer
+		has "world: free worlds patrol surge"
+		"world: free worlds defense strain" >= 1
+		not "B2 Free Worlds Volunteer Command Compact: introduced"
+		not "B2 Free Worlds Volunteer Command Compact: declined"
+	on offer
+		conversation
+			`A defense liaison has cornered an old rescue tug captain beside a patrol board. The liaison introduces herself as Elia Venn. The captain, Mara Quill, barely looks away from the board. Her tug volunteered for militia coordination when the patrol surge began; now a copied tasking sheet describes the ship as though it were simply part of the patrol force.`
+			`Venn taps the mobilization notice. "Nobody is trying to seize her ship. But temporary defense only works if an order means something while the emergency is active." Quill folds her arms. "Then the record should also say exactly when the order stops meaning something."`
+			choice
+				`\tUse bounded activation: every volunteer order states its defensive purpose, scope, release condition, and who may issue the next task.`
+					goto bounded
+				`\tKeep captain discretion explicit: militia tasking coordinates the objective, but the civilian captain retains safety authority and may reject work outside the agreed emergency scope.`
+					goto discretion
+				`\tUse paired records: one records the shared defensive task, while a linked captain record preserves consent, limits, substitutions, and withdrawal conditions.`
+					goto paired
+				`\tDo not turn one surge into a permanent command rule for independent captains.`
+					goto decline
+			label bounded
+			`You argue that temporary authority should become stronger by becoming narrower. A volunteer order should identify the emergency, the task, the officer allowed to redirect it, the conditions that end the activation, and what happens to unfinished work after release. Venn says a bounded order is easier to enforce because nobody has to guess where it ends. Quill says that is the first version she would sign without crossing anything out.`
+			action
+				"B2 Free Worlds Volunteer Command Compact: introduced" = 1
+				"B2 Free Worlds Volunteer Command Compact: route bounded activation" = 1
+				"B2 Free Worlds Volunteer Command Compact: quill trusts player" = 1
+			decline
+			label discretion
+			`You tell Venn that coordination is not ownership. The militia can define the common defensive objective, rendezvous, and priority, while the civilian captain remains responsible for whether the ship can safely perform a particular maneuver or accept a task outside the volunteered scope. Venn accepts the distinction. Quill says she can follow an emergency order more confidently when refusal outside its limits is not treated as desertion.`
+			action
+				"B2 Free Worlds Volunteer Command Compact: introduced" = 1
+				"B2 Free Worlds Volunteer Command Compact: route captain discretion" = 1
+				"B2 Free Worlds Volunteer Command Compact: venn trusts player" = 1
+			decline
+			label paired
+			`You separate the records. The patrol board keeps the shared tactical task; the captain's linked record preserves the volunteered scope, safety limits, substitutions, any refusal, and the exact release condition. Neither record can silently replace the other. Venn says command keeps a usable board. Quill says her consent no longer disappears when somebody copies only the tasking line.`
+			action
+				"B2 Free Worlds Volunteer Command Compact: introduced" = 1
+				"B2 Free Worlds Volunteer Command Compact: route paired records" = 1
+				"B2 Free Worlds Volunteer Command Compact: venn trusts player" = 1
+				"B2 Free Worlds Volunteer Command Compact: quill trusts player" = 1
+			decline
+			label decline
+			`You tell them that one mobilization is too small a sample for a standing rule. Venn records that no general command model was adopted from your advice. Quill says that is preferable to having her emergency consent quoted as permanent agreement later.`
+			action
+				"B2 Free Worlds Volunteer Command Compact: declined" = 1
+			decline
+
+
+mission "B2 Free Worlds Volunteer Command Compact: Review"
+	minor
+	name `After the Recall`
+	description `Return after Free Worlds defense pressure recovers and decide how temporary volunteer authority should survive in later records without remaining active.`
+	source
+		government "Free Worlds"
+	to offer
+		has "B2 Free Worlds Volunteer Command Compact: introduced"
+		not "world: free worlds patrol surge"
+		"world: free worlds defense strain" <= 1
+		not "B2 Free Worlds Volunteer Command Compact: reviewed"
+	on offer
+		conversation
+			branch bounded
+				has "B2 Free Worlds Volunteer Command Compact: route bounded activation"
+			branch discretion
+				has "B2 Free Worlds Volunteer Command Compact: route captain discretion"
+			`The patrol surge is over. Venn shows you three copied tasking records from different ports. All three correctly say that Quill's tug was assigned to defense work. Only one says that the activation has ended. Quill points to the other two. "A true old order can become a false current order just by losing its release line."`
+			choice
+				`\tUse a portable activation packet: purpose, scope, issuing authority, captain consent, safety limits, substitutions, release condition, and closure status travel together.`
+					goto packet
+				`\tUse an expiry-and-release roster: active volunteer authority expires with the named emergency unless fresh consent and a new activation explicitly renew it.`
+					goto expiry
+			label bounded
+			`Your bounded orders ended correctly at the issuing port, but one downstream copy retained the task and dropped the release condition. Venn says the original record is accurate. Quill answers, "The copy is also accurate about what happened. It is just wrong about whether it is still happening."`
+			choice
+				`\tMake the whole activation context travel as one portable packet.`
+					goto packet
+				`\tMake emergency authority expire unless a fresh activation renews it.`
+					goto expiry
+			label discretion
+			`Captain discretion prevented several bad taskings during the surge, but a later summary records only that Quill refused one patrol order. It omits that the task was outside the volunteered scope and would have left her rescue tug without a safe recovery margin. Venn says a refusal without its authority boundary looks like disobedience after the fact.`
+			choice
+				`\tCarry consent, scope, safety limits, refusals, and release state in one portable packet.`
+					goto packet
+				`\tRequire every volunteer activation to expire and be explicitly renewed before old tasking can regain authority.`
+					goto expiry
+			label packet
+			`You recommend a portable activation packet. A copied order is incomplete unless it carries the emergency purpose, volunteered scope, issuing authority, captain consent, safety limits, substitutions or refusals, release condition, and current closure status. The historical task remains visible after release, but nobody can mistake that history for a live command.`
+			action
+				"B2 Free Worlds Volunteer Command Compact: reviewed" = 1
+				"B2 Free Worlds Volunteer Command Compact: settlement portable activation packet" = 1
+				"B2 Free Worlds Volunteer Command Compact: venn trusts player" = 1
+				"B2 Free Worlds Volunteer Command Compact: quill trusts player" = 1
+			decline
+			label expiry
+			`You recommend an expiry-and-release roster. Volunteer authority is tied to the named emergency and ends when that activation closes. The old order remains searchable history, but it cannot become current authority again through copying or habit; a later emergency requires a fresh activation and fresh captain consent.`
+			action
+				"B2 Free Worlds Volunteer Command Compact: reviewed" = 1
+				"B2 Free Worlds Volunteer Command Compact: settlement expiry and release" = 1
+				"B2 Free Worlds Volunteer Command Compact: venn trusts player" = 1
+				"B2 Free Worlds Volunteer Command Compact: quill trusts player" = 1
+			decline
+
+
+mission "B2 Free Worlds Volunteer Command Compact: Quill Remembers"
+	minor
+	name `Quill Remembers`
+	description `Mara Quill remembers whether temporary Free Worlds militia authority can be preserved as history without remaining live command.`
+	source
+		government "Free Worlds"
+	to offer
+		not "B2 Free Worlds Volunteer Command Compact: aftermath seen"
+		or
+			has "B2 Free Worlds Volunteer Command Compact: settlement portable activation packet"
+			has "B2 Free Worlds Volunteer Command Compact: settlement expiry and release"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Free Worlds Volunteer Command Compact: settlement expiry and release"
+			`Quill shows you a later tasking copy with the old mobilization still attached. Beside it is the complete activation packet, including the line that released her tug from militia coordination. "Now the record can remember that I volunteered without pretending I never got my ship back," she says.`
+			goto record
+			label expiry
+			`Quill has another mobilization notice open on her console. The old activation is visible beneath it, marked closed. The new notice has its own scope and its own consent line. "Same ship. Same captain. Different emergency," she says. "That is enough reason to ask again."`
+			label record
+			action
+				"B2 Free Worlds Volunteer Command Compact: aftermath seen" = 1
+			decline
