@@ -37,6 +37,25 @@ for settlement in ("packet", "reconcile"):
     assert f'has "B2 Deep Escort Capacity Compact: settlement {settlement}"' in text
 assert '"B2 Deep Escort Capacity Compact: aftermath seen" = 1' in text
 
+# These three missions only record story state. They create no gameplay objective,
+# so every terminal conversation branch must close with decline rather than leaving
+# an objective-less accepted mission in the player's active mission list.
+assert not re.search(r'^\s*accept\s*$', text, re.M), "state-only slice must not accept missions"
+assert len(re.findall(r'^\s*decline\s*$', text, re.M)) == 7, "expected 7 state-only decline terminals"
+for objective_pattern in (
+    r'^\s*destination\b',
+    r'^\s*stopover\b',
+    r'^\s*waypoint\b',
+    r'^\s*npc\b',
+    r'^\s*cargo\b',
+    r'^\s*passenger\b',
+    r'^\s*deadline\b',
+    r'^\s*timer\b',
+):
+    assert not re.search(objective_pattern, text, re.M | re.I), (
+        f"state-only lifecycle assumption invalidated by objective directive: {objective_pattern}"
+    )
+
 assert text.count('attributes "deep"') == 3
 assert text.count('government "Republic"') == 3
 for phrase in (
@@ -94,5 +113,6 @@ print("PASS: missions=3")
 print("PASS: named_characters=2")
 print("PASS: initial_routes=3 + refusal")
 print("PASS: terminal_settlements=2")
+print("PASS: lifecycle=0 accepts + 7 declines")
 print("PASS: deep_scope=3 missions")
 print("PASS: mutation_surface=B2 conditions only")
