@@ -1,0 +1,152 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Pirate Harbor Peace Compact production slice.
+# Consumes the B1 Pirate Safe Harbor Register and turns limited port neutrality
+# into a character conflict about revenge, personal safety, witness choice, and
+# whether temporary harbor peace protects people as well as ships.
+
+
+event "B2 Pirate Harbor Peace Compact: Review Ready"
+	"B2 Pirate Harbor Peace Compact: review ready" = 1
+
+
+mission "B2 Pirate Harbor Peace Compact: Offer"
+	minor
+	name `Peace at the Dock`
+	description `A harbor mediator and a pirate captain disagree over whether temporary dockside neutrality protects a crew member who wants to walk away from a feud.`
+	source
+		government "Pirate"
+	"offer precedence" 8
+	to offer
+		has "Pirate Safe Harbor Register: offered"
+		not "B2 Pirate Harbor Peace Compact: introduced"
+		not "B2 Pirate Harbor Peace Compact: declined"
+	on offer
+		conversation
+			`Rhea Corbin, a mediator who keeps a battered desk beside the repair slips, asks you to stay. Across from her stands Captain Jory Kade, whose crew has declared harbor peace while their ship is being patched. Between them is Sima Voss, one of Kade's gunners, carrying a small bag and no weapon.`
+			`Sima says she is leaving the crew. Kade says she can leave after the ship clears the harbor, but not while an old rival crew is docked nearby and every rumor could be taken as betrayal. Rhea says the port's neutrality is meaningless if a captain may turn it into confinement whenever someone becomes inconvenient.`
+			`Kade does not claim ownership of Sima. He claims that her timing could get people killed. Sima replies that the danger is real, but so is the fact that postponing departure until the captain decides it is safe can become postponing it forever.`
+			choice
+				`\tBack personal exit: harbor peace should protect Sima's right to leave the crew while she is physically inside the neutral port.`
+					goto exit
+				`\tBack bounded delay: Kade may request a short, explicit safety delay, but it needs a fixed end and cannot become custody.`
+					goto delay
+				`\tSeparate movement from information: Sima may leave now, while Rhea separately records what operational information she is still expected not to disclose during the repair window.`
+					goto paired
+				`\tRefuse to turn one crew dispute into a general harbor rule.`
+					goto decline
+			label exit
+			`You tell Kade that a neutral harbor cannot promise temporary safety and then let a captain redefine the dock as an extension of shipboard command. Kade's jaw tightens. Sima says she will leave without approaching the rival crew and without taking any shared equipment. Rhea records the separation as voluntary rather than as desertion under port authority.`
+			action
+				"B2 Pirate Harbor Peace Compact: introduced" = 1
+				"B2 Pirate Harbor Peace Compact: route exit" = 1
+				"B2 Pirate Harbor Peace Compact: sima trusts player" = 1
+				event "B2 Pirate Harbor Peace Compact: Review Ready" 7 11
+				decline
+			label delay
+			`You tell Sima that the risk around the repair slip is real, but a delay needs a clock and a reason that can be challenged. Rhea writes down one night, the rival crew's departure or Kade's ship becoming spaceworthy, whichever comes first. Sima agrees because the end condition belongs to the record instead of to Kade's mood.`
+			action
+				"B2 Pirate Harbor Peace Compact: introduced" = 1
+				"B2 Pirate Harbor Peace Compact: route delay" = 1
+				"B2 Pirate Harbor Peace Compact: kade trusts player" = 1
+				event "B2 Pirate Harbor Peace Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You separate two claims that everyone has been treating as one. Sima's movement is hers. Information learned as part of the crew's current repair and defense plan is a different question. Rhea records a narrow, expiring nondisclosure promise while Sima walks away from the berth under harbor peace.`
+			action
+				"B2 Pirate Harbor Peace Compact: introduced" = 1
+				"B2 Pirate Harbor Peace Compact: route paired" = 1
+				"B2 Pirate Harbor Peace Compact: sima trusts player" = 1
+				"B2 Pirate Harbor Peace Compact: kade trusts player" = 1
+				event "B2 Pirate Harbor Peace Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a visitor should not decide how one pirate harbor balances a captain's safety fears against a crew member's freedom. Rhea accepts the boundary. Sima stays for the moment, but makes Kade say aloud that staying tonight is not the same thing as belonging to him.`
+			action
+				"B2 Pirate Harbor Peace Compact: declined" = 1
+				decline
+
+
+mission "B2 Pirate Harbor Peace Compact: Review"
+	minor
+	name `When the Repair Window Ends`
+	description `Return after the immediate harbor dispute to see whether temporary neutrality became a real boundary or merely postponed the argument.`
+	source
+		government "Pirate"
+	"offer precedence" 8
+	to offer
+		has "B2 Pirate Harbor Peace Compact: introduced"
+		has "B2 Pirate Harbor Peace Compact: review ready"
+		not "B2 Pirate Harbor Peace Compact: reviewed"
+	on offer
+		conversation
+			branch exit
+				has "B2 Pirate Harbor Peace Compact: route exit"
+			branch delay
+				has "B2 Pirate Harbor Peace Compact: route delay"
+			`Rhea tells you the original dispute is over, but another harbor copied only the phrase "protected departure" from her notes and assumed that anyone leaving a crew under safe-harbor rules must be innocent of every later accusation. Kade says that turns a movement rule into immunity. Sima says he is finally describing the problem correctly.`
+				goto settle
+			label exit
+			`Sima left safely, but Kade later accused her of passing one repair detail to a fence. Rhea cannot prove that accusation, and she refuses to let the mere fact of a protected departure count as evidence either for or against it. The port needs a rule that protects exit without laundering later disputes.`
+				goto settle
+			label delay
+			`The one-night delay expired exactly as written and Sima left. A neighboring port now treats any recorded safety delay as evidence that the delayed person was dangerous. Rhea says a temporary precaution must not become a permanent character judgment after the reason for it ends.`
+			label settle
+			choice
+				`\tUse a portable harbor-status packet: movement protection, any temporary safety restriction, its reason, expiry, unresolved accusation, and later disposition travel as separate fields.`
+					goto packet
+				`\tUse expiry and fresh-cause review: harbor restrictions end when their recorded trigger ends, and later accusations require new evidence rather than inherited suspicion.`
+					goto expiry
+			label packet
+			`You recommend a record that refuses to collapse different questions into one. It can say Sima was protected while leaving, that a temporary restriction existed or did not, why it existed, when it expired, and whether a later accusation remains unresolved. None of those entries automatically proves another.`
+			action
+				"B2 Pirate Harbor Peace Compact: reviewed" = 1
+				"B2 Pirate Harbor Peace Compact: settlement status packet" = 1
+				"B2 Pirate Harbor Peace Compact: sima trusts player" = 1
+				decline
+			label expiry
+			`You recommend that safe-harbor restrictions die with their stated cause. A later captain may raise a new complaint, but must identify fresh evidence instead of recycling the old precaution as proof. Rhea says that is the only way a temporary rule stays temporary. Kade admits he can live with a rule that lets him make a case without letting him inherit a verdict.`
+			action
+				"B2 Pirate Harbor Peace Compact: reviewed" = 1
+				"B2 Pirate Harbor Peace Compact: settlement expiry and fresh cause" = 1
+				"B2 Pirate Harbor Peace Compact: kade trusts player" = 1
+				"B2 Pirate Harbor Peace Compact: sima trusts player" = 1
+				decline
+
+
+mission "B2 Pirate Harbor Peace Compact: Sima Remembers"
+	minor
+	name `Sima Remembers`
+	description `Sima Voss remembers whether harbor peace protected a person without becoming immunity, custody, or a permanent accusation.`
+	source
+		government "Pirate"
+	"offer precedence" 8
+	to offer
+		not "B2 Pirate Harbor Peace Compact: aftermath seen"
+		or
+			has "B2 Pirate Harbor Peace Compact: settlement status packet"
+			has "B2 Pirate Harbor Peace Compact: settlement expiry and fresh cause"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Pirate Harbor Peace Compact: settlement expiry and fresh cause"
+			`Sima finds you at another pirate dock. She shows you a copied harbor record that lists her protected departure and a later unresolved complaint in separate lines. "It is not a clean story," she says. "That is why I trust it. Walking away did not make me innocent of everything, and Kade being afraid did not make me guilty."`
+				goto finish
+			label expiry
+			`Sima tells you a mechanic tried to reuse Kade's old one-night restriction to bar her from a new berth. The harbor mediator asked for the original trigger, saw that it had expired, and demanded fresh cause. There was none. "They did not have to like me," Sima says. "They just had to stop pretending an old fear was a permanent fact."`
+			label finish
+			action
+				"B2 Pirate Harbor Peace Compact: aftermath seen" = 1
+				decline
