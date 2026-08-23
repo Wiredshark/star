@@ -58,6 +58,23 @@ def main() -> None:
     if f'"{PREFIX} aftermath seen" = 1' not in text:
         fail("missing one-shot aftermath state")
 
+    # These missions only persist dialogue state. They create no gameplay objective,
+    # so accepting them would leave objective-less missions in the active mission list.
+    terminal_accepts = re.findall(r'^\s*accept\s*$', text, flags=re.MULTILINE)
+    terminal_declines = re.findall(r'^\s*decline\s*$', text, flags=re.MULTILINE)
+    if terminal_accepts:
+        fail(f"state-only slice must have zero terminal accept commands, found {len(terminal_accepts)}")
+    if len(terminal_declines) != 7:
+        fail(f"expected exactly 7 state-only decline terminals, found {len(terminal_declines)}")
+
+    objective_rx = re.compile(
+        r'^\s*(?:destination|stopover|waypoint|npc|cargo|passenger|deadline|timer)\b',
+        flags=re.MULTILINE | re.IGNORECASE,
+    )
+    objective_lines = [line.strip() for line in text.splitlines() if objective_rx.match(line)]
+    if objective_lines:
+        fail(f"unexpected gameplay-objective directive(s) in state-only slice: {objective_lines}")
+
     write_rx = re.compile(r'^\s*"([^"]+)"\s*(?:=|\+=|-=)\s*\d+', re.MULTILINE)
     for cond in write_rx.findall(text):
         if not cond.startswith(PREFIX):
@@ -100,6 +117,7 @@ def main() -> None:
     print("PASS: terminal_settlements=2")
     print("PASS: later_reader=Quell Remembers")
     print("PASS: write_ownership=B2 namespace only")
+    print("PASS: lifecycle=0 accepts + 7 declines + no gameplay objectives")
     print("PASS: repair-credit boundary=original obligation != current transfer value")
     print("PASS: pirate authority boundary=local conventions, no central bank/code")
 
