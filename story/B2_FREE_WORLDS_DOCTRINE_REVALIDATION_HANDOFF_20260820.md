@@ -1,40 +1,45 @@
-# B2 Free Worlds Doctrine Revalidation Compact Handoff — 2026-08-20
+# B2 Free Worlds Doctrine Revalidation Compact Handoff — 2026-08-23 lifecycle recovery
 
 ## Verdict
 
-READY for A3 review/integration. B2 does not self-integrate.
+PARTIAL. The doctrine-revalidation content is structurally validated and the lifecycle repair is green in the simulation/story workflow, but the exact-head production build/save-load workflow is still in progress. B2 does not self-integrate.
 
 ## Repository state
 
-- Authoritative base / `main` observed at selection and rechecked before handoff: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`.
+- Authoritative base / `main`: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`.
 - Isolated branch: `agent/b2-free-worlds-doctrine-revalidation-20260820-2023`.
-- Production commit: `31b9ecb85245e3a95e225a00c7bad7a2cc3d8108`.
-- Exact fully validated production + focused-validator candidate: `a3f9268bcf92908a35e25672b6d6a395ae8353ca`.
+- Original production commit: `31b9ecb85245e3a95e225a00c7bad7a2cc3d8108`.
+- Original validated production + focused-validator candidate: `a3f9268bcf92908a35e25672b6d6a395ae8353ca`.
+- Lifecycle production repair: `e702efd960a10cdeea5d97574484480a0f041504`.
+- Lifecycle validator hardening / exact current candidate: `fd68072f079498a0f5ea6018771a66d4bb085a22`.
 - Draft PR: #201.
 
-## What B2 adds
+## Character / dynamic-content behavior
 
-This slice is a character-driven sequel to `A2 Free Worlds Patrol Doctrine`.
+This remains a character-driven sequel to `A2 Free Worlds Patrol Doctrine`, reusing canonical patrol planner **Anika Ro** and maintenance coordinator **Mira Keel**. It reads A1 patrol-surge / repair-backlog state and A2 doctrine-history state without mutating them.
 
-It reuses canonical patrol planner **Anika Ro** and introduces maintenance coordinator **Mira Keel**. A later A1 patrol surge arrives while `world: free worlds repair backlog >= 3`, forcing them to decide how much authority an earlier successful doctrine should carry when current hull availability, repair margin, traffic, intelligence confidence, and expected duration differ.
+The player can treat an old successful doctrine as a revalidatable default, require current-evidence-first planning, maintain paired inherited/current records, or refuse a general rule. The later Review resolves into either a portable doctrine packet or a per-activation revalidation cycle. `Keel Remembers` is the one-shot aftermath reader.
 
-The initial player routes are:
+The central continuity rules are unchanged:
 
-1. inherited doctrine as a revalidatable default;
-2. current-evidence-first planning with the old doctrine retained as historical evidence;
-3. paired inherited-doctrine/current-assumptions records;
-4. refusal to create a general rule.
+- prior success is historical evidence, not permanent authority;
+- repetition of one source is not independent corroboration;
+- distributed Free Worlds operational practice is not a new centralized doctrine bureaucracy.
 
-After A1 naturally ends the patrol surge and reduces the repair backlog to `<= 1`, the Review exposes a source-lineage failure: copied doctrine summaries can preserve the deployment pattern while dropping the context that made it valid, and repeated copies of one original evidence source can be misread as independent confirmation.
+## Lifecycle repair
 
-The two terminal settlements are:
+All three missions are dialogue/state-only and create no gameplay objective. Six positive terminal paths previously persisted state and then used `accept`, which could leave objective-less missions active. Those six terminals now use `decline`; refusal already did, so all **7/7** terminal paths persist their existing state and close cleanly.
 
-- **portable doctrine packet** — trigger conditions, readiness, repair margin, traffic/intelligence assumptions, source lineage, observed outcome, known limits, and review condition travel together;
-- **revalidation cycle** — doctrine remains durable historical guidance, but each activation separately records current assumptions, deviations, inherited evidence, genuinely new evidence, and the basis for renewal/rejection.
+The focused validator now requires:
 
-`Keel Remembers` is a one-shot aftermath reader.
+- zero terminal `accept` commands;
+- exactly seven terminal `decline` commands;
+- no destination/stopover/waypoint/NPC/cargo/passenger/deadline/timer directives;
+- all prior route, settlement, state-ownership, source-lineage, and `goto`/`label` invariants.
 
-## Dependencies and ownership
+No persistent condition names or values changed. No save-state migration is required.
+
+## Ownership
 
 B2 reads but does not write:
 
@@ -44,43 +49,34 @@ B2 reads but does not write:
 - `A2 Free Worlds Patrol Doctrine: interdiction future contact`;
 - `A2 Free Worlds Patrol Doctrine: mobility future contact`.
 
-Every new persistent write is namespaced under `B2 Free Worlds Doctrine Revalidation Compact:*`.
-
-There are no direct credits, reputation, cargo, outfit, ship, fleet, or combat-rating mutations.
+Every persistent write remains namespaced under `B2 Free Worlds Doctrine Revalidation Compact:*`. There are no direct credits, reputation, cargo, outfit, ship, fleet, or combat-rating mutations.
 
 ## Validation evidence
 
-Local isolated-worktree checks:
+Exact lifecycle candidate `fd68072f079498a0f5ea6018771a66d4bb085a22`:
 
-- `python3 tools/story/validate_b2_free_worlds_doctrine_revalidation_compact.py` — PASS.
-- `python3 tools/story/validate_story_repo.py` — PASS.
-- `python3 tools/story/test_b2_character_packets.py` — PASS.
-- `python3 -m py_compile tools/story/validate_b2_free_worlds_doctrine_revalidation_compact.py` — PASS.
-- `git diff --check` — PASS.
-- local `python3 utils/check_content_style.py ...` could not start because that private host lacks the third-party Python `regex` package; this local limitation is superseded by repository-native CI below.
+- `Fork simulation and story validation` run #474 / `32636539892` — **SUCCESS**.
+  - focused story validators — SUCCESS;
+  - lifecycle validator — SUCCESS;
+  - A1 simulation/state-ownership contracts — SUCCESS;
+  - changed-content style — SUCCESS.
+- `Fork save-load integration smoke` run #459 / `32636539927` — **IN PROGRESS** at handoff time.
+  - dependency install — SUCCESS;
+  - production configure — SUCCESS;
+  - production build — still running;
+  - stock save-load smoke — pending.
 
-Repository-native exact-candidate validation at `a3f9268bcf92908a35e25672b6d6a395ae8353ca`:
-
-- `Fork simulation and story validation` run #289 / `32433036936` — SUCCESS.
-  - Focused simulation and story contracts — SUCCESS.
-  - All focused story validators, including the new doctrine-revalidation validator — SUCCESS.
-  - A1 simulation contract tests — SUCCESS.
-  - Changed fork content style — SUCCESS.
-- `Fork save-load integration smoke` run #274 / `32433036885` — SUCCESS.
-  - Production executable configure — SUCCESS.
-  - Production executable build — SUCCESS.
-  - Stock save-load smoke cases — SUCCESS.
+The original pre-lifecycle candidate and final pre-lifecycle head had already passed both repository-native workflows. The lifecycle patch itself changes only terminal mission disposition plus validator enforcement, but READY is withheld until the exact lifecycle candidate's build/save-load workflow is terminal green.
 
 ## A3 / B3 integration notes
 
-- This branch is based directly on current `main`; no additional B1 branch dependency is required.
-- Re-read current `main` before integration in case integration ancestry moved after this handoff.
+- Do not integrate while this handoff remains PARTIAL.
+- Re-read current `main` before integration.
 - Preserve A1 sole ownership of patrol-surge and repair-backlog world state.
-- Preserve A2 ownership of the original patrol-doctrine choice/history.
-- Preserve the continuity invariant that **a doctrine's prior success is historical evidence, not permanent authority**.
-- Preserve the source-independence invariant that **repetition of one source is not several sources**.
-- The Free Worlds procedure is distributed operational practice, not a newly invented centralized doctrine bureaucracy.
+- Preserve A2 ownership of original patrol-doctrine history.
+- Preserve all current route, settlement, trust, and aftermath condition names/values.
+- Keep every state-only dialogue terminal as `decline` unless a future change adds a real gameplay objective.
 
-## Exact integration candidate
+## Current candidate
 
-A3 should review candidate `a3f9268bcf92908a35e25672b6d6a395ae8353ca` plus this handoff-only commit. Production and validator behavior were fully green on the exact candidate before the handoff file was added.
+A3 should review `fd68072f079498a0f5ea6018771a66d4bb085a22` after exact-head save-load/build becomes terminal green.
