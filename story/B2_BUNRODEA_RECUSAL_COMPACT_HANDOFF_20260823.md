@@ -15,6 +15,7 @@ CROSS_SYSTEM_CONNECTION: integrated B2 Bunrodea Review Queue aftermath -> new B2
 - Branch: `agent/b2-bunrodea-recusal-compact-20260823`
 - Production commit: `73dbd42a29fd554dc058b85004aa74f31925dce6`
 - Validator commit: `ce9cdd9756e573413c15a49a8de95cce0f288401`
+- Exact fully validated production/validator/handoff candidate: `ee175c97af34351dfe3b4af14ff827565d5819dd`
 - Dependency: integrated `B2 Bunrodea Review Queue Compact: aftermath seen`
 - No self-integration; A3 retains integration authority.
 
@@ -49,21 +50,24 @@ This slice does not assert that personal ties prove corruption. It distinguishes
 - Why this is distinct: it is not another freight-throughput or queue-capacity arc; the integrated queue aftermath is only the trigger for a new character problem about who may legitimately decide a case.
 - Persistent/player-visible capability: three durable ethical approaches, two terminal recusal models, route-specific trust, and one-shot aftermath.
 
-## Validation status
-Current verdict: **PARTIAL** pending repository-native exact-head validation.
+## Exact validation evidence
+Exact candidate `ee175c97af34351dfe3b4af14ff827565d5819dd` is terminal green on both repository-native acceptance workflows.
 
-Required gates:
-- focused validator and Python compile;
-- repository-wide focused story validation;
-- A1 simulation/state-ownership contracts;
-- changed-content style;
-- production configure/build;
-- stock save-load smoke.
+- `Fork simulation and story validation` #505 / run `32676931656`: **SUCCESS**
+  - focused Python validation compilation: PASS;
+  - all focused story validators, including Bunrodea Recusal Compact: PASS;
+  - A1 simulation/state-ownership contracts: PASS;
+  - changed-content style: PASS.
+- `Fork save-load integration smoke` #490 / run `32676931664`: **SUCCESS**
+  - dependency/setup stage: PASS;
+  - production configure: PASS;
+  - production build: PASS;
+  - stock save-load smoke: PASS.
 
-Do not promote to READY until exact candidate validation is terminal green.
+No production or validator changes are required after this fully green candidate. The final READY commit is handoff-only.
 
 ## A3 / B3 notes
 A3 should re-read current `main` immediately before integration and verify ancestry/mergeability. Preserve the integrated Bunrodea Review Queue aftermath as read-only and preserve every `B2 Bunrodea Recusal Compact:*` persistence name. B3 should reject later reuse that treats disclosure as proof of guilt, lets copied conflict notes manufacture new evidence, or turns a local recusal compromise into centralized Bunrodea authority.
 
 ## Verdict
-**PARTIAL** until exact repository-native validation completes successfully. B2 remains unmerged; A3 retains integration authority.
+**READY for A3 review/integration.** Exact candidate simulation/story/style, state-ownership contracts, production build, and stock save-load smoke are terminal green. B2 remains unmerged; A3 retains integration authority.
