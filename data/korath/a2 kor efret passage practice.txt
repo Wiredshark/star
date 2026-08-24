@@ -1,0 +1,95 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# A2 Kor Efret Passage Practice.
+# Consumes the resolved B2 Passage Continuity Compact read-only. The player carries
+# forward a private operating practice without acquiring Kor Efreti authority.
+
+mission "A2 Kor Efret Passage Practice: Briefing"
+	landing
+	minor
+	invisible
+	offer precedence 9
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		has "B2 Kor Efret Passage Continuity Compact: aftermath seen"
+		not "A2 Kor Efret Passage Practice: introduced"
+		not "A2 Kor Efret Passage Practice: declined"
+		random < 24
+	on offer
+		conversation
+			`You find the two Kor Efreti you privately think of as the Tracker and the Passage Keeper beside another passenger board. The compact solved one immediate record problem, but its aftermath left a harder question: what part of that practice should survive when a future case looks similar without being identical?`
+			`\tThe board separates physical safety, family contact, present destination preference, permission to share location, and unfinished passage. None of those marks gives you authority to decide where another person belongs.`
+			choice
+				`\tCarry forward consent and current preference as living fields. Old reunion or destination goals must not become permanent commands.`
+					goto consent
+				`\tCarry forward separate closure states. Safety, family contact, and voluntary settlement must each close on their own evidence.`
+					goto closure
+				`\tKeep this practice local to the cases and institutions that produced it instead of treating it as borrowed Kor Efreti authority.`
+					goto local
+				`\tRefuse to establish a standing practice from the compact.`
+					goto refuse
+			label consent
+			`You choose a consent-and-preference discipline. A copied record may preserve history, but current sharing permission and current destination preference must remain current facts rather than inherited instructions.`
+			action
+				"A2 Kor Efret Passage Practice: introduced" = 1
+				"A2 Kor Efret Passage Practice: consent current" = 1
+			decline
+			label closure
+			`You choose separate closure. A safe berth can close an immediate danger without closing a family search; restored contact can succeed without requiring return; settlement can be voluntary without erasing the route that preceded it.`
+			action
+				"A2 Kor Efret Passage Practice: introduced" = 1
+				"A2 Kor Efret Passage Practice: separate closure" = 1
+			decline
+			label local
+			`You keep the lesson bounded. The compact remains useful evidence about these ports and these cases, not a universal rule and not permission to speak for Kor Efreti elsewhere.`
+			action
+				"A2 Kor Efret Passage Practice: introduced" = 1
+				"A2 Kor Efret Passage Practice: local only" = 1
+			decline
+			label refuse
+			`You decline to turn the compact into a standing practice. The Tracker and Passage Keeper continue their work without treating refusal as consent or endorsement.`
+			action
+				"A2 Kor Efret Passage Practice: declined" = 1
+			decline
+
+mission "A2 Kor Efret Passage Practice: Reflection"
+	landing
+	minor
+	invisible
+	offer precedence 9
+	source
+		attributes "efret"
+		not attributes "station"
+	to offer
+		has "B2 Kor Efret Passage Continuity Compact: aftermath seen"
+		has "A2 Kor Efret Passage Practice: introduced"
+		not "A2 Kor Efret Passage Practice: declined"
+		not "A2 Kor Efret Passage Practice: reflection seen"
+		random < 30
+	on offer
+		conversation
+			branch consent
+				has "A2 Kor Efret Passage Practice: consent current"
+			branch closure
+				has "A2 Kor Efret Passage Practice: separate closure"
+			branch local
+				has "A2 Kor Efret Passage Practice: local only"
+			label consent
+			`The Tracker shows you a copied family-contact record whose destination is still accurate but whose sharing permission is not. The old copy would have exposed a traveler's location after they withdrew consent. Because the permission was treated as a living field rather than inherited history, the downstream board carries the route history while withholding the location. The record remembers without deciding for the person.`
+			goto done
+			label closure
+			`The Passage Keeper shows you a household marked safe at a temporary refuge while its family-contact line remains open. Another traveler has restored contact but chosen a different settlement. Separate closure states make both cases legible: one success no longer silently declares every other obligation complete.`
+			goto done
+			label local
+			`A visiting clerk asks whether the earlier compact should be copied wholesale into a different port's passenger system. Your bounded practice supplies the answer: preserve the distinctions that can be justified, but do not claim the local record grants authority over another community's rules or another traveler's choices.`
+			goto done
+			label done
+			action
+				"A2 Kor Efret Passage Practice: reflection seen" = 1
+			decline
