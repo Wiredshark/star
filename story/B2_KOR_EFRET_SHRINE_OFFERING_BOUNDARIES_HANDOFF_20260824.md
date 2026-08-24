@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending exact-head repository-native validation.
+READY for A3 review/integration.
 
 ## Authority
 
@@ -11,7 +11,8 @@ PARTIAL pending exact-head repository-native validation.
 - Isolated branch: `agent/b2-kor-efret-shrine-offering-boundaries-20260824`
 - Production commit: `b087fc01a82590b13ed86a2efc81307771c268be`
 - Focused-validator commit: `4b37f23132e125eddbeec956687a912012929f8e`
-- Current handoff head: this commit
+- Exact fully validated production/validator/handoff candidate: `cca994306c5212725a014b1a2bd1ca5634e2b672`
+- Final READY handoff head: this commit
 
 B2 remains isolated and unmerged; A3 retains integration authority.
 
@@ -79,17 +80,22 @@ All seven dialogue/state-only terminal paths use `decline`; there are zero objec
 - `tools/story/validate_b2_kor_efret_shrine_offering_boundaries.py`
 - `story/B2_KOR_EFRET_SHRINE_OFFERING_BOUNDARIES_HANDOFF_20260824.md`
 
-## Validation plan
+## Exact validation evidence
 
-Required before READY:
+On exact candidate `cca994306c5212725a014b1a2bd1ca5634e2b672`:
 
-- focused validator for this slice;
-- all focused story validators / repository story contracts;
-- A1 simulation and state-ownership regressions;
-- changed-content style;
-- production configure/build;
-- stock save-load integration smoke;
-- exact branch/base diff and final status recheck.
+- `Fork simulation and story validation` #551 / run `32757009621`: **SUCCESS**
+  - changed fork content style: **SUCCESS**
+  - focused Python validation compilation: **SUCCESS**
+  - all focused story validators, including the new Kor Efret validator: **SUCCESS**
+  - A1 simulation/state-ownership contracts: **SUCCESS**
+- `Fork save-load integration smoke` #536 / run `32757009613`: **SUCCESS**
+  - dependency installation: **SUCCESS**
+  - production configure: **SUCCESS**
+  - production build: **SUCCESS**
+  - stock save-load smoke: **SUCCESS**
+
+Exact base-to-candidate comparison is 3 commits ahead / 0 behind with exactly three added files: 161 lines of production content, 154 lines of focused validation, and this durable handoff. No unrelated deletions or integration changes are present.
 
 ## A3 / B3 notes
 
