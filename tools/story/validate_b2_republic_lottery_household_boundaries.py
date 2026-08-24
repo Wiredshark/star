@@ -47,7 +47,7 @@ def test_scope_and_characters():
         "household",
         "personal spending",
         "not a diagnosis",
-        "not a claim that",
+        "universal republic policy",
         "civic strain causes gambling behavior",
     ):
         assert fragment in lowered, fragment
