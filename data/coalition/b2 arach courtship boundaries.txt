@@ -49,7 +49,7 @@ mission "B2 Arach Courtship Boundaries: Offer"
 					goto scoped
 				`\tRefuse to turn one couple's awkward situation into a general rule for Arach society.`
 					goto decline
-+			label mutual
+			label mutual
 			`You suggest that any public description of the relationship require a statement both Selka and Neri actually approved. The theater may still record who attended, and the family may still record what it paid for, but neither record becomes a substitute for the couple's own words. Selka looks relieved. Neri says that being publicly acknowledged would feel different if the acknowledgement were actually theirs.`
 			action
 				"B2 Arach Courtship Boundaries: introduced" = 1
