@@ -41,6 +41,20 @@ for block in re.split(r'(?=mission "B2 South Convoy Compact:)', text)[1:]:
 for forbidden in ["payment", "credits", "reputation", "cargo", "outfit", "combat"]:
     assert not re.search(rf'^\s*{re.escape(forbidden)}\b', text, re.MULTILINE), forbidden
 
+# This slice is dialogue/state-only. No terminal path should accept a mission
+# with no gameplay objective; all seven terminals must close with decline.
+accepts = re.findall(r'^\s*accept\s*$', text, re.MULTILINE)
+declines = re.findall(r'^\s*decline\s*$', text, re.MULTILINE)
+assert not accepts, f"state-only South Convoy missions must not use accept terminals: {len(accepts)} found"
+assert len(declines) == 7, f"expected seven decline terminals, found {len(declines)}"
+for objective_token in [
+    "destination ", "waypoint ", "stopover ", "npc ", "cargo ", "passengers ",
+    "deadline ", "timer ", "on enter", "on land", "on visit", "on complete",
+]:
+    assert not re.search(rf'^\s*{re.escape(objective_token)}', text, re.MULTILINE), (
+        f"dialogue-only lifecycle assumption invalidated by objective token: {objective_token.strip()}"
+    )
+
 # Every explicit goto target in each conversation must have a matching label.
 for mission in re.split(r'(?=mission "B2 South Convoy Compact:)', text)[1:]:
     gotos = set(re.findall(r'^\s*goto\s+([A-Za-z0-9_-]+)\s*$', mission, re.MULTILINE))
@@ -73,4 +87,5 @@ print("PASS: initial_routes=3 + refusal")
 print("PASS: review_routing=pledge fallthrough + explicit Dane/Reeve branches")
 print("PASS: terminal_settlements=2")
 print("PASS: later_reader=Reeve Remembers")
+print("PASS: lifecycle=7 dialogue-only decline terminals; 0 accept terminals")
 print("PASS: persistence_model=stock mission/global conditions")
