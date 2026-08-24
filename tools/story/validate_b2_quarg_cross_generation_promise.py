@@ -82,6 +82,31 @@ def main() -> int:
             "refusal must not arm the Review")
     require(f'event "{PREFIX} Review Ready" 7 11' not in decline,
             "refusal must not schedule the Review")
+    for state in route_states:
+        require(f'"{PREFIX} {state}"' not in decline,
+                f"refusal must not write substantive route state: {state}")
+
+    # Prove route-local lifecycle ownership, not just global counts. Each substantive
+    # branch must write only its own route, arm Review once, and terminate cleanly.
+    route_specs = [
+        ("living", "bounded", "route living renewal"),
+        ("bounded", "paired", "route bounded family continuity"),
+        ("paired", "decline", "route paired promise records"),
+    ]
+    for label, next_label, own_state in route_specs:
+        route = segment(offer, f"\t\t\tlabel {label}", f"\t\t\tlabel {next_label}")
+        require(route.count(f'"{PREFIX} introduced" = 1') == 1,
+                f"{label} route must arm introduced exactly once")
+        require(route.count(f'"{PREFIX} {own_state}" = 1') == 1,
+                f"{label} route must write its own route state exactly once")
+        for other_state in route_states:
+            if other_state != own_state:
+                require(f'"{PREFIX} {other_state}"' not in route,
+                        f"{label} route must not write other route state: {other_state}")
+        require(route.count(f'event "{PREFIX} Review Ready" 7 11') == 1,
+                f"{label} route must schedule exactly one delayed Review")
+        require(sum(line.strip() == "decline" for line in route.splitlines()) == 1,
+                f"{label} route must terminate exactly once with decline")
 
     # Review lifecycle and terminal settlements.
     review = segment(
@@ -106,6 +131,22 @@ def main() -> int:
     require(text.count(f'"{PREFIX} reviewed" = 1') == 2,
             "each terminal settlement must close Review exactly once")
 
+    history = segment(review, "\t\t\tlabel history", "\t\t\tlabel renewal")
+    renewal = segment(review, "\t\t\tlabel renewal")
+    settlement_specs = [
+        ("history", history, "settlement portable promise history", "settlement renewal by living parties"),
+        ("renewal", renewal, "settlement renewal by living parties", "settlement portable promise history"),
+    ]
+    for label, body, own_state, other_state in settlement_specs:
+        require(body.count(f'"{PREFIX} reviewed" = 1') == 1,
+                f"{label} settlement must close Review exactly once")
+        require(body.count(f'"{PREFIX} {own_state}" = 1') == 1,
+                f"{label} settlement must write its own settlement exactly once")
+        require(f'"{PREFIX} {other_state}"' not in body,
+                f"{label} settlement must not write the alternate settlement")
+        require(sum(line.strip() == "decline" for line in body.splitlines()) == 1,
+                f"{label} settlement must terminate exactly once with decline")
+
     # One-shot aftermath must consume either settlement and write once.
     aftermath = segment(text, 'mission "B2 Quarg Cross-Generation Promise: Jules Remembers"')
     require(f'not "{PREFIX} aftermath seen"' in aftermath,
@@ -115,6 +156,8 @@ def main() -> int:
                 f"aftermath must read settlement: {state}")
     require(text.count(f'"{PREFIX} aftermath seen" = 1') == 1,
             "aftermath must write its seen flag exactly once")
+    require(sum(line.strip() == "decline" for line in aftermath.splitlines()) == 1,
+            "aftermath must terminate exactly once with decline")
 
     # State ownership: all direct condition assignments belong to this B2 namespace.
     assignments = re.findall(r'^\s*"([^"]+)"\s*=\s*-?\d+\s*$', text, flags=re.MULTILINE)
