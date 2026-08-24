@@ -45,8 +45,9 @@ def test_scope_and_characters():
     assert "theater" in lowered
     assert "patron" in lowered
     assert "local relationship practice" in lowered
-    assert "not\n# arach law" not in lowered
-    assert "not\n# coalition law" not in lowered
+    assert "not arach law" in lowered
+    assert "coalition law" in lowered
+    assert "universal description of arach courtship" in lowered
 
 
 def test_routes_and_settlements():
