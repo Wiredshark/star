@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Paradise Service Home Boundaries.
+# The Paradise Service District Museum records a long transition from employer-
+# controlled service housing toward ordinary municipalities. This slice turns
+# that history into one worker's present-day home/employment dispute. It does not
+# establish Republic tenancy law or a universal Paradise rule.
+
+event "B2 Paradise Service Home Boundaries: Review Ready"
+	"B2 Paradise Service Home Boundaries: review ready" = 1
+
+mission "B2 Paradise Service Home Boundaries: Offer"
+	minor
+	name `The Apartment Behind the Badge`
+	description `A Paradise service worker discovers that an old employer file still treats her apartment, transit access, and job as one status.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "Paradise Service District Museum: offered"
+		not "B2 Paradise Service Home Boundaries: introduced"
+		not "B2 Paradise Service Home Boundaries: declined"
+	on offer
+		conversation
+			`Rina Vale is waiting beside a municipal housing counter with a folded estate uniform under one arm. Tomas Keene, the clerk helping her, has three screens open and the expression of someone who has found three different answers to a simple question.`
+			`Rina has driven for the same hillside estate for eleven years. She is leaving for a transit job in the service district below. The apartment where she lives was once employer housing, but the district began collecting rent directly years ago. One old database still labels the unit "service residence" and ties its gate pass and shuttle access to her employment badge.`
+			`"I am resigning from a job," Rina says. "I am not resigning from my kitchen." Tomas points out that some homes really are temporary job housing, and some access privileges genuinely belong to the work. "The problem is that the old systems use the same field for all of it."`
+			choice
+				`\tSeparate the home from the job. If Rina has an independent occupancy agreement now, employment status cannot silently terminate it.`
+					goto tenancy
+				`\tIf any housing or access really is job-dependent, make the transition explicit: notice, end date, replacement access, and responsibility for relocation or handoff.`
+					goto transition
+				`\tKeep paired records for employment, occupancy, subsidies, and access rights so one status can change without pretending the others changed too.`
+					goto paired
+				`\tRefuse to define the arrangement for them.`
+					goto decline
+			label tenancy
+			`You tell Tomas to start from the present occupancy agreement rather than the oldest label. Rina's current rent record, keys, and municipal tenancy should answer the housing question; her resignation should answer the employment question. Rina relaxes visibly when the two stop sharing a single checkbox.`
+			action
+				"B2 Paradise Service Home Boundaries: introduced" = 1
+				"B2 Paradise Service Home Boundaries: route tenancy first" = 1
+				"B2 Paradise Service Home Boundaries: Rina trusts player" = 1
+				event "B2 Paradise Service Home Boundaries: Review Ready" 7 11
+				decline
+			label transition
+			`You argue that genuine employer housing is still not the same thing as instant eviction by database. If a benefit ends with a job, the record should say what ends, when, who must notify whom, and what happens to household access during the transition. Tomas starts a list that is much longer than the single field he inherited.`
+			action
+				"B2 Paradise Service Home Boundaries: introduced" = 1
+				"B2 Paradise Service Home Boundaries: route explicit transition" = 1
+				"B2 Paradise Service Home Boundaries: Tomas trusts player" = 1
+				event "B2 Paradise Service Home Boundaries: Review Ready" 7 11
+				decline
+			label paired
+			`You split the problem into four records: the job, the right to occupy the apartment, any employer subsidy, and the access permissions that depend on each. Rina can leave one relationship without the system inventing changes to the others. Tomas says the difficult part will be teaching old software that one person can have more than one status.`
+			action
+				"B2 Paradise Service Home Boundaries: introduced" = 1
+				"B2 Paradise Service Home Boundaries: route paired records" = 1
+				"B2 Paradise Service Home Boundaries: Rina trusts player" = 1
+				"B2 Paradise Service Home Boundaries: Tomas trusts player" = 1
+				event "B2 Paradise Service Home Boundaries: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that one worker's apartment should not become a visiting captain's model for every estate and service district. Rina agrees. Tomas closes the policy draft and keeps working the individual file.`
+			action
+				"B2 Paradise Service Home Boundaries: declined" = 1
+				decline
+
+mission "B2 Paradise Service Home Boundaries: Review"
+	minor
+	name `The Door That Still Thinks She Works There`
+	description `Return after old access and housing systems interpret Rina's job change in contradictory ways.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Paradise Service Home Boundaries: introduced"
+		has "B2 Paradise Service Home Boundaries: review ready"
+		not "B2 Paradise Service Home Boundaries: reviewed"
+	on offer
+		conversation
+			branch transition
+				has "B2 Paradise Service Home Boundaries: route explicit transition"
+			branch paired
+				has "B2 Paradise Service Home Boundaries: route paired records"
+			`Rina finds you outside her apartment building. Her new transit-worker badge opens the municipal front door, but the estate gate still lists her as active staff. The housing office, meanwhile, received an automated notice saying "employment ended" and briefly marked her apartment for vacancy review. No person made either decision.`
+			`Tomas has restored the housing status, but he is less pleased than relieved. "Every individual record was almost defensible," he says. "The mistake was letting one change propagate into systems that answer different questions."`
+				goto settle
+			label transition
+			`The explicit transition prevented an immediate lockout, but the estate's shuttle pass expired a day before Rina's replacement municipal pass became active. She spent a night in a coworker's spare room even though her tenancy never ended. Tomas says a transition record that names an end date but not the replacement dependency can still strand someone between systems.`
+				goto settle
+			label paired
+			`The paired records prevented the housing office from closing Rina's tenancy, but one copied access list still treated "former employee" as equivalent to "no legitimate reason to enter the estate district." Rina points out that tenants, visitors, workers, and service contractors all use some of the same gates for different reasons.`
+			label settle
+			choice
+				`\tUse a portable occupancy packet: current tenancy basis, subsidy if any, access rights, employment link if any, transition dates, responsible office, and explicit closure travel together.`
+					goto packet
+				`\tUse an employment-housing firewall: changing jobs cannot change tenancy or residential access unless the housing agreement itself explicitly says so; temporary exceptions must expire or be renewed on their own evidence.`
+					goto firewall
+			label packet
+			`You propose a record that answers the questions downstream systems actually need instead of forwarding one ambiguous status. It can say that Rina's old job ended, her tenancy continues, the employer subsidy ended on a named date, and residential access now comes from the housing authority. Tomas says that makes the history visible without letting history issue today's orders.`
+			action
+				"B2 Paradise Service Home Boundaries: reviewed" = 1
+				"B2 Paradise Service Home Boundaries: settlement portable occupancy packet" = 1
+				"B2 Paradise Service Home Boundaries: Rina trusts player" = 1
+				"B2 Paradise Service Home Boundaries: Tomas trusts player" = 1
+				decline
+			label firewall
+			`You recommend a harder separation. Employment systems may report employment. Housing systems may report occupancy. Access systems must name which current authority grants entry. A former job can remain in history without becoming a standing instruction to evict, admit, or exclude. Rina says that is the first version that sounds like her home belongs to the present instead of an old payroll record.`
+			action
+				"B2 Paradise Service Home Boundaries: reviewed" = 1
+				"B2 Paradise Service Home Boundaries: settlement employment housing firewall" = 1
+				"B2 Paradise Service Home Boundaries: Rina trusts player" = 1
+				decline
+
+mission "B2 Paradise Service Home Boundaries: Rina Remembers"
+	minor
+	name `Rina Remembers`
+	description `Rina remembers that leaving a job did not have to mean surrendering a home.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Paradise Service Home Boundaries: aftermath seen"
+		or
+			has "B2 Paradise Service Home Boundaries: settlement portable occupancy packet"
+			has "B2 Paradise Service Home Boundaries: settlement employment housing firewall"
+	on offer
+		conversation
+			branch firewall
+				has "B2 Paradise Service Home Boundaries: settlement employment housing firewall"
+			`Rina recognizes you on a public shuttle. She is still in the same apartment and now drives a municipal route. "The strange part," she says, "is how quickly everyone stopped thinking the apartment was part of my old uniform once the records stopped saying it was." She still visits former coworkers at the estate, now through the same guest gate everyone else uses.`
+				goto finish
+			label firewall
+			`Rina meets you near the service-district transit hub and taps her residential pass against a reader. "Different badge, same front door," she says. The old employer record still exists in the archive, but the access system no longer treats it as authority over her home. "History is allowed to be true without staying in charge."`
+			label finish
+			action
+				"B2 Paradise Service Home Boundaries: aftermath seen" = 1
+				decline
