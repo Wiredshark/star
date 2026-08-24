@@ -2,7 +2,7 @@
 
 ## Verdict
 
-PARTIAL pending repository-native exact-head validation.
+READY for A3 review/integration.
 
 ## Authority
 
@@ -11,7 +11,8 @@ PARTIAL pending repository-native exact-head validation.
 - Branch: `agent/b2-hai-retirement-autonomy-compact-20260824`
 - Production commit: `b6fa09e14842d6ee26dbc51498d6a4b76f5f8f01`
 - Focused validator commit: `603529abfb5575a437c1a173e516ad9676be9fa7`
-- Current candidate/handoff head: this handoff commit
+- Exact fully validated production/validator/handoff candidate: `a124676074bab9100ebd2d47f189918f53b577e8`
+- Final READY handoff-only head: this commit
 
 ## Character / dynamic-content scope
 
@@ -53,15 +54,20 @@ The core canon boundary is that age, requested assistance, emergency contact, de
 - `tools/story/validate_b2_hai_retirement_autonomy_compact.py`
 - `story/B2_HAI_RETIREMENT_AUTONOMY_COMPACT_HANDOFF_20260824.md`
 
-## Validation required before READY
+## Exact validation evidence
 
-- focused validator discovery/execution;
-- repository story/state-ownership validation;
-- A1 regression suite;
-- changed-content style;
-- production configure/build;
-- stock save-load integration smoke;
-- exact final diff/status and ancestry recheck.
+On exact candidate `a124676074bab9100ebd2d47f189918f53b577e8`:
+
+- `Fork simulation and story validation` run `32728394496` / #538: SUCCESS;
+- focused Python validation compilation: SUCCESS;
+- all focused story validators, including the new Hai retirement-autonomy validator: SUCCESS;
+- A1 simulation/state-ownership contracts: SUCCESS;
+- changed-content style: SUCCESS;
+- `Fork save-load integration smoke` run `32728394611` / #523: SUCCESS;
+- production configure/build: SUCCESS;
+- stock save-load integration smoke: SUCCESS.
+
+The final READY commit changes only this durable handoff; production and validator behavior are unchanged from the fully validated candidate.
 
 ## A3 / B3 integration notes
 
