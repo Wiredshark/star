@@ -1,0 +1,158 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Avgi Inherited Concession Boundaries.
+#
+# The Avgi Mineral Tenure Archive establishes that old extraction concessions
+# accumulated inherited claims, tax privileges, maintenance obligations, and
+# administrative offices. This slice turns that institutional history into a
+# parent/adult-child conflict over whether inheritance can also assign a role.
+#
+# "Holder" and "Heir" are player-private shorthand, not Avgi offices. The
+# settlement is local to one family and concession; it does not define universal
+# Consonance inheritance law. All persistent writes are B2-prefixed.
+
+
+event "B2 Avgi Inherited Concession Boundaries: Review Ready"
+	"B2 Avgi Inherited Concession Boundaries: review ready" = 1
+
+
+mission "B2 Avgi Inherited Concession Boundaries: Offer"
+	minor
+	name `What the Deed Calls an Heir`
+	description `An Avgi concession holder and their adult child disagree over whether inheriting a mineral claim also assigns an administrative role.`
+	source
+		government "Avgi (Consonance)"
+	"offer precedence" 8
+	to offer
+		has "language: Avgi (Written)"
+		not "avgi: lost in twilight"
+		not "B2 Avgi Inherited Concession Boundaries: introduced"
+		not "B2 Avgi Inherited Concession Boundaries: declined"
+	on offer
+		conversation
+			`A family office near the port has spread an old mineral concession across three screens: extraction rights, tax privileges, maintenance duties, and a line naming the next heir. The older Avgi points at that line as though it settles the matter. The younger one keeps pointing at a different field: current responsible officer.`
+			`Your translator offers no useful title for either person, so in your notes you think of them simply as the Holder and the Heir. The Holder says, "My parent accepted the office when the claim came to us. I accepted it after them. The concession survives because someone carries the obligations."`
+			`The Heir answers, "Then record who accepts them. Do not turn my name in a family line into consent I never gave. I may inherit an interest without inheriting a life."`
+			choice
+				`\tSeparate succession from consent. The Heir may refuse the administrative role even if the family interest survives.`
+					goto consent
+				`\tTie obligations to retained benefits. Nobody is forced into office, but whoever keeps the concession's benefits must explicitly assign its duties.`
+					goto reciprocity
+				`\tKeep paired records: inherited economic interest and current administrative authority must never be inferred from one another.`
+					goto paired
+				`\tRefuse to turn one family's succession dispute into a general Avgi rule.`
+					goto decline
++			label consent
+			`You recommend treating the heir line as history and potential interest, not as present consent. The Heir can decline the office without the record pretending that the family relationship disappeared. The Holder dislikes the uncertainty, but concedes that an office filled by assumption may be less durable than one deliberately accepted.`
+			action
+				"B2 Avgi Inherited Concession Boundaries: introduced" = 1
+				"B2 Avgi Inherited Concession Boundaries: route succession requires consent" = 1
+				"B2 Avgi Inherited Concession Boundaries: heir trusts player" = 1
+				event "B2 Avgi Inherited Concession Boundaries: Review Ready" 7 11
+				decline
+			label reciprocity
+			`You separate personal office from the bargain attached to the concession. The Heir need not become the administrator, but if the family keeps the claim's privileges and income, the maintenance and settlement-support obligations must be assigned to a named consenting party rather than evaporating between generations.`
+			action
+				"B2 Avgi Inherited Concession Boundaries: introduced" = 1
+				"B2 Avgi Inherited Concession Boundaries: route benefits require assigned obligations" = 1
+				"B2 Avgi Inherited Concession Boundaries: holder trusts player" = 1
+				event "B2 Avgi Inherited Concession Boundaries: Review Ready" 7 11
+				decline
+			label paired
+			`You propose two linked records. One follows the inherited economic interest: shares, privileges, liabilities, and transfer history. The other records current administrative authority: who accepted it, which duties were delegated, and when that authority ends. The Holder can see the continuity; the Heir can see the exit.`
+			action
+				"B2 Avgi Inherited Concession Boundaries: introduced" = 1
+				"B2 Avgi Inherited Concession Boundaries: route paired succession records" = 1
+				"B2 Avgi Inherited Concession Boundaries: holder trusts player" = 1
+				"B2 Avgi Inherited Concession Boundaries: heir trusts player" = 1
+				event "B2 Avgi Inherited Concession Boundaries: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a visiting captain should not decide how one Avgi family interprets an inherited concession. The Heir accepts that answer more readily than the Holder. They return to the screens and to an argument that is at least still theirs.`
+			action
+				"B2 Avgi Inherited Concession Boundaries: declined" = 1
+				decline
+
+
+mission "B2 Avgi Inherited Concession Boundaries: Review"
+	minor
+	name `The Office Outlives the Assumption`
+	description `Return after copies of the concession record have begun treating family lineage, economic interest, and present authority as though they were the same fact.`
+	source
+		government "Avgi (Consonance)"
+	"offer precedence" 8
+	to offer
+		has "B2 Avgi Inherited Concession Boundaries: introduced"
+		has "B2 Avgi Inherited Concession Boundaries: review ready"
+		not "B2 Avgi Inherited Concession Boundaries: reviewed"
+	on offer
+		conversation
+			branch reciprocity
+				has "B2 Avgi Inherited Concession Boundaries: route benefits require assigned obligations"
+			branch paired
+				has "B2 Avgi Inherited Concession Boundaries: route paired succession records"
+			`The Heir has formally declined the administrative office, but two copied registries still list the heir line beside the old office title. A contractor treated that layout as proof of current authority and sent approval requests to the Heir anyway. The Holder now admits that the inherited line has become an accidental command channel.`
+				goto settle
+			label reciprocity
+			`The family reassigned the administrative duties while retaining part of the concession interest. The arrangement works, but a copied summary now says only that the Heir "kept the concession." One settlement office has interpreted that phrase as proof that the Heir personally accepted every inherited maintenance obligation.`
+				goto settle
+			label paired
+			`The paired records survived locally. Downstream copies did not. One retained only the economic-interest page and inferred authority from it; another retained only the officeholder page and lost the inherited liabilities still attached to the concession. Each copy is incomplete in a different direction.`
+			label settle
+			choice
+				`\tAdopt a portable succession charter: interest, benefits, obligations, accepted authority, delegated duties, consent, and closure travel together without collapsing into one status.`
+					goto charter
+				`\tUse renunciation and reassignment: declining an office is explicit, responsibilities move to a named consenting party, and lineage remains history rather than current authority.`
+					goto renunciation
+			label charter
+			`You recommend a charter with separate fields that must travel together. It records the inherited economic interest, benefits retained, obligations still open, the current consenting officeholder, delegated duties, review dates, and explicit closure or transfer. The heir line remains visible, but no longer answers questions it was never meant to answer.`
+			action
+				"B2 Avgi Inherited Concession Boundaries: reviewed" = 1
+				"B2 Avgi Inherited Concession Boundaries: settlement portable succession charter" = 1
+				"B2 Avgi Inherited Concession Boundaries: holder trusts player" = 1
+				"B2 Avgi Inherited Concession Boundaries: heir trusts player" = 1
+				decline
+			label renunciation
+			`You recommend making refusal legible. An heir may decline the administrative role, after which the record must name who accepted each continuing duty or how the concession interest was transferred, reduced, or relinquished. The family lineage remains in the archive, but it cannot silently reactivate authority later.`
+			action
+				"B2 Avgi Inherited Concession Boundaries: reviewed" = 1
+				"B2 Avgi Inherited Concession Boundaries: settlement renunciation and reassignment" = 1
+				"B2 Avgi Inherited Concession Boundaries: heir trusts player" = 1
+				decline
+
+
+mission "B2 Avgi Inherited Concession Boundaries: Heir Remembers"
+	minor
+	name `Heir Remembers`
+	description `The Avgi heir remembers the difference between belonging to a family history and consenting to exercise an inherited office.`
+	source
+		government "Avgi (Consonance)"
+	"offer precedence" 8
+	to offer
+		not "B2 Avgi Inherited Concession Boundaries: aftermath seen"
+		or
+			has "B2 Avgi Inherited Concession Boundaries: settlement portable succession charter"
+			has "B2 Avgi Inherited Concession Boundaries: settlement renunciation and reassignment"
+	on offer
+		conversation
+			branch renunciation
+				has "B2 Avgi Inherited Concession Boundaries: settlement renunciation and reassignment"
+			`The Heir recognizes you beside a concession terminal. "My name is still in the family history. It should be. But the current officeholder is someone who actually agreed to do the work, and the remaining obligations have names beside them too. I did not have to erase my family to refuse its office."`
+				goto finish
+			label renunciation
+			`The Heir recognizes you while reviewing a transfer record. "The refusal held. They reassigned the duties instead of pretending I had accepted them by inheritance. The old lineage is still there, but it does not wake up as authority every time somebody copies the archive."`
+			label finish
+			action
+				"B2 Avgi Inherited Concession Boundaries: aftermath seen" = 1
+				decline
