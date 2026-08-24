@@ -1,6 +1,6 @@
 # B2 Syndicate Near-Miss Protection Compact — handoff
 
-Verdict: PARTIAL pending repository-native validation.
+Verdict: READY for A3 review/integration.
 
 ## Scope
 Deepens A2 recurring character Tessa Marr and introduces contract technician Niko Renn in a corporate/labor-safety arc about near-miss evidence, reporter identity, retaliation risk, investigation, and corrective authority.
@@ -8,6 +8,7 @@ Deepens A2 recurring character Tessa Marr and introduces contract technician Nik
 ## Base and isolation
 - Authoritative base: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`.
 - Branch: `agent/b2-syndicate-near-miss-protection-20260824`.
+- Exact fully validated production/validator candidate: `c0307e80f7ef46612a410c1f4acc13272198fdd9`.
 - No self-integration. A3 retains integration authority.
 
 ## Dependencies and ownership
@@ -30,4 +31,13 @@ A safety report is evidence, not a personnel verdict. Reporter identity, technic
 - Persistent consequences: Marr/Renn trust, chosen reporting rule, later settlement, one-shot aftermath.
 
 ## Validation
-Pending exact-head focused validation, repository story/state checks, changed-content style, production build, and stock save-load smoke.
+Exact candidate `c0307e80f7ef46612a410c1f4acc13272198fdd9` passed:
+- focused validator for this compact;
+- all 49 focused story validators;
+- A1 regression suite: 128 passed;
+- changed-content style: PASS;
+- `git diff --check`: PASS;
+- GitHub `Fork simulation and story validation` run `32694222132` / #516: SUCCESS;
+- GitHub `Fork save-load integration smoke` run `32694222144` / #501: SUCCESS, including production configure/build and stock save-load smoke.
+
+The final commit after this validated candidate changes only this durable handoff document.
