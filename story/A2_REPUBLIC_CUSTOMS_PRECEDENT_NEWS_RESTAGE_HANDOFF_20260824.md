@@ -1,6 +1,6 @@
 # A2 Republic Customs Precedent News Current-Main Restage Handoff — 2026-08-24
 
-Verdict: **PARTIAL pending exact-head repository-native validation.**
+Verdict: **READY for A3 review/integration.**
 
 ## Authority
 
@@ -10,6 +10,7 @@ Verdict: **PARTIAL pending exact-head repository-native validation.**
 - Branch: `agent/a2-republic-customs-precedent-news-restage-20260824-1304`
 - Production restage commit: `83799219615fe926c3595a3dcedfb65cfea0715f`
 - Strengthened validator commit: `e42ceadd090d37ca244471dec49722f390cfcb57`
+- Exact validated production/validator head: `8f13630a534166fd847b139e94715cfeeb33af3f`
 - Historical PARTIAL PR #60 remains untouched.
 
 ## Scope
@@ -41,20 +42,20 @@ Every public News group requires both `A2 Republic Customs Review: later reader 
 - `tools/story/validate_a2_republic_customs_precedent_news.py`
 - `story/A2_REPUBLIC_CUSTOMS_PRECEDENT_NEWS_RESTAGE_HANDOFF_20260824.md`
 
-## Validation contract
+## Validation evidence
+
+Exact validated production/validator head: `8f13630a534166fd847b139e94715cfeeb33af3f`.
+
+- `Fork simulation and story validation` run `32754754071` / #550: **SUCCESS**.
+- `Fork save-load integration smoke` run `32754754020` / #535: **SUCCESS**.
 
 The strengthened validator requires exactly four Republic News groups, exact outcome-memory gates, `later reader seen` on every group, bounded-consent gating on every group, absence of private-precedent authorization, zero persistent writes, zero gameplay objectives/material mutations, and Republic-only scope.
-
-Repository-native acceptance requires both exact-head workflows to be terminal green:
-
-- Fork simulation and story validation;
-- Fork save-load integration smoke.
 
 No manual actual-game runtime result is claimed from unrelated hosts.
 
 ## Process / workspace boundary
 
-The exposed private process service reported four pre-existing service-owned orphan processes. None were modified. That host is not treated as authoritative `Wiredshark/star` runtime evidence.
+The exposed private process service again reported four pre-existing service-owned orphan processes. None were modified. That host is not treated as authoritative `Wiredshark/star` runtime evidence.
 
 ## A3 integration boundary
 
