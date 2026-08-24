@@ -1,0 +1,161 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Syndicate Near-Miss Protection Compact.
+# Deepens A2 recurring character Tessa Marr after maintenance triage. Consumes
+# B1 dockyard-labor history and A1 labor strain / rotation read-only.
+
+
+event "B2 Syndicate Near-Miss Protection Compact: Review Ready"
+	set "B2 Syndicate Near-Miss Protection Compact: review ready"
+
+
+mission "B2 Syndicate Near-Miss Protection Compact: Offer"
+	minor
+	name `The Report Nobody Wants Attached`
+	description `Tessa Marr and technician Niko Renn disagree over how a strained Syndicate yard should preserve a near-miss report without turning the reporter into the subject of the case.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		has "A2 Syndicate Maintenance Triage: followup seen"
+		"world: syndicate labor strain" >= 2
+		has "world: syndicate labor rotation active"
+		not "B2 Syndicate Near-Miss Protection Compact: introduced"
+		not "B2 Syndicate Near-Miss Protection Compact: declined"
+	on offer
+		conversation
+			`Tessa Marr catches you beside a maintenance board. A pressure-door interlock failed during a shift change. Nobody was hurt, and the fault was corrected before the next cycle, but the report has become a personnel problem.`
+			`Niko Renn, a contract technician, keeps glancing toward the personnel office. "I filed it. My supervisor wants the original with my name on every copy. He says anonymous reports make discipline impossible."`
+			`Marr replies, "If every safety observation becomes a personnel accusation, the next technician waits until somebody gets hurt. We need the evidence to survive. We do not need the reporter's current assignment copied everywhere."`
+			choice
+				`\tProtect the reporter: preserve the technical report while putting identity behind a narrow access gate.`
+					goto protected
+				`\tRequire attributable reporting, but separate identity from discipline until an independent investigation establishes cause.`
+					goto accountable
+				`\tPair both: immutable technical evidence plus a separately controlled identity-and-retaliation record.`
+					goto paired
+				`\tRefuse to turn one near miss into a general personnel rule.`
+					goto decline
+			label protected
+			`You tell Marr the technical observation should travel widely while reporter identity travels only where a reviewer can justify needing it. Renn exhales. Marr says, "Evidence gets a broad audience. Identity gets a purpose."`
+			action
+				"B2 Syndicate Near-Miss Protection Compact: introduced" = 1
+				"B2 Syndicate Near-Miss Protection Compact: route protected" = 1
+				"B2 Syndicate Near-Miss Protection Compact: renn trusts player" = 1
+				event "B2 Syndicate Near-Miss Protection Compact: Review Ready" 7 11
+			decline
+			label accountable
+			`You tell Renn that attribution can matter when investigators need follow-up, but identity must not be treated as evidence of fault. Marr writes the distinction into the draft: named source, separate cause finding, separate discipline authority.`
+			action
+				"B2 Syndicate Near-Miss Protection Compact: introduced" = 1
+				"B2 Syndicate Near-Miss Protection Compact: route accountable" = 1
+				"B2 Syndicate Near-Miss Protection Compact: marr trusts player" = 1
+				event "B2 Syndicate Near-Miss Protection Compact: Review Ready" 7 11
+			decline
+			label paired
+			`You separate the records. The near-miss file preserves what happened, equipment state, timestamps, and uncertainty. A controlled personnel file preserves who reported it, who accessed that identity, and any reassignment or adverse action afterward. Marr nods. "Then retaliation cannot hide inside ordinary scheduling."`
+			action
+				"B2 Syndicate Near-Miss Protection Compact: introduced" = 1
+				"B2 Syndicate Near-Miss Protection Compact: route paired" = 1
+				"B2 Syndicate Near-Miss Protection Compact: renn trusts player" = 1
+				"B2 Syndicate Near-Miss Protection Compact: marr trusts player" = 1
+				event "B2 Syndicate Near-Miss Protection Compact: Review Ready" 7 11
+			decline
+			label decline
+			`You tell them that one frightened technician and one near miss are not enough basis for an outsider to define a Syndicate-wide personnel rule. Marr accepts that. Renn says he still wants the incident preserved even if no broader compact comes from it.`
+			action
+				"B2 Syndicate Near-Miss Protection Compact: declined" = 1
+			decline
+
+
+mission "B2 Syndicate Near-Miss Protection Compact: Review"
+	minor
+	name `When the Shift Looks Normal Again`
+	description `Return after labor rotation ends and decide what a near-miss record should retain once the immediate staffing pressure is gone.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		has "B2 Syndicate Near-Miss Protection Compact: introduced"
+		has "B2 Syndicate Near-Miss Protection Compact: review ready"
+		"world: syndicate labor strain" <= 1
+		not "world: syndicate labor rotation active"
+		not "B2 Syndicate Near-Miss Protection Compact: reviewed"
+	on offer
+		conversation
+			branch protected
+				has "B2 Syndicate Near-Miss Protection Compact: route protected"
+			branch accountable
+				has "B2 Syndicate Near-Miss Protection Compact: route accountable"
+			`The rotation is over. The original near-miss report now appears in three yard summaries. Its technical details survived, but one copied summary quietly restored Renn's name from an older personnel export. Another dropped the note that the interlock cause was still under review.`
+			`Marr taps the two errors. "Privacy can decay. So can uncertainty. We need a record that survives copying without turning either omission into a new fact."`
+			choice
+				`\tAdopt a portable safety packet: evidence, uncertainty, reporter-access class, access log, investigation status, and corrective action travel together.`
+					goto packet
+				`\tAdopt expiry plus fresh cause: identity restrictions and retaliation review expire when resolved, but renewed access or discipline requires a current stated reason.`
+					goto expiry
+			label protected
+			`The protected-identity route encouraged two more near-miss reports, but one supervisor complained that investigators had to request source access twice. Renn says that friction is acceptable if every request states a reason. Marr answers that secrecy without accountable access can become its own blind spot.`
+			choice
+				`\tUse a portable safety packet with explicit access purpose and current investigation status.`
+					goto packet
+				`\tUse expiry plus fresh cause so protected identity is not permanent, but renewed access is never automatic.`
+					goto expiry
+			label accountable
+			`The attributable route made follow-up fast, but Renn's next shift assignment was changed hours after his supervisor read the report. Nobody can prove retaliation from timing alone. Marr says, "A suspicious sequence is a review trigger, not a verdict."`
+			choice
+				`\tKeep technical evidence and personnel access history in one portable safety packet without merging their conclusions.`
+					goto packet
+				`\tMake retaliation review expire when resolved, but require fresh cause for any new adverse action tied to the old report.`
+					goto expiry
+			label packet
+			`You recommend a portable safety packet. The technical observation, uncertainty, source-access class, identity-access log, investigation status, corrective action, and any retaliation review remain linked but separately labeled. Renn says, "Then my name does not become the accident." Marr adds, "And the accident does not become anonymous when a real investigator needs the source."`
+			action
+				"B2 Syndicate Near-Miss Protection Compact: reviewed" = 1
+				"B2 Syndicate Near-Miss Protection Compact: settlement packet" = 1
+				"B2 Syndicate Near-Miss Protection Compact: renn trusts player" = 1
+			decline
+			label expiry
+			`You recommend expiry plus fresh cause. Once the technical cause is closed and a retaliation review is resolved, temporary identity restrictions and personnel warnings stop circulating as active controls. Any later disclosure, discipline, or renewed protection must state a current reason rather than inheriting authority from the old near miss. Marr calls it closure without amnesia.`
+			action
+				"B2 Syndicate Near-Miss Protection Compact: reviewed" = 1
+				"B2 Syndicate Near-Miss Protection Compact: settlement expiry" = 1
+				"B2 Syndicate Near-Miss Protection Compact: marr trusts player" = 1
+			decline
+
+
+mission "B2 Syndicate Near-Miss Protection Compact: Renn Remembers"
+	minor
+	name `Renn Remembers`
+	description `Niko Renn remembers whether the yard learned to separate safety evidence from reporter exposure and retaliation review.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	to offer
+		not "B2 Syndicate Near-Miss Protection Compact: aftermath seen"
+		or
+			has "B2 Syndicate Near-Miss Protection Compact: settlement packet"
+			has "B2 Syndicate Near-Miss Protection Compact: settlement expiry"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Syndicate Near-Miss Protection Compact: settlement expiry"
+			`Renn shows you a new near-miss packet. The equipment finding is visible to every participating yard. His identity is available to the assigned investigator, and the access log records why. "People still know reports have authors," he says. "They just stopped treating authorship like a charge."`
+			goto finish
+			label expiry
+			`Renn points out an old protection flag marked closed. The report remains searchable, but the restriction no longer travels as an active warning. A supervisor who wants renewed access must give a current reason. "The history stayed," Renn says. "The presumption did not."`
+			label finish
+			action
+				"B2 Syndicate Near-Miss Protection Compact: aftermath seen" = 1
+			decline
