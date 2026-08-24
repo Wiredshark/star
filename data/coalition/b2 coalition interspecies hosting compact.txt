@@ -1,0 +1,157 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Coalition Interspecies Hosting Compact.
+# Turns the existing Interspecies Exchange Program into persistent household-scale
+# character content without creating a centralized Coalition domestic authority.
+
+event "B2 Coalition Interspecies Hosting Compact: Review Ready"
+	date 1 1 3014
+	to trigger
+		"B2 Coalition Interspecies Hosting Compact: review ready" = 1
+
+mission "B2 Coalition Interspecies Hosting Compact: Offer"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "known to the heliarchs"
+		not "B2 Coalition Interspecies Hosting Compact: introduced"
+		not "B2 Coalition Interspecies Hosting Compact: declined"
+		random < 16
+	on offer
+		conversation
+			`Near a public exchange-program desk, two familiar volunteers are speaking much more quietly than the crowded spaceport around them. One is a Saryd who has spent months helping visiting families find local hosts, so in your own notes you have started calling them the Host. The other is a Kimek who moved here through the Interspecies Exchange Program and has stayed with the same household long enough that you privately think of them as the Settler. Neither is a title either has claimed.`
+			`\tThe Settler says the official placement profile was accurate in every factual detail: a private sleeping room, shared meals, help learning local transit, and a household willing to explain Saryd customs. What it did not capture was how often "shared" quietly became "expected." Meals, visitors, household chores, and even time alone have acquired meanings that neither side remembers agreeing to.`
+			choice
+				`\tTreat the original placement agreement as the floor. Any household expectation that materially affects privacy, guests, work, or free time should require explicit agreement from both sides.`
+					goto consent
+				`\tTreat adaptation as part of the exchange, but require changes to be named. Customs can become expectations only after the Settler has had a real chance to understand and refuse them.`
+					goto adaptation
+				`\tKeep a paired record: practical household arrangements can change informally, while privacy, visitors, money, work, and exit conditions remain separately recorded and reviewable.`
+					goto paired
+				`\tDecline to turn one household disagreement into a general rule for the exchange program.`
+					goto refuse
+			label consent
+			`You point back to the original placement terms. The Host agrees that hospitality loses meaning if a guest cannot tell which parts are offers and which parts are obligations. The Settler looks relieved, though both admit that writing every ordinary custom into a contract would make the home feel like another office.`
+			action
+				"B2 Coalition Interspecies Hosting Compact: introduced" = 1
+				"B2 Coalition Interspecies Hosting Compact: route consent floor" = 1
+				"B2 Coalition Interspecies Hosting Compact: settler trusts player" = 1
+				event "B2 Coalition Interspecies Hosting Compact: Review Ready" 7 11
+			decline
+			label adaptation
+			`You separate cultural adaptation from silent obligation. The Host starts listing customs that local families often assume are obvious; the Settler lists the ones that seemed optional until refusing them caused friction. They agree to make those expectations discussable before treating them as part of the placement.`
+			action
+				"B2 Coalition Interspecies Hosting Compact: introduced" = 1
+				"B2 Coalition Interspecies Hosting Compact: route named adaptation" = 1
+				"B2 Coalition Interspecies Hosting Compact: host trusts player" = 1
+				event "B2 Coalition Interspecies Hosting Compact: Review Ready" 7 11
+			decline
+			label paired
+			`You suggest that most household life remain informal, but a few boundaries should never become invisible through habit. The Host and Settler sketch two layers: everyday arrangements that can change by conversation, and a smaller set covering privacy, guests, money, work, and the right to leave the placement.`
+			action
+				"B2 Coalition Interspecies Hosting Compact: introduced" = 1
+				"B2 Coalition Interspecies Hosting Compact: route paired" = 1
+				"B2 Coalition Interspecies Hosting Compact: host trusts player" = 1
+				"B2 Coalition Interspecies Hosting Compact: settler trusts player" = 1
+				event "B2 Coalition Interspecies Hosting Compact: Review Ready" 7 11
+			decline
+			label refuse
+			`You leave the argument with the people who actually have to live with its answer. The Host and Settler return to the placement notes, this time speaking less like representatives of two species and more like two people trying to describe one difficult household.`
+			action
+				"B2 Coalition Interspecies Hosting Compact: declined" = 1
+			decline
+
+mission "B2 Coalition Interspecies Hosting Compact: Review"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		has "B2 Coalition Interspecies Hosting Compact: introduced"
+		has "B2 Coalition Interspecies Hosting Compact: review ready"
+		not "B2 Coalition Interspecies Hosting Compact: reviewed"
+		random < 22
+	on offer
+		conversation
+			branch consent
+				has "B2 Coalition Interspecies Hosting Compact: route consent floor"
+			branch adaptation
+				has "B2 Coalition Interspecies Hosting Compact: route named adaptation"
+			`The Host and Settler find you again with several anonymized placement notes. Your paired approach spread informally. It helped, but every household chose different boundaries for the "formal" layer, and some hosts copied another family's list without asking whether their own guest wanted the same things protected.`
+			`\tThe problem is no longer whether expectations should be visible. It is how to preserve consent without turning one household's compromise into a universal template.`
+			choice
+				`\tUse a portable household charter: agreed boundaries travel with the placement, but each clause records who agreed, when, whether it can be revised, and what remains explicitly optional.`
+					goto charter
+				`\tUse periodic consent checks: keep the original placement terms durable, but require major household expectations to expire unless both sides deliberately renew them after living with the arrangement.`
+					goto renewal
+			label consent
+			`Your consent-floor rule stopped several hosts from treating custom as automatic obligation. The Host also shows you placements where people now invoke the original paperwork to avoid every later compromise, even when both sides want the household to evolve. A protection against silent pressure has started hardening into a fear of changing anything at all.`
+			choice
+				`\tUse a portable household charter so revisions remain possible, but every important boundary keeps its consent and revision history.`
+					goto charter
+				`\tUse periodic consent checks so arrangements can evolve without becoming permanent merely because nobody reopened the old form.`
+					goto renewal
+			label adaptation
+			`Your insistence on naming cultural expectations made many placements easier to discuss. The Settler has also seen a new failure: once an expectation is written down, some hosts treat that disclosure as permanent consent. Explaining a custom before someone agrees to it is not the same as obtaining agreement forever.`
+			choice
+				`\tUse a portable household charter that records actual agreement, not merely disclosure, and keeps revision history attached.`
+					goto charter
+				`\tUse periodic consent checks so disclosed expectations expire unless both sides renew them after experience.`
+					goto renewal
+			label charter
+			`You recommend a portable household charter. It is intentionally small: privacy, guests, money, work, exit conditions, and any unusual expectation the people involved want made explicit. Each entry records consent, revision history, and whether it is optional or required. Ordinary friendship and daily compromise remain outside the form.`
+			action
+				"B2 Coalition Interspecies Hosting Compact: reviewed" = 1
+				"B2 Coalition Interspecies Hosting Compact: settlement household charter" = 1
+				"B2 Coalition Interspecies Hosting Compact: host trusts player" = 1
+				"B2 Coalition Interspecies Hosting Compact: settler trusts player" = 1
+			decline
+			label renewal
+			`You recommend periodic consent checks instead. The original placement terms remain durable, but added expectations receive a review date. If nobody renews them, they return to being customs or suggestions rather than obligations. The household can change without letting inertia impersonate consent.`
+			action
+				"B2 Coalition Interspecies Hosting Compact: reviewed" = 1
+				"B2 Coalition Interspecies Hosting Compact: settlement periodic renewal" = 1
+				"B2 Coalition Interspecies Hosting Compact: host trusts player" = 1
+				"B2 Coalition Interspecies Hosting Compact: settler trusts player" = 1
+			decline
+
+mission "B2 Coalition Interspecies Hosting Compact: Settler Remembers"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+	to offer
+		not "B2 Coalition Interspecies Hosting Compact: aftermath seen"
+		or
+			has "B2 Coalition Interspecies Hosting Compact: settlement household charter"
+			has "B2 Coalition Interspecies Hosting Compact: settlement periodic renewal"
+		random < 26
+	on offer
+		conversation
+			branch renewal
+				has "B2 Coalition Interspecies Hosting Compact: settlement periodic renewal"
+			`The Settler recognizes you near a transit map and shows you a short household charter from a new placement. Most of it is blank. The few filled entries cover private space, guests, shared expenses, and an exit plan, with revisions initialed by both people involved. "The rest," the Settler says, "they are learning by living together. That part should not need a form."`
+			goto done
+			label renewal
+			`The Settler recognizes you near an exchange-program desk. A host family and guest are finishing a scheduled check-in, laughing over two expectations they have decided to drop and one they want to keep. Nothing dramatic changed. That seems to be the point: neither habit nor politeness had to pretend to be permanent consent.`
+			label done
+			action
+				"B2 Coalition Interspecies Hosting Compact: aftermath seen" = 1
+			decline
