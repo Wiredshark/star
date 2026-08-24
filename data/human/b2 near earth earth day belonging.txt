@@ -1,0 +1,154 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Near Earth Earth Day Belonging.
+# B1's Near Earth Earth Day Archive establishes pilgrimage, civic observance, and
+# family storytelling as different later forms of the holiday. This slice turns
+# that history into one parent/adult-child dispute, not Republic policy or a
+# universal definition of human identity.
+
+event "B2 Near Earth Earth Day Belonging: Review Ready"
+	"B2 Near Earth Earth Day Belonging: review ready" = 1
+
+mission "B2 Near Earth Earth Day Belonging: Offer"
+	minor
+	name `Where Home Points`
+	description `A Near Earth parent and her adult son disagree over whether inherited Earth Day traditions are an invitation, a family obligation, or a test of belonging.`
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "Near Earth Earth Day Archive: offered"
+		not "B2 Near Earth Earth Day Belonging: introduced"
+		not "B2 Near Earth Earth Day Belonging: declined"
+	on offer
+		conversation
+			`Mara Quill is standing beside an Earth Day display, holding two old passenger vouchers preserved in a family album. Her adult son Leo is beside her, studying a school project about the first settlements beyond Sol rather than the pictures of Earth.`
+			`Mara explains that her parents saved for years to make one pilgrimage to Earth, then asked each generation to try to return at least once. Leo knows the story and cares about it. What he resents is relatives calling his reluctance to make the trip a rejection of the family.`
+			`"New Boston is not the place I ended up after leaving home," Leo says. "It is home." Mara answers, "I do not want Earth to become a loyalty test. I also do not want a promise that mattered to my parents to disappear because I was afraid to ask you to carry it."`
+			choice
+				`\tTreat the pilgrimage as a heritage invitation, not an inherited obligation. Mara can explain why it matters without making attendance the price of belonging.`
+					goto invitation
+				`\tLet Leo define his own belonging. Family history can matter even if his observance centers on the world where he actually lives.`
+					goto selfdefinition
+				`\tSeparate ancestry, private family tradition, public Earth Day participation, and present home. They can all be true without proving one another.`
+					goto layered
+				`\tRefuse to settle a family tradition for them.`
+					goto decline
+			label invitation
+			`You suggest preserving the story as an invitation with a reason attached, rather than a debt passed automatically from parent to child. Leo says he can hear a request differently when refusing it does not threaten his place in the family. Mara gives him one old voucher without asking him to promise a destination.`
+			action
+				"B2 Near Earth Earth Day Belonging: introduced" = 1
+				"B2 Near Earth Earth Day Belonging: route heritage invitation" = 1
+				"B2 Near Earth Earth Day Belonging: Mara trusts player" = 1
+				event "B2 Near Earth Earth Day Belonging: Review Ready" 7 11
+				decline
+			label selfdefinition
+			`You tell Mara that continuity can survive a changed center of gravity. Leo can inherit the stories without treating Earth as the only place where those stories become legitimate. Mara admits that her parents changed the holiday too; perhaps Leo is allowed to change it again.`
+			action
+				"B2 Near Earth Earth Day Belonging: introduced" = 1
+				"B2 Near Earth Earth Day Belonging: route self authored belonging" = 1
+				"B2 Near Earth Earth Day Belonging: Leo trusts player" = 1
+				event "B2 Near Earth Earth Day Belonging: Review Ready" 7 11
+				decline
+			label layered
+			`You separate four things the argument keeps collapsing: where the family came from, what traditions relatives privately value, how each person marks Earth Day, and which world each presently calls home. Mara and Leo both laugh when they realize none of those questions requires the others to have the same answer.`
+			action
+				"B2 Near Earth Earth Day Belonging: introduced" = 1
+				"B2 Near Earth Earth Day Belonging: route layered belonging" = 1
+				"B2 Near Earth Earth Day Belonging: Mara trusts player" = 1
+				"B2 Near Earth Earth Day Belonging: Leo trusts player" = 1
+				event "B2 Near Earth Earth Day Belonging: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them an old family promise does not need a visiting captain to become its judge. Leo nods. Mara admits that if the tradition matters, the next conversation should belong to the two of them.`
+			action
+				"B2 Near Earth Earth Day Belonging: declined" = 1
+				decline
+
+mission "B2 Near Earth Earth Day Belonging: Review"
+	minor
+	name `The Biography on the Program`
+	description `Return after an Earth Day program turns one family's observance into a public claim about identity and loyalty.`
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Near Earth Earth Day Belonging: introduced"
+		has "B2 Near Earth Earth Day Belonging: review ready"
+		not "B2 Near Earth Earth Day Belonging: reviewed"
+	on offer
+		conversation
+			branch selfdefinition
+				has "B2 Near Earth Earth Day Belonging: route self authored belonging"
+			branch layered
+				has "B2 Near Earth Earth Day Belonging: route layered belonging"
+			`Mara and Leo find you beside the same display. A community Earth Day program copied the family pilgrimage story and describes the Quills as a family that "returns home to Earth whenever it can." Leo is quoted nowhere, yet the program treats the sentence as his identity too. Mara is angry on his behalf before he can say anything.`
+				goto settle
+			label selfdefinition
+			`Leo shows you a school-club profile that praises him for "choosing New Boston over old Earth traditions." He never said that either. His decision not to make a pilgrimage has been turned into a rejection story because the writer needed a cleaner contrast. Mara calls it the same loyalty test with the answer reversed.`
+				goto settle
+			label layered
+			`The layered approach worked within the family, but a public program flattened it back into a single biography. It lists Earth ancestry, a family pilgrimage, Leo's local civic work, and his current home as if one fact explains the others. Every item is true; the conclusion tying them together belongs to the editor.`
+			label settle
+			choice
+				`\tUse a voluntary heritage statement: public programs may use only the identity or observance claims each person actually chooses to make, with family history kept attributable rather than inherited automatically.`
+					goto voluntary
+				`\tUse plural belonging: public remembrance can present several compatible attachments without ranking one as the authentic home or treating nonparticipation as rejection.`
+					goto plural
+			label voluntary
+			`You suggest a simple discipline: a family story can be cited as family history, but a living person's identity statement must come from that person. Mara can say that Earth pilgrimage matters to her. Leo can say that New Boston is home to him. Neither statement cancels the ancestry they share or authorizes someone else to extend one person's words to the other.`
+			action
+				"B2 Near Earth Earth Day Belonging: reviewed" = 1
+				"B2 Near Earth Earth Day Belonging: settlement voluntary heritage statement" = 1
+				"B2 Near Earth Earth Day Belonging: Mara trusts player" = 1
+				"B2 Near Earth Earth Day Belonging: Leo trusts player" = 1
+				decline
+			label plural
+			`You argue for leaving the complexity visible. Earth can be an ancestral reference, a pilgrimage destination, a civic symbol, or not the center of a person's observance at all. A program can describe those differences without turning attendance into proof of loyalty or absence into proof of rejection. Leo says that sounds more like a celebration than an exam.`
+			action
+				"B2 Near Earth Earth Day Belonging: reviewed" = 1
+				"B2 Near Earth Earth Day Belonging: settlement plural belonging" = 1
+				"B2 Near Earth Earth Day Belonging: Leo trusts player" = 1
+				decline
+
+mission "B2 Near Earth Earth Day Belonging: Leo Remembers"
+	minor
+	name `Leo Remembers`
+	description `Leo remembers that inherited history can matter without dictating where a living person must locate home.`
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Near Earth Earth Day Belonging: aftermath seen"
+		or
+			has "B2 Near Earth Earth Day Belonging: settlement voluntary heritage statement"
+			has "B2 Near Earth Earth Day Belonging: settlement plural belonging"
+	on offer
+		conversation
+			branch plural
+				has "B2 Near Earth Earth Day Belonging: settlement plural belonging"
+			`Leo recognizes you near a departure board. He is carrying the old passenger voucher Mara gave him. "I still have not decided whether I will ever use a ticket to Earth," he says. "But now when my mother tells that story, she calls it her invitation instead of my obligation. That made it easier to keep the story instead of running from it."`
+				goto finish
+			label plural
+			`Leo recognizes you at a community Earth Day display. His contribution is a photograph of New Boston beside a copy of his grandparents' Earth ticket. "They let both captions stand," he says. "No arrow explaining which one is the real home. Apparently the universe survived the ambiguity."`
+			label finish
+			action
+				"B2 Near Earth Earth Day Belonging: aftermath seen" = 1
+				decline
