@@ -1,0 +1,160 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Hai Stage Persona Compact.
+# Primary domain: entertainment culture / friendship / public identity.
+#
+# Hai popular entertainment has treated performers, labels, fandom, and long-lived
+# reinterpretations as ordinary cultural life for ages. Human settlement in Hai
+# space adds another layer: artists and collaborators can move between cultural
+# expectations without making a stage persona equivalent to a private identity.
+
+
+event "B2 Hai Stage Persona Compact: Review Ready"
+	"B2 Hai Stage Persona Compact: review ready" = 1
+
+
+mission "B2 Hai Stage Persona Compact: Offer"
+	minor
+	name `The Person in the Poster`
+	description `Hai singer Kessa Riin and human songwriter Mara Dey disagree over when a label-created stage persona becomes a claim about the artist behind it.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "language: Hai"
+		not "B2 Hai Stage Persona Compact: introduced"
+		not "B2 Hai Stage Persona Compact: declined"
+	on offer
+		conversation
+			`A rehearsal hall near the spaceport is cycling through promotional holograms faster than the performers inside can finish a chorus. Kessa Riin, a Hai singer with the practiced patience of someone who has survived several label meetings, pauses one image on the wall. It shows a sharper smile, brighter costume, and much more reckless expression than the Kessa standing beside you.`
+			`Mara Dey, a human songwriter who has lived in Hai space long enough to argue comfortably in Hai, says the image is not the problem by itself. The problem is the accompanying profile. A marketing team has taken jokes from rehearsals, a staged rivalry, and one improvised interview answer and compressed them into a permanent public personality.`
+			`Kessa says Hai fans understand that performers can play with persona and tradition. Mara replies that new human residents, foreign press, and even other labels increasingly copy promotional profiles as if they were biographies. Both ask what should survive when the performance travels farther than the context.`
+			choice
+				`\tTreat the persona as bounded performance: every promotional profile should identify what is staged and when the campaign ends.`
+					goto bounded
+				`\tGive the artist revision authority: Kessa can evolve the public persona, but copied profiles must preserve who authored later changes.`
+					goto revision
+				`\tSeparate the layers: keep stage persona, credited creative authorship, publicity consent, and private biographical claims as distinct records.`
+					goto layered
+				`\tRefuse to turn one label dispute into a universal rule for Hai entertainment.`
+					goto decline
+			label bounded
+			`You suggest treating the stage persona like a production role rather than a permanent diagnosis of character. Campaign notes can say what is deliberately performed, which release or tour the persona belongs to, and when those claims expire. Kessa says fans can still enjoy the fiction. Mara says future readers will at least know where the fiction ends.`
+			action
+				"B2 Hai Stage Persona Compact: introduced" = 1
+				"B2 Hai Stage Persona Compact: route bounded performance" = 1
+				"B2 Hai Stage Persona Compact: mara trusts player" = 1
+				event "B2 Hai Stage Persona Compact: Review Ready" 7 11
+				decline
+			label revision
+			`You argue that a public persona can be real creative work without becoming property of the first marketing team that wrote it down. Kessa should be able to change the performance, retire a joke, or contradict an old interview. Copied profiles should preserve which version they describe and who approved the revision. Kessa looks relieved; Mara immediately starts listing old copies that need dates.`
+			action
+				"B2 Hai Stage Persona Compact: introduced" = 1
+				"B2 Hai Stage Persona Compact: route revision authority" = 1
+				"B2 Hai Stage Persona Compact: kessa trusts player" = 1
+				event "B2 Hai Stage Persona Compact: Review Ready" 7 11
+				decline
+			label layered
+			`You tell them the problem is not performance but compression. A label can record the stage character used in a campaign. Song and image credits can identify who created it. Publicity permissions can say what Kessa agreed to repeat. Claims about her private history, relationships, or beliefs belong in a different category entirely. Kessa and Mara begin dividing the profile before you finish speaking.`
+			action
+				"B2 Hai Stage Persona Compact: introduced" = 1
+				"B2 Hai Stage Persona Compact: route layered identity" = 1
+				"B2 Hai Stage Persona Compact: kessa trusts player" = 1
+				"B2 Hai Stage Persona Compact: mara trusts player" = 1
+				event "B2 Hai Stage Persona Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that Hai entertainment has survived countless styles, labels, fan traditions, and reinterpretations without a visiting captain defining the rules. Kessa accepts the point. Mara says she will keep arguing with the label directly instead of pretending your refusal settled the issue.`
+			action
+				"B2 Hai Stage Persona Compact: declined" = 1
+				decline
+
+
+mission "B2 Hai Stage Persona Compact: Review"
+	minor
+	name `When the Profile Becomes a Biography`
+	description `Return after Kessa and Mara test whether a stage persona can survive copying without turning performance into private biography.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "language: Hai"
+		has "B2 Hai Stage Persona Compact: introduced"
+		has "B2 Hai Stage Persona Compact: review ready"
+		not "B2 Hai Stage Persona Compact: reviewed"
+	on offer
+		conversation
+			branch bounded
+				has "B2 Hai Stage Persona Compact: route bounded performance"
+			branch revision
+				has "B2 Hai Stage Persona Compact: route revision authority"
+			`Mara shows you three copied profiles from unrelated venues. One preserves the campaign slogan but drops its expiry. Another credits the label for a joke Kessa rewrote herself. A third cites both copies and calls the resulting repetition independent evidence that Kessa is personally reckless. Kessa says the most irritating part is that none of the copies is entirely fabricated; they are simply no longer saying what their sources meant.`
+				goto settle
+			label bounded
+			`The label marked the original profile as a tour persona, but a foreign entertainment feed copied only the colorful claims and omitted the campaign boundary. Kessa says a temporary performance became a permanent personality because the boring metadata did not travel with the entertaining part.`
+				goto settle
+			label revision
+			`Kessa revised the persona for a new release, but several promoters kept using the older profile because it was already translated and familiar. Mara says revision authority means little if downstream copies can erase the revision date and present an obsolete version as current.`
+			label settle
+			choice
+				`\tCreate a portable persona packet: campaign role, credited authors, approved claims, consent scope, revision history, expiry, and private-biography exclusions travel together.`
+					goto packet
+				`\tCreate a persona firewall: promotional claims expire unless renewed, while private biographical claims require a separate attributable source rather than inference from performance.`
+					goto firewall
+			label packet
+			`You recommend that the useful metadata become inseparable from the appealing copy. Every profile carries which campaign it belongs to, who created and revised the stage character, what Kessa actually approved for publicity, when those approvals expire, and which claims are explicitly performance rather than private biography. Repetition of the same source remains one lineage, not independent corroboration.`
+			action
+				"B2 Hai Stage Persona Compact: reviewed" = 1
+				"B2 Hai Stage Persona Compact: settlement portable persona packet" = 1
+				"B2 Hai Stage Persona Compact: kessa trusts player" = 1
+				"B2 Hai Stage Persona Compact: mara trusts player" = 1
+				decline
+			label firewall
+			`You recommend a harder boundary. Promotional persona claims are current only for the campaign that authorizes them and expire unless deliberately renewed. Anyone making a private biographical claim must identify a separate source instead of reasoning backward from a costume, lyric, staged rivalry, or old publicity line. Kessa says fans can still play along; they simply stop being drafted as accidental biographers.`
+			action
+				"B2 Hai Stage Persona Compact: reviewed" = 1
+				"B2 Hai Stage Persona Compact: settlement persona firewall" = 1
+				"B2 Hai Stage Persona Compact: kessa trusts player" = 1
+				decline
+
+
+mission "B2 Hai Stage Persona Compact: Kessa Remembers"
+	minor
+	name `Kessa Remembers`
+	description `Kessa Riin remembers whether a successful stage character stayed a performance or became a biography she never agreed to write.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "language: Hai"
+		not "B2 Hai Stage Persona Compact: aftermath seen"
+		or
+			has "B2 Hai Stage Persona Compact: settlement portable persona packet"
+			has "B2 Hai Stage Persona Compact: settlement persona firewall"
+	on offer
+		conversation
+			branch firewall
+				has "B2 Hai Stage Persona Compact: settlement persona firewall"
+			`Kessa shows you a new promotional profile. The theatrical exaggerations are still there, and she seems pleased with several of them, but each version lists its campaign, authors, revisions, and the publicity claims she actually approved. "It turns out the performance is more fun when I do not have to defend it as my entire personality," she says.`
+				goto finish
+			label firewall
+			`Kessa has retired the old reckless-rival persona without trying to erase it from cultural memory. Old profiles remain searchable as old campaigns. New coverage that wants to claim something about her private life has to cite a source that actually concerns her private life. Mara says the distinction has made interviews both less dramatic and much less exhausting.`
+			label finish
+			action
+				"B2 Hai Stage Persona Compact: aftermath seen" = 1
+				decline
