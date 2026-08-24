@@ -1,0 +1,160 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Free Worlds Memorial Boundaries.
+# Primary domain: grief / friendship / family relationships / public memory.
+#
+# This slice reacts to A1-owned Free Worlds defense strain without taking ownership
+# of military state. It keeps private last messages, crew memories, family claims,
+# public memorial language, and uncertainty distinct instead of turning grief into
+# a single official story.
+
+
+event "B2 Free Worlds Memorial Boundaries: Review Ready"
+	"B2 Free Worlds Memorial Boundaries: review ready" = 1
+
+
+mission "B2 Free Worlds Memorial Boundaries: Offer"
+	minor
+	name `What the Memorial Gets to Say`
+	description `Tess Morrow and Mika Rowe disagree over how much of a lost volunteer captain's private life belongs in a public Free Worlds memorial.`
+	source
+		government "Free Worlds"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		"world: free worlds defense strain" >= 3
+		not "B2 Free Worlds Memorial Boundaries: introduced"
+		not "B2 Free Worlds Memorial Boundaries: declined"
+	on offer
+		conversation
+			`A volunteer-hall wall near the port is covered with handwritten names, patched flight badges, and photographs copied from a dozen ships. Tess Morrow, who flew rescue duty with Captain Niko Rowe, is holding a draft memorial notice. Mika Rowe, Niko's younger sister, is holding the private message he sent home before his final patrol.`
+			`Tess says the crew remembers Niko as funny, frightened, stubborn, and brave in different proportions depending on who is speaking. Mika says the public draft has compressed all of that into a fearless symbol and quotes a line from the family message without saying it was private.`
+			`Neither of them wants the memorial erased. They disagree about what remembrance is allowed to claim.`
+			choice
+				`\tGive the family first authority over private messages while crew memories remain attributable to the people who actually remember them.`
+					goto family
+				`\tKeep public remembrance broad, but require every personal claim to identify whether it came from family, crew, or an official incident record.`
+					goto attributed
+				`\tAllow several memorial voices side by side instead of forcing one definitive version of Niko into a single official biography.`
+					goto plural
+				`\tRefuse to decide how another family and crew should grieve.`
+					goto decline
+			label family
+			`You tell Tess that a public memorial can honor service without automatically inheriting private correspondence. Mika can decide whether the final message is quoted, summarized, or kept inside the family. Crew memories can still be public when the speaker is named and the memory remains theirs rather than becoming an official fact about Niko's inner life.`
+			action
+				"B2 Free Worlds Memorial Boundaries: introduced" = 1
+				"B2 Free Worlds Memorial Boundaries: route family privacy" = 1
+				"B2 Free Worlds Memorial Boundaries: mika trusts player" = 1
+				event "B2 Free Worlds Memorial Boundaries: Review Ready" 7 11
+				decline
+			label attributed
+			`You suggest keeping the memorial generous but explicit about source. A line from a crew mate is a crew mate's memory. A family statement is a family statement. An incident report can establish events without pretending it establishes motive. Tess likes that the memorial can stay warm without becoming anonymous certainty. Mika says she can live with that.`
+			action
+				"B2 Free Worlds Memorial Boundaries: introduced" = 1
+				"B2 Free Worlds Memorial Boundaries: route attributed memory" = 1
+				"B2 Free Worlds Memorial Boundaries: tess trusts player" = 1
+				event "B2 Free Worlds Memorial Boundaries: Review Ready" 7 11
+				decline
+			label plural
+			`You tell them that a memorial does not need to settle every contradiction. The crew can remember the captain who joked during launch checks. Mika can remember the brother who admitted fear. An official record can describe what the ship did. None of those voices has to cancel the others. Tess and Mika both stop trying to edit the other version out of the draft.`
+			action
+				"B2 Free Worlds Memorial Boundaries: introduced" = 1
+				"B2 Free Worlds Memorial Boundaries: route plural remembrance" = 1
+				"B2 Free Worlds Memorial Boundaries: tess trusts player" = 1
+				"B2 Free Worlds Memorial Boundaries: mika trusts player" = 1
+				event "B2 Free Worlds Memorial Boundaries: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a visiting captain should not turn a family argument into Free Worlds custom. Tess accepts that. Mika folds the private message back into its envelope. They continue the argument without pretending your refusal settled it.`
+			action
+				"B2 Free Worlds Memorial Boundaries: declined" = 1
+				decline
+
+
+mission "B2 Free Worlds Memorial Boundaries: Review"
+	minor
+	name `When Memory Hardens`
+	description `Return after the first memorial drafts spread and decide how grief, attribution, privacy, and later correction should survive copying.`
+	source
+		government "Free Worlds"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "B2 Free Worlds Memorial Boundaries: introduced"
+		has "B2 Free Worlds Memorial Boundaries: review ready"
+		"world: free worlds defense strain" <= 2
+		not "B2 Free Worlds Memorial Boundaries: reviewed"
+	on offer
+		conversation
+			branch family
+				has "B2 Free Worlds Memorial Boundaries: route family privacy"
+			branch attributed
+				has "B2 Free Worlds Memorial Boundaries: route attributed memory"
+			`Tess and Mika show you several copies of the memorial notice from nearby ports. One preserves a crew story but drops the speaker's name. Another quotes the family's approved summary, then cites that summary as evidence that Niko never felt fear. A third silently merges an incident report with a friend's recollection.`
+			`Mika says the problem is no longer only privacy. Tess agrees: once a memorial spreads, later editors can turn a source into a fact, a fact into a motive, and repetition into false certainty.`
+				goto settle
+			label family
+			`Mika kept the private message out of the public memorial, but one later writer reconstructed its supposed meaning from secondhand comments and presented the reconstruction as though the family had released it. Tess says protecting the document did not automatically protect the boundary around what people inferred from it.`
+				goto settle
+			label attributed
+			`The first memorial carefully attributed each memory. Several copied versions kept the stories but dropped the names, making three different recollections look like one settled official account. Tess says attribution that disappears during copying is only temporary honesty.`
+			label settle
+			choice
+				`\tCreate a layered memorial record: event facts, attributed memories, family-approved private material, disagreements, and later corrections remain separable.`
+					goto layered
+				`\tUse living remembrance: preserve several attributed versions and require later editors to mark additions, removals, and disputed interpretations rather than replacing them silently.`
+					goto living
+			label layered
+			`You recommend a layered memorial. Operational facts remain factual records. Crew and family memories remain attached to named sources. Private material keeps its release boundary. Disagreement is preserved rather than smoothed away, and later corrections can change one layer without rewriting the others. Mika says the memorial can finally be honest without being invasive.`
+			action
+				"B2 Free Worlds Memorial Boundaries: reviewed" = 1
+				"B2 Free Worlds Memorial Boundaries: settlement layered memorial" = 1
+				"B2 Free Worlds Memorial Boundaries: tess trusts player" = 1
+				"B2 Free Worlds Memorial Boundaries: mika trusts player" = 1
+				decline
+			label living
+			`You recommend treating remembrance as an attributed conversation rather than a finalized biography. Each contributor keeps a name or source class. Later editors may add another memory or challenge an interpretation, but cannot silently erase who said what or convert repetition into independent corroboration. Tess says that sounds more like the person she knew than a polished plaque ever did.`
+			action
+				"B2 Free Worlds Memorial Boundaries: reviewed" = 1
+				"B2 Free Worlds Memorial Boundaries: settlement living remembrance" = 1
+				"B2 Free Worlds Memorial Boundaries: tess trusts player" = 1
+				decline
+
+
+mission "B2 Free Worlds Memorial Boundaries: Mika Remembers"
+	minor
+	name `Mika Remembers`
+	description `Mika Rowe remembers whether Niko's memorial stayed a place for grief or became a biography no single source had the right to write.`
+	source
+		government "Free Worlds"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		not "B2 Free Worlds Memorial Boundaries: aftermath seen"
+		or
+			has "B2 Free Worlds Memorial Boundaries: settlement layered memorial"
+			has "B2 Free Worlds Memorial Boundaries: settlement living remembrance"
+	on offer
+		conversation
+			branch living
+				has "B2 Free Worlds Memorial Boundaries: settlement living remembrance"
+			`Mika shows you the memorial entry now used by several volunteer halls. The public page describes what Niko's ship did, links named crew memories without merging them, and marks the one family excerpt she chose to release. The full private message is still private. "I did not need everyone to remember him the way I do," she says. "I needed them to stop pretending there was only one honest way."`
+				goto finish
+			label living
+			`The volunteer wall now carries several short memories beneath Niko's name. One crew mate remembers bad jokes. Another remembers careful preflight checks. Mika contributed a line about the brother who admitted fear and went anyway. None is labeled the final version. New additions show who added them and when.`
+			label finish
+			action
+				"B2 Free Worlds Memorial Boundaries: aftermath seen" = 1
+				decline
