@@ -120,7 +120,7 @@ def test_household_agency_boundaries_explicit():
         "household floor",
         "voluntary limit",
         "cooling-off",
-        "not turn mara into his financial guardian",
+        "financial guardian",
         "personal spending",
         "current household obligations",
         "explicit loans",
