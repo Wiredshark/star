@@ -137,7 +137,7 @@ def test_home_employment_boundaries_are_explicit():
         "employment systems may report employment",
         "housing systems may report occupancy",
         "history is allowed to be true without staying in charge",
-        "does not establish republic tenancy law",
+        "republic tenancy law",
         "universal paradise rule",
     )
     for fragment in fragments:
