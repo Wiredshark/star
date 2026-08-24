@@ -1,0 +1,159 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Saryd Living Folklore Compact.
+#
+# Saryd civic history establishes a Cultural Commons Ledger that preserves local
+# variants of plays, songs, props, and stage practice rather than selecting one
+# official version. This local character conflict asks who may alter, credit, and
+# present one inherited performance. It does not create centralized Saryd cultural
+# law or make archival preservation equivalent to creative authority.
+
+
+event "B2 Saryd Living Folklore Compact: Review Ready"
+	"B2 Saryd Living Folklore Compact: review ready" = 1
+
+
+mission "B2 Saryd Living Folklore Compact: Offer"
+	minor
+	name `The Version We Inherited`
+	description `Two Saryd performers disagree over whether preserving a traditional play also determines who may change it.`
+	source
+		government "Coalition"
+		attributes "saryd"
+		attributes "folklore"
+	"offer precedence" 8
+	to offer
+		has "known to the heliarchs"
+		not "B2 Saryd Living Folklore Compact: introduced"
+		not "B2 Saryd Living Folklore Compact: declined"
+	on offer
+		conversation
+			`A rehearsal has stopped halfway through an old Saryd comedy. A veteran director named Aven Pell holds a marked script whose margins contain notes from several worlds. Younger performer Tiri Sen holds a newer copy with three scenes rearranged and a new ending written for the local cast.`
+			`Aven says the changes erase choices that earlier communities deliberately preserved. Tiri says preserving every old version should make adaptation easier, not turn the archive into a veto. Both agree that the copied program is worse than either position: it describes Tiri's revision as "the corrected version" and credits no earlier community at all.`
+			choice
+				`\tTreat the inherited versions as sources that must remain attributable, while allowing a new production to identify itself openly as a new adaptation.`
+					goto attribution
+				`\tGive the current company broad creative freedom, but require it to preserve what was changed and which earlier versions supplied the material.`
+					goto revision
+				`\tKeep paired records: archival lineage and current production authority remain linked but separate.`
+					goto paired
+				`\tRefuse to turn one rehearsal dispute into a general rule for Saryd culture.`
+					goto decline
+			label attribution
+			`You tell them that preservation can establish where a scene came from without freezing it forever. A new company can change the play, but it should say that it changed it and preserve the source lineage it is changing. Aven relaxes first. Tiri says that being credited for an adaptation is better than being blamed for a "correction" she never claimed to make.`
+			action
+				"B2 Saryd Living Folklore Compact: introduced" = 1
+				"B2 Saryd Living Folklore Compact: route attributable adaptation" = 1
+				"B2 Saryd Living Folklore Compact: Aven trusts player" = 1
+				event "B2 Saryd Living Folklore Compact: Review Ready" 7 11
+				decline
+			label revision
+			`You support the present company's right to revise its own performance, provided the revision history stays visible. A new ending may be theirs; the borrowed jokes, stage business, and older structure still retain their own sources. Tiri accepts immediately. Aven says that if the record keeps the old paths visible, he can live with the road continuing.`
+			action
+				"B2 Saryd Living Folklore Compact: introduced" = 1
+				"B2 Saryd Living Folklore Compact: route revision history" = 1
+				"B2 Saryd Living Folklore Compact: Tiri trusts player" = 1
+				event "B2 Saryd Living Folklore Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You recommend two linked records. The commons ledger preserves source versions, communities, and known variants. The current production record says who chose this arrangement, what they changed, and who has authority over this staging. Neither record silently grants authority over the other. Both performers agree that this sounds less elegant than tradition and more useful than argument.`
+			action
+				"B2 Saryd Living Folklore Compact: introduced" = 1
+				"B2 Saryd Living Folklore Compact: route paired lineage and production" = 1
+				"B2 Saryd Living Folklore Compact: Aven trusts player" = 1
+				"B2 Saryd Living Folklore Compact: Tiri trusts player" = 1
+				event "B2 Saryd Living Folklore Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that the disagreement belongs to the people making and inheriting the play, not to an outsider looking for a universal Saryd rule. Aven nods. Tiri says that refusing to settle it may be the most traditional answer anyone has offered all afternoon.`
+			action
+				"B2 Saryd Living Folklore Compact: declined" = 1
+				decline
+
+
+mission "B2 Saryd Living Folklore Compact: Review"
+	minor
+	name `When a Variant Becomes the Original`
+	description `Copied programs are collapsing source lineage, adaptation, and present production authority into a single supposed official version.`
+	source
+		government "Coalition"
+		attributes "saryd"
+		attributes "folklore"
+	"offer precedence" 8
+	to offer
+		has "B2 Saryd Living Folklore Compact: introduced"
+		has "B2 Saryd Living Folklore Compact: review ready"
+		not "B2 Saryd Living Folklore Compact: reviewed"
+	on offer
+		conversation
+			branch revision
+				has "B2 Saryd Living Folklore Compact: route revision history"
+			branch paired
+				has "B2 Saryd Living Folklore Compact: route paired lineage and production"
+			`Aven and Tiri show you three programs from different worlds. Each is internally accurate, but the copied summaries have quietly promoted one local staging into "the traditional ending." Another copy lists Tiri's company as the author of material that predates any living cast member.`
+				goto settle
+			label revision
+			`The revision-history approach preserved the edits, but one downstream copy discarded the source layer and kept only the latest version number. "Version six" became "the definitive version" through nothing more than missing context.`
+				goto settle
+			label paired
+			`The paired records worked until a host merged them into one field labeled "authority." Archival source, current staging rights, and creative credit survived as words but lost the distinctions that made them useful.`
+			label settle
+			choice
+				`\tUse a portable provenance packet: source versions, borrowed elements, current adapters, production authority, disputed claims, and revision date travel together.`
+					goto packet
+				`\tUse versioned coexistence: no variant becomes official by repetition, and each production must identify the lineage it uses and the changes it claims as its own.`
+					goto coexistence
+			label packet
+			`You propose a compact record that keeps source lineage and present creative authority visible at the same time. Aven can point to what earlier communities preserved; Tiri can point to what her company actually changed. Neither fact silently becomes ownership of the whole tradition.`
+			action
+				"B2 Saryd Living Folklore Compact: reviewed" = 1
+				"B2 Saryd Living Folklore Compact: settlement portable provenance packet" = 1
+				"B2 Saryd Living Folklore Compact: Aven trusts player" = 1
+				"B2 Saryd Living Folklore Compact: Tiri trusts player" = 1
+				decline
+			label coexistence
+			`You recommend that variants remain variants. Hosts may choose one for a performance, but repetition does not turn that choice into a universal original. New adapters claim their own changes, inherited material keeps its lineage, and later companies remain free to choose differently.`
+			action
+				"B2 Saryd Living Folklore Compact: reviewed" = 1
+				"B2 Saryd Living Folklore Compact: settlement versioned coexistence" = 1
+				"B2 Saryd Living Folklore Compact: Tiri trusts player" = 1
+				decline
+
+
+mission "B2 Saryd Living Folklore Compact: Tiri Remembers"
+	minor
+	name `Tiri Remembers`
+	description `Tiri remembers that a living tradition can change without pretending that the newest copy wrote the past.`
+	source
+		government "Coalition"
+		attributes "saryd"
+		attributes "folklore"
+	"offer precedence" 8
+	to offer
+		not "B2 Saryd Living Folklore Compact: aftermath seen"
+		or
+			has "B2 Saryd Living Folklore Compact: settlement portable provenance packet"
+			has "B2 Saryd Living Folklore Compact: settlement versioned coexistence"
+	on offer
+		conversation
+			branch coexistence
+				has "B2 Saryd Living Folklore Compact: settlement versioned coexistence"
+			`Tiri hands you a program that lists three source communities, two borrowed scenes, and one line in bold: "New ending by this company." Aven has added a note correcting one old attribution. Neither correction cancels the other.`
+				goto finish
+			label coexistence
+			`You arrive during another rehearsal. This time the company is performing an older ending from a different world, followed by Tiri's newer one as an encore. "Apparently coexistence is good for ticket sales," she says. Aven pretends not to look pleased.`
+			label finish
+			action
+				"B2 Saryd Living Folklore Compact: aftermath seen" = 1
+				decline
