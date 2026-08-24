@@ -1,0 +1,158 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Quarg Cross-Generation Promise.
+#
+# Quarg first-contact canon establishes that the Quarg live for many human
+# lifetimes and often make friends among younger species. This slice turns that
+# longevity difference into a personal relationship problem: a promise made to
+# one human survives in family memory after that human dies.
+#
+# Jules Sorel is the adult grandson of Mira Sorel. The recurring Quarg is called
+# "Old Friend" only in the player's private notes; this is not a Quarg title or
+# office. Family memory, historical promise, current consent, present obligation,
+# and closure are separate facts. This local relationship is not Quarg law.
+
+
+event "B2 Quarg Cross-Generation Promise: Review Ready"
+	"B2 Quarg Cross-Generation Promise: review ready" = 1
+
+
+mission "B2 Quarg Cross-Generation Promise: Offer"
+	minor
+	name `A Promise Between Lifetimes`
+	description `A human descendant and a long-lived Quarg disagree over whether a promise made to a dead friend became an obligation to that friend's family.`
+	source
+		government "Quarg"
+	"offer precedence" 8
+	to offer
+		has "First Contact: Quarg: offered"
+		not "B2 Quarg Cross-Generation Promise: introduced"
+		not "B2 Quarg Cross-Generation Promise: declined"
+	on offer
+		conversation
+			`Jules Sorel is standing beside a Quarg who lowers itself to human eye level when you approach. Jules introduces himself as the grandson of Mira Sorel, a merchant who spent much of her life traveling through Quarg space. The Quarg knew Mira for nearly all of that life. In your private notes you think of the Quarg simply as the Old Friend.`
+			`Jules has brought a family recording in which Mira, late in life, laughs and tells the Quarg, "If one of mine ever washes up here in trouble, look after them the way you looked after me." Jules reads that as a promise to the family. The Old Friend remembers the exchange warmly, but not as a contract that Mira could impose on people who had not yet been born.`
+			`"My grandmother trusted you," Jules says. "That should mean something after she is gone." The Old Friend answers slowly, "It means much. But what it asks of you and me now is not contained inside her memory."`
+			choice
+				`\tTreat Mira's promise as historical relationship evidence. Any present obligation should be renewed explicitly by the living people involved.`
+					goto living
+				`\tPreserve family continuity, but bind it to specific help that Jules actually requests and the Old Friend actually agrees to provide.`
+					goto bounded
+				`\tUse paired records: keep Mira's original promise and history intact, while current agreements carry their own scope, consent, duration, and closure.`
+					goto paired
+				`\tRefuse to decide what one dead friend's words require of two living people.`
+					goto decline
+			label living
+			`You tell Jules that Mira's words can remain meaningful without silently speaking for either of them now. The Old Friend may choose to honor that memory; Jules may choose to ask for help; neither choice needs to be invented in advance by a family story. Jules looks disappointed, but not dismissed. The Old Friend says, "A friendship remembered freely is not made smaller by being free."`
+			action
+				"B2 Quarg Cross-Generation Promise: introduced" = 1
+				"B2 Quarg Cross-Generation Promise: route living renewal" = 1
+				"B2 Quarg Cross-Generation Promise: Old Friend trusts player" = 1
+				event "B2 Quarg Cross-Generation Promise: Review Ready" 7 11
+				decline
+			label bounded
+			`You suggest that family continuity can be real without being unlimited. If Jules asks for a place to stay, advice, or an introduction, that request can be accepted or refused on its own terms. The family story records why the request matters, but it does not decide the answer before Jules asks it. Jules says that feels closer to what his grandmother actually did in life: ask, argue, and listen.`
+			action
+				"B2 Quarg Cross-Generation Promise: introduced" = 1
+				"B2 Quarg Cross-Generation Promise: route bounded family continuity" = 1
+				"B2 Quarg Cross-Generation Promise: Jules trusts player" = 1
+				event "B2 Quarg Cross-Generation Promise: Review Ready" 7 11
+				decline
+			label paired
+			`You recommend preserving two linked layers. Mira's recording, its date, and what each person remembers about the friendship remain historical material. Any present promise between Jules and the Old Friend receives its own description, scope, review point, and closure. Neither layer is allowed to overwrite the other.`
+			action
+				"B2 Quarg Cross-Generation Promise: introduced" = 1
+				"B2 Quarg Cross-Generation Promise: route paired promise records" = 1
+				"B2 Quarg Cross-Generation Promise: Old Friend trusts player" = 1
+				"B2 Quarg Cross-Generation Promise: Jules trusts player" = 1
+				event "B2 Quarg Cross-Generation Promise: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that Mira's relationship with the Old Friend belonged to Mira and the Old Friend, while whatever Jules builds here belongs to Jules and the Old Friend. They can decide that without turning you into an interpreter of a dead woman's joke. Jules pockets the recording. The Quarg says, "This answer leaves us the work that is ours."`
+			action
+				"B2 Quarg Cross-Generation Promise: declined" = 1
+				decline
+
+
+mission "B2 Quarg Cross-Generation Promise: Review"
+	minor
+	name `When Memory Starts Giving Orders`
+	description `A copied family account has begun treating a personal Quarg-human promise as either a hereditary entitlement or a fully discharged historical debt.`
+	source
+		government "Quarg"
+	"offer precedence" 8
+	to offer
+		has "B2 Quarg Cross-Generation Promise: introduced"
+		has "B2 Quarg Cross-Generation Promise: review ready"
+		not "B2 Quarg Cross-Generation Promise: reviewed"
+	on offer
+		conversation
+			branch bounded
+				has "B2 Quarg Cross-Generation Promise: route bounded family continuity"
+			branch paired
+				has "B2 Quarg Cross-Generation Promise: route paired promise records"
+			`Jules shows you a family summary copied from Mira's recording. It now says that the Old Friend "promised permanent assistance to the Sorel family." The words permanent and assistance were not in Mira's sentence. Meanwhile, a Quarg note records one recent favor as "Mira Sorel's request fulfilled," as though helping Jules once could close an entire friendship that never had a ledger balance to begin with.`
+				goto settle
+			label bounded
+			`Jules did ask for specific help, and the Old Friend agreed. That worked. The problem arrived afterward: a cousin copied the successful request into the family history as proof that every descendant may claim the same help. The Old Friend is less angry than puzzled. "One freely given answer has become many questions I have not yet heard."`
+				goto settle
+			label paired
+			`The paired records worked locally. A downstream family copy kept Mira's old promise but dropped the current agreement's end point. A Quarg copy kept the current agreement but lost the note that it was a fresh choice rather than inherited duty. Each copy is accurate in pieces and wrong in the relationship it implies.`
+			label settle
+			choice
+				`\tAdopt a portable promise history: original speaker and recipient, known wording, uncertainty, later fulfillments, current parties, active scope, and explicit closure travel together.`
+					goto history
+				`\tUse renewal by living parties: inherited promises remain history, while current obligations exist only when the people alive now explicitly renew them and can later close them.`
+					goto renewal
+			label history
+			`You propose a record that can survive both long Quarg memory and short human generations without pretending they are the same thing. It keeps Mira's words attributed to Mira, the Old Friend's memory attributed to the Old Friend, later favors as later favors, and any current agreement as a current agreement. Unknown intent stays unknown rather than being filled in by repetition.`
+			action
+				"B2 Quarg Cross-Generation Promise: reviewed" = 1
+				"B2 Quarg Cross-Generation Promise: settlement portable promise history" = 1
+				"B2 Quarg Cross-Generation Promise: Old Friend trusts player" = 1
+				"B2 Quarg Cross-Generation Promise: Jules trusts player" = 1
+				decline
+			label renewal
+			`You recommend treating Mira's promise as durable history but not self-renewing authority. Jules and the Old Friend can make a present promise, define what it covers, and close it when fulfilled or withdrawn. A later descendant may read that history and ask again, but the copy itself cannot answer on behalf of either side.`
+			action
+				"B2 Quarg Cross-Generation Promise: reviewed" = 1
+				"B2 Quarg Cross-Generation Promise: settlement renewal by living parties" = 1
+				"B2 Quarg Cross-Generation Promise: Jules trusts player" = 1
+				decline
+
+
+mission "B2 Quarg Cross-Generation Promise: Jules Remembers"
+	minor
+	name `Jules Remembers`
+	description `Jules remembers the difference between inheriting a family story and inheriting authority over another person's choices.`
+	source
+		government "Quarg"
+	"offer precedence" 8
+	to offer
+		not "B2 Quarg Cross-Generation Promise: aftermath seen"
+		or
+			has "B2 Quarg Cross-Generation Promise: settlement portable promise history"
+			has "B2 Quarg Cross-Generation Promise: settlement renewal by living parties"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Quarg Cross-Generation Promise: settlement renewal by living parties"
+			`Jules catches you near the docks. "I listened to my grandmother's recording again. It sounds less like she was writing instructions for me and more like she was teasing a friend she trusted." The Old Friend, standing nearby, makes a low sound that might be Quarg amusement. Jules adds, "We wrote down what we actually agreed to now. That is enough."`
+				goto finish
+			label renewal
+			`Jules finds you while the Old Friend is showing him a route map. "We made a new promise," he says. "Small one. Specific one. Mine, not my grandmother's." He smiles. "Her story is still there. It just stopped pretending to be my signature."`
+			label finish
+			action
+				"B2 Quarg Cross-Generation Promise: aftermath seen" = 1
+				decline
