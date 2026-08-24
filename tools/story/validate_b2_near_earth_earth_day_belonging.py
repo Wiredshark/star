@@ -20,6 +20,12 @@ def mission_block(name: str) -> str:
     return TEXT[start:] if nxt < 0 else TEXT[start:nxt]
 
 
+def label_block(block: str, label: str) -> str:
+    start = block.index(f"\n\t\t\tlabel {label}\n")
+    nxt = block.find("\n\t\t\tlabel ", start + 1)
+    return block[start:] if nxt < 0 else block[start:nxt]
+
+
 def assignments():
     return re.findall(r'^\s*"([^"\n]+)"\s*(?:=|\+=|-=|\+\+|--|\?=|<\?=|>\?=)', TEXT, re.M)
 
@@ -33,7 +39,27 @@ def test_graph_scope_and_delay():
         assert '\t\tnot attributes "station"' in block
     offer = mission_block(MISSIONS[0])
     assert 'has "Near Earth Earth Day Archive: offered"' in offer
-    assert 'event "B2 Near Earth Earth Day Belonging: Review Ready" 7 11' in offer
+    assert offer.count('event "B2 Near Earth Earth Day Belonging: Review Ready" 7 11') == 3
+
+
+def test_offer_routes_and_refusal_boundary():
+    offer = mission_block(MISSIONS[0])
+    expected_routes = {
+        "invitation": "route heritage invitation",
+        "selfdefinition": "route self authored belonging",
+        "layered": "route layered belonging",
+    }
+    for label, route in expected_routes.items():
+        block = label_block(offer, label)
+        assert f'"{PREFIX}introduced" = 1' in block
+        assert f'"{PREFIX}{route}" = 1' in block
+        assert 'event "B2 Near Earth Earth Day Belonging: Review Ready" 7 11' in block
+        assert re.search(r'^\s*decline\s*$', block, re.M)
+    refusal = label_block(offer, "decline")
+    assert f'"{PREFIX}declined" = 1' in refusal
+    assert f'"{PREFIX}introduced" = 1' not in refusal
+    assert 'event "B2 Near Earth Earth Day Belonging: Review Ready"' not in refusal
+    assert re.search(r'^\s*decline\s*$', refusal, re.M)
 
 
 def test_characters_routes_and_settlements():
@@ -52,12 +78,18 @@ def test_review_and_aftermath_lifecycle():
     assert f'has "{PREFIX}introduced"' in review
     assert f'has "{PREFIX}review ready"' in review
     assert f'not "{PREFIX}reviewed"' in review
+    assert f'has "{PREFIX}declined"' not in review
     assert review.count(f'"{PREFIX}reviewed" = 1') == 2
+    for settlement in ("voluntary", "plural"):
+        block = label_block(review, settlement)
+        assert f'"{PREFIX}reviewed" = 1' in block
+        assert re.search(r'^\s*decline\s*$', block, re.M)
     aftermath = mission_block(MISSIONS[2])
     assert f'not "{PREFIX}aftermath seen"' in aftermath
     assert f'has "{PREFIX}settlement voluntary heritage statement"' in aftermath
     assert f'has "{PREFIX}settlement plural belonging"' in aftermath
     assert aftermath.count(f'"{PREFIX}aftermath seen" = 1') == 1
+    assert re.search(r'^\s*decline\s*$', aftermath, re.M)
 
 
 def test_state_only_lifecycle_and_gotos():
@@ -105,6 +137,7 @@ def test_belonging_boundaries_are_explicit():
 
 def main():
     test_graph_scope_and_delay()
+    test_offer_routes_and_refusal_boundary()
     test_characters_routes_and_settlements()
     test_review_and_aftermath_lifecycle()
     test_state_only_lifecycle_and_gotos()
@@ -112,8 +145,8 @@ def main():
     test_belonging_boundaries_are_explicit()
     print("PASS: B2 Near Earth Earth Day Belonging structure validated")
     print("PASS: missions=3; routes=3+refusal; settlements=2; aftermath=one-shot")
-    print("PASS: delayed_review=7-11 days; terminals=7 decline / 0 accept")
-    print("PASS: writes=B2 namespace only; no material/reputation mutation")
+    print("PASS: delayed_review=3 substantive routes only; refusal cannot arm Review")
+    print("PASS: terminals=7 decline / 0 accept; writes=B2 namespace only")
     print("PASS: ancestry/tradition/home/public-observance boundaries explicit")
 
 
