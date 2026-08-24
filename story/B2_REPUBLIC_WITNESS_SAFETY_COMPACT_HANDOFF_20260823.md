@@ -1,6 +1,6 @@
 # B2 Republic Witness Safety Compact handoff — 2026-08-23
 
-Verdict: PARTIAL pending repository-native exact-head validation.
+Verdict: READY for A3 review/integration.
 
 ## Authority
 - repository: `Wiredshark/star`
@@ -8,6 +8,7 @@ Verdict: PARTIAL pending repository-native exact-head validation.
 - branch: `agent/b2-republic-witness-safety-compact-20260823`
 - production commit: `af476f73dbe0ebf7d9a1ac11ce8c472cdf117dde`
 - focused-validator commit: `3791edcd81da848e8d57df50652e8ab6cc13a993`
+- exact fully validated production/validator/handoff candidate: `c8e328b750d61b6f8d7175fe87c4302e0169704a`
 
 ## Character / dynamic-content scope
 This is a sequel to the integrated `B2 Republic Border Testimony Compact` rather than another evidence-provenance duplicate.
@@ -55,14 +56,20 @@ All seven dialogue/state-only terminal paths use `decline`. The slice creates no
 - `tools/story/validate_b2_republic_witness_safety_compact.py`
 - `story/B2_REPUBLIC_WITNESS_SAFETY_COMPACT_HANDOFF_20260823.md`
 
-## Validation required before READY
-- focused validator for this slice;
-- repository focused-story suite / state-ownership contracts;
-- A1 simulation regressions;
-- changed-content style;
-- production configure/build;
-- stock save-load integration smoke;
-- final base/head comparison and clean exact-head evidence.
+## Exact validation evidence
+On exact candidate `c8e328b750d61b6f8d7175fe87c4302e0169704a`:
+- `Fork simulation and story validation` #507 / run `32679841782`: SUCCESS;
+- focused story validators, including `validate_b2_republic_witness_safety_compact.py`: SUCCESS;
+- A1 simulation/state-ownership contracts: SUCCESS;
+- changed-content style: SUCCESS;
+- `Fork save-load integration smoke` #492 / run `32679841776`: SUCCESS;
+- production configure/build: SUCCESS;
+- stock save-load integration smoke: SUCCESS.
+
+Exact base-to-candidate comparison: 3 commits ahead / 0 behind, exactly three added files, 405 additions, 0 deletions. PR #274 is mergeable and remains draft/unmerged for A3 authority.
+
+## Risks / deferred work
+No manual in-game narrative QA beyond repository-native build/save-load coverage is claimed. A3 should still re-read current `main`, recheck ancestry/mergeability, and assess overlap with any newly integrated Republic privacy or witness content immediately before integration.
 
 ## A3 / B3 notes
 A3 retains integration authority. Re-read current `main` immediately before integration and preserve the read-only ownership of Republic border pressure and prior Border Testimony state.
