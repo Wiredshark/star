@@ -1,0 +1,150 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 dynamic-narrative consumer for A1 Syndicate replacement-parts scarcity.
+# This slice uses the B1 replacement-stock provenance lesson as player-facing
+# policy without changing A1 parts scarcity or maintenance state.
+
+
+mission "A2 Syndicate Parts Practice: Scarcity Briefing"
+	minor
+	name `Syndicate Procurement: Scarcity Practice`
+	description `Procurement auditor Elara Dane asks what rule should govern scarce replacement components.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		"world: syndicate parts scarcity" >= 3
+		not "A2 Syndicate Parts Practice: briefing seen"
+	on offer
+		conversation
+			`A procurement auditor waves you toward a side terminal crowded with component records. "Captain <last>? Elara Dane. The maintenance surge has pulled enough replacement stock out of circulation that every substitute part now comes with an argument attached."`
+			`\tShe opens an older procurement archive. Supplier, compatible systems, prior repairs, substitutions, receiving yard: the same fields repeat across generations of records. "Scarcity is when people become tempted to call anything that fits interchangeable. The archive exists because that shortcut kept producing surprises later."`
+			branch severe
+				"world: syndicate parts scarcity" >= 5
+			`Dane glances at the live stock board. "At this level, we are not choosing between ideal parts and bad parts. We are choosing which uncertainties we are willing to carry forward."`
+				goto choose
+			label severe
+			`Dane highlights several amber substitutions. "Stock is thin enough that a decision made for one repair line will change what remains for the next one. I need a rule that survives that pressure."`
+			label choose
+			`She folds the archive window beside the live inventory. "If you had one vote in the procurement review, what should govern substitute use while reserves are tight?"`
+			choice
+				`\tPreserve provenance first. No critical substitute should lose its supplier, compatibility, repair, or substitution history.`
+					goto provenance
+				`\tReserve the most traceable components for systems that have no certified substitute, even if easier jobs wait.`
+					goto reserve
+				`\tAllow provisional substitutes, but require an explicit expiration and reinspection obligation.`
+					goto reversible
+				`\tI am not setting a Syndicate procurement rule for your yards.`
+					goto refuse
+			label provenance
+			`Dane adds a hard requirement to the issue form. "Traceability before convenience. A scarce part can be imperfect; it cannot be anonymous. That at least keeps today's improvisation legible to tomorrow's mechanic."`
+			action
+				"A2 Syndicate Parts Practice: briefing seen" = 1
+				"A2 Syndicate Parts Practice: provenance first" = 1
+				"A2 Syndicate Parts Practice: followup pending" = 1
+				decline
+			label reserve
+			`Dane sorts the remaining stock by replaceability rather than price. "Use the best-documented parts where no safe fallback exists. That makes some easy repairs slower, but it stops convenience from consuming the only clean option for a harder job."`
+			action
+				"A2 Syndicate Parts Practice: briefing seen" = 1
+				"A2 Syndicate Parts Practice: critical reserve" = 1
+				"A2 Syndicate Parts Practice: followup pending" = 1
+				decline
+			label reversible
+			`Dane adds an expiry field and mandatory return inspection to the substitution form. "Temporary means we can prove when it stops being acceptable. Good. That keeps emergency compatibility from quietly becoming permanent certification."`
+			action
+				"A2 Syndicate Parts Practice: briefing seen" = 1
+				"A2 Syndicate Parts Practice: reversible substitution" = 1
+				"A2 Syndicate Parts Practice: followup pending" = 1
+				decline
+			label refuse
+			`Dane closes the voting pane. "Understood. I will record that you declined to recommend a procurement policy. Nobody gets to turn silence into authorization later."`
+			action
+				"A2 Syndicate Parts Practice: briefing seen" = 1
+				"A2 Syndicate Parts Practice: refused" = 1
+				"A2 Syndicate Parts Practice: followup pending" = 1
+				decline
+
+
+mission "A2 Syndicate Parts Practice: Recovery Review"
+	minor
+	name `Syndicate Procurement: After the Shortage`
+	description `Elara Dane reviews how the scarcity policy aged after replacement stock recovered.`
+	source
+		government "Syndicate"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Syndicate Parts Practice: followup pending"
+		"world: syndicate parts scarcity" <= 1
+		not "A2 Syndicate Parts Practice: followup seen"
+	on offer
+		conversation
+			branch provenance_high
+				has "A2 Syndicate Parts Practice: provenance first"
+				"world: syndicate maintenance backlog" >= 3
+			branch provenance_low
+				has "A2 Syndicate Parts Practice: provenance first"
+				"world: syndicate maintenance backlog" < 3
+			branch reserve_high
+				has "A2 Syndicate Parts Practice: critical reserve"
+				"world: syndicate maintenance backlog" >= 3
+			branch reserve_low
+				has "A2 Syndicate Parts Practice: critical reserve"
+				"world: syndicate maintenance backlog" < 3
+			branch reversible_high
+				has "A2 Syndicate Parts Practice: reversible substitution"
+				"world: syndicate maintenance backlog" >= 3
+			branch reversible_low
+				has "A2 Syndicate Parts Practice: reversible substitution"
+				"world: syndicate maintenance backlog" < 3
+			`Dane recognizes you near the procurement terminals. "No follow-up vote. You declined the first one, and the record still says declined." She turns the screen toward you. "Nobody attached your name to the policy after you left."`
+			action
+				"A2 Syndicate Parts Practice: refusal respected" = 1
+				goto finish
+			label provenance_high
+			`Dane opens a still-busy maintenance queue. "Parts scarcity is down, but the repair backlog is not. Provenance-first did one useful thing under continued pressure: the substitutes already in service still tell us where they came from and what limits they carry. We did not erase uncertainty just because stock recovered."`
+			action
+				"A2 Syndicate Parts Practice: Dane remembers provenance under backlog" = 1
+				goto finish
+			label provenance_low
+			`Dane shows you a quiet inventory board and a stack of closed substitution records. "Stock recovered and the maintenance queue came down with it. The provenance rule survived because mechanics can now distinguish repaired, revised, and improvised parts without reopening the original emergency."`
+			action
+				"A2 Syndicate Parts Practice: Dane remembers provenance stabilized" = 1
+				goto finish
+			label reserve_high
+			`Dane points to several scarce assemblies still locked behind priority flags. "The backlog remains high, but the reserve rule kept the last traceable units from disappearing into jobs that had workable alternatives. It did not solve capacity. It prevented capacity pressure from consuming every clean option."`
+			action
+				"A2 Syndicate Parts Practice: Dane remembers reserve under backlog" = 1
+				goto finish
+			label reserve_low
+			`Dane clears the final reserve flag. "The backlog is back to ordinary levels. We can now release the protected stock without pretending the earlier rationing was free. The report preserves which repairs waited so the shortage does not vanish from the accounting."`
+			action
+				"A2 Syndicate Parts Practice: Dane remembers reserve stabilized" = 1
+				goto finish
+			label reversible_high
+			`Dane opens a list of temporary substitutions awaiting reinspection. "The backlog is still elevated, so some provisional parts remain in service. The expiration rule is doing its job: every one of them is a visible future obligation instead of a forgotten emergency exception."`
+			action
+				"A2 Syndicate Parts Practice: Dane remembers reversible under backlog" = 1
+				goto finish
+			label reversible_low
+			`Dane signs off the last reinspection batch. "Scarcity and backlog both eased enough to revisit the temporary substitutions. Some stayed after inspection, some were replaced, and none became permanent merely because nobody remembered to ask."`
+			action
+				"A2 Syndicate Parts Practice: Dane remembers reversible stabilized" = 1
+			label finish
+			action
+				"A2 Syndicate Parts Practice: followup pending" = 0
+				"A2 Syndicate Parts Practice: followup seen" = 1
+				decline
