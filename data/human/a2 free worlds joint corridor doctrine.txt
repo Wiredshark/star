@@ -1,0 +1,175 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 cross-system consequence for the integrated Free Worlds patrol-doctrine and
+# Southern Rim traffic-coordination arcs.
+#
+# This file does not write any A1 `world:` state. It waits until both earlier A2
+# reviews have resolved, lets the player choose a standing joint corridor protocol,
+# then tests that protocol against a later recurrence of authoritative congestion
+# and patrol-surge state.
+
+mission "A2 Free Worlds Joint Corridor Doctrine: Review"
+	minor
+	name `Free Worlds Operations: Joint Corridor Review`
+	description `Anika Ro and Rhea Solano ask whether your earlier patrol and traffic advice should become a standing joint corridor protocol.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Free Worlds Patrol Doctrine: Briefing: done"
+		not "A2 Free Worlds Patrol Doctrine: later reader pending"
+		not "A2 Free Worlds Patrol Doctrine: refused"
+		has "A2 Southern Rim Traffic Coordination: followup seen"
+		not "A2 Southern Rim Traffic Coordination: refused"
+		not "A2 Free Worlds Joint Corridor Doctrine: review seen"
+	on offer
+		conversation
+			`Anika Ro and Rhea Solano are waiting at the same operations table, patrol tracks layered over Southern Rim arrival lanes. Ro gives you a tired half-smile. "You have now advised both sides of the same problem. Patrols need room to move, and traffic control needs routes captains can actually predict."`
+			branch aligned_safety
+				has "A2 Free Worlds Patrol Doctrine: civilians"
+				has "A2 Southern Rim Traffic Coordination: policy emergency corridors"
+			branch aligned_distribution
+				has "A2 Free Worlds Patrol Doctrine: mobility"
+				has "A2 Southern Rim Traffic Coordination: policy distributed routing"
+			branch aligned_control
+				has "A2 Free Worlds Patrol Doctrine: interdiction"
+				has "A2 Southern Rim Traffic Coordination: policy staggered clearance"
+			`Solano highlights where the two earlier policies overlap imperfectly. "Your patrol advice and your traffic advice solved different failures. That is useful, but it also means local controllers still have to decide which rule wins when the network is stressed again."`
+				goto protocol
+			label aligned_safety
+			`Solano highlights the emergency approaches while Ro overlays civilian patrol coverage. "Your earlier answers were unusually consistent: preserve protected capacity for ships that cannot safely wait. We can formalize that, but doing so means accepting delays elsewhere on purpose."`
+				goto protocol
+			label aligned_distribution
+			`Ro breaks the patrol map into mobile groups while Solano spreads arrivals across secondary approaches. "Your earlier answers both favored flexibility over concentration. The question is whether we make that decentralization a standing rule instead of an emergency improvisation."`
+				goto protocol
+			label aligned_control
+			`Ro marks likely raider approaches while Solano lays timed clearance windows across them. "Your earlier answers both favored deliberate control: patrols press the threat while traffic stops improvising around every exception. We can synchronize those clocks if you want that tradeoff written down."`
+			label protocol
+			`Ro folds her arms. "One standing protocol. Not a claim that it always wins, but a default that patrol planners and traffic controllers can both see before the next surge starts. What should it be?"`
+			choice
+				`\tReserve protected capacity first: emergency, civilian, and rescue corridors stay usable even when patrol and traffic demand compete.`
+					goto protected
+				`\tSynchronize patrol and traffic windows: publish short protected movement blocks so escorts, controllers, and ordinary captains plan around the same clock.`
+					goto synchronized
+				`\tDelegate corridor authority locally: give sector patrol leads and controllers room to rebalance routes together instead of waiting for central approval.`
+					goto delegated
+				`\tDo not turn my two emergency recommendations into a permanent joint doctrine.`
+					goto refuse
+			label protected
+			`Solano locks a minimum emergency-capacity band onto the routing display. Ro nods. "Then some ordinary movement waits by design. The advantage is that a damaged freighter, evacuation ship, or escort group does not discover that every usable lane has already been optimized away."`
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: review seen" = 1
+				"A2 Free Worlds Joint Corridor Doctrine: protected capacity" = 1
+				"A2 Free Worlds Joint Corridor Doctrine: stress reader pending" = 1
+				decline
+			label synchronized
+			`Ro and Solano build alternating movement blocks across the map. "Predictable windows," Solano says. "Not perfect throughput, but every side knows when a corridor belongs to patrol movement and when it belongs to ordinary traffic."`
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: review seen" = 1
+				"A2 Free Worlds Joint Corridor Doctrine: synchronized windows" = 1
+				"A2 Free Worlds Joint Corridor Doctrine: stress reader pending" = 1
+				decline
+			label delegated
+			`The central control layer on Solano's map fades into sector boundaries. Ro points to the local command links. "Then the doctrine is coordination authority, not a fixed route plan. Faster adaptation, but we are trusting local teams to recognize when their solution is pushing pressure onto the next system."`
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: review seen" = 1
+				"A2 Free Worlds Joint Corridor Doctrine: delegated authority" = 1
+				"A2 Free Worlds Joint Corridor Doctrine: stress reader pending" = 1
+				decline
+			label refuse
+			`Ro closes the joint draft while Solano removes your name from the review pane. "Then the earlier recommendations stay bounded to the emergencies that produced them," Solano says. "No doctrine by accumulation."`
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: review seen" = 1
+				"A2 Free Worlds Joint Corridor Doctrine: refused" = 1
+				"A2 Free Worlds Joint Corridor Doctrine: stress reader pending" = 1
+				decline
+
+mission "A2 Free Worlds Joint Corridor Doctrine: Stress Test"
+	minor
+	name `Free Worlds Operations: Corridor Stress Test`
+	description `See how the standing joint corridor protocol behaves when Southern Rim pressure returns.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 9
+	to offer
+		has "A2 Free Worlds Joint Corridor Doctrine: stress reader pending"
+		"world: southern rim transit congestion" >= 4
+		not "A2 Free Worlds Joint Corridor Doctrine: stress reader seen"
+	on offer
+		conversation
+			branch refused
+				has "A2 Free Worlds Joint Corridor Doctrine: refused"
+			branch protected_combined
+				has "A2 Free Worlds Joint Corridor Doctrine: protected capacity"
+				has "world: free worlds patrol surge"
+			branch protected_traffic
+				has "A2 Free Worlds Joint Corridor Doctrine: protected capacity"
+				not "world: free worlds patrol surge"
+			branch synchronized_combined
+				has "A2 Free Worlds Joint Corridor Doctrine: synchronized windows"
+				has "world: free worlds patrol surge"
+			branch synchronized_traffic
+				has "A2 Free Worlds Joint Corridor Doctrine: synchronized windows"
+				not "world: free worlds patrol surge"
+			branch delegated_combined
+				has "A2 Free Worlds Joint Corridor Doctrine: delegated authority"
+				has "world: free worlds patrol surge"
+			branch delegated_traffic
+				has "A2 Free Worlds Joint Corridor Doctrine: delegated authority"
+				not "world: free worlds patrol surge"
+			`Solano catches you beside a congested arrival board. "The Southern Rim is backing up again, but you did not authorize a standing joint doctrine. We are handling this recurrence under current command rules, and your earlier emergency advice is not being cited as permanent policy."`
+			goto finish_refusal
+			label refused
+			`Ro joins Solano long enough to make the point explicit. "Your refusal held. The network is stressed again, but nobody converted your earlier recommendations into a doctrine after you said not to."`
+			label finish_refusal
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: refusal respected" = 1
+				goto finish
+			label protected_combined
+			`The arrival board is crowded and patrol groups are mobilized at the same time. Solano points to a narrow band of green approaches. "Protected capacity is expensive right now, but it is still there. Patrols are routing around the reserve instead of consuming it, and damaged or civilian ships have somewhere predictable to go."`
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: protected combined proven" = 1
+				goto finish
+			label protected_traffic
+			`Traffic is heavy, but there is no active patrol surge competing for the same space. Solano points to the emergency reserve. "The protected band costs throughput even without mobilization, but it also means controllers do not have to invent emergency capacity after the queue is already full."`
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: protected traffic proven" = 1
+				goto finish
+			label synchronized_combined
+			`Ro overlays patrol movement blocks on Solano's congested arrival schedule. "This is the hard case. Patrols are mobilized and traffic is backing up, but both sides are using the same published windows. We are losing flexibility minute to minute, and gaining far fewer last-second conflicts."`
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: synchronized combined proven" = 1
+				goto finish
+			label synchronized_traffic
+			`Solano scrolls through a congested but orderly sequence of movement blocks. "No patrol surge this time, so the shared windows are mostly a traffic discipline. They are slower to improvise around, but captains can see the queue instead of guessing whether an exception will erase their slot."`
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: synchronized traffic proven" = 1
+				goto finish
+			label delegated_combined
+			`The map is full of local route changes. Ro points to three sectors that have rebalanced patrol and civilian movement differently. "Mobilization and congestion hit together, and local teams adapted faster than central command could have. The cost is that every boundary needs active coordination so one sector does not export its pressure to the next."`
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: delegated combined proven" = 1
+				goto finish
+			label delegated_traffic
+			`Without a patrol surge, local controllers are using the delegated protocol mostly to spread ordinary congestion across secondary routes. Solano nods at the map. "It is doing what we intended: adapting early. The risk is still consistency, not speed."`
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: delegated traffic proven" = 1
+			label finish
+			action
+				"A2 Free Worlds Joint Corridor Doctrine: stress reader pending" = 0
+				"A2 Free Worlds Joint Corridor Doctrine: stress reader seen" = 1
+				decline
+
