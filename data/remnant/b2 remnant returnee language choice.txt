@@ -1,0 +1,156 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Remnant Returnee Language Choice.
+#
+# Remnant canon establishes that everyday communication is primarily signed while
+# voices are normally reserved for song or chant. It also establishes at least one
+# older Remnant traveler who learned ordinary spoken speech while living in Republic
+# space. This local sibling conflict asks how a returnee's communication choices are
+# treated after living outside the Ember Waste. It does not define Remnant language
+# law, purity, competence, loyalty, or a new office.
+
+
+event "B2 Remnant Returnee Language Choice: Review Ready"
+	"B2 Remnant Returnee Language Choice: review ready" = 1
+
+
+mission "B2 Remnant Returnee Language Choice: Offer"
+	minor
+	name `A Voice Brought Home`
+	description `Two Remnant siblings disagree over whether a returnee's spoken habits are a private preference, a cultural statement, or evidence about belonging.`
+	source
+		government "Remnant"
+	"offer precedence" 8
+	to offer
+		has "Remnant: Cognizance 4: done"
+		not "B2 Remnant Returnee Language Choice: introduced"
+		not "B2 Remnant Returnee Language Choice: declined"
+	on offer
+		conversation
+			`Mira Pell signs a greeting before switching, with visible effort, into ordinary spoken speech. Her younger brother Eren answers in rapid Remnant sign and then sings a short irritated phrase. Mira rolls her eyes and signs back. You understand enough from the alternation to realize that the argument is not about whether either sibling can communicate. It is about what Mira's choices are supposed to mean.`
+			`Mira spent several years working in Republic space. She learned to speak conversationally because most people around her did not know Remnant sign and because chanting every practical exchange drew attention she did not want. Since returning home she still signs fluently, still sings when she wants to sing, and sometimes speaks when speech feels easier. A local copied profile now describes her as "linguistically assimilated" and quietly routes her away from work that involves representing Remnant visitors.`
+			`"I came home," Mira says aloud. Then she signs the same sentence. "Apparently I have to prove which version counts." Eren signs that the profile is insulting, but he also worries that outsiders may mistake Mira's habits for evidence that Remnant customs are disappearing. Mira answers that she should not have to perform discomfort to protect strangers from making bad inferences.`
+			choice
+				`\tTreat communication mode as Mira's choice unless a specific task genuinely requires a particular shared language.`
+					goto autonomy
+				`\tAllow context-specific communication expectations, but require them to name the actual task instead of treating speech habits as evidence about identity or loyalty.`
+					goto context
+				`\tKeep paired records: current communication preferences and task-language requirements stay separate from cultural or biographical interpretation.`
+					goto paired
+				`\tRefuse to turn one sibling argument into a general rule about Remnant identity.`
+					goto decline
+			label autonomy
+			`You tell them that Mira can sign, sing, or speak without each choice becoming a referendum on whether she belongs. If a particular job requires rapid signing with a Remnant crew, that requirement can be stated directly. It does not need a story about what ordinary speech supposedly reveals about her character. Mira signs a sharp thank-you. Eren thinks for a moment, then signs that this at least gives him something concrete to defend.`
+			action
+				"B2 Remnant Returnee Language Choice: introduced" = 1
+				"B2 Remnant Returnee Language Choice: route communication autonomy" = 1
+				"B2 Remnant Returnee Language Choice: Mira trusts player" = 1
+				event "B2 Remnant Returnee Language Choice: Review Ready" 7 11
+				decline
+			label context
+			`You suggest separating real communication needs from symbolic judgments. A rescue team may need everyone to understand the same signs; a Republic-facing desk may need spoken fluency. Those are task requirements. Neither proves who is more truly Remnant. Eren signs that he can accept that distinction. Mira says, "Good. I am tired of my mouth being treated as a political document."`
+			action
+				"B2 Remnant Returnee Language Choice: introduced" = 1
+				"B2 Remnant Returnee Language Choice: route task context" = 1
+				"B2 Remnant Returnee Language Choice: Eren trusts player" = 1
+				event "B2 Remnant Returnee Language Choice: Review Ready" 7 11
+				decline
+			label paired
+			`You recommend two linked layers. One records what languages and modes Mira currently prefers or can use, plus any task-specific communication requirement. The other may preserve attributed cultural or biographical context, but it cannot silently convert a practical language choice into a verdict about assimilation, loyalty, competence, or identity. Both siblings sign agreement before realizing they did it at exactly the same moment.`
+			action
+				"B2 Remnant Returnee Language Choice: introduced" = 1
+				"B2 Remnant Returnee Language Choice: route paired communication records" = 1
+				"B2 Remnant Returnee Language Choice: Mira trusts player" = 1
+				"B2 Remnant Returnee Language Choice: Eren trusts player" = 1
+				event "B2 Remnant Returnee Language Choice: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that Mira's habits belong first to Mira, and that the two of them do not need an outsider to manufacture a general Remnant rule from one family disagreement. Mira nods. Eren signs that this answer is frustratingly difficult to argue with.`
+			action
+				"B2 Remnant Returnee Language Choice: declined" = 1
+				decline
+
+
+mission "B2 Remnant Returnee Language Choice: Review"
+	minor
+	name `When a Preference Becomes a Verdict`
+	description `Copied personnel notes have begun turning language preferences and task requirements into claims about assimilation, loyalty, and competence.`
+	source
+		government "Remnant"
+	"offer precedence" 8
+	to offer
+		has "B2 Remnant Returnee Language Choice: introduced"
+		has "B2 Remnant Returnee Language Choice: review ready"
+		not "B2 Remnant Returnee Language Choice: reviewed"
+	on offer
+		conversation
+			branch context
+				has "B2 Remnant Returnee Language Choice: route task context"
+			branch paired
+				has "B2 Remnant Returnee Language Choice: route paired communication records"
+			`Mira shows you two copied records. One began as a note that she sometimes prefers ordinary speech with outsiders; several copies later it says she is "less comfortable with Remnant communication." The other began as a legitimate requirement for fluent signing on one emergency team and now appears as evidence that people who speak more often are less suited to trusted work in general.`
+			`Eren signs, more angrily than before, that both conclusions are inventions. Mira answers aloud, "And now my brother is defending my right to talk." He gives her a rude sign that requires no translation.`
+				goto settle
+			label context
+			`The task-specific approach helped locally, but copied summaries kept the requirement and dropped the task. "Fluent signing required during pressure-suit operations" became "signing required for trusted duty." A real safety constraint survived while its scope disappeared.`
+				goto settle
+			label paired
+			`The paired records worked until a downstream clerk merged them for convenience. The new summary lists Mira's speech preference beside a cultural note about returnees and then treats the adjacency as a causal explanation. Neither source actually made that claim.`
+			label settle
+			choice
+				`\tAdopt a portable communication packet: current capability, stated preference, task requirement, scope, source, review date, and explicit exclusions travel together.`
+					goto packet
+				`\tUse fresh-context renewal: task-language requirements expire outside the task that justified them, while personal preferences can be updated without becoming identity judgments.`
+					goto renewal
+			label packet
+			`You propose a compact record that says what a person can do, what they currently prefer, what a specific task requires, who recorded each fact, and what the record does not establish. Cultural interpretation may be attached only as attributed interpretation, not smuggled into the capability field. Mira signs that a record capable of saying "we do not know" might finally be useful.`
+			action
+				"B2 Remnant Returnee Language Choice: reviewed" = 1
+				"B2 Remnant Returnee Language Choice: settlement portable communication packet" = 1
+				"B2 Remnant Returnee Language Choice: Mira trusts player" = 1
+				"B2 Remnant Returnee Language Choice: Eren trusts player" = 1
+				decline
+			label renewal
+			`You recommend that operational language requirements remain tied to the job, team, and conditions that created them. Once that context ends, the requirement ends unless a new task creates a new reason. Mira's preferences can also change without old copies becoming permanent evidence about her. Eren signs that a living culture should be able to survive people changing their minds.`
+			action
+				"B2 Remnant Returnee Language Choice: reviewed" = 1
+				"B2 Remnant Returnee Language Choice: settlement fresh context renewal" = 1
+				"B2 Remnant Returnee Language Choice: Eren trusts player" = 1
+				decline
+
+
+mission "B2 Remnant Returnee Language Choice: Mira Remembers"
+	minor
+	name `Mira Remembers`
+	description `Mira remembers that speaking, signing, and singing can all remain choices without being converted into permanent judgments about who she is.`
+	source
+		government "Remnant"
+	"offer precedence" 8
+	to offer
+		not "B2 Remnant Returnee Language Choice: aftermath seen"
+		or
+			has "B2 Remnant Returnee Language Choice: settlement portable communication packet"
+			has "B2 Remnant Returnee Language Choice: settlement fresh context renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Remnant Returnee Language Choice: settlement fresh context renewal"
+			`Mira greets you in sign, switches to speech halfway through a joke, then sings the punch line badly enough that Eren covers his face. "The new record says I can do all three," she says. "It does not say which one makes me a better person. That is a remarkable improvement."`
+				goto finish
+			label renewal
+			`You find Mira and Eren arguing cheerfully over a repair diagram. Mira is speaking; Eren is signing; both are obviously following the conversation. Mira notices you and signs, "The old task restriction expired. Nobody had to declare a cultural victory." Then she says aloud, "Imagine that."`
+			label finish
+			action
+				"B2 Remnant Returnee Language Choice: aftermath seen" = 1
+				decline
