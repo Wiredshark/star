@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Arach Courtship Boundaries.
+#
+# Established Arach culture includes patron-funded live theater, prestigious social
+# attendance, and guests from across Coalition society. This slice narrows that
+# backdrop to two individuals. Their solution is local relationship practice, not
+# Arach law, Coalition law, or a universal description of Arach courtship.
+
+
+event "B2 Arach Courtship Boundaries: Review Ready"
+	"B2 Arach Courtship Boundaries: review ready" = 1
+
+
+mission "B2 Arach Courtship Boundaries: Offer"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "arach"
+	to offer
+		has "known to the heliarchs"
+		not "B2 Arach Courtship Boundaries: introduced"
+		not "B2 Arach Courtship Boundaries: declined"
+		random < 18
+	on offer
+		conversation
+			`Outside a theater district, an Arach in expensive formal wraps is arguing in a deliberately quiet voice with an Arach carrying a case of stage tools. They notice you when a passing patron loudly congratulates them on an "announcement" neither seems to recognize. The better-dressed Arach introduces themself as Selka Meren. The stage worker is Neri Vass.`
+			`Selka explains that they have been seeing one another privately for months. Neri has also done paid stage work for events supported by Selka's family. A guest list placed them together, a family gift was copied into a patronage ledger, and now several social notices describe the two as if a formal commitment had already been made.`
+			`Neri clicks their mandibles in irritation. "I do not object to being seen with Selka. I object to a seat assignment becoming a promise I never made." Selka answers more softly: "And I do not want pretending we are strangers to be the price of protecting what is ours."`
+			choice
+				`\tOnly treat relationship claims as public when both people explicitly agree to the claim. Gifts, seating, and patronage stay separate evidence.`
+					goto mutual
+				`\tMake privacy the default. Public appearances may be visible without granting permission to publish a relationship status or private biography.`
+					goto private
+				`\tUse event-by-event boundaries: sponsorship, gifts, attendance, creative work, and relationship disclosure each get their own scope instead of implying one another.`
+					goto scoped
+				`\tRefuse to turn one couple's awkward situation into a general rule for Arach society.`
+					goto decline
++			label mutual
+			`You suggest that any public description of the relationship require a statement both Selka and Neri actually approved. The theater may still record who attended, and the family may still record what it paid for, but neither record becomes a substitute for the couple's own words. Selka looks relieved. Neri says that being publicly acknowledged would feel different if the acknowledgement were actually theirs.`
+			action
+				"B2 Arach Courtship Boundaries: introduced" = 1
+				"B2 Arach Courtship Boundaries: route mutual acknowledgement" = 1
+				"B2 Arach Courtship Boundaries: selka trusts player" = 1
+				"B2 Arach Courtship Boundaries: neri trusts player" = 1
+				event "B2 Arach Courtship Boundaries: Review Ready" 7 11
+				decline
+			label private
+			`You recommend treating the relationship as private unless Selka and Neri choose otherwise. Being seated together or accepting a gift can remain visible facts without becoming permission to publish a romantic status. Neri immediately agrees. Selka hesitates, then says privacy is preferable to letting every patron in the district write the relationship for them.`
+			action
+				"B2 Arach Courtship Boundaries: introduced" = 1
+				"B2 Arach Courtship Boundaries: route private by default" = 1
+				"B2 Arach Courtship Boundaries: neri trusts player" = 1
+				event "B2 Arach Courtship Boundaries: Review Ready" 7 11
+				decline
+			label scoped
+			`You separate the facts into distinct permissions. A theater credit says who worked. A patronage entry says who paid. A guest list says who attended. A gift says what changed hands. None of those, alone or together, grants permission to publish the couple's private status. Selka says that keeps the social world from becoming silent. Neri says it keeps silence from being interpreted as consent.`
+			action
+				"B2 Arach Courtship Boundaries: introduced" = 1
+				"B2 Arach Courtship Boundaries: route scoped boundaries" = 1
+				"B2 Arach Courtship Boundaries: selka trusts player" = 1
+				"B2 Arach Courtship Boundaries: neri trusts player" = 1
+				event "B2 Arach Courtship Boundaries: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a human captain has no business turning one difficult courtship into a standing rule for Arach relationships. Selka accepts that more readily than Neri expected. The two leave together, still arguing, but now about what they themselves want to say rather than what everyone else has already decided.`
+			action
+				"B2 Arach Courtship Boundaries: declined" = 1
+				decline
+
+
+mission "B2 Arach Courtship Boundaries: Review"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "arach"
+	to offer
+		has "B2 Arach Courtship Boundaries: introduced"
+		has "B2 Arach Courtship Boundaries: review ready"
+		not "B2 Arach Courtship Boundaries: reviewed"
+	on offer
+		conversation
+			branch private
+				has "B2 Arach Courtship Boundaries: route private by default"
+			branch scoped
+				has "B2 Arach Courtship Boundaries: route scoped boundaries"
+			`Selka and Neri find you after another performance. Their jointly approved description worked at first, but copied event notices kept the sentence while dropping the date and context. One copied notice now reads like a permanent formal status. Neri says, "Even our own words can become somebody else's claim if no one remembers when we said them."`
+				goto settle
+			label private
+			`The privacy rule stopped most public notices, but a few patrons began treating the absence of a public statement as evidence that something had gone wrong. Selka is furious that silence is now being interpreted as a different kind of announcement. Neri points out that privacy cannot work if every refusal to publish becomes a rumor source.`
+				goto settle
+			label scoped
+			`The separate event records survived, but one social directory automatically combined guest attendance, patronage payments, and a gift entry into a relationship label. Every source record is individually accurate. The inferred conclusion is still not something Selka or Neri authorized.`
+			label settle
+			choice
+				`\tUse a shared public boundary: only a mutually approved statement establishes public relationship status, and it carries its date, scope, revision history, and withdrawal status.`
+					goto statement
+				`\tUse a privacy firewall: event, patronage, work, gift, and guest records may not be transformed into relationship claims without fresh direct consent.`
+					goto firewall
+			label statement
+			`You help them reduce the problem to a simple rule they control together. A public statement can exist, but it remains attributable to both people, dated, revisable, and withdrawable. Older copies remain history, not permanent authority over the present. Selka says the arrangement allows them to be visible without being frozen in place. Neri says that is the first public version that still feels private enough to be theirs.`
+			action
+				"B2 Arach Courtship Boundaries: reviewed" = 1
+				"B2 Arach Courtship Boundaries: settlement shared public boundary" = 1
+				"B2 Arach Courtship Boundaries: selka trusts player" = 1
+				"B2 Arach Courtship Boundaries: neri trusts player" = 1
+				decline
+			label firewall
+			`You recommend a harder separation. Social and commercial records may preserve attendance, payment, work, and gifts, but they cannot generate a relationship status. Only fresh direct consent can do that, and declining to provide it cannot be treated as evidence of conflict. Neri calls that clean. Selka says it may annoy the patrons, which seems to improve Neri's opinion of it.`
+			action
+				"B2 Arach Courtship Boundaries: reviewed" = 1
+				"B2 Arach Courtship Boundaries: settlement privacy firewall" = 1
+				"B2 Arach Courtship Boundaries: neri trusts player" = 1
+				decline
+
+
+mission "B2 Arach Courtship Boundaries: Selka Remembers"
+	landing
+	minor
+	invisible
+	source
+		government "Coalition"
+		attributes "arach"
+	to offer
+		not "B2 Arach Courtship Boundaries: aftermath seen"
+		or
+			has "B2 Arach Courtship Boundaries: settlement shared public boundary"
+			has "B2 Arach Courtship Boundaries: settlement privacy firewall"
+	on offer
+		conversation
+			branch firewall
+				has "B2 Arach Courtship Boundaries: settlement privacy firewall"
+			`Selka spots you in a theater lobby and gestures toward a new program. A short note identifies Selka and Neri as a couple, dated and attributed to both of them. "We changed the wording twice," Selka says. "The old versions are still visible as old versions. Nobody has to pretend we never said them, and nobody gets to pretend they still speak for us forever." Neri, checking a lighting rig nearby, gives you a brief approving wave.`
+				goto finish
+			label firewall
+			`Selka recognizes you at a reception where Neri is working backstage. The guest list records both names. A patronage ledger records a donation from Selka's family. Neither record tries to say what the two are to one another. "People still gossip," Selka says. "But gossip has finally stopped masquerading as a field in the official form."`
+			label finish
+			action
+				"B2 Arach Courtship Boundaries: aftermath seen" = 1
+				decline
