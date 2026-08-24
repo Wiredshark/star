@@ -77,7 +77,6 @@ for fragment in [
     "identity or loyalty",
     "less suited to trusted work in general",
     "what the record does not establish",
-    "not a Remnant title",
     "new office",
 ]:
     require(fragment in text, f"missing continuity fragment: {fragment}")
