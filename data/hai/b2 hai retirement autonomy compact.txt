@@ -1,0 +1,165 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Hai Retirement Autonomy Compact.
+#
+# B1 Hai settlement/stewardship history establishes long-lived communities where
+# human residents settle permanently and Hai institutions expect responsibilities
+# to pass between generations. This slice turns that background into a personal
+# dispute about aging, neighborly help, contingency planning, and retained agency.
+#
+# Elena Voss is a retired human merchant who has lived in Hai space for decades.
+# The recurring Hai neighbor is intentionally called "Neighbor" only in the
+# player's private notes; this is not a formal Hai title or community office.
+# Requested assistance, emergency contact, decision authority, and guardianship
+# are separate facts. This local compromise is not universal Hai elder-care law.
+
+
+event "B2 Hai Retirement Autonomy Compact: Review Ready"
+	"B2 Hai Retirement Autonomy Compact: review ready" = 1
+
+
+mission "B2 Hai Retirement Autonomy Compact: Offer"
+	minor
+	name `Help Without Taking the Helm`
+	description `A retired human merchant and a Hai neighbor disagree over when practical help becomes an assumption that somebody else should decide for her.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "First Contact: Hai: offered"
+		or
+			has "Hai Guest Settlement Register: offered"
+			has "Hai Stewardship Archive: offered"
+		not "B2 Hai Retirement Autonomy Compact: introduced"
+		not "B2 Hai Retirement Autonomy Compact: declined"
+	on offer
+		conversation
+			`Elena Voss is waiting beside a bench outside the port clinic, a folded merchant's coat across her lap. She tells you she retired years ago after decades of carrying human goods through Hai space. Beside her stands a Hai who has lived next door to her for nearly as long. Your translator supplies no useful social title, so in your notes you simply think of them as the Neighbor.`
+			`The disagreement is not about whether Elena sometimes wants help. She does. The Neighbor has carried heavy groceries, accompanied her to unfamiliar offices, and kept a spare key for emergencies. The problem is that a visiting human relative copied those arrangements into a note that now reads as though the Neighbor should approve Elena's travel, purchases, and appointments.`
+			`Elena taps the note. "I asked for a hand with some things. I did not resign from being myself." The Neighbor looks embarrassed rather than defensive. "I wanted others to know how to help you. I did not mean to make help into authority."`
+			choice
+				`\tMake assistance task-specific and revocable. Help with one task does not transfer decision authority over another.`
+					goto autonomy
+				`\tKeep a narrow contingency contact: define the exact emergency trigger, who may act, what they may do, and when that permission expires.`
+					goto contingency
+				`\tUse paired records: ordinary preferences and requested assistance stay separate from emergency authority and its review conditions.`
+					goto paired
+				`\tRefuse to turn one neighbor's concern and one retiree's choices into a general rule.`
+					goto decline
+			label autonomy
+			`You suggest recording help at the scale Elena actually requested it. A ride to an appointment is a ride; carrying a crate is carrying a crate. Neither silently becomes approval authority over her money, travel, correspondence, or future choices. Elena visibly relaxes. The Neighbor says that a smaller promise may also be easier to keep honestly.`
+			action
+				"B2 Hai Retirement Autonomy Compact: introduced" = 1
+				"B2 Hai Retirement Autonomy Compact: route task specific assistance" = 1
+				"B2 Hai Retirement Autonomy Compact: Elena trusts player" = 1
+				event "B2 Hai Retirement Autonomy Compact: Review Ready" 7 11
+				decline
+			label contingency
+			`You separate everyday independence from true contingency planning. Elena names the narrow circumstances in which she wants the Neighbor called, what information may be shared, and what temporary actions are permitted. The Neighbor insists that the record also say when the authority ends, so an old emergency cannot become a permanent habit.`
+			action
+				"B2 Hai Retirement Autonomy Compact: introduced" = 1
+				"B2 Hai Retirement Autonomy Compact: route bounded contingency" = 1
+				"B2 Hai Retirement Autonomy Compact: Neighbor trusts player" = 1
+				event "B2 Hai Retirement Autonomy Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You recommend two linked layers. One records Elena's current preferences and the practical help she has actually requested. The other is a contingency record with a specific trigger, bounded authority, responsible contact, and review date. A reader can see both without mistaking one for the other.`
+			action
+				"B2 Hai Retirement Autonomy Compact: introduced" = 1
+				"B2 Hai Retirement Autonomy Compact: route paired support records" = 1
+				"B2 Hai Retirement Autonomy Compact: Elena trusts player" = 1
+				"B2 Hai Retirement Autonomy Compact: Neighbor trusts player" = 1
+				event "B2 Hai Retirement Autonomy Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a visiting captain should not decide the shape of a long friendship or Elena's private arrangements. Elena accepts that immediately. The Neighbor nods after a moment and folds the troublesome note away rather than asking you to settle it for them.`
+			action
+				"B2 Hai Retirement Autonomy Compact: declined" = 1
+				decline
+
+
+mission "B2 Hai Retirement Autonomy Compact: Review"
+	minor
+	name `The Helpful Note Outlives the Help`
+	description `Return after copied support notes begin confusing requested assistance, emergency contact, and continuing decision authority.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "B2 Hai Retirement Autonomy Compact: introduced"
+		has "B2 Hai Retirement Autonomy Compact: review ready"
+		not "B2 Hai Retirement Autonomy Compact: reviewed"
+	on offer
+		conversation
+			branch contingency
+				has "B2 Hai Retirement Autonomy Compact: route bounded contingency"
+			branch paired
+				has "B2 Hai Retirement Autonomy Compact: route paired support records"
+			`Elena finds you first. A copied port-service note correctly says that the Neighbor has sometimes helped with errands, but the copied version dropped the list of actual tasks. One clerk treated the shortened note as evidence that Elena should not arrange an interplanetary trip without the Neighbor's approval.`
+				goto settle
+			label contingency
+			`A minor emergency occurred and the contingency contact worked exactly as Elena intended. The emergency ended days ago, but one copied record still marks the Neighbor as an active decision contact because the expiry and closure fields were omitted. Elena is more irritated by the lingering authority than by the original emergency.`
+				goto settle
+			label paired
+			`The paired records worked locally. A downstream copy kept Elena's current assistance preferences but dropped the contingency trigger, while another retained the emergency-contact field but lost the review date. Each copy is individually plausible and misleading in a different direction.`
+			label settle
+			choice
+				`\tAdopt a portable support charter: requested help, decision authority, emergency trigger, permitted actions, responsible contact, review date, and closure travel together without collapsing into one status.`
+					goto charter
+				`\tUse expiry and renewal: temporary contingency authority ends automatically unless Elena deliberately renews it, while ordinary assistance remains task-specific and current.`
+					goto expiry
+			label charter
+			`You recommend a compact record designed to survive copying. It states what Elena currently wants help with, what she decides for herself, the exact emergency trigger, what temporary actions are permitted, who may take them, and how the record closes. Age is not used as a substitute for any of those fields.`
+			action
+				"B2 Hai Retirement Autonomy Compact: reviewed" = 1
+				"B2 Hai Retirement Autonomy Compact: settlement portable support charter" = 1
+				"B2 Hai Retirement Autonomy Compact: Elena trusts player" = 1
+				"B2 Hai Retirement Autonomy Compact: Neighbor trusts player" = 1
+				decline
+			label expiry
+			`You recommend making temporary authority expire by default. A past emergency remains visible as history, but it does not stay active without Elena's fresh renewal. New help requests are recorded at the scale she actually asks for them instead of inheriting the scope of the old emergency.`
+			action
+				"B2 Hai Retirement Autonomy Compact: reviewed" = 1
+				"B2 Hai Retirement Autonomy Compact: settlement expiry and renewal" = 1
+				"B2 Hai Retirement Autonomy Compact: Elena trusts player" = 1
+				decline
+
+
+mission "B2 Hai Retirement Autonomy Compact: Elena Remembers"
+	minor
+	name `Elena Remembers`
+	description `Elena remembers the difference between accepting help and surrendering the authority to decide how she lives.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		not "B2 Hai Retirement Autonomy Compact: aftermath seen"
+		or
+			has "B2 Hai Retirement Autonomy Compact: settlement portable support charter"
+			has "B2 Hai Retirement Autonomy Compact: settlement expiry and renewal"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Hai Retirement Autonomy Compact: settlement expiry and renewal"
+			`Elena recognizes you near a passenger board. "The new note is boring, which is exactly what I wanted. It says what help I asked for and what I still decide myself. Nobody has to guess from my age or from the fact that I trust my neighbor." She smiles. "I am taking a short trip next week. I arranged it myself."`
+				goto finish
+			label expiry
+			`Elena recognizes you while the Neighbor is helping her load a small parcel cart. "The old emergency permission expired. This help is just help because I asked for it today. That should not have been a difficult distinction, but now at least the record remembers it too."`
+			label finish
+			action
+				"B2 Hai Retirement Autonomy Compact: aftermath seen" = 1
+				decline
