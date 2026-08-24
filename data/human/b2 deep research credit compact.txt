@@ -1,0 +1,167 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Deep Research Credit Compact character slice.
+#
+# This deepens A2 Deep Field Review after Selene Arcos has already demonstrated
+# that direct observation, inference, and hearsay should remain distinct. The new
+# conflict concerns scientific contribution and publication credit: who observed,
+# who analyzed, who authored a claim, who consented to named use, and who owns a
+# later correction are related facts, but they are not interchangeable authority.
+
+
+event "B2 Deep Research Credit Compact: Review Ready"
+	"B2 Deep Research Credit Compact: review ready" = 1
+
+
+mission "B2 Deep Research Credit Compact: Offer"
+	minor
+	name `Whose Name Goes First`
+	description `Selene Arcos and junior analyst Toren Ilyas disagree over how Deep research credit should follow observation, analysis, authorship, and consent.`
+	source
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		or
+			has "A2 Deep Field Review: arcos future methods contact"
+			has "A2 Deep Field Review: arcos future anomaly contact"
+			has "A2 Deep Field Review: arcos future field contact"
+			has "A2 Deep Field Review: refusal respected"
+		not "B2 Deep Research Credit Compact: introduced"
+		not "B2 Deep Research Credit Compact: declined"
+	on offer
+		conversation
+			branch refusal
+				has "A2 Deep Field Review: refusal respected"
+			`Selene Arcos is reviewing a draft paper with a younger analyst beside her. "Captain <last>, this is Toren Ilyas. You once reminded me that a person's history should not become a training object without consent. We have reached the same problem from the other side: contribution credit."`
+			`Ilyas points to a result assembled from a survey crew's raw observations, his own statistical reduction, and Arcos's interpretation. "The draft makes it look as though the paper had one author and everyone else supplied inputs. That is tidy. It is also not what happened."`
+				goto choices
+			label refusal
+			`Selene Arcos is standing with a younger analyst over a publication draft. "Captain <last>, this is Toren Ilyas. You declined to let your own service history become somebody else's teaching example. Toren has found the publication version of the same boundary."`
+			`Ilyas taps three annotations: field observation, analytical reduction, and interpretive claim. "Every step matters. The draft compresses them into one author line. I want credit to describe contribution without pretending every contributor endorses every conclusion."`
+			label choices
+			choice
+				`\tUse contribution-first credit: list observation, analysis, interpretation, and writing roles separately instead of forcing one prestige order.`
+					goto roles
+				`\tUse claim-specific attribution: every important conclusion cites the contributors whose work actually supports that claim, including dissent or uncertainty.`
+					goto claims
+				`\tUse paired authorship and consent records: publication credit can travel broadly, while named personal history, quotations, and identifiable field notes require separate permission.`
+					goto consent
+				`\tRefuse to turn one paper's dispute into a general Deep research-credit rule.`
+					goto decline
+			label roles
+			`You recommend contribution roles instead of a single prestige ladder. A field observer can receive explicit observation credit, an analyst can receive analytical credit, and an interpreting author can own the argument without absorbing the earlier work into their identity. Ilyas says, "That lets a reader see the chain instead of guessing from name order." Arcos begins rewriting the byline notes.`
+			action
+				"B2 Deep Research Credit Compact: introduced" = 1
+				"B2 Deep Research Credit Compact: route contribution roles" = 1
+				"B2 Deep Research Credit Compact: ilyas trusts player" = 1
+				event "B2 Deep Research Credit Compact: Review Ready" 7 11
+				decline
+			label claims
+			`You recommend attaching attribution to important claims. If a conclusion depends on Ilyas's reduction, that relationship should be visible. If an observer disputes the interpretation, the disagreement should survive rather than disappearing behind a shared author list. Arcos says, "Then credit becomes evidence lineage, not ceremony." Ilyas agrees.`
+			action
+				"B2 Deep Research Credit Compact: introduced" = 1
+				"B2 Deep Research Credit Compact: route claim attribution" = 1
+				"B2 Deep Research Credit Compact: arcos trusts player" = 1
+				"B2 Deep Research Credit Compact: ilyas trusts player" = 1
+				event "B2 Deep Research Credit Compact: Review Ready" 7 11
+				decline
+			label consent
+			`You separate publication credit from permission to expose a person. Contributions may remain attributable, but quotations, personal histories, and identifiable field notes need their own consent record. Ilyas says that protects junior researchers from having private context treated as part of the price of receiving credit. Arcos calls it "recognition without annexation."`
+			action
+				"B2 Deep Research Credit Compact: introduced" = 1
+				"B2 Deep Research Credit Compact: route paired consent" = 1
+				"B2 Deep Research Credit Compact: arcos trusts player" = 1
+				event "B2 Deep Research Credit Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell Arcos and Ilyas that one difficult paper is a poor basis for a universal publication rule. Ilyas accepts the boundary. Arcos records that no general compact was adopted from this dispute.`
+			action
+				"B2 Deep Research Credit Compact: declined" = 1
+				decline
+
+
+mission "B2 Deep Research Credit Compact: Review"
+	minor
+	name `The Correction Has an Author`
+	description `Arcos and Ilyas return after a copied research summary loses the distinction between original observation, analysis, interpretation, and later correction.`
+	source
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Deep Research Credit Compact: introduced"
+		has "B2 Deep Research Credit Compact: review ready"
+		not "B2 Deep Research Credit Compact: reviewed"
+	on offer
+		conversation
+			branch roles
+				has "B2 Deep Research Credit Compact: route contribution roles"
+			branch claims
+				has "B2 Deep Research Credit Compact: route claim attribution"
+			`Arcos and Ilyas have found a second problem. A short research summary copied the paper's conclusion but dropped the contributor roles and the later correction that changed one assumption. The summary is not fabricated; it is simply too compressed to show which part of the claim survived and who changed it.`
+				goto settle
+			label roles
+			`The contribution-role model made the original paper readable, but a downstream summary kept only the lead author and conclusion. Ilyas says, "The credit existed in the source and still vanished in the copy." Arcos adds that the correction now looks like a contradiction by the lead author instead of a change supported by new analysis.`
+				goto settle
+			label claims
+			`Claim-specific attribution preserved the evidence chain in the paper, but a downstream abstract copied the conclusion without its supporting attribution or dissent note. Arcos says the abstract is concise enough to be useful and incomplete enough to manufacture certainty.`
+			label settle
+			choice
+				`\tAdopt a portable contribution packet: every copied conclusion carries observation source, analytical contributors, interpretive author, uncertainty, consent limits, and correction history.`
+					goto packet
+				`\tAdopt versioned claim custody: old conclusions remain citable history, but current summaries must identify the active version, responsible reviser, and unresolved disagreement.`
+					goto versions
+			label packet
+			`You recommend a compact contribution packet that travels with important conclusions. It does not reproduce the whole paper; it preserves who observed, who analyzed, who interpreted, what uncertainty remained, what personal material was consented for reuse, and who authored later corrections. Ilyas says it lets credit survive compression without turning the packet into another paper.`
+			action
+				"B2 Deep Research Credit Compact: reviewed" = 1
+				"B2 Deep Research Credit Compact: settlement portable contribution packet" = 1
+				"B2 Deep Research Credit Compact: arcos trusts player" = 1
+				"B2 Deep Research Credit Compact: ilyas trusts player" = 1
+				decline
+			label versions
+			`You recommend versioned claim custody. A superseded claim can remain part of scientific history, but current summaries must identify which version is active, who revised it, what evidence changed, and whether disagreement remains open. Arcos says that prevents correction from looking like erasure. Ilyas adds that it also prevents an old author list from owning work they did not perform.`
+			action
+				"B2 Deep Research Credit Compact: reviewed" = 1
+				"B2 Deep Research Credit Compact: settlement versioned claim custody" = 1
+				"B2 Deep Research Credit Compact: arcos trusts player" = 1
+				decline
+
+
+mission "B2 Deep Research Credit Compact: Ilyas Remembers"
+	minor
+	name `Ilyas Remembers`
+	description `Toren Ilyas remembers whether Deep research credit now survives copying, revision, and disagreement without becoming authority over another person's work.`
+	source
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Deep Research Credit Compact: aftermath seen"
+		or
+			has "B2 Deep Research Credit Compact: settlement portable contribution packet"
+			has "B2 Deep Research Credit Compact: settlement versioned claim custody"
+	on offer
+		conversation
+			branch versions
+				has "B2 Deep Research Credit Compact: settlement versioned claim custody"
+			`Ilyas recognizes you beside a stack of field summaries. One conclusion has a small attached record naming the observers, the analytical work, the interpretation, an uncertainty note, and the correction that followed. "Nobody has to read the whole archive to know whose work they are repeating. And nobody gets ownership of the parts they did not do."`
+				goto finish
+			label versions
+			`Ilyas shows you two versions of the same conclusion. The older one is still searchable, with its original authorship intact. The newer one names the reviser and the evidence that changed the interpretation. "We stopped treating correction as betrayal. A scientific claim can have a history without pretending every person in that history said the same thing."`
+			label finish
+			action
+				"B2 Deep Research Credit Compact: aftermath seen" = 1
+				decline
