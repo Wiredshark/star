@@ -1,12 +1,13 @@
-# B2 Gegno Apprenticeship Standing Compact handoff — PARTIAL
+# B2 Gegno Apprenticeship Standing Compact handoff — READY
 
 ## Authority
 - Repository: `Wiredshark/star`
-- Authoritative base observed: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
+- Authoritative base observed and rechecked: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-gegno-apprenticeship-standing-20260824`
 - Production commit: `c6fd8cca2e11cbb333e6eb6e03e5fb56b5223295`
 - Focused validator commit: `8ecbff65e777d7aafa75e799261267dab1970461`
-- Current handoff head: filled by this commit
+- Exact fully validated production/validator/handoff candidate: `f1fe75b468816de61f71322a001d38fa3c2af94b`
+- Final READY handoff-only head: this commit
 
 ## Scope
 Adds a present-day Gegno mentorship / apprenticeship character arc on Tschyss after integrated `B2 Gegno Claim Records: aftermath seen`.
@@ -57,17 +58,21 @@ No `world:*`, B1/A1/A2, Claim Records, material, reputation, cargo, equipment, s
 - `tools/story/validate_b2_gegno_apprenticeship_standing_compact.py`
 - `story/B2_GEGNO_APPRENTICESHIP_STANDING_COMPACT_HANDOFF_20260824.md`
 
-## Validation
-Current verdict: **PARTIAL** pending repository-native exact-head workflows.
+## Exact validation evidence
+On exact candidate `f1fe75b468816de61f71322a001d38fa3c2af94b`:
+- `Fork simulation and story validation` #523 / run `32707091341`: **SUCCESS**;
+- focused Python validation compilation: **SUCCESS**;
+- all focused story validators, including the new Gegno validator: **SUCCESS**;
+- A1 simulation/state-ownership contracts: **SUCCESS**;
+- changed-content style: **SUCCESS**;
+- `Fork save-load integration smoke` #508 / run `32707091254`: **SUCCESS**;
+- production configure/build: **SUCCESS**;
+- stock save-load integration smoke: **SUCCESS**.
 
-Required before READY:
-- focused validator discovered and passes;
-- full focused story suite passes;
-- A1 simulation/state-ownership contracts pass;
-- changed-content style passes;
-- production configure/build passes;
-- stock save-load integration smoke passes;
-- final diff remains isolated to this B2 slice.
+Exact base-to-candidate isolation: **3 commits ahead / 0 behind**, exactly 3 added files, 388 additions, 0 deletions.
+
+## Process / concurrency boundary
+The live `agent/b2-global-dialogue-lifecycle-audit-20260823` branch was detected before authoring and was not touched. Four pre-existing service-owned host processes were observed and preserved. No destructive Git operation, process cleanup, unrelated workspace modification, or self-integration was performed.
 
 ## A3 / B3 integration notes
-A3 retains integration authority. Do not self-integrate. Re-read current `main`, ancestry, the active global B2 dialogue-lifecycle audit, and current Gegno/B2 work before integration. Preserve the existing Claim Records state as read-only and keep demonstrated skill, mentor lineage, faction identity, political allegiance, current task scope, and explicit renewal as distinct facts.
+**Verdict: READY for A3 review/integration.** A3 retains integration authority. Re-read current `main`, ancestry, the active global B2 dialogue-lifecycle audit, and current Gegno/B2 work before integration. Preserve the existing Claim Records state as read-only and keep demonstrated skill, mentor lineage, faction identity, political allegiance, current task scope, and explicit renewal as distinct facts.
