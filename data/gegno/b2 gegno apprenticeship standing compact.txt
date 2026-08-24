@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Gegno Apprenticeship Standing Compact.
+#
+# This is a character sequel to the integrated Gegno claim-record work. It turns
+# the shared ore-measure / record tradition into a personal mentorship dispute:
+# what should travel with a worker's demonstrated skill when the mentor and
+# apprentice come from opposite sides of the Vi/Scin rivalry?
+#
+# "Mentor" and "Apprentice" are player-private shorthand, not Gegno offices or
+# credentials. All persistent writes are B2-prefixed. This slice does not alter
+# material state, faction attitude, campaign state, or political allegiance.
+
+
+event "B2 Gegno Apprenticeship Standing Compact: Review Ready"
+	"B2 Gegno Apprenticeship Standing Compact: review ready" = 1
+
+
+mission "B2 Gegno Apprenticeship Standing Compact: Offer"
+	minor
+	name `The Hand That Taught the Measure`
+	description `A veteran Vi toolwright and a younger Scin machinist disagree over whether a mentorship record proves skill, political allegiance, or neither.`
+	source "Tschyss"
+	"offer precedence" 8
+	to offer
+		has "Gegno Asteroid Mining Prologue: done"
+		has "B2 Gegno Claim Records: aftermath seen"
+		not "B2 Gegno Apprenticeship Standing Compact: introduced"
+		not "B2 Gegno Apprenticeship Standing Compact: declined"
+	on offer
+		conversation
+			`Near the commodity scales, you recognize the old argument about records, but this time the record belongs to a person. A veteran Gegno Vi toolwright is showing a younger Gegno Scin machinist how to calibrate a cutting head against the common ore measures. Your translator never gives you titles for either of them, so in your own notes you think of them simply as the Mentor and the Apprentice.`
+			`The Apprentice has spent months learning the toolwright's method. A Scin work crew now wants proof that the training is real, but one foreman has started treating the Vi mentor's name as evidence of political sympathy. The Mentor snorts when the translator reaches that point. "I can say what work I saw. I cannot say what is in another mind."`
+			`The Apprentice answers, "And if they erase who taught me, they erase how the method reached me. I want the history without being owned by it."`
+			choice
+				`\tJudge the skill by demonstrated work first. Keep the mentor lineage as context, not as proof of loyalty or universal competence.`
+					goto demonstration
+				`\tLet the Mentor vouch only for tasks personally observed, with explicit scope and review when the work changes.`
+					goto reference
+				`\tKeep paired records: a skill portfolio for demonstrated tasks and a separate mentorship lineage that cannot silently become political affiliation.`
+					goto paired
+				`\tRefuse to make one cross-faction apprenticeship into a general Gegno rule.`
+					goto decline
+			label demonstration
+			`You recommend a witnessed demonstration as the working basis for employment. The record can still name who taught the method and which tools were used, but the hiring crew must distinguish that history from the task the Apprentice can actually perform now. The Mentor approves. The Apprentice says that being tested is fairer than being interpreted.`
+			action
+				"B2 Gegno Apprenticeship Standing Compact: introduced" = 1
+				"B2 Gegno Apprenticeship Standing Compact: route demonstration first" = 1
+				"B2 Gegno Apprenticeship Standing Compact: apprentice trusts player" = 1
+				event "B2 Gegno Apprenticeship Standing Compact: Review Ready" 7 11
+				decline
+			label reference
+			`You keep the Mentor's reference, but make it narrow. A mentor can vouch for work they actually saw, not for political loyalty or every task the apprentice may ever attempt. If the job changes enough to exceed that observed scope, the receiving crew must ask for new evidence instead of stretching the old endorsement.`
+			action
+				"B2 Gegno Apprenticeship Standing Compact: introduced" = 1
+				"B2 Gegno Apprenticeship Standing Compact: route bounded reference" = 1
+				"B2 Gegno Apprenticeship Standing Compact: mentor trusts player" = 1
+				event "B2 Gegno Apprenticeship Standing Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You separate the two questions. The skill portfolio records demonstrated tasks, tools, materials, failure conditions, and observers. The mentorship lineage records who taught whom and which method was passed along. Training lineage is history, not allegiance. The Apprentice seems relieved that neither record has to pretend the other is irrelevant.`
+			action
+				"B2 Gegno Apprenticeship Standing Compact: introduced" = 1
+				"B2 Gegno Apprenticeship Standing Compact: route paired portfolio" = 1
+				"B2 Gegno Apprenticeship Standing Compact: mentor trusts player" = 1
+				"B2 Gegno Apprenticeship Standing Compact: apprentice trusts player" = 1
+				event "B2 Gegno Apprenticeship Standing Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a foreign captain should not turn one unusual apprenticeship into a standing rule for rival Gegno crews. The Mentor accepts the boundary with a grunt. The Apprentice keeps the training notes and says the next work crew can decide what evidence it needs.`
+			action
+				"B2 Gegno Apprenticeship Standing Compact: declined" = 1
+				decline
+
+
+mission "B2 Gegno Apprenticeship Standing Compact: Review"
+	minor
+	name `When the Teacher's Name Travels`
+	description `Return after the apprenticeship record has been copied through several Gegno work crews and decide what the record is actually allowed to mean.`
+	source "Tschyss"
+	"offer precedence" 8
+	to offer
+		has "B2 Gegno Apprenticeship Standing Compact: introduced"
+		has "B2 Gegno Apprenticeship Standing Compact: review ready"
+		not "B2 Gegno Apprenticeship Standing Compact: reviewed"
+	on offer
+		conversation
+			branch demonstration
+				has "B2 Gegno Apprenticeship Standing Compact: route demonstration first"
+			branch reference
+				has "B2 Gegno Apprenticeship Standing Compact: route bounded reference"
+			`The Mentor and Apprentice have returned with copies of the paired portfolio. The useful part survived: crews can see what tasks were demonstrated and where the method came from. The problem is that one copy now displays the mentor lineage more prominently than the work evidence. A Vi crew reads the name as a claim of loyalty; a Scin crew reads it as a reason for suspicion.`
+				goto settle
+			label demonstration
+			`The witnessed demonstrations made hiring easier, but a copied summary has collapsed three different tasks into the single word "qualified." One crew now expects the Apprentice to service equipment never included in the test. The Mentor points out that a successful demonstration is evidence with conditions, not a universal credential.`
+				goto settle
+			label reference
+			`The bounded mentor reference traveled farther than expected. Some copies still preserve the tasks the Mentor personally observed. Others retain only the mentor's name, as though repetition had strengthened the endorsement. The Apprentice says a copied endorsement is still one source, not independent corroboration.`
+			label settle
+			choice
+				`\tAdopt a portable skill portfolio: demonstrated tasks, conditions, observers, limits, mentorship lineage, and current role travel together without collapsing into allegiance.`
+					goto portfolio
+				`\tUse challenge and renewal: mentorship remains historical context, while materially different work can trigger a bounded new demonstration instead of inherited suspicion or inherited authority.`
+					goto renewal
+			label portfolio
+			`You recommend a portable portfolio with explicit layers. It says what the Apprentice demonstrated, under which tools and materials, who observed it, where the limits are, and who taught the method. The mentor lineage remains visible, but it is marked as history rather than political allegiance or universal skill. The Mentor calls that precise enough to survive rivals.`
+			action
+				"B2 Gegno Apprenticeship Standing Compact: reviewed" = 1
+				"B2 Gegno Apprenticeship Standing Compact: settlement portable skill portfolio" = 1
+				"B2 Gegno Apprenticeship Standing Compact: mentor trusts player" = 1
+				"B2 Gegno Apprenticeship Standing Compact: apprentice trusts player" = 1
+				decline
+			label renewal
+			`You recommend preserving the mentorship history while refusing to let it become either permanent authority or permanent suspicion. A receiving crew may ask for a new demonstration when the equipment, material, or task changes materially. The challenge must be about the work, not the faction of the teacher. The Apprentice says that gives future crews a way to doubt without inventing a political verdict.`
+			action
+				"B2 Gegno Apprenticeship Standing Compact: reviewed" = 1
+				"B2 Gegno Apprenticeship Standing Compact: settlement challenge and renewal" = 1
+				"B2 Gegno Apprenticeship Standing Compact: apprentice trusts player" = 1
+				decline
+
+
+mission "B2 Gegno Apprenticeship Standing Compact: Apprentice Remembers"
+	minor
+	name `Apprentice Remembers`
+	description `The Gegno apprentice remembers the distinction between who taught a skill, what was demonstrated, and what rival crews merely inferred from the record.`
+	source "Tschyss"
+	"offer precedence" 8
+	to offer
+		not "B2 Gegno Apprenticeship Standing Compact: aftermath seen"
+		or
+			has "B2 Gegno Apprenticeship Standing Compact: settlement portable skill portfolio"
+			has "B2 Gegno Apprenticeship Standing Compact: settlement challenge and renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Gegno Apprenticeship Standing Compact: settlement challenge and renewal"
+			`The Apprentice recognizes you beside a workbench where two crews are comparing tool settings. "The portfolio traveled. They still ask who taught me, but now the answer sits beside the work I actually demonstrated. A teacher's name did not become my allegiance, and one successful task did not become every task." The Mentor is nearby, arguing with someone about tolerances rather than politics.`
+				goto finish
+			label renewal
+			`The Apprentice recognizes you while preparing a fresh demonstration on unfamiliar equipment. "They challenged the work because the job changed. That is different from challenging me because my teacher was Vi. The old mentorship stayed in the history; the new test answered the new question." The distinction seems to have survived at least this handoff.`
+			label finish
+			action
+				"B2 Gegno Apprenticeship Standing Compact: aftermath seen" = 1
+				decline
