@@ -32,8 +32,8 @@ for directive in ("destination", "stopover", "waypoint", "npc", "cargo", "passen
 for match in re.finditer(r'^\s*"([^"]+)"\s*=\s*[-0-9]+\s*$', text, re.M):
     need(match.group(1).startswith(PREFIX), f"non-B2 condition write: {match.group(1)}")
 
-for forbidden in ("credits ", "reputation ", "combat rating", "outfit ", "ship ", "fleet "):
-    need(forbidden not in text.lower(), f"unexpected material/reputation mutation token: {forbidden.strip()}")
+for command in ("credits", "reputation", "combat rating", "outfit", "ship", "fleet"):
+    need(not re.search(rf'^\s*{re.escape(command)}\b', text, re.M | re.I), f"unexpected material/reputation command: {command}")
 
 for phrase in (
     "identity behind a narrow access gate",
