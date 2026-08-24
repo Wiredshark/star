@@ -51,7 +51,6 @@ for settlement in settlements:
 require(text.count(f'"{PREFIX} reviewed" = 1') == 2, "each settlement must close Review exactly once")
 require(text.count(f'"{PREFIX} aftermath seen" = 1') == 1, "aftermath must be one-shot")
 
-# Review lifecycle and one-shot aftermath gates.
 for fragment in [
     'has "B2 Remnant Returnee Language Choice: introduced"',
     'has "B2 Remnant Returnee Language Choice: review ready"',
@@ -62,28 +61,27 @@ for fragment in [
 ]:
     require(fragment in text, f"missing lifecycle gate: {fragment}")
 
-# State ownership: assignments must stay in this B2 namespace.
 for line in text.splitlines():
     if re.match(r'^\s+"[^\"]+"\s*(?:=|\+=|-=|\+\+|--|\?=|\^=|<\?=|>\?=)', line):
         key = re.search(r'"([^"]+)"', line).group(1)
         require(key.startswith(PREFIX), f"write outside B2 namespace: {key}")
 
-# No material/gameplay-objective directives in this state-only character slice.
 objective_directive = re.compile(r'^\t+(destination|stopover|waypoint|npc|cargo|passengers?|deadline|timer|outfit|ship|fleet|payment|credits|reputation)\b', re.M)
 require(not objective_directive.search(text), "state-only slice contains gameplay-objective/material directive")
 
-# Continuity / canon boundaries.
+# Semantic continuity fragments. Keep these formatting-independent so line wrapping
+# or comments do not become false negatives.
 for fragment in [
     "communication mode as Mira's choice",
     "task requirements",
     "identity or loyalty",
     "less suited to trusted work in general",
     "what the record does not establish",
-    "not a Remnant title or",
+    "not a Remnant title",
+    "new office",
 ]:
     require(fragment in text, f"missing continuity fragment: {fragment}")
 
-# Ensure no universal authority language is asserted as a new rule.
 require("does not define Remnant language" in text, "missing local-not-universal canon boundary")
 
 if errors:
