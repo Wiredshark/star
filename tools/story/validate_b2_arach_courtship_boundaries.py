@@ -40,14 +40,17 @@ def test_scope_and_characters():
     offer = mission_block(MISSIONS[0])
     assert 'has "known to the heliarchs"' in offer
     lowered = TEXT.lower()
-    assert "selka meren" in lowered
-    assert "neri vass" in lowered
-    assert "theater" in lowered
-    assert "patron" in lowered
-    assert "local relationship practice" in lowered
-    assert "not arach law" in lowered
-    assert "coalition law" in lowered
-    assert "universal description of arach courtship" in lowered
+    for fragment in (
+        "selka meren",
+        "neri vass",
+        "theater",
+        "patron",
+        "local relationship practice",
+        "arach law",
+        "coalition law",
+        "universal description of arach courtship",
+    ):
+        assert fragment in lowered, fragment
 
 
 def test_routes_and_settlements():
@@ -121,10 +124,10 @@ def test_relationship_boundaries_explicit():
         "withdrawal status",
         "older copies remain history, not permanent authority",
         "declining to provide it cannot be treated as evidence of conflict",
+        "their solution is local relationship practice, not",
+        "a universal description of arach courtship",
     ):
         assert fragment in lowered, fragment
-    assert "their solution is local relationship practice, not" in lowered
-    assert "a universal description of arach courtship" in lowered
 
 
 def main():
