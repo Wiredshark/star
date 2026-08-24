@@ -1,9 +1,20 @@
-# A2 dynamic-narrative consumer for the A1 Republic displacement-pressure loop.
+# Copyright (c) 2026 by the Endless Sky contributors
 #
-# A1 remains sole owner of `world: republic displacement pressure`,
-# `world: republic border pressure`, and `world: republic resettlement surge`.
-# This slice reads those states, records only A2-owned player policy memory,
-# and later reflects the choice after displacement pressure subsides.
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 dynamic-narrative consumer for the A1 Republic displacement-pressure loop.
+# A1 remains sole owner of Republic displacement pressure, border pressure, and
+# resettlement surge. This slice records only A2-owned player policy memory.
+
 
 mission "A2 Republic Resettlement Council: Emergency Session"
 	minor
@@ -68,6 +79,7 @@ mission "A2 Republic Resettlement Council: Emergency Session"
 				"A2 Republic Resettlement Council: followup pending" = 1
 				decline
 
+
 mission "A2 Republic Resettlement Council: After Action"
 	minor
 	name `Republic Resettlement: After the Pressure`
@@ -98,6 +110,9 @@ mission "A2 Republic Resettlement Council: After Action"
 			branch distributed_border_low
 				has "A2 Republic Resettlement Council: priority distributed placement"
 				"world: republic border pressure" < 4
+			branch refused
+				has "A2 Republic Resettlement Council: refused"
+			label refused
 			`Orr recognizes you beside a much shorter intake queue. "No policy question this time. I remember that you declined." She taps the archived session record. "Nobody converted your refusal into support after you left."`
 			action
 				"A2 Republic Resettlement Council: refusal respected" = 1
@@ -131,6 +146,7 @@ mission "A2 Republic Resettlement Council: After Action"
 			`Orr points to several new interworld placement links that remain active even after the emergency. "Both pressures are down. The distributed network cost more to coordinate, but now those secondary worlds can absorb a future surge without improvising from zero."`
 			action
 				"A2 Republic Resettlement Council: Orr remembers distribution stabilized" = 1
+				goto finish
 			label finish
 			action
 				"A2 Republic Resettlement Council: followup pending" = 0
