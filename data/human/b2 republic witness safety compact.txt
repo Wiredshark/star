@@ -1,0 +1,164 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Republic Witness Safety Compact production slice.
+#
+# Sequel to the integrated Republic Border Testimony Compact. Talia Rook and
+# Jace Verran now confront a different problem: preserving evidentiary lineage
+# without making a civilian witness's current location, route, family contacts,
+# or ordinary identity available to every downstream reader of the evidence.
+#
+# A1 owns `world: republic border pressure`; B2 reads it only.
+
+
+event "B2 Republic Witness Safety Compact: Review Ready"
+	"B2 Republic Witness Safety Compact: review ready" = 1
+
+
+mission "B2 Republic Witness Safety Compact: Offer"
+	minor
+	name `The Address Beside the Statement`
+	description `Talia Rook and Jace Verran disagree over how a useful border statement should travel without turning witness identity and location into permanent operational data.`
+	source
+		government "Republic"
+	"offer precedence" 8
+	to offer
+		has "B2 Republic Border Testimony Compact: aftermath seen"
+		"world: republic border pressure" >= 3
+		not "B2 Republic Witness Safety Compact: introduced"
+		not "B2 Republic Witness Safety Compact: declined"
+	on offer
+		conversation
+			`Talia Rook has fixed the problem that once made one patrol observation look like four witnesses. Jace Verran has found the next problem. A copied statement correctly identifies him as the original civilian source, but the export also carries his present docking address, usual courier route, and an emergency contact.`
+			`Rook says the source must remain identifiable to an authorized reviewer or the provenance chain becomes unverifiable. Verran answers, "Identifiable is not the same thing as visible to everyone who needs the statement. A record can prove I said something without telling every scheduler where I sleep."`
+			choice
+				`\tUse identity escrow: ordinary copies carry a stable witness reference while direct identity and current contact data stay with a narrowly authorized custodian.`
+					goto escrow
+				`\tUse purpose-bounded access: reviewers may see only the identity fields necessary for the specific investigation, with audience and expiry recorded.`
+					goto purpose
+				`\tUse paired records: immutable testimony provenance and separately maintained current-safety/contact data, linked without giving the same audience access to both.`
+					goto paired
+				`\tRefuse to turn one witness's safety concern into a standing Republic rule.`
+					goto decline
+			label escrow
+			`You tell Rook that provenance can survive behind a stable witness reference. The original office keeps the verified identity and the authority to resolve a challenge to authorship. Routine copies carry the statement, source class, date, and stable reference, but not Verran's current berth or family contact. Rook keeps an auditable source; Verran stops broadcasting his life with every copy.`
+			action
+				"B2 Republic Witness Safety Compact: introduced" = 1
+				"B2 Republic Witness Safety Compact: route identity escrow" = 1
+				"B2 Republic Witness Safety Compact: verran trusts player" = 1
+				event "B2 Republic Witness Safety Compact: Review Ready" 7 11
+				decline
+			label purpose
+			`You argue that access should follow purpose rather than institutional curiosity. An investigator challenging authorship may see identity. A scheduler reading a current warning may not. Every exceptional disclosure records who asked, why, which fields were shown, and when that authority expires. Rook likes the review trail; Verran likes that access is no longer inherited by every downstream system.`
+			action
+				"B2 Republic Witness Safety Compact: introduced" = 1
+				"B2 Republic Witness Safety Compact: route purpose bounded" = 1
+				"B2 Republic Witness Safety Compact: rook trusts player" = 1
+				event "B2 Republic Witness Safety Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You separate evidentiary continuity from personal-safety administration. The testimony record keeps its source reference, date, corrections, and disposition. A second record keeps current contact permissions, safety restrictions, and any address needed by the small office responsible for the witness. A link proves the records correspond without making one audience inherit the other's access.`
+			action
+				"B2 Republic Witness Safety Compact: introduced" = 1
+				"B2 Republic Witness Safety Compact: route paired records" = 1
+				"B2 Republic Witness Safety Compact: rook trusts player" = 1
+				"B2 Republic Witness Safety Compact: verran trusts player" = 1
+				event "B2 Republic Witness Safety Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that one badly exported statement is not enough basis for a standing rule. Rook records no general procedure. Verran asks only that this copy be corrected under existing privacy practice, and no later Review is armed.`
+			action
+				"B2 Republic Witness Safety Compact: declined" = 1
+				decline
+
+
+mission "B2 Republic Witness Safety Compact: Review"
+	minor
+	name `When Protection Becomes a Label`
+	description `Return after the immediate border pressure eases and decide how witness-safety restrictions should close without erasing provenance or becoming permanent suspicion.`
+	source
+		government "Republic"
+	"offer precedence" 8
+	to offer
+		has "B2 Republic Witness Safety Compact: introduced"
+		has "B2 Republic Witness Safety Compact: review ready"
+		"world: republic border pressure" <= 2
+		not "B2 Republic Witness Safety Compact: reviewed"
+	on offer
+		conversation
+			branch escrow
+				has "B2 Republic Witness Safety Compact: route identity escrow"
+			branch purpose
+				has "B2 Republic Witness Safety Compact: route purpose bounded"
+			`Rook and Verran have found the failure that arrives after the emergency. A copied file says that a witness is "protected," but the copy no longer explains which fields were restricted, who imposed the restriction, whether the risk still exists, or what would close it. One office treats the label as a reason to hide everything. Another treats it as a reason to suspect the witness.`
+			choice
+				`\tUse a portable access packet: witness reference, protected fields, permitted audiences, reason, custodian, review date, and closure state travel together.`
+					goto packet
+				`\tUse expiry plus fresh cause: safety restrictions expire or require review, and reopening them requires a current reason rather than the historical fact that protection once existed.`
+					goto expiry
+			label escrow
+			`Identity escrow kept Verran's address out of routine copies, but one receiving office treated the hidden identity itself as suspicious. Rook says the source reference proves authorship without exposing the person; Verran says the copy also needs to explain that restricted identity is a safety control, not an evidentiary warning.`
+			choice
+				`\tCarry the protected fields, access purpose, review point, and closure state with the source reference.`
+					goto packet
+				`\tRequire protection status to expire or be renewed for a current documented reason.`
+					goto expiry
+			label purpose
+			`Purpose-bounded access prevented broad disclosure, but a temporary authorization was copied into a later system without its expiry. The audience widened while the original investigative purpose had already ended. Rook calls it inherited authority. Verran calls it permission that forgot how to stop.`
+			choice
+				`\tMake purpose, audience, expiry, and closure travel together with every exceptional access record.`
+					goto packet
+				`\tLet exceptional access expire, requiring a fresh current reason before identity fields can be reopened.`
+					goto expiry
+			label packet
+			`You recommend a portable access packet. A downstream reader sees the stable witness reference and the evidence it authenticates, plus exactly which personal fields are protected, who may access them, why, which office is responsible, when the restriction must be reviewed, and whether it has closed. Protection can remain auditable without becoming a permanent identity label.`
+			action
+				"B2 Republic Witness Safety Compact: reviewed" = 1
+				"B2 Republic Witness Safety Compact: settlement portable access packet" = 1
+				"B2 Republic Witness Safety Compact: rook trusts player" = 1
+				"B2 Republic Witness Safety Compact: verran trusts player" = 1
+				decline
+			label expiry
+			`You recommend expiry plus fresh cause. Historical protection remains in the audit trail, but current restrictions close when their review condition is met. Reopening identity or contact restrictions requires a present documented risk or investigative need; the mere fact that a witness was once protected is neither fresh danger nor fresh evidence.`
+			action
+				"B2 Republic Witness Safety Compact: reviewed" = 1
+				"B2 Republic Witness Safety Compact: settlement expiry plus fresh cause" = 1
+				"B2 Republic Witness Safety Compact: rook trusts player" = 1
+				"B2 Republic Witness Safety Compact: verran trusts player" = 1
+				decline
+
+
+mission "B2 Republic Witness Safety Compact: Verran Remembers"
+	minor
+	name `Verran Remembers`
+	description `Jace Verran remembers whether a Republic record can preserve testimony provenance without turning his private life into permanent operational data.`
+	source
+		government "Republic"
+	"offer precedence" 8
+	to offer
+		not "B2 Republic Witness Safety Compact: aftermath seen"
+		or
+			has "B2 Republic Witness Safety Compact: settlement portable access packet"
+			has "B2 Republic Witness Safety Compact: settlement expiry plus fresh cause"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Republic Witness Safety Compact: settlement expiry plus fresh cause"
+			`Verran shows you a copied statement from another port. His stable source reference, the observation date, and the final disposition are intact. His present berth and emergency contact are not. A reviewer with the right purpose can still challenge authorship through Rook's office. "The record can prove I spoke," he says, "without proving where to find me tonight."`
+				goto finish
+			label expiry
+			`Verran shows you an old protection entry marked closed. The historical audit still says why his identity fields were restricted during the earlier alert, but the restriction no longer behaves like current suspicion. "If something changes, they can open a new review for a new reason. They do not get to call yesterday's caution today's evidence."`
+			label finish
+			action
+				"B2 Republic Witness Safety Compact: aftermath seen" = 1
+				decline
