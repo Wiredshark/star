@@ -1,0 +1,153 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Bunrodea Recusal Compact.
+# Primary domain: institutional ethics / personal ties / decision authority.
+# Consumes the integrated B2 Bunrodea Review Queue aftermath without changing
+# queue state. The problem is who may decide a petition when family, patronage,
+# or prior work creates a conflict of interest.
+
+
+event "B2 Bunrodea Recusal Compact: Review Ready"
+	"B2 Bunrodea Recusal Compact: review ready" = 1
+
+
+mission "B2 Bunrodea Recusal Compact: Offer"
+	minor
+	name `The Reviewer in the Family`
+	description `A Bunrodea petition reviewer and an independent case observer disagree over when a personal tie requires recusal rather than disclosure.`
+	source
+		government "Bunrodea"
+	"offer precedence" 8
+	to offer
+		has "B2 Bunrodea Review Queue Compact: aftermath seen"
+		not "B2 Bunrodea Recusal Compact: introduced"
+		not "B2 Bunrodea Recusal Compact: declined"
+	on offer
+		conversation
+			`Tavi Rell, a Bunrodea petition reviewer, asks you to sit in on a conversation with Nema Oss, an independent case observer. A petition has reached Tavi's desk involving an estate managed by his older sister. The freight facts are straightforward. The authority question is not.`
+			`Tavi says he has no financial stake in the estate and believes he can review the case fairly. Nema says fairness is not only an internal feeling: a decision can become harder to trust when the reviewer has a close personal tie to one side, even if the evidence itself is sound.`
+			`Neither wants a rule so broad that ordinary acquaintance empties every small office of qualified reviewers. They ask where disclosure ends and recusal begins.`
+			choice
+				`\tRequire recusal for direct family or material ties, with the reason preserved in the case record.`
+					goto recuse
+				`\tAllow disclosed review for weaker ties, but require a second reviewer before the decision becomes final.`
+					goto disclose
+				`\tSeparate evidence work from decision authority: a conflicted reviewer may organize facts but cannot make the final ruling.`
+					goto layered
+				`\tRefuse to turn one family dispute into a general Bunrodea rule.`
+					goto decline
+			label recuse
+			`You tell Tavi that a close family tie is enough to move final authority elsewhere even when nobody alleges corruption. Tavi may still explain the file's history, but another reviewer must own the decision. Nema says the important part is that the record state why authority moved rather than pretending the conflict never existed.`
+			action
+				"B2 Bunrodea Recusal Compact: introduced" = 1
+				"B2 Bunrodea Recusal Compact: route recusal" = 1
+				"B2 Bunrodea Recusal Compact: nema trusts player" = 1
+				event "B2 Bunrodea Recusal Compact: Review Ready" 7 11
+				decline
+			label disclose
+			`You distinguish direct conflicts from ordinary social ties. A weaker tie can remain disclosed, but a second reviewer must independently examine the basis before the ruling becomes final. Tavi says that preserves scarce expertise. Nema says independence only matters if the second review is real rather than a signature copied from the first.`
+			action
+				"B2 Bunrodea Recusal Compact: introduced" = 1
+				"B2 Bunrodea Recusal Compact: route disclosure plus second review" = 1
+				"B2 Bunrodea Recusal Compact: tavi trusts player" = 1
+				event "B2 Bunrodea Recusal Compact: Review Ready" 7 11
+				decline
+			label layered
+			`You separate evidence handling from decision authority. A reviewer with relevant history may still identify records, explain terminology, and correct factual mistakes, but the final judgment belongs to someone without the disqualifying tie. Tavi says that lets knowledge survive recusal. Nema says it also makes the boundary visible.`
+			action
+				"B2 Bunrodea Recusal Compact: introduced" = 1
+				"B2 Bunrodea Recusal Compact: route layered authority" = 1
+				"B2 Bunrodea Recusal Compact: tavi trusts player" = 1
+				"B2 Bunrodea Recusal Compact: nema trusts player" = 1
+				event "B2 Bunrodea Recusal Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that one awkward family connection is not enough reason for a visiting captain to define Bunrodea review ethics. Tavi accepts that. Nema records that the case was resolved locally without adopting a standing compact from your advice.`
+			action
+				"B2 Bunrodea Recusal Compact: declined" = 1
+				decline
+
+
+mission "B2 Bunrodea Recusal Compact: Review"
+	minor
+	name `When Disclosure Becomes Decoration`
+	description `Return after Bunrodea reviewers test whether conflict disclosures still matter once copied into routine case summaries.`
+	source
+		government "Bunrodea"
+	"offer precedence" 8
+	to offer
+		has "B2 Bunrodea Recusal Compact: introduced"
+		has "B2 Bunrodea Recusal Compact: review ready"
+		not "B2 Bunrodea Recusal Compact: reviewed"
+	on offer
+		conversation
+			branch recuse
+				has "B2 Bunrodea Recusal Compact: route recusal"
+			branch disclose
+				has "B2 Bunrodea Recusal Compact: route disclosure plus second review"
+			`Nema shows you several case summaries copied between offices. Each contains a conflict-disclosure line, but the copies no longer say whether the tie required recusal, independent review, or merely notice. Tavi says a disclosure that survives only as a sentence can become ceremonial rather than operational.`
+				goto settle
+			label recuse
+			`Tavi's original case was reassigned, but one downstream summary lists him as the reviewer because he prepared the evidence chronology. Nema says the facts are accurate while the authority history is not: the copy has collapsed who knew the file into who was allowed to decide it.`
+				goto settle
+			label disclose
+			`A second reviewer did independently confirm one decision, but another office copied only the first reviewer's conclusion and the phrase "conflict disclosed." Tavi says the copied summary preserved the warning and lost the safeguard that made the decision acceptable.`
+			label settle
+			choice
+				`\tCreate a portable recusal record: tie, disclosure, allowed role, excluded authority, substitute decision-maker, and review result travel together.`
+					goto portable
+				`\tCreate a tiered conflict screen: direct conflicts force recusal, weaker ties require independent review, and expired or irrelevant ties stop propagating as active warnings.`
+					goto tiered
+			label portable
+			`You recommend that conflict information travel as a decision-authority record rather than a stray note. It states the relationship, whether it required recusal, what work the conflicted reviewer could still perform, who held final authority, whether independent review occurred, and how the matter was closed.`
+			action
+				"B2 Bunrodea Recusal Compact: reviewed" = 1
+				"B2 Bunrodea Recusal Compact: settlement portable recusal record" = 1
+				"B2 Bunrodea Recusal Compact: nema trusts player" = 1
+				decline
+			label tiered
+			`You recommend a tiered screen. Direct family, ownership, or material stakes move final authority automatically. Lesser disclosed ties require independent confirmation when they could reasonably affect trust. Old or irrelevant connections remain in history but stop circulating as active conflicts unless fresh circumstances make them relevant again.`
+			action
+				"B2 Bunrodea Recusal Compact: reviewed" = 1
+				"B2 Bunrodea Recusal Compact: settlement tiered conflict screen" = 1
+				"B2 Bunrodea Recusal Compact: tavi trusts player" = 1
+				"B2 Bunrodea Recusal Compact: nema trusts player" = 1
+				decline
+
+
+mission "B2 Bunrodea Recusal Compact: Nema Remembers"
+	minor
+	name `Nema Remembers`
+	description `Nema Oss remembers whether a disclosed personal tie remained a meaningful limit on decision authority or became decorative paperwork.`
+	source
+		government "Bunrodea"
+	"offer precedence" 8
+	to offer
+		not "B2 Bunrodea Recusal Compact: aftermath seen"
+		or
+			has "B2 Bunrodea Recusal Compact: settlement portable recusal record"
+			has "B2 Bunrodea Recusal Compact: settlement tiered conflict screen"
+	on offer
+		conversation
+			branch tiered
+				has "B2 Bunrodea Recusal Compact: settlement tiered conflict screen"
+			`Nema shows you a new case record. The evidence chronology names Tavi because he built it. The authority section names someone else because Tavi was recused. "We stopped pretending that knowledge and judgment are the same role," she says. "The file can remember both without confusing them."`
+				goto finish
+			label tiered
+			`Nema points out a closed conflict notice on a recent review. The old connection is still visible in history, but it is no longer copied as an active warning because it has no current bearing on the case. A different reviewer with a direct family tie was automatically recused. "A conflict can matter without becoming permanent suspicion," she says.`
+			label finish
+			action
+				"B2 Bunrodea Recusal Compact: aftermath seen" = 1
+				decline
