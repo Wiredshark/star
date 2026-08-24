@@ -74,21 +74,45 @@ def main() -> None:
             fail(f"out-of-scope persistent write: {raw}")
 
     blocks = re.split(r'(?=^mission ")', text, flags=re.MULTILINE)
-    for block in blocks:
-        if not block.startswith("mission "):
-            continue
+    mission_blocks = {missions[0]: blocks[-3], missions[1]: blocks[-2], missions[2]: blocks[-1]}
+    for block in mission_blocks.values():
         labels = set(re.findall(r'^\s*label ([A-Za-z0-9_-]+)\s*$', block, flags=re.MULTILINE))
         gotos = set(re.findall(r'^\s*goto ([A-Za-z0-9_-]+)\s*$', block, flags=re.MULTILINE))
         missing = gotos - labels
         if missing:
             fail(f"unresolved local goto labels: {sorted(missing)}")
 
-    offer_block = next(b for b in blocks if b.startswith(f'mission "{PREFIX} Offer"'))
+    offer_block = mission_blocks[f"{PREFIX} Offer"]
     decline_block = offer_block.split("label decline", 1)[1]
     if f'"{PREFIX} introduced" = 1' in decline_block:
         fail("refusal must not enter the Review chain")
     if 'Review Ready" 7 11' in decline_block:
         fail("refusal must not schedule Review")
+
+    review_block = mission_blocks[f"{PREFIX} Review"]
+    review_requirements = (
+        f'has "{PREFIX} introduced"',
+        f'has "{PREFIX} review ready"',
+        '"world: free worlds defense strain" <= 2',
+        f'not "{PREFIX} reviewed"',
+    )
+    for requirement in review_requirements:
+        if requirement not in review_block:
+            fail(f"Review missing lifecycle gate: {requirement}")
+    if review_block.count(f'"{PREFIX} reviewed" = 1') != 2:
+        fail("both Review settlements must close the Review exactly once")
+    for settlement in expected_settlements:
+        if f'"{PREFIX} settlement {settlement}" = 1' not in review_block:
+            fail(f"Review missing settlement write: {settlement}")
+
+    aftermath_block = mission_blocks[f"{PREFIX} Mika Remembers"]
+    if f'not "{PREFIX} aftermath seen"' not in aftermath_block:
+        fail("aftermath reader must remain one-shot")
+    for settlement in expected_settlements:
+        if f'has "{PREFIX} settlement {settlement}"' not in aftermath_block:
+            fail(f"aftermath reader must consume settlement: {settlement}")
+    if aftermath_block.count(f'"{PREFIX} aftermath seen" = 1') != 1:
+        fail("aftermath reader must mark aftermath exactly once")
 
     required = (
         "private message", "crew memories", "family", "public memorial",
@@ -115,8 +139,9 @@ def main() -> None:
     print("PASS: missions=3")
     print("PASS: characters=Tess Morrow + Mika Rowe; memorial subject=Niko Rowe")
     print("PASS: initial_routes=3 + refusal")
+    print("PASS: review_gating=introduced + delayed-ready + recovered A1 strain + one-shot")
     print("PASS: terminal_settlements=2")
-    print("PASS: later_reader=Mika Remembers")
+    print("PASS: later_reader=Mika Remembers; both settlements consumed one-shot")
     print("PASS: lifecycle=7 state-only terminals decline")
     print("PASS: mutation_surface=B2 conditions only; A1 defense strain read-only")
     print("PASS: primary_domain=grief / friendship / family relationships / public memory")
