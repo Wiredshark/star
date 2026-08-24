@@ -1,0 +1,164 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Republic Lottery Household Boundaries.
+#
+# Republic and Syndicate spaceports already depict ordinary lottery play, including
+# small winners immediately buying more tickets. This slice narrows that background
+# to one Near Earth household. It is about personal agency, shared obligations, and
+# voluntary limits, not a diagnosis, a universal Republic policy, or a claim that
+# A1 civic strain causes gambling behavior.
+
+
+event "B2 Republic Lottery Household Boundaries: Review Ready"
+	"B2 Republic Lottery Household Boundaries: review ready" = 1
+
+
+mission "B2 Republic Lottery Household Boundaries: Offer"
+	landing
+	minor
+	invisible
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	to offer
+		not "B2 Republic Lottery Household Boundaries: introduced"
+		not "B2 Republic Lottery Household Boundaries: declined"
+		random < 14
+	on offer
+		conversation
+			`A lottery display near the spaceport flashes a modest winner's number. The young man beneath it, Elias Penn, laughs once and immediately reaches for another strip of tickets. His older sister Mara catches his wrist before he can pay. "Rent first," she says. Elias pulls free without anger. "I paid my share this month. This is mine."`
+			`Mara recognizes you as an independent captain and asks for an outside view before Elias can object. The siblings share an apartment with their mother. Elias works irregular dock shifts; Mara covers more of the fixed bills when his hours are cut. Elias says he has never missed an agreed payment. Mara says that watching him turn every small win back into tickets makes the distinction feel thinner than he admits.`
+			choice
+				`\tProtect a household floor first: agreed rent, food, medicine, and shared debts are due before either sibling gets a say over the other's personal spending.`
+					goto floor
+				`\tUse a voluntary limit and cooling-off period that Elias chooses, reviews, and can end without turning Mara into his financial guardian.`
+					goto voluntary
+				`\tKeep shared obligations and personal-risk spending as separate records. The household may audit the first; the second stays private once agreed obligations are met.`
+					goto paired
+				`\tRefuse to turn one family's argument into a general rule about legal lottery play.`
+					goto decline
+			label floor
+			`You tell them that the clearest boundary is the obligation they already share. Rent, food, medicine, and explicit household debts can be written down and funded first. What remains belongs to the person who earned it unless they separately agree otherwise. Mara says that would let her object to a missed bill without objecting to Elias as a person. Elias says he can live with a rule that binds both of them.`
+			action
+				"B2 Republic Lottery Household Boundaries: introduced" = 1
+				"B2 Republic Lottery Household Boundaries: route household floor" = 1
+				"B2 Republic Lottery Household Boundaries: mara trusts player" = 1
+				"B2 Republic Lottery Household Boundaries: elias trusts player" = 1
+				event "B2 Republic Lottery Household Boundaries: Review Ready" 7 11
+				decline
+			label voluntary
+			`You suggest that Elias, not Mara, set a temporary spending limit and a cooling-off period before buying more tickets after a win. The limit should have a review date and should not become permanent evidence that he cannot manage his own money. Elias is defensive until you make that last point. Mara says she wanted a pause, not ownership of his wallet.`
+			action
+				"B2 Republic Lottery Household Boundaries: introduced" = 1
+				"B2 Republic Lottery Household Boundaries: route voluntary limit" = 1
+				"B2 Republic Lottery Household Boundaries: mara trusts player" = 1
+				"B2 Republic Lottery Household Boundaries: elias trusts player" = 1
+				event "B2 Republic Lottery Household Boundaries: Review Ready" 7 11
+				decline
+			label paired
+			`You separate two kinds of information. The household record contains agreed contributions, explicit loans, and whether those obligations are current. Elias's personal spending is not copied into that record merely because someone dislikes it. Mara says she only needs to know whether the household is being carried fairly. Elias says that is the first version that does not make every ticket into a family hearing.`
+			action
+				"B2 Republic Lottery Household Boundaries: introduced" = 1
+				"B2 Republic Lottery Household Boundaries: route paired records" = 1
+				"B2 Republic Lottery Household Boundaries: elias trusts player" = 1
+				event "B2 Republic Lottery Household Boundaries: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that they know their household better than a passing captain does, and that legal personal spending does not need an outsider's doctrine attached to it. Mara looks dissatisfied but accepts the point. Elias puts the new ticket strip back anyway. "Not because you told me to," he says, which makes Mara laugh despite herself.`
+			action
+				"B2 Republic Lottery Household Boundaries: declined" = 1
+				decline
+
+
+mission "B2 Republic Lottery Household Boundaries: Review"
+	landing
+	minor
+	invisible
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	to offer
+		has "B2 Republic Lottery Household Boundaries: introduced"
+		has "B2 Republic Lottery Household Boundaries: review ready"
+		not "B2 Republic Lottery Household Boundaries: reviewed"
+	on offer
+		conversation
+			branch strained
+				"world: republic civic strain" >= 3
+			`Mara and Elias find you again after another lottery draw. This time Elias lost nothing dramatic, but the household has had a difficult week of paperwork and delayed public services. Mara admits that the outside pressure made every discretionary purchase feel like a threat even when the bills were current. Elias says that is exactly why a temporary family rule must not quietly become permanent authority over him.`
+				goto routes
+			label strained
+			`Mara and Elias find you again after another lottery draw while Republic civic offices are visibly strained. The household's own bills are still current, but delayed paperwork and service queues have made both of them more anxious about money. They agree the public pressure is real and also agree it does not prove anything about Elias's judgment or turn Mara into his guardian.`
+			label routes
+			branch voluntary
+				has "B2 Republic Lottery Household Boundaries: route voluntary limit"
+			branch paired
+				has "B2 Republic Lottery Household Boundaries: route paired records"
+			`The household-first rule worked until Elias won enough to cover two months of his normal contribution. Mara now thinks the win should be reserved for future bills because past uncertainty was expensive. Elias says meeting a future obligation early is generous, but being permanently required to do so would convert one good week into family control of every later windfall.`
+				goto settle
+			label voluntary
+			`Elias kept the voluntary limit for its full term, then let it expire. A copied household note still marks him as "limited" without the end date or the fact that he chose it himself. Mara agrees the old note is now misleading, but worries that deleting it entirely would erase why the family tried the experiment.`
+				goto settle
+			label paired
+			`The separate records mostly worked, but an old loan from Mara to Elias was copied into the household ledger after it had already been repaid. The copy preserves the amount while dropping the closure. Elias says an accurate old debt can become a false current accusation if its status disappears.`
+			label settle
+			choice
+				`\tUse a portable household-boundary record: current shared obligations, explicit loans, voluntary limits, start/end dates, responsible person, and closure evidence travel together.`
+					goto packet
+				`\tUse expiry plus fresh cause: resolved loans and expired voluntary limits remain searchable history but stop acting as current restrictions unless a new missed obligation or new voluntary agreement reopens them.`
+					goto expiry
+			label packet
+			`You help them build a small record that distinguishes current household obligations from personal spending and distinguishes a voluntary limit from a guardianship order. Old loans remain visible with their repayment status. Limits carry who chose them, when they began, when they end, and whether they were renewed. Mara says this gives her something concrete to rely on without making every old worry current forever. Elias says history feels less accusatory when closure travels with it.`
+			action
+				"B2 Republic Lottery Household Boundaries: reviewed" = 1
+				"B2 Republic Lottery Household Boundaries: settlement portable household boundary" = 1
+				"B2 Republic Lottery Household Boundaries: mara trusts player" = 1
+				"B2 Republic Lottery Household Boundaries: elias trusts player" = 1
+				decline
+			label expiry
+			`You recommend allowing resolved restrictions to become history instead of remaining active controls. A repaid loan does not keep acting like a debt. An expired voluntary limit does not keep acting like a judgment of competence. A new missed obligation can justify a new conversation, but the old record alone cannot manufacture fresh authority. Mara accepts the distinction. Elias says he can tolerate family memory if it stops pretending to be a current verdict.`
+			action
+				"B2 Republic Lottery Household Boundaries: reviewed" = 1
+				"B2 Republic Lottery Household Boundaries: settlement expiry and fresh cause" = 1
+				"B2 Republic Lottery Household Boundaries: elias trusts player" = 1
+				decline
+
+
+mission "B2 Republic Lottery Household Boundaries: Elias Remembers"
+	landing
+	minor
+	invisible
+	source
+		government "Republic"
+		attributes "near earth"
+		not attributes "station"
+	to offer
+		not "B2 Republic Lottery Household Boundaries: aftermath seen"
+		or
+			has "B2 Republic Lottery Household Boundaries: settlement portable household boundary"
+			has "B2 Republic Lottery Household Boundaries: settlement expiry and fresh cause"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Republic Lottery Household Boundaries: settlement expiry and fresh cause"
+			`Elias spots you near another lottery kiosk and waves before you can pretend not to notice. He shows you the household record on his terminal. The current obligations are short; the older loans and one voluntary limit are still visible, each marked closed. "Mara can see whether I am carrying my share," he says. "She cannot turn a closed line back into a current one because she is nervous. And I cannot pretend the old problem never happened either."`
+				goto finish
+			label expiry
+			`Elias finds you while Mara is buying groceries nearby. He points at the lottery kiosk and grins. "I still buy a ticket sometimes." Then he shows you a household note in which an old repaid loan is clearly historical and an expired limit is no longer active. "The useful part was not banning anything. It was making sure yesterday's worry did not automatically become today's authority." Mara, overhearing him, says that applies to both of them.`
+			label finish
+			action
+				"B2 Republic Lottery Household Boundaries: aftermath seen" = 1
+				decline
