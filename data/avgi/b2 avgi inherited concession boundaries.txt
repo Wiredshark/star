@@ -53,7 +53,7 @@ mission "B2 Avgi Inherited Concession Boundaries: Offer"
 					goto paired
 				`\tRefuse to turn one family's succession dispute into a general Avgi rule.`
 					goto decline
-+			label consent
+			label consent
 			`You recommend treating the heir line as history and potential interest, not as present consent. The Heir can decline the office without the record pretending that the family relationship disappeared. The Holder dislikes the uncertainty, but concedes that an office filled by assumption may be less durable than one deliberately accepted.`
 			action
 				"B2 Avgi Inherited Concession Boundaries: introduced" = 1
