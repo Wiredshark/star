@@ -1,0 +1,161 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Kor Efret Shrine Offering Boundaries.
+#
+# This slice uses the existing Far'en Lai remembrance rite and the integrated
+# Kor Efret passage-continuity aftermath as cultural/relationship context. It is
+# one local family dispute, not a universal Korath rule for sacred property.
+
+
+event "B2 Kor Efret Shrine Offering Boundaries: Review Ready"
+	"B2 Kor Efret Shrine Offering Boundaries: review ready" = 1
+
+
+mission "B2 Kor Efret Shrine Offering Boundaries: Offer"
+	landing
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "Korath Far'en Lai Prayer: offered"
+		has "B2 Kor Efret Passage Continuity Compact: aftermath seen"
+		not "B2 Kor Efret Shrine Offering Boundaries: introduced"
+		not "B2 Kor Efret Shrine Offering Boundaries: declined"
+		random < 20
+	on offer
+		conversation
+			`Near one of the blackened walls used during Far'en Lai remembrance, two Kor Efreti are arguing quietly over a heavy workshop tool resting among older offerings. You recognize one as a person who often straightens weather covers and keeps children from trampling the small piles of keepsakes. In your own thoughts you have started calling this one the Caretaker, though nobody has offered that as a Korath title. The other is a younger relative of the mechanic whose tool lies on the shrine.`
+			`The younger Kor Efret points toward a reopened workshop and then to the tool. The gestures are easy to follow: the mechanic's family needs the calibrated cutter again. The Caretaker points instead to the shrine, the old family mark beside the tool, and the faded date of the offering. The object is both useful equipment and part of a remembrance.`
+			`Neither side can show you a clear record saying the offering was meant to be permanent, temporary, reclaimable, or transferred away from the family forever. The dispute is not whether Far'en Lai matters. It is whether later practical need can silently rewrite the meaning of an old offering, or whether the old offering can silently erase every later family claim.`
+			choice
+				`\tUse intent first: preserve any explicit donor or family instruction, and when intent is unknown do not invent permanent surrender or automatic retrieval.`
+					goto intent
+				`\tAllow family reuse when no permanent gift was recorded, but preserve when the object was offered, why it was removed, and whether anything remains at the shrine in its place.`
+					goto reuse
+				`\tTrack ritual status and physical custody separately so the object's movement does not erase the history of what it once meant here.`
+					goto paired
+				`\tRefuse to turn one family's remembrance into a general rule.`
+					goto decline
+			label intent
+			`You point first to the old family mark, then make the clearest gesture you can for asking rather than assuming. If a living donor or family instruction survives, it should control what can be known about the offering. If no such instruction exists, the record should say that instead of pretending uncertainty means permanent surrender or automatic retrieval. The Caretaker nods first. The younger relative follows after a long look at the tool.`
+			action
+				"B2 Kor Efret Shrine Offering Boundaries: introduced" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: route intent first" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: caretaker trusts player" = 1
+				event "B2 Kor Efret Shrine Offering Boundaries: Review Ready" 7 11
+				decline
+			label reuse
+			`You point from the tool to the reopened workshop, then back to the shrine and its dated family mark. The family can use an object again without pretending it was never offered. The younger Kor Efret adds a removal mark and a sketch of the workshop beside the old shrine entry. The Caretaker accepts the practical use after adding a second note showing that the object's commemorative history remains open.`
+			action
+				"B2 Kor Efret Shrine Offering Boundaries: introduced" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: route family reuse" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: relative trusts player" = 1
+				event "B2 Kor Efret Shrine Offering Boundaries: Review Ready" 7 11
+				decline
+			label paired
+			`You draw two simple columns. One records that the cutter was once placed at the Far'en Lai shrine, by whom, and in whose memory. The other records who physically holds it now and for what purpose. Moving the object can change custody without erasing its ritual history; preserving the ritual history does not itself decide who may physically use the object today. Both Kor Efreti begin adding marks to the two columns.`
+			action
+				"B2 Kor Efret Shrine Offering Boundaries: introduced" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: route paired status" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: caretaker trusts player" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: relative trusts player" = 1
+				event "B2 Kor Efret Shrine Offering Boundaries: Review Ready" 7 11
+				decline
+			label decline
+			`You step back from the shrine and make it clear that you will not define the meaning of an offering for a family whose language and customs are not yours. The argument continues more quietly. Before you leave, the younger relative adds a small mark meaning the question is still unresolved rather than simply taking the cutter.`
+			action
+				"B2 Kor Efret Shrine Offering Boundaries: declined" = 1
+				decline
+
+
+mission "B2 Kor Efret Shrine Offering Boundaries: Review"
+	landing
+	minor
+	invisible
+	source
+		attributes "efret"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Kor Efret Shrine Offering Boundaries: introduced"
+		has "B2 Kor Efret Shrine Offering Boundaries: review ready"
+		not "B2 Kor Efret Shrine Offering Boundaries: reviewed"
+	on offer
+		conversation
+			branch reuse
+				has "B2 Kor Efret Shrine Offering Boundaries: route family reuse"
+			branch paired
+				has "B2 Kor Efret Shrine Offering Boundaries: route paired status"
+			`The Caretaker and the younger relative find you beside a newer shrine ledger. The workshop tool is now back in use, but a copied catalog at another settlement lists it as "missing from shrine." A different family saw that entry and assumed that anything placed for Far'en Lai could be reclaimed whenever useful. Both conclusions took one true fact and turned it into a rule the original record never stated.`
+			`The Caretaker points to several other offerings: a child's drawing, an ancestor's worn hand tool, a sealed message, a valuable crystal, a photograph from a destroyed world. Their physical value, family ownership history, ritual meaning, donor intent, and current custodian are not the same thing.`
+				goto settle
+			label reuse
+			`Family reuse kept the cutter working, but the copied catalog reduced the whole decision to "family retrieved offering." The removal date and workshop need survived; the uncertainty about permanent gift, the old commemorative purpose, and the family-specific reasoning did not. The younger relative looks frustrated that a careful exception has become a shortcut for strangers.`
+				goto settle
+			label paired
+			`The paired record preserved ritual history and current custody, but one settlement copied only the physical-custody column and concluded that the shrine record had been corrected as an error. The Caretaker taps the older column repeatedly: an object can leave the shrine without making its earlier presence false.`
+			label settle
+			choice
+				`\tUse a portable offering history: donor or family source, intended permanence if known, ritual meaning, physical custodian, removal or return reason, unresolved claims, and closure travel together.`
+					goto history
+				`\tUse dual closure: ritual status and physical custody remain separate records, and neither is treated as settled until its own uncertainty or claim is explicitly closed.`
+					goto dual
+			label history
+			`You recommend a portable offering history. It can say that the cutter was genuinely offered in remembrance, later removed for family workshop use, and that no surviving record proved the original placement was an irreversible transfer. A future reader sees the whole chain rather than a single word such as "missing" or "reclaimed." The Caretaker adds a mark for unresolved intent instead of inventing certainty.`
+			action
+				"B2 Kor Efret Shrine Offering Boundaries: reviewed" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: settlement portable offering history" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: caretaker trusts player" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: relative trusts player" = 1
+				decline
+			label dual
+			`You recommend separate closure. The shrine record answers what the object meant there and whether that ritual status is still open, fulfilled, replaced, or unknown. The custody record answers who physically holds the object now and what claims remain. Neither column is allowed to overwrite the other. The younger relative points to the cutter's old shrine entry and then to the workshop: both can remain true.`
+			action
+				"B2 Kor Efret Shrine Offering Boundaries: reviewed" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: settlement dual closure" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: caretaker trusts player" = 1
+				"B2 Kor Efret Shrine Offering Boundaries: relative trusts player" = 1
+				decline
+
+
+mission "B2 Kor Efret Shrine Offering Boundaries: Caretaker Remembers"
+	landing
+	minor
+	invisible
+	name `Caretaker Remembers`
+	description `A Kor Efret shrine caretaker remembers how one family's useful tool remained part of a remembrance even after leaving the shrine.`
+	source
+		attributes "efret"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Kor Efret Shrine Offering Boundaries: aftermath seen"
+		or
+			has "B2 Kor Efret Shrine Offering Boundaries: settlement portable offering history"
+			has "B2 Kor Efret Shrine Offering Boundaries: settlement dual closure"
+	on offer
+		conversation
+			branch dual
+				has "B2 Kor Efret Shrine Offering Boundaries: settlement dual closure"
+			`The Caretaker recognizes you near the Far'en Lai wall and shows you a copied offering history from another settlement. One entry follows an object from a family workshop to a shrine and later back into family use. The old offering date remains visible beside the later custody change. Nobody has labeled the object stolen, returned, abandoned, or permanently gifted without evidence for that word.`
+				goto finish
+			label dual
+			`The Caretaker shows you two linked marks beside the old cutter entry. The ritual-status mark still records the remembrance; the custody mark points to the reopened workshop. The younger relative has added a new note showing the tool still in use. The records do not force the object to be in one place forever in order for the earlier offering to remain true.`
+			label finish
+			action
+				"B2 Kor Efret Shrine Offering Boundaries: aftermath seen" = 1
+				decline
