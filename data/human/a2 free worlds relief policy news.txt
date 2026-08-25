@@ -1,8 +1,21 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # A2 ambient consequence consumer for the integrated Free Worlds relief-allocation slice.
 #
 # This file reads only persistent A2 outcome memory and publishes it through
 # stock News `to show` conditions. It does not mutate A1 relief-demand state or
-# create a second policy authority.
+# create a second policy authority. Refusal remains private and has no News consumer.
 
 news "A2 Free Worlds relief policy medical clear"
 	location
