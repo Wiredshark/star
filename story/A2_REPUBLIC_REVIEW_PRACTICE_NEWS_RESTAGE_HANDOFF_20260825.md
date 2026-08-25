@@ -1,6 +1,6 @@
 # A2 Republic Review Practice News — current-main restage handoff
 
-Verdict: PARTIAL. Keep this branch isolated and unmerged until both repository-native exact-head gates are terminal green.
+Verdict: READY for A3 review/integration. Keep this branch isolated and unmerged; A3 retains integration authority.
 
 ## Authority / isolation
 - Authoritative repository: `Wiredshark/star`
@@ -8,8 +8,9 @@ Verdict: PARTIAL. Keep this branch isolated and unmerged until both repository-n
 - Branch: `agent/a2-republic-review-practice-news-restage-20260825-1805`
 - Production commit: `003073c23fe7a5c9a4d5ae6f04e1cd0e1998f8be`
 - Strengthened validator commit: `881dcfcc435c0142ee8270a807e83b60dda61c2b`
-- Historical branch `agent/a2-republic-review-practice-news-20260819-0505` remains untouched.
-- Do not self-integrate; A3 retains integration authority.
+- Exact validated production/validator/handoff candidate: `a28a6c93821ae9369e1a6e617daf169af1f99196`
+- Historical branch `agent/a2-republic-review-practice-news-20260819-0505` remains untouched and must not be integrated alongside this restage.
+- No self-integration was performed.
 
 ## Player-facing dynamic narrative loop
 This is a read-only ambient consequence layer that connects three already-integrated systems:
@@ -49,9 +50,19 @@ The focused validator checks:
 - no upstream/world assignments;
 - no gameplay/material/objective mutation directives.
 
-Repository-native exact-head workflows are required before READY:
-- `Fork simulation and story validation`
-- `Fork save-load integration smoke`
+## Exact validation evidence
+Exact candidate `a28a6c93821ae9369e1a6e617daf169af1f99196`:
+- `Fork simulation and story validation` #630 / run `32904579883`: SUCCESS
+  - focused Python validation compile: SUCCESS
+  - all focused story validators: SUCCESS
+  - A1 simulation/state-ownership contracts: SUCCESS
+  - changed fork content style: SUCCESS
+- `Fork save-load integration smoke` #615 / run `32904579990`: SUCCESS
+  - checkout: SUCCESS
+  - build/runtime dependencies: SUCCESS
+  - production configure: SUCCESS
+  - production build: SUCCESS
+  - stock save-load smoke: SUCCESS
 
 ## A3 integration instructions
-When both exact-head workflows are green, A3 may review this branch as the current-main replacement for the historical Republic Review Practice News candidate. Do not integrate the historical branch alongside this restage. Preserve the bounded-consent/private-precedent boundary and A1/B2/upstream-A2 read-only ownership.
+A3 may review this branch as the current-main replacement for the historical Republic Review Practice News candidate. Preserve the exact four outcome mappings, bounded-consent/private-precedent boundary, Republic-only scope, and A1/B2/upstream-A2 read-only ownership. Do not integrate the historical branch alongside this restage.
