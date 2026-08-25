@@ -1,0 +1,142 @@
+# Copyright (c) 2026 Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 dynamic narrative: make the A1 Republic-displacement -> Free Worlds relief
+# spillover legible to the player without taking ownership of either simulation.
+
+
+mission "A2 Displacement Relief Liaison: Cross-Border Briefing"
+	minor
+	name `Relief Liaison: Cross-Border Cases`
+	description `Imani Vale asks how Free Worlds relief staff should document arrivals connected to severe Republic displacement.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "world: republic displacement relief spillover active"
+		"world: republic displacement pressure" >= 4
+		not "A2 Displacement Relief Liaison: briefing seen"
+	on offer
+		conversation
+			`Imani Vale catches you beside an arrivals board whose newest entries carry Republic departure records alongside Free Worlds relief numbers. "This is no longer only a local queue. Some of these cases are arriving because displacement pressure across the border is spilling into our network."`
+			`She keeps her voice low. "I do not want a Republic crisis turned into a Free Worlds talking point, and I do not want the origin of these cases erased either. How should we record the connection?"`
+			choice
+				`\tRecord the cross-border cause, but keep individual arrivals anonymous.`
+					goto bounded
+				`\tTrack only aggregate capacity pressure; do not attach a political origin to individual cases.`
+					goto aggregate
+				`\tKeep the two systems operationally separate unless an arrival asks for the connection to be recorded.`
+					goto consent
+				`\tI am not authorizing a cross-border documentation policy.`
+					goto refuse
+			label bounded
+			`Vale nods. "Cause without exposure. We can preserve the fact that displacement is moving demand across the border without turning a passenger list into evidence."`
+			action
+				"A2 Displacement Relief Liaison: briefing seen" = 1
+				"A2 Displacement Relief Liaison: bounded provenance" = 1
+				"A2 Displacement Relief Liaison: followup pending" = 1
+				decline
+			label aggregate
+			`Vale marks the capacity ledger instead. "Then the shared fact is load, not identity. Ports can plan around the pressure without pretending every arrival has the same story."`
+			action
+				"A2 Displacement Relief Liaison: briefing seen" = 1
+				"A2 Displacement Relief Liaison: aggregate only" = 1
+				"A2 Displacement Relief Liaison: followup pending" = 1
+				decline
+			label consent
+			`Vale closes the origin column. "Case by case, then. The network can coordinate capacity while the people moving through it decide whether their history travels with the file."`
+			action
+				"A2 Displacement Relief Liaison: briefing seen" = 1
+				"A2 Displacement Relief Liaison: consent led" = 1
+				"A2 Displacement Relief Liaison: followup pending" = 1
+				decline
+			label refuse
+			`Vale locks the policy field. "Understood. I will record that you declined rather than treating silence as permission."`
+			action
+				"A2 Displacement Relief Liaison: briefing seen" = 1
+				"A2 Displacement Relief Liaison: refused" = 1
+				"A2 Displacement Relief Liaison: followup pending" = 1
+				decline
+
+
+mission "A2 Displacement Relief Liaison: Review"
+	minor
+	name `Relief Liaison: After the Crossing`
+	description `Imani Vale reviews how the cross-border documentation rule behaved after the immediate spillover latch ended.`
+	source
+		government "Free Worlds"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "A2 Displacement Relief Liaison: followup pending"
+		not "world: republic displacement relief spillover active"
+		not "A2 Displacement Relief Liaison: followup seen"
+	on offer
+		conversation
+			branch bounded_high
+				has "A2 Displacement Relief Liaison: bounded provenance"
+				"world: republic displacement pressure" >= 4
+			branch bounded_low
+				has "A2 Displacement Relief Liaison: bounded provenance"
+				"world: republic displacement pressure" < 4
+			branch aggregate_high
+				has "A2 Displacement Relief Liaison: aggregate only"
+				"world: republic displacement pressure" >= 4
+			branch aggregate_low
+				has "A2 Displacement Relief Liaison: aggregate only"
+				"world: republic displacement pressure" < 4
+			branch consent_high
+				has "A2 Displacement Relief Liaison: consent led"
+				"world: republic displacement pressure" >= 4
+			branch consent_low
+				has "A2 Displacement Relief Liaison: consent led"
+				"world: republic displacement pressure" < 4
+			`Vale finds you again. "The immediate crossing pulse ended. I kept your refusal exactly where you left it; nobody converted it into a policy endorsement."`
+			action
+				"A2 Displacement Relief Liaison: refusal respected" = 1
+				goto finish
+			label bounded_high
+			`"The first pulse passed, but Republic displacement is still severe," Vale says. "Anonymous provenance gave planners warning that another cross-border load may follow without exposing the people already here."`
+			action
+				"A2 Displacement Relief Liaison: bounded pressure persists" = 1
+				goto finish
+			label bounded_low
+			`"Republic displacement has eased below the severe threshold," Vale says. "The anonymous provenance record now reads as history instead of an active warning, which is exactly the distinction we needed."`
+			action
+				"A2 Displacement Relief Liaison: bounded pressure eased" = 1
+				goto finish
+			label aggregate_high
+			`"The crossing pulse ended, but the upstream pressure has not," Vale says. "Aggregate load tracking kept our ports ready without making assumptions about why any particular traveler left."`
+			action
+				"A2 Displacement Relief Liaison: aggregate pressure persists" = 1
+				goto finish
+			label aggregate_low
+			`"Both the immediate pulse and the severe upstream pressure have eased," Vale says. "The capacity ledger was enough to scale back cleanly without leaving political labels attached to case files."`
+			action
+				"A2 Displacement Relief Liaison: aggregate pressure eased" = 1
+				goto finish
+			label consent_high
+			`"The upstream pressure is still severe," Vale says. "Consent-led records are slower to summarize, but nobody had their displacement history carried forward simply because the network wanted cleaner statistics."`
+			action
+				"A2 Displacement Relief Liaison: consent pressure persists" = 1
+				goto finish
+			label consent_low
+			`"The severe upstream pressure has eased," Vale says. "The consent-led files stayed attached only where people wanted them attached. We can close the emergency review without rewriting anyone's history for them."`
+			action
+				"A2 Displacement Relief Liaison: consent pressure eased" = 1
+			label finish
+			action
+				"A2 Displacement Relief Liaison: followup pending" = 0
+				"A2 Displacement Relief Liaison: followup seen" = 1
+				decline
