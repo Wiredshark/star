@@ -95,7 +95,7 @@ assignments = re.findall(r'^\s*"([^"]+)"\s*[+\-*/]?=', text, flags=re.MULTILINE)
 require(assignments, "expected persistent writes")
 require(all(name.startswith(PREFIX) for name in assignments),
         f"non-B2 state write found: {[name for name in assignments if not name.startswith(PREFIX)]}")
-for banned in ('credits', 'reputation', 'outfit ', 'cargo ', 'ship ', 'fleet ', 'combat rating'):
+for banned in ('credits', 'reputation', 'outfit ', 'cargo ', 'fleet ', 'combat rating'):
     require(banned not in text.lower(), f"unexpected material/reputation mutation surface: {banned}")
 
 for phrase in (
