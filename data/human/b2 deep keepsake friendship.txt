@@ -1,0 +1,158 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Deep Keepsake Friendship production slice.
+# Returns to the two young Deep locals first seen laughing over an overpriced
+# souvenir. Their friendship is the subject here: gifts, class mobility, pride,
+# and reciprocity remain personal rather than becoming an institutional rule.
+
+
+event "B2 Deep Keepsake Friendship: Review Ready"
+	"B2 Deep Keepsake Friendship: review ready" = 1
+
+
+mission "B2 Deep Keepsake Friendship: Offer"
+	minor
+	name `The Joke Became a Gift`
+	description `Two old friends from the Deep disagree over whether a more expensive farewell gift changes what either of them owes the other.`
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "Gift Store Interaction: declined"
+		not "B2 Deep Keepsake Friendship: introduced"
+		not "B2 Deep Keepsake Friendship: declined"
+	on offer
+		conversation
+			`You recognize two young adults near a souvenir kiosk: Niko Rell and Sana Vey, the same pair you once saw laughing over a price tag neither of them wanted to pay. They recognize you only as another familiar traveler until Niko holds up a boxed souvenir and says, "This is the problem."`
+			`Sana rolls her eyes. "Our whole joke was finding the worst overpriced thing in the port and walking away. Then he gets a promotion and suddenly buys one for me because I'm leaving for a training post." Niko protests that it is a farewell present, not charity. Sana says, "I know. But now I feel like I either owe you something equally ridiculous or I become the poor friend you buy things for."`
+			choice
+				`\tKeep the old ritual cheap: the point was the shared joke, not the price of the object.`
+					goto ritual
+				`\tLet the gift be generous, but say plainly that generosity does not create a matching debt.`
+					goto nodebt
+				`\tSeparate gifts from obligations: either friend may give freely, but actual loans and promises must be named as such.`
+					goto separate
+				`\tRefuse to referee a friendship that has survived perfectly well without you.`
+					goto decline
+			label ritual
+			`You tell them that the old ritual worked because both of them could participate on equal terms. Niko quietly admits he liked finally being able to buy the thing they always joked about, but Sana says that turning the joke into a purchase changed its shape. They agree to keep the tradition small enough that either can answer it with another joke rather than another expense.`
+			action
+				"B2 Deep Keepsake Friendship: introduced" = 1
+				"B2 Deep Keepsake Friendship: route shared ritual" = 1
+				"B2 Deep Keepsake Friendship: sana trusts player" = 1
+				event "B2 Deep Keepsake Friendship: Review Ready" 7 11
+				decline
+			label nodebt
+			`You tell Sana that accepting a gift need not mean accepting a debt. Niko has to mean that when he says it, even if she never buys him anything comparable. Niko agrees immediately. Sana makes him repeat it without joking, then takes the box and warns that if he ever mentions its price again she will leave it in an airlock.`
+			action
+				"B2 Deep Keepsake Friendship: introduced" = 1
+				"B2 Deep Keepsake Friendship: route no debt" = 1
+				"B2 Deep Keepsake Friendship: niko trusts player" = 1
+				event "B2 Deep Keepsake Friendship: Review Ready" 7 11
+				decline
+			label separate
+			`You suggest that gifts remain gifts unless the two of them explicitly name a loan, favor, or promise. That lets Niko be generous without pretending money never matters, and lets Sana accept or refuse a present without rewriting every other thing they have done for one another. Both seem relieved by how ordinary that sounds.`
+			action
+				"B2 Deep Keepsake Friendship: introduced" = 1
+				"B2 Deep Keepsake Friendship: route gifts separate" = 1
+				"B2 Deep Keepsake Friendship: sana trusts player" = 1
+				"B2 Deep Keepsake Friendship: niko trusts player" = 1
+				event "B2 Deep Keepsake Friendship: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a friendship old enough to have traditions about bad souvenirs can probably survive one awkward present without acquiring a formal doctrine. Sana laughs first. Niko looks offended for half a second, then laughs too. They go back to arguing about whether the box is ugly enough to deserve keeping.`
+			action
+				"B2 Deep Keepsake Friendship: declined" = 1
+				decline
+
+
+mission "B2 Deep Keepsake Friendship: Review"
+	minor
+	name `The Favor Nobody Priced`
+	description `Niko and Sana discover whether their answer about gifts still works when a favor matters more than money.`
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Deep Keepsake Friendship: introduced"
+		has "B2 Deep Keepsake Friendship: review ready"
+		not "B2 Deep Keepsake Friendship: reviewed"
+	on offer
+		conversation
+			branch ritual
+				has "B2 Deep Keepsake Friendship: route shared ritual"
+			branch nodebt
+				has "B2 Deep Keepsake Friendship: route no debt"
+			`Niko and Sana flag you down outside a cafe. Sana's training post changed its start date, and Niko spent most of a day helping her repack and rebook transport. Nothing expensive changed hands, but Sana says the favor felt larger than the souvenir ever did. Niko says, "Apparently we solved the price problem and discovered the time problem."`
+				goto settle
+			label ritual
+			`Their cheap keepsake ritual survived, but the move exposed a different imbalance. Niko had more free time and used it freely; Sana now feels pressure to repay hours rather than credits. "I can buy him a joke mug," she says. "I cannot manufacture a spare day."`
+				goto settle
+			label nodebt
+			`The expensive gift never became a debt, exactly as you advised. But Niko's day of unpaid help feels harder for Sana to categorize. Niko insists he volunteered. Sana says that generosity can still become uncomfortable when one person is always the one with more money or more time to give.`
+			label settle
+			choice
+				`\tKeep reciprocity broad: friends may contribute different things at different times without balancing every act one-for-one.`
+					goto broad
+				`\tKeep favors specific: gratitude is real, but only an explicitly requested promise creates an obligation that remains open.`
+					goto explicit
+			label broad
+			`You tell them that friendship can be reciprocal without being an account book. Money, time, rides, listening, bad souvenirs, and simply showing up do not need equal prices to matter. Sana says that works only if either of them can say no without the older generosity being invoked as leverage. Niko agrees before she finishes the sentence.`
+			action
+				"B2 Deep Keepsake Friendship: reviewed" = 1
+				"B2 Deep Keepsake Friendship: settlement broad reciprocity" = 1
+				"B2 Deep Keepsake Friendship: sana trusts player" = 1
+				"B2 Deep Keepsake Friendship: niko trusts player" = 1
+				decline
+			label explicit
+			`You suggest a simpler boundary: help may be generous and gratitude may be sincere, but an ongoing obligation exists only when both people actually make a promise. Niko says that means a favor cannot be retroactively turned into a loan. Sana says it also means she can promise something specific when she truly wants to repay help instead of guessing forever.`
+			action
+				"B2 Deep Keepsake Friendship: reviewed" = 1
+				"B2 Deep Keepsake Friendship: settlement explicit promises" = 1
+				"B2 Deep Keepsake Friendship: sana trusts player" = 1
+				"B2 Deep Keepsake Friendship: niko trusts player" = 1
+				decline
+
+
+mission "B2 Deep Keepsake Friendship: Sana Remembers"
+	minor
+	name `Sana Remembers`
+	description `Sana remembers what survived after distance changed the shape of an old friendship.`
+	source
+		government "Republic"
+		attributes "deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Deep Keepsake Friendship: aftermath seen"
+		or
+			has "B2 Deep Keepsake Friendship: settlement broad reciprocity"
+			has "B2 Deep Keepsake Friendship: settlement explicit promises"
+	on offer
+		conversation
+			branch explicit
+				has "B2 Deep Keepsake Friendship: settlement explicit promises"
+			`Sana recognizes you while carrying a tiny paper bag from the same souvenir kiosk. "Niko sent me a picture of the ugliest lamp in his new neighborhood, so I found him an equally terrible keychain. We still help each other when we can. We also got better at believing that 'I can't this time' means exactly that, not 'I forgot what you did for me.'" She looks pleased with the keychain. "Honestly, the friendship got cheaper and better."`
+				goto finish
+			label explicit
+			`Sana recognizes you with a parcel addressed to Niko. "We finally learned to use the word promise when we mean promise. Everything else can still matter without becoming a debt. He helped me through the move; I talked him through a terrible week at work; neither event has a balance due." She taps the parcel. "This is just a gift. A truly hideous one."`
+			label finish
+			action
+				"B2 Deep Keepsake Friendship: aftermath seen" = 1
+				decline
