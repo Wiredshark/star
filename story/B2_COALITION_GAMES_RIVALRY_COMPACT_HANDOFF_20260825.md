@@ -1,0 +1,26 @@
+# B2 Coalition Games Rivalry Compact handoff — READY
+
+- Repository authority: `Wiredshark/star`.
+- Authoritative base observed and rechecked: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`.
+- Branch: `agent/b2-coalition-games-rivalry-compact-20260825`.
+- Production commit: `ec8049e2c03d3e35a62d58b09ebe59845e17886b`.
+- Initial focused validator commit: `abb7f89b2c482494e1f429a8bcc999cf33d0c465`.
+- Lifecycle/branch-gate hardening commits: `66d0c47f74d361ab7deedc03fcd2a605893f3601`, `c0f0aee89daaf6a47770636f06b058746552353c`, `f2744adc5cba22e00ad58fc588740fa3bf699449`.
+- Exact fully validated production/validator candidate: `f2744adc5cba22e00ad58fc588740fa3bf699449`.
+- Scope: Saryd runner Seli Vara + Arach climber Toren Kesh; friendship / Coalition Games competition / public rivalry / promotional pressure.
+- Canon hook: Coalition ambient content already establishes the Coalition Games and professional athletes. This slice does not define universal Games rules or centralized athlete law.
+- RPG-state dependency: all three missions read `known to the heliarchs`; no upstream state is written.
+- Routes: competition/private-relationship separation; current campaign consent; paired competition/publicity records; refusal.
+- Review: delayed 7-11 days; route-local consequence branches for competition-separate and campaign-consent paths, deliberate paired-records fallthrough, portable competition-context packet or fresh-context renewal, one-shot `Seli Remembers` aftermath.
+- Ownership: writes only `B2 Coalition Games Rivalry Compact:*`; no `world:*`, A1/A2/B1, material, reputation, cargo, equipment, ship, fleet, or combat mutation.
+- Lifecycle: all seven dialogue/state-only terminal paths use `decline`; refusal cannot arm Review; exactly the three substantive routes schedule Review; both settlements close Review exactly once; aftermath consumes either settlement and closes exactly once.
+- Continuity: competition result, direct quotation, private friendship, publicity framing, athlete approval, expiry, correction, and current evidence remain distinct facts. Repetition of an old promotional narrative is not independent corroboration of current hostility.
+- Concurrency: current B2 portfolio and active global dialogue-lifecycle audit were inspected before authoring/recovery; no competing Coalition Games rivalry slice was found and unrelated work was left untouched.
+- Process safety: four pre-existing service-owned host processes were observed and preserved; no unrelated process was terminated or modified.
+- Cancelled prior evidence: save-load run #598 / `32865987890` on older candidate `242981251420f4fabdbceca3c5b6da3f79e25c84` was CANCELLED and is not counted as acceptance evidence.
+- Validator recovery: two hardening attempts exposed validator-only branch/gate matching defects; production content and changed-content style remained unchanged/green. The final validator uses explicit branch-state matching and verifies route-local Review/aftermath lifecycle.
+- Exact candidate validation: `Fork simulation and story validation` #617 / run `32872938281` SUCCESS on `f2744adc5cba22e00ad58fc588740fa3bf699449`.
+- Exact candidate production gate: `Fork save-load integration smoke` #602 / run `32872938239` SUCCESS on the same exact candidate; production configure/build and stock save-load smoke completed successfully.
+- Exact candidate isolation: 7 commits ahead / 0 behind authoritative main; exactly 3 changed files; production, focused validator, and this handoff only.
+- Verdict: READY for A3 review/integration.
+- A3: do not self-integrate; re-read current main, open B1/A2/B2 work, ancestry, mergeability, and exact workflow state before integration.
