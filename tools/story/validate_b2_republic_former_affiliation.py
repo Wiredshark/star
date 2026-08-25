@@ -104,8 +104,13 @@ for label, settlement in (("packet", SETTLEMENTS[0]), ("renewal", SETTLEMENTS[1]
 after = mission_block(MISSIONS[2])
 require(f'not "{PREFIX} aftermath seen"' in after, "aftermath must be one-shot")
 require(after.count("\n\t\tor\n") == 1, "aftermath must use exactly one two-settlement OR gate")
-for settlement in SETTLEMENTS:
-    require(after.count(f'has "{settlement}"') == 1, f"aftermath eligibility must consume {settlement} exactly once")
+require(after.count(f'has "{SETTLEMENTS[0]}"') == 1, "packet settlement must appear once in aftermath eligibility")
+require(after.count(f'has "{SETTLEMENTS[1]}"') == 2, "renewal settlement must appear once in eligibility and once for route-specific dialogue")
+renewal_branch = re.search(
+    rf"\n\t\t\tbranch renewal\n\t\t\t\thas \"{re.escape(SETTLEMENTS[1])}\"\n",
+    after,
+)
+require(renewal_branch is not None, "renewal-specific aftermath dialogue must be gated by the renewal settlement")
 require(after.count(f'"{PREFIX} aftermath seen" = 1') == 1, "aftermath must write seen once")
 require(len(re.findall(r"\n\s+decline\s*(?:\n|$)", after)) == 1, "aftermath must terminate once")
 
