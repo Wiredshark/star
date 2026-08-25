@@ -1,12 +1,14 @@
 # B2 Deep Keepsake Friendship — Handoff
 
-Verdict: PARTIAL pending exact-head repository-native validation.
+Verdict: READY for A3 review/integration.
 
 - Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-deep-souvenir-friendship-20260825`
 - Production commit: `7f6d6df1bb916ad703afa6fa33919c526851e091`
-- Focused validator commit: `70fb27524cfaf6b0dc5bd858e74ec11f182e6d39`
-- Exact current handoff head: this commit.
+- Initial focused validator commit: `70fb27524cfaf6b0dc5bd858e74ec11f182e6d39`
+- Validator simplification: `7f5568e0a91e3da1f9cb888842118b26bf25cd09`
+- Validator false-positive repair / exact fully validated production+validator candidate: `8008ab5d079f241c5fcb5fd1a46ed4e78336e355`
+- Final READY handoff head: this commit.
 
 ## Character / dynamic-content behavior
 
@@ -33,14 +35,21 @@ Each substantive route schedules a 7–11 day Review. The Review stress-tests th
 
 This is deliberately a personal friendship arc rather than a new Deep institution. Material generosity, emotional gratitude, actual loans, explicit promises, time spent helping, refusal, and continuing friendship remain separate facts. A generous act cannot be retroactively converted into a debt merely because one friend later has more money or time to give.
 
-## Validation required before READY
+## Exact validation evidence
 
-- `python3 tools/story/validate_b2_deep_keepsake_friendship.py`
-- repository focused story-validator suite;
-- A1 simulation/state-ownership contracts;
-- changed-content style;
-- production configure/build;
-- stock save-load integration smoke;
-- exact base/head comparison and final clean diff review.
+Exact candidate `8008ab5d079f241c5fcb5fd1a46ed4e78336e355` passed:
+
+- Fork simulation and story validation #604 / run `32848610183`: SUCCESS.
+  - focused Python compilation: SUCCESS;
+  - all focused story validators: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS;
+  - changed-content style: SUCCESS.
+- Fork save-load integration smoke #589 / run `32848610288`: SUCCESS.
+  - dependency installation: SUCCESS;
+  - production configure: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
+
+Two prior simulation/story attempts exposed validator-only assertions. The final repair narrowed a broad ban on the substring `institution` so that a negative production disclaimer such as “rather than becoming an institutional rule” no longer fails validation. Production character/content behavior did not change during those repairs.
 
 A3 retains integration authority. Do not self-integrate.
