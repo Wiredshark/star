@@ -95,6 +95,21 @@ for route in route_names:
 require(decline_block.count("\n\t\t\t\tdecline") == 1,
         "refusal must terminate exactly once")
 
+# Prove lifecycle gates are attached to the Review mission itself, not merely
+# present somewhere else in the file.
+review_gate_fragments = [
+    f'has "{PREFIX} introduced"',
+    f'has "{PREFIX} review ready"',
+    f'not "{PREFIX} reviewed"',
+]
+for fragment in review_gate_fragments:
+    require(review.count(fragment) == 1,
+            f"Review must contain exactly one lifecycle gate: {fragment}")
+require(f'has "{PREFIX} declined"' not in review,
+        "Review must not be unlocked by refusal state")
+require(f'"{PREFIX} introduced" = 1' not in review,
+        "Review must not rewrite introduction state")
+
 settlement_labels = {
     "packet": "settlement portable representation packet",
     "renewal": "settlement fresh context renewal",
@@ -121,21 +136,13 @@ for label, settlement in settlement_labels.items():
     require(block.count("\n\t\t\t\tdecline") == 1,
             f"{label} must terminate exactly once")
 
-for fragment in [
-    'has "B2 Paradise Charity Representation Compact: introduced"',
-    'has "B2 Paradise Charity Representation Compact: review ready"',
-    'not "B2 Paradise Charity Representation Compact: reviewed"',
-    'not "B2 Paradise Charity Representation Compact: aftermath seen"',
-    'has "B2 Paradise Charity Representation Compact: settlement portable representation packet"',
-    'has "B2 Paradise Charity Representation Compact: settlement fresh context renewal"',
-]:
-    require(fragment in text, f"missing lifecycle gate: {fragment}")
-
 require('not "B2 Paradise Charity Representation Compact: aftermath seen"' in aftermath,
         "aftermath must gate on not-yet-seen state")
+require(aftermath.count("\n\t\tor\n") == 1,
+        "aftermath must contain exactly one OR gate for the two settlements")
 for settlement in settlement_names:
-    require(f'has "{PREFIX} {settlement}"' in aftermath,
-            f"aftermath must consume settlement: {settlement}")
+    require(aftermath.count(f'has "{PREFIX} {settlement}"') == 1,
+            f"aftermath must consume settlement exactly once: {settlement}")
 finish_block = label_block(aftermath, "finish")
 require(finish_block.count(f'"{PREFIX} aftermath seen" = 1') == 1,
         "aftermath finish must write aftermath seen exactly once")
