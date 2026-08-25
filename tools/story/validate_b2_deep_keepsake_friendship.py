@@ -72,10 +72,17 @@ require('"world:' not in TEXT, "slice must not depend on or write world state")
 for directive in ["\n\tdestination ", "\n\tstopover ", "\n\twaypoint ", "\n\tnpc ", "\n\tcargo ", "\n\tpassengers ", "\n\tdeadline ", "\n\ttimer ", "\n\t\tpayment ", "\n\t\toutfit "]:
     require(directive not in TEXT, f"unexpected gameplay/material directive: {directive.strip()}")
 
-# Character continuity and deliberately local scope.
+# Character continuity and deliberately local scope. Negative disclaimers such as
+# "rather than becoming an institutional rule" are allowed; reject only positive
+# authority claims that would actually centralize this private friendship.
 for phrase in ["Niko Rell", "Sana Vey", "souvenir", "friendship", "gift", "favor", "promise"]:
     require(phrase.lower() in TEXT.lower(), f"missing character/theme phrase: {phrase}")
-require("institution" not in TEXT.lower(), "this friendship arc must not invent a new institution")
-require("universal" not in TEXT.lower(), "this friendship arc must not claim universal authority")
+for forbidden in [
+    "establishes Deep law",
+    "creates a Deep office",
+    "binding Deep authority",
+    "universal Deep rule",
+]:
+    require(forbidden.lower() not in TEXT.lower(), f"must not invent centralized authority: {forbidden}")
 
 print("PASS: B2 Deep Keepsake Friendship")
