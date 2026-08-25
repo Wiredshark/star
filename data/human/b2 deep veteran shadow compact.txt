@@ -1,0 +1,157 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Deep Veteran Shadow Compact.
+# A younger Deep escort pilot has started copying a veteran captain's choices as
+# though reputation were a substitute for judgment. This is one mentoring
+# relationship, not a Deep command doctrine or Pilot Guild rule.
+
+
+event "B2 Deep Veteran Shadow Compact: Review Ready"
+	"B2 Deep Veteran Shadow Compact: review ready" = 1
+
+
+mission "B2 Deep Veteran Shadow Compact: Offer"
+	minor
+	name `A Good Example Is Not a Flight Plan`
+	description `A young Deep escort pilot asks what it means to learn from a veteran captain without turning imitation into judgment.`
+	source
+		government "Deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		"combat rating" >= 80
+		not "B2 Deep Veteran Shadow Compact: introduced"
+		not "B2 Deep Veteran Shadow Compact: declined"
+	on offer
+		conversation
+			`Eva Pell, an older Deep mechanic, catches your sleeve near a departure board. Beside her is Lio Marr, a young escort pilot who looks embarrassed to have been brought over. Eva says, "He has watched too many recordings of captains who survived long enough to become stories."`
+			`Lio folds his arms. "I study people who know what they are doing. Your combat record is not rumor. But everyone keeps telling me I am copying the result instead of learning the reason."`
+			choice
+				`\tStudy the decision, not the signature move. The same maneuver can be wise once and reckless the next time.`
+					goto reasoning
+				`\tA veteran can be a useful example, but disagreement is part of learning. You still own the decision when you are in the cockpit.`
+					goto judgment
+				`\tKeep paired notes: what an experienced captain actually did, and your current assessment of why it does or does not fit this situation.`
+					goto paired
+				`\tI am not interested in becoming somebody else's doctrine.`
+					goto decline
+			label reasoning
+			`You tell Lio that competence is not a collection of reusable moves. The useful part of a veteran example is the problem, the information available, the risk accepted, and the options that were deliberately left open.`
+			action
+				"B2 Deep Veteran Shadow Compact: introduced" = 1
+				"B2 Deep Veteran Shadow Compact: route decision reasoning" = 1
+				"B2 Deep Veteran Shadow Compact: Lio trusts player" = 1
+				event "B2 Deep Veteran Shadow Compact: Review Ready" 7 11
+				decline
+			label judgment
+			`You tell Lio that mentorship becomes dangerous when admiration erases disagreement. A useful example should make his judgment sharper, not replace it.`
+			action
+				"B2 Deep Veteran Shadow Compact: introduced" = 1
+				"B2 Deep Veteran Shadow Compact: route independent judgment" = 1
+				"B2 Deep Veteran Shadow Compact: Eva trusts player" = 1
+				event "B2 Deep Veteran Shadow Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You suggest two columns whenever Lio studies a veteran action: what was actually observed, and what Lio currently thinks it means for his own flight. The first can remain history even when the second changes.`
+			action
+				"B2 Deep Veteran Shadow Compact: introduced" = 1
+				"B2 Deep Veteran Shadow Compact: route paired example assessment" = 1
+				"B2 Deep Veteran Shadow Compact: Lio trusts player" = 1
+				"B2 Deep Veteran Shadow Compact: Eva trusts player" = 1
+				event "B2 Deep Veteran Shadow Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that your combat record is public enough already and that you do not want to turn one conversation into a mentoring rule.`
+			action
+				"B2 Deep Veteran Shadow Compact: declined" = 1
+				decline
+
+
+mission "B2 Deep Veteran Shadow Compact: Review"
+	minor
+	name `The Legend Got Bigger`
+	description `Lio's first independent escort decision is being judged against a veteran reputation that may have grown since your first conversation.`
+	source
+		government "Deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Deep Veteran Shadow Compact: introduced"
+		has "B2 Deep Veteran Shadow Compact: review ready"
+		not "B2 Deep Veteran Shadow Compact: reviewed"
+	on offer
+		conversation
+			branch famous
+				"combat rating" >= 160
+			branch judgment
+				has "B2 Deep Veteran Shadow Compact: route independent judgment"
+			branch paired
+				has "B2 Deep Veteran Shadow Compact: route paired example assessment"
+			`Eva finds you first. Lio recently broke formation to shepherd a damaged freighter away from a fight rather than chase a retreating attacker. The escort succeeded, but another pilot called the choice timid because it did not look like the stories people tell about veteran captains.`
+				goto settle
+			label famous
+			`Your reputation has grown since you first spoke with Lio. Eva says that has made the problem worse: every clean victory becomes another simplified story about what a "real veteran" would do. Lio's quiet rescue choice is now being compared to a legend rather than a decision.`
+				goto settle
+			label judgment
+			`Lio says the disagreement lesson helped. He ignored another pilot's imitation of a famous attack pattern and chose the escort objective instead. "I still learned from the veterans," he says. "I just stopped pretending they were in my cockpit."`
+				goto settle
+			label paired
+			`Lio shows you his paired notes. The observed examples are unchanged; his assessments have crossed-out assumptions and new annotations. One copied training summary, however, flattened both columns back into a list of veteran-approved maneuvers.`
+			label settle
+			choice
+				`\tUse an independent-practice record: examples remain attributable history, but each pilot records the present objective, evidence, alternatives, and their own decision.`
+					goto practice
+				`\tUse explicit mentor attribution: advice can remain credited to a veteran, but only the advice actually given travels; current choices remain the learner's responsibility.`
+					goto attribution
+			label practice
+			`You make the learner's reasoning visible without converting it into another rigid checklist. A reader can compare Lio's decision with veteran examples without claiming that similarity proves wisdom or difference proves failure.`
+			action
+				"B2 Deep Veteran Shadow Compact: reviewed" = 1
+				"B2 Deep Veteran Shadow Compact: settlement independent practice" = 1
+				"B2 Deep Veteran Shadow Compact: Lio trusts player" = 1
+				decline
+			label attribution
+			`You keep mentor influence attributable and narrow. What you actually told Lio can remain part of his history; later pilots cannot expand that into blanket approval of choices you never reviewed.`
+			action
+				"B2 Deep Veteran Shadow Compact: reviewed" = 1
+				"B2 Deep Veteran Shadow Compact: settlement explicit mentor attribution" = 1
+				"B2 Deep Veteran Shadow Compact: Eva trusts player" = 1
+				decline
+
+
+mission "B2 Deep Veteran Shadow Compact: Lio Remembers"
+	minor
+	name `Lio Remembers`
+	description `Lio remembers whether learning from a veteran became a method for thinking or a shortcut around his own judgment.`
+	source
+		government "Deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Deep Veteran Shadow Compact: aftermath seen"
+		or
+			has "B2 Deep Veteran Shadow Compact: settlement independent practice"
+			has "B2 Deep Veteran Shadow Compact: settlement explicit mentor attribution"
+	on offer
+		conversation
+			branch attribution
+				has "B2 Deep Veteran Shadow Compact: settlement explicit mentor attribution"
+			`Lio tells you he recently disagreed with one of your old recorded choices while training a new escort pilot. He looks almost pleased about it. "That was the point, right? If I can explain why my situation is different, I am finally learning instead of tracing."`
+				goto finish
+			label attribution
+			`Lio says a new pilot asked what you would have done in a recent escort dispute. "I told them what you actually taught me, then I told them I had no idea what you would choose now. Those are different facts."`
+			label finish
+			action
+				"B2 Deep Veteran Shadow Compact: aftermath seen" = 1
+				decline
