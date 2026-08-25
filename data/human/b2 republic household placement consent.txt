@@ -1,0 +1,168 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Republic Household Placement Consent.
+#
+# A2 Republic Resettlement Council establishes how Lena Orr's emergency placement
+# system prioritized family unity, work continuity, distributed placement, or a
+# respected refusal. This sequel consumes that saved policy memory but gives B2 no
+# authority over A2 or A1 state. It distinguishes temporary household coordination
+# from a living adult's consent to a durable residence, contract, or representative.
+
+
+event "B2 Republic Household Placement Consent: Review Ready"
+	"B2 Republic Household Placement Consent: review ready" = 1
+
+
+mission "B2 Republic Household Placement Consent: Offer"
+	minor
+	name `Who Said Yes for the Household?`
+	description `Lena Orr asks you to help two adult siblings untangle an emergency placement record that treats one sibling's intake signature as continuing authority for both.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		has "A2 Republic Resettlement Council: followup seen"
+		not "B2 Republic Household Placement Consent: introduced"
+		not "B2 Republic Household Placement Consent: declined"
+	on offer
+		conversation
+			`Lena Orr recognizes you beside a quieter version of the placement board you saw during the displacement surge. With her are Nadia Kess and her younger brother Owen, both adults now living in stable housing. Their problem is not where the emergency sent them. It is what the old intake record now claims Nadia agreed to on Owen's behalf.`
+			branch family
+				has "A2 Republic Resettlement Council: priority family unity"
+			branch work
+				has "A2 Republic Resettlement Council: priority work continuity"
+			branch distributed
+				has "A2 Republic Resettlement Council: priority distributed placement"
+			`Orr says the emergency policy was never meant to create permanent representatives. The surviving file nevertheless marks Nadia as "household contact" and several downstream offices have read that as permission for her to approve Owen's lease renewal, address changes, and placement interviews.`
+				goto issue
+			label family
+			`Orr looks uncomfortable. "Keeping households together worked during the surge. The intake staff needed one person to answer transport and rooming questions quickly. Somewhere downstream, that convenience became a claim that the same person speaks for every adult in the household."`
+				goto issue
+			label work
+			`Orr opens the old employment-linked placement. "We protected contract continuity, which meant one worker often became the main contact for the whole household. That helped people move. It did not mean the worker acquired authority over another adult's permanent residence."`
+				goto issue
+			label distributed
+			`Orr shows the multiworld transfer chain. "Distributed placement meant a single household contact often dealt with several transport offices. Each copy preserved the contact name and dropped why that person had been chosen. By the third world, 'contact' looked like 'representative.'"`
+			label issue
+			`Owen folds his arms. "Nadia did what I asked during the emergency. I am not accusing her of anything. I just want the record to stop turning help I accepted then into authority I never granted forever." Nadia nods. "And I want to be able to help without every signature becoming a power I cannot give back."`
+			choice
+				`\tRequire separate adult consent for durable residence, contracts, and legal representation; emergency household coordination cannot substitute for it.`
+					goto individual
+				`\tKeep household representatives, but limit them to explicit logistical tasks with a named scope, duration, and revocation point.`
+					goto bounded
+				`\tKeep paired records: emergency placement coordination in one layer, durable residence and individual consent decisions in another.`
+					goto paired
+				`\tRefuse to turn one household's paperwork failure into a general Republic rule.`
+					goto decline
+			label individual
+			`You draw a hard line between emergency coordination and durable consent. A household contact can relay information, but an adult's long-term residence, employment commitment, or representative must come from that adult directly. Owen relaxes. Nadia says that rule would have spared her from receiving decisions she never wanted to make.`
+			action
+				"B2 Republic Household Placement Consent: introduced" = 1
+				"B2 Republic Household Placement Consent: route individual consent" = 1
+				"B2 Republic Household Placement Consent: Owen trusts player" = 1
+				event "B2 Republic Household Placement Consent: Review Ready" 7 11
+				decline
+			label bounded
+			`You keep the practical role but narrow it. A household representative may handle named tasks such as transport notices or room assignment, only for a stated duration, and any adult covered by the arrangement may revoke it. Orr says the emergency system can work with that. Nadia says the important part is that "helping" finally has an end condition.`
+			action
+				"B2 Republic Household Placement Consent: introduced" = 1
+				"B2 Republic Household Placement Consent: route bounded representative" = 1
+				"B2 Republic Household Placement Consent: Nadia trusts player" = 1
+				"B2 Republic Household Placement Consent: Owen trusts player" = 1
+				event "B2 Republic Household Placement Consent: Review Ready" 7 11
+				decline
+			label paired
+			`You separate the records. The emergency layer can say who coordinated transport, rooms, or intake questions and why. The durable layer records each adult's own residence choice, contracts, permissions, and current representative if any. Orr likes that the emergency history remains visible. Owen likes that the history can no longer impersonate present consent.`
+			action
+				"B2 Republic Household Placement Consent: introduced" = 1
+				"B2 Republic Household Placement Consent: route paired placement and consent" = 1
+				"B2 Republic Household Placement Consent: Nadia trusts player" = 1
+				"B2 Republic Household Placement Consent: Owen trusts player" = 1
+				event "B2 Republic Household Placement Consent: Review Ready" 7 11
+				decline
+			label decline
+			`You tell Orr that emergency systems vary too much for one household dispute to become a universal Republic rule. Nadia and Owen agree that their own record still needs correction, but they stop asking you to define the practice for everyone else.`
+			action
+				"B2 Republic Household Placement Consent: declined" = 1
+				decline
+
+
+mission "B2 Republic Household Placement Consent: Review"
+	minor
+	name `The Contact Who Became the Decision Maker`
+	description `Copied resettlement records are preserving an old household contact while losing the task, duration, and consent that made the role legitimate.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		has "B2 Republic Household Placement Consent: introduced"
+		has "B2 Republic Household Placement Consent: review ready"
+		not "B2 Republic Household Placement Consent: reviewed"
+	on offer
+		conversation
+			branch bounded
+				has "B2 Republic Household Placement Consent: route bounded representative"
+			branch paired
+				has "B2 Republic Household Placement Consent: route paired placement and consent"
+			`Orr has found several copied placement files with the same pattern. The household contact survived every transfer. The original task did not. One office now treats a transport contact as authority to approve a lease change; another treats an old room-allocation signature as proof that a sibling still speaks for the household.`
+				goto settle
+			label bounded
+			`The bounded-role form worked locally, but one downstream database copied the representative's name without the task or expiry fields. The role outlived the purpose that justified it.`
+				goto settle
+			label paired
+			`The paired records survived until an office exported only the placement layer. The emergency history is accurate, but the receiving clerk cannot see the separate current-consent record and has started treating the old coordinator as present authority again.`
+			label settle
+			choice
+				`\tUse a portable consent packet: person, current decision, representative if any, exact scope, source of authority, start, expiry, revocation, and closure travel together.`
+					goto packet
+				`\tUse expiry and renewal: emergency household authority ends automatically, and any continuing representative role requires fresh consent from the living adult.`
+					goto renewal
+			label packet
+			`You recommend a compact consent packet that travels only with decisions that actually need it. The emergency placement history remains historical evidence. Present authority is recorded separately with its scope, source, duration, revocation, and closure. Nadia says she can finally point to a record that proves both that she helped and that the help ended.`
+			action
+				"B2 Republic Household Placement Consent: reviewed" = 1
+				"B2 Republic Household Placement Consent: settlement portable consent packet" = 1
+				"B2 Republic Household Placement Consent: Nadia trusts player" = 1
+				"B2 Republic Household Placement Consent: Owen trusts player" = 1
+				decline
+			label renewal
+			`You recommend that emergency authority expire by default. Old intake and transport records remain searchable, but they do not stay active as present consent. If Owen wants Nadia to represent him for a new task, that authority is created again from Owen's current choice and ends when the task or stated period ends.`
+			action
+				"B2 Republic Household Placement Consent: reviewed" = 1
+				"B2 Republic Household Placement Consent: settlement expiry and renewal" = 1
+				"B2 Republic Household Placement Consent: Owen trusts player" = 1
+				decline
+
+
+mission "B2 Republic Household Placement Consent: Owen Remembers"
+	minor
+	name `Owen Remembers`
+	description `Owen sees whether emergency family coordination can remain part of the record without remaining permanent authority over his adult life.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		not "B2 Republic Household Placement Consent: aftermath seen"
+		or
+			has "B2 Republic Household Placement Consent: settlement portable consent packet"
+			has "B2 Republic Household Placement Consent: settlement expiry and renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Republic Household Placement Consent: settlement expiry and renewal"
+			`Owen shows you a current housing record. Nadia is listed in the emergency history as the person who coordinated their original placement. The field marked "current representative" is blank. Owen grins. "The system can remember that she helped without pretending I stopped being an adult."`
+				goto finish
+			label renewal
+			`Owen shows you a new authorization he signed for Nadia to collect a document while he is off-world. It lists the single task and its expiry date. Beside it, the old emergency contact entry remains archived but inactive. Nadia says, "This is what I thought I was agreeing to the first time: help with one thing, not authority forever."`
+			label finish
+			action
+				"B2 Republic Household Placement Consent: aftermath seen" = 1
+				decline
