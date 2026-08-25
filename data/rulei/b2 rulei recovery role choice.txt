@@ -1,0 +1,153 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Rulei Recovery Role Choice production slice.
+#
+# Sequel to the integrated Rulei Exposure Accountability aftermath. Dr. Sena
+# Orlov returns with Kaia Renn, a human survey pilot whose old exposure history is
+# accurate but whose current work choices are being inferred from that history.
+# This local dispute separates past symptoms, present capability, worker-requested
+# support, current restrictions, role preference, and actual duty authority. It
+# does not diagnose a lasting Rulei effect or create universal employment law.
+
+
+event "B2 Rulei Recovery Role Choice: Review Ready"
+	"B2 Rulei Recovery Role Choice: review ready" = 1
+
+
+mission "B2 Rulei Recovery Role Choice: Offer"
+	minor
+	name `Cleared Is Not Assigned`
+	description `Dr. Sena Orlov and a recovered survey pilot disagree with a scheduler who has turned an old exposure history into a permanent job description.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		has "B2 Rulei Exposure Accountability: aftermath seen"
+		not "B2 Rulei Recovery Role Choice: introduced"
+		not "B2 Rulei Recovery Role Choice: declined"
+	on offer
+		conversation
+			`Dr. Sena Orlov catches you outside the same archive where Rulei-contact records are reviewed. Beside her stands Kaia Renn, a survey pilot with a current flight clearance and a much older exposure record.`
+			`Renn says, "After the Kanguwa run, I asked for quieter sensor watches for a while. That helped. Then I recovered, passed the checks, and went back to ordinary duty. The copied roster kept the words 'reduced sensory duty' and dropped the date."`
+			`Orlov adds, "Nothing in the current examination requires that restriction. But simply deleting the old support would erase what actually helped her at the time. We need a way to keep history without letting history assign the present."`
+			choice
+				`\tUse current-function first: assignments follow present demonstrated capability and current restrictions, while old recovery history remains background evidence.`
+					goto current
+				`\tMake support worker-directed: Renn can request a bounded adjustment for a task without that request becoming a general judgment about what work she can do.`
+					goto support
+				`\tUse paired records: keep the exposure/recovery history separate from a current role-and-support record that can be revised without rewriting the past.`
+					goto paired
+				`\tRefuse to turn one pilot's recovery into a standing personnel rule.`
+					goto decline
+			label current
+			`You tell them that a historical recovery note can remain true without deciding today's assignment. Orlov keeps the old symptoms, recovery dates, and support history in the medical record. Renn's current personnel summary carries only present capability, any current restriction, and the task she has actually agreed to perform.`
+			action
+				"B2 Rulei Recovery Role Choice: introduced" = 1
+				"B2 Rulei Recovery Role Choice: route current function" = 1
+				"B2 Rulei Recovery Role Choice: orlov trusts player" = 1
+				event "B2 Rulei Recovery Role Choice: Review Ready" 7 11
+				decline
+			label support
+			`You suggest that support should describe a present request, not manufacture a permanent category. Renn can ask for a quieter watch, shorter exposure window, paired observer, or another practical adjustment when a particular job warrants it, with scope and review attached. Refusing a support on a later job does not erase the fact that an earlier one helped.`
+			action
+				"B2 Rulei Recovery Role Choice: introduced" = 1
+				"B2 Rulei Recovery Role Choice: route worker directed support" = 1
+				"B2 Rulei Recovery Role Choice: renn trusts player" = 1
+				event "B2 Rulei Recovery Role Choice: Review Ready" 7 11
+				decline
+			label paired
+			`You separate the records. One preserves the exposure, symptoms, recovery, examinations, and supports that were actually used. The other records Renn's current role preference, demonstrated capability, any present restriction, any support she currently requests, and when that current arrangement must be reviewed. Neither record silently overwrites the other.`
+			action
+				"B2 Rulei Recovery Role Choice: introduced" = 1
+				"B2 Rulei Recovery Role Choice: route paired" = 1
+				"B2 Rulei Recovery Role Choice: orlov trusts player" = 1
+				"B2 Rulei Recovery Role Choice: renn trusts player" = 1
+				event "B2 Rulei Recovery Role Choice: Review Ready" 7 11
+				decline
+			label decline
+			`You tell Orlov and Renn that one person's recovery should not become a general personnel standard through your authority. Orlov leaves Renn's current clearance untouched, and Renn asks the scheduler to correct her own roster entry without creating a broader rule.`
+			action
+				"B2 Rulei Recovery Role Choice: declined" = 1
+				decline
+
+
+mission "B2 Rulei Recovery Role Choice: Review"
+	minor
+	name `The Helpful Label`
+	description `Return after a temporary support label follows Renn into work where she no longer requested it.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		has "B2 Rulei Recovery Role Choice: introduced"
+		has "B2 Rulei Recovery Role Choice: review ready"
+		not "B2 Rulei Recovery Role Choice: reviewed"
+	on offer
+		conversation
+			branch current
+				has "B2 Rulei Recovery Role Choice: route current function"
+			branch support
+				has "B2 Rulei Recovery Role Choice: route worker directed support"
+			`Orlov and Renn have found the next failure. A contractor copied an old support field into a new assignment system. The system now routes Renn away from certain watches before anyone asks what she can do now, what she wants to do now, or whether any current restriction exists.`
+				goto settle
+			label current
+			`The current-function rule kept Renn's formal clearance accurate, but a downstream scheduler treated the existence of any historical support as evidence that the same support must always be required. Orlov says, "The history is true. The inference is not."`
+				goto settle
+			label support
+			`Renn's request-based support worked on one demanding survey, but a copied roster turned the request into a standing category. Renn says, "I asked for help with one job. I did not ask the database to decide every later job for me."`
+			label settle
+			choice
+				`\tUse a portable current-role packet: present capability, current restrictions if any, requested supports, role preference, responsible reviewer, review date, and closure travel together; old recovery history stays linked but separate.`
+					goto packet
+				`\tUse fresh-need renewal: historical supports remain visible as history, but active restrictions or supports require a current reason, current scope, and a current decision by the person and responsible reviewer.`
+					goto renewal
+			label packet
+			`You make present status as portable as the old history. The current-role packet says what Renn is cleared for now, what she currently chooses, whether any restriction exists now, what support she currently requests, and when that status must be reviewed. The old exposure and recovery record remains linked for clinicians without becoming the assignment itself.`
+			action
+				"B2 Rulei Recovery Role Choice: reviewed" = 1
+				"B2 Rulei Recovery Role Choice: settlement portable current role" = 1
+				"B2 Rulei Recovery Role Choice: orlov trusts player" = 1
+				"B2 Rulei Recovery Role Choice: renn trusts player" = 1
+				decline
+			label renewal
+			`You recommend fresh-need renewal. Old supports remain in the recovery history because they really happened, but they do not remain active merely through copying. A present restriction needs a current basis. A present support needs current scope. Renn can request help without accepting a permanent identity, and a reviewer can document a current safety limit without pretending it is timeless.`
+			action
+				"B2 Rulei Recovery Role Choice: reviewed" = 1
+				"B2 Rulei Recovery Role Choice: settlement fresh need renewal" = 1
+				"B2 Rulei Recovery Role Choice: orlov trusts player" = 1
+				"B2 Rulei Recovery Role Choice: renn trusts player" = 1
+				decline
+
+
+mission "B2 Rulei Recovery Role Choice: Renn Remembers"
+	minor
+	name `Renn Remembers`
+	description `Kaia Renn remembers whether recovery history remained useful without becoming a permanent job assignment.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		not "B2 Rulei Recovery Role Choice: aftermath seen"
+		or
+			has "B2 Rulei Recovery Role Choice: settlement portable current role"
+			has "B2 Rulei Recovery Role Choice: settlement fresh need renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Rulei Recovery Role Choice: settlement fresh need renewal"
+			`Renn waves from a survey briefing. Her current-role packet lists the watch she accepted and no active restriction. A link points to the older recovery record without copying its temporary support into today's assignment. Orlov says the history is still there if a clinician needs it. Renn says, "Good. History should remember me. It should not schedule me."`
+				goto finish
+			label renewal
+			`Renn shows you a new survey request. The scheduler asked whether the old support should be renewed instead of assuming that it remained active. Renn declined it for this job and accepted a different work pattern on another. Orlov says the record now preserves both facts without turning either into a permanent judgment of capability.`
+			label finish
+			action
+				"B2 Rulei Recovery Role Choice: aftermath seen" = 1
+				decline
