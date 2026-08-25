@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Coalition Shared Table Compact production slice.
+#
+# Leri Vann, a Saryd baker, and Mato Kesh, a Kimek neighbor, have spent years
+# cooking together for one local neighborhood meal. A copied menu has started
+# calling their improvised dish an ancient "Coalition tradition," erasing the
+# family recipes, substitutions, jokes, and shared work that actually produced it.
+# This is one friendship and one local meal, not centralized Coalition food law.
+
+
+event "B2 Coalition Shared Table Compact: Review Ready"
+	"B2 Coalition Shared Table Compact: review ready" = 1
+
+
+mission "B2 Coalition Shared Table Compact: Offer"
+	minor
+	name `Who Made the Old New Dish?`
+	description `Two neighbors ask how to preserve a beloved shared recipe without inventing an ancient tradition or erasing either contributor.`
+	source
+		attributes "saryd"
+	"offer precedence" 8
+	to offer
+		has "known to the heliarchs"
+		not "B2 Coalition Shared Table Compact: introduced"
+		not "B2 Coalition Shared Table Compact: declined"
+	on offer
+		conversation
+			`Leri Vann waves you toward a market table covered in flat loaves, spiced seed paste, and a bowl of crisp Kimek-style pickles. Beside her, Mato Kesh holds up a printed menu with visible irritation.`
+			`Mato taps one line. "It says 'traditional Coalition harvest bread.' Leri's grandmother never made this version. My family never served pickles this way. We invented it together because I burned the first batch and she refused to throw it out."`
+			`Leri laughs, then sighs. "People love the dish. I do too. But now every copy sounds older and more official. If we correct it badly, Mato disappears. If we preserve it badly, my grandmother disappears."`
+			choice
+				`\tKeep attributable source lines: name the family recipes, the later substitutions, and the shared version without pretending they are the same thing.`
+					goto lineage
+				`\tTreat the shared recipe as a living version: anyone can adapt it, but each version should say who changed what and avoid claiming universal authenticity.`
+					goto living
+				`\tKeep paired records: family-source notes stay separate from the current neighborhood recipe and its co-authors.`
+					goto paired
+				`\tRefuse to turn one neighborhood meal into a broader cultural rule.`
+					goto decline
+			label lineage
+			`You suggest a short source line on every public copy: Leri's family loaf, Mato's family pickle method, the substitutions they made together, and the date the shared version emerged. The dish can be loved without being made ancient by typography.`
+			action
+				"B2 Coalition Shared Table Compact: introduced" = 1
+				"B2 Coalition Shared Table Compact: route attributable lineage" = 1
+				"B2 Coalition Shared Table Compact: leri trusts player" = 1
+				event "B2 Coalition Shared Table Compact: Review Ready" 7 11
+				decline
+			label living
+			`You tell them that living food changes. A current cook may adapt the dish, but the new version should identify its adapter and avoid quietly turning one local recipe into the official form of a whole culture.`
+			action
+				"B2 Coalition Shared Table Compact: introduced" = 1
+				"B2 Coalition Shared Table Compact: route living version" = 1
+				"B2 Coalition Shared Table Compact: mato trusts player" = 1
+				event "B2 Coalition Shared Table Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You separate the records. One preserves the family recipes and who taught them. The other describes the neighborhood dish, the substitutions, its current co-authors, and later revisions. Neither record is allowed to overwrite the other.`
+			action
+				"B2 Coalition Shared Table Compact: introduced" = 1
+				"B2 Coalition Shared Table Compact: route paired records" = 1
+				"B2 Coalition Shared Table Compact: leri trusts player" = 1
+				"B2 Coalition Shared Table Compact: mato trusts player" = 1
+				event "B2 Coalition Shared Table Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that their friendship does not need your rule. Leri and Mato decide to correct their own menu and leave the larger question to each household and cook who faces it.`
+			action
+				"B2 Coalition Shared Table Compact: declined" = 1
+				decline
+
+
+mission "B2 Coalition Shared Table Compact: Review"
+	minor
+	name `Authentic Since Last Week`
+	description `A copied menu has turned one local recipe into an official-sounding tradition and dropped the source history that made it meaningful.`
+	source
+		attributes "saryd"
+	"offer precedence" 8
+	to offer
+		has "B2 Coalition Shared Table Compact: introduced"
+		has "B2 Coalition Shared Table Compact: review ready"
+		not "B2 Coalition Shared Table Compact: reviewed"
+	on offer
+		conversation
+			branch lineage
+				has "B2 Coalition Shared Table Compact: route attributable lineage"
+			branch living
+				has "B2 Coalition Shared Table Compact: route living version"
+			`Leri and Mato have found the next copy. A caterer on another world advertises the dish as an "authentic Coalition harvest bread" and cites the neighborhood menu as proof. The copied version keeps the name and drops the source line.`
+				goto settle
+			label lineage
+			`The source line worked locally, but a downstream copy retained only the final dish name. Mato says, "The facts were there. The copy stripped away the part that made them facts instead of mythology."`
+				goto settle
+			label living
+			`A new cook adapted the recipe honestly, but a distributor copied that version without the adapter's name and labeled it the traditional form. Leri says, "A living recipe can change. That does not mean every change becomes ancient."`
+			label settle
+			choice
+				`\tUse a portable recipe-lineage packet: source recipes, contributors, substitutions, current version, later adapters, disputed claims, and corrections travel together.`
+					goto packet
+				`\tUse versioned coexistence: family recipes, Leri and Mato's shared dish, and later adaptations may all remain valid named versions without any one becoming the universal original.`
+					goto coexist
+			label packet
+			`You make the context travel with the recipe. A copy can still be short, but it keeps enough lineage to distinguish inheritance, adaptation, co-authorship, and later revision. If someone claims universal authenticity, that claim must stand on its own evidence instead of borrowed repetition.`
+			action
+				"B2 Coalition Shared Table Compact: reviewed" = 1
+				"B2 Coalition Shared Table Compact: settlement portable lineage" = 1
+				"B2 Coalition Shared Table Compact: leri trusts player" = 1
+				"B2 Coalition Shared Table Compact: mato trusts player" = 1
+				decline
+			label coexist
+			`You recommend versioned coexistence. Leri's family loaf remains itself. Mato's family pickle method remains itself. Their shared neighborhood dish remains itself. Later versions can stand beside them with their own names and contributors. Repetition does not promote one local version into centralized Coalition food law.`
+			action
+				"B2 Coalition Shared Table Compact: reviewed" = 1
+				"B2 Coalition Shared Table Compact: settlement versioned coexistence" = 1
+				"B2 Coalition Shared Table Compact: leri trusts player" = 1
+				"B2 Coalition Shared Table Compact: mato trusts player" = 1
+				decline
+
+
+mission "B2 Coalition Shared Table Compact: Mato Remembers"
+	minor
+	name `Mato Remembers`
+	description `Mato remembers whether a shared dish remained a friendship and a living recipe instead of becoming invented ancient authority.`
+	source
+		attributes "saryd"
+	"offer precedence" 8
+	to offer
+		not "B2 Coalition Shared Table Compact: aftermath seen"
+		or
+			has "B2 Coalition Shared Table Compact: settlement portable lineage"
+			has "B2 Coalition Shared Table Compact: settlement versioned coexistence"
+	on offer
+		conversation
+			branch coexist
+				has "B2 Coalition Shared Table Compact: settlement versioned coexistence"
+			`Mato hands you a fresh market card. The recipe name is unchanged, but a small source line names the family methods, Leri and Mato's shared version, and the latest adapter. Mato says, "It is still ours without having to be everyone's ancestor."`
+				goto finish
+			label coexist
+			`Leri has three versions of the dish on the table today, each labeled by the household or cook who made it. Mato points to the oldest shared version and says, "That one is still special. It does not need to defeat the others to stay ours."`
+			label finish
+			action
+				"B2 Coalition Shared Table Compact: aftermath seen" = 1
+				decline
