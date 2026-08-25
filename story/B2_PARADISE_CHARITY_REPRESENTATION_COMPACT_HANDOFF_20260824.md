@@ -1,6 +1,6 @@
 # B2 Paradise Charity Representation Compact — Handoff
 
-Verdict: PARTIAL pending exact-head save-load completion.
+Verdict: READY for A3 review/integration.
 
 Authoritative base: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 
@@ -10,7 +10,11 @@ Production commit: `084ccdfd215586a2e77bdbfe646d3f6d46261992`
 
 Initial focused-validator commit: `23726bad8fcdf39aece4806aa9c963b48318002f`
 
-Validator hardening / exact current production+validator candidate: `fcecc102e3950d0245cc3399f344b4cf27a61972`
+Continuity wording hardening: `fcecc102e3950d0245cc3399f344b4cf27a61972`
+
+Review/aftermath lifecycle hardening: `272eb27b308e6f08aaea3124948d2eb5beb45562`
+
+Lifecycle assertion correction / exact fully validated production+validator candidate: `c10ed6edf1e9350c377901016f01d8392ce74d8e`
 
 ## Behavior
 
@@ -48,11 +52,20 @@ Initial handoff head `7f07d3f8aba3cbdef5c8536465e5d38a225a4132`:
 - Fork save-load integration smoke #551 / run `32796266491`: SUCCESS.
 - Fork simulation and story validation #566 / run `32796266302`: FAILED in the focused story-validator step while changed-content style passed.
 
-The failure was validator-only: a continuity assertion required a phrase to survive source-comment line wrapping. Production semantics were unchanged. Commit `fcecc102e3950d0245cc3399f344b4cf27a61972` hardens that check to a semantic fragment while retaining all route-local, settlement-local, lifecycle, ownership, and continuity assertions.
+The first failure was validator-only: a continuity assertion required a phrase to survive source-comment line wrapping. Production semantics were unchanged. Commit `fcecc102e3950d0245cc3399f344b4cf27a61972` hardened that assertion to a semantic fragment.
 
-Exact current candidate `fcecc102e3950d0245cc3399f344b4cf27a61972`:
+The exact save-load run for `fcecc102e3950d0245cc3399f344b4cf27a61972` (#552 / run `32798115261`) was cancelled during production build; it was not treated as a pass.
 
-- Fork simulation and story validation #567 / run `32798115269`: SUCCESS.
-- Fork save-load integration smoke #552 / run `32798115261`: IN PROGRESS at handoff update time.
+This backup run then strengthened lifecycle coverage in `272eb27b308e6f08aaea3124948d2eb5beb45562` so Review gates are proven to live on the Review mission itself and the aftermath OR-gate shape is validated. That first hardening exposed one validator-only counting mistake because the renewal settlement is legitimately referenced once in the eligibility OR gate and once in route-specific aftermath dialogue. Commit `c10ed6edf1e9350c377901016f01d8392ce74d8e` corrected the assertion without changing production content.
 
-Do not promote to READY until exact candidate `fcecc102e3950d0245cc3399f344b4cf27a61972` has terminal-green save-load integration evidence. Do not self-integrate. A3 retains integration authority and must re-read current `main`, ancestry, mergeability, and concurrent B1/A2/B2 work before integration.
+Exact fully validated candidate `c10ed6edf1e9350c377901016f01d8392ce74d8e`:
+
+- Fork simulation and story validation #571 / run `32801567923`: SUCCESS.
+- Focused story validators: SUCCESS.
+- A1 simulation/state-ownership contracts: SUCCESS.
+- Changed-content style: SUCCESS.
+- Fork save-load integration smoke #556 / run `32801567932`: SUCCESS.
+- Production configuration/build: SUCCESS.
+- Stock save-load smoke: SUCCESS.
+
+The exact candidate is suitable for later integration. Do not self-integrate. A3 retains integration authority and must re-read current `main`, ancestry, mergeability, and concurrent B1/A2/B2 work before integration.
