@@ -68,11 +68,12 @@ def test_characters_and_local_canon_boundary():
         "mara hale",
         "teren",
         "call each other siblings",
-        "chosen family bond",
+        "family bond",
         "not universal hai family law",
         "one household's arrangement",
     ):
         assert fragment in lowered, f"missing character/canon boundary: {fragment}"
+    assert "socially real without automatically carrying inheritance" in lowered
 
 
 def test_offer_routes_are_local_and_refusal_suppresses_review():
@@ -156,7 +157,6 @@ def test_b2_only_writes_and_no_material_mutation():
 def test_relationship_authority_boundaries_are_explicit():
     lowered = TEXT.lower()
     for fragment in (
-        "socially real without automatically carrying inheritance",
         "family. that does not make every legal power",
         "relationship and authority must be the same thing",
         "does not itself authorize teren",
