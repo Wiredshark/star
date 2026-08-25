@@ -1,0 +1,152 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Pirate Reconciliation Compact.
+# A personal former-crewmate arc about apology, forgiveness, repaired friendship,
+# and the fact that restored affection does not automatically restore operational
+# trust or crew authority. This is one relationship, not Pirate law or a new office.
+
+
+event "B2 Pirate Reconciliation Compact: Review Ready"
+	"B2 Pirate Reconciliation Compact: review ready" = 1
+
+
+mission "B2 Pirate Reconciliation Compact: Offer"
+	minor
+	name `The Apology With No Price`
+	description `Two former pirate crewmates disagree over whether an apology can repair a friendship without restoring the old crew relationship.`
+	source
+		government "Pirate"
+	"offer precedence" 8
+	to offer
+		"pirate jobs" > 2
+		not "B2 Pirate Reconciliation Compact: introduced"
+		not "B2 Pirate Reconciliation Compact: declined"
+	on offer
+		conversation
+			`A woman at the edge of the bar waves you over before you can decide whether you know her. "Ressa Vale," she says. "And that is Kade Orin, pretending he did not see me." The man at the next table looks over anyway. Ressa tells you they served on the same pirate crew for years until a failed boarding left her stranded in a damaged launch while Kade followed the captain's retreat order.`
+			`Kade does not defend the captain. "I left her there," he says. "I was scared, and I obeyed an order I should have challenged. She survived. I have apologized. She says the apology matters. She also says I keep acting like that means we should fly together again." Ressa folds her arms. "I can forgive him and still not want him watching my back."`
+			choice
+				`\tLet the apology stand on its own. Kade can acknowledge harm without demanding forgiveness, friendship, or a berth in return.`
+					goto apology
+				`\tMake repair about changed behavior: Kade can earn trust through specific actions without treating them as a purchase of forgiveness.`
+					goto repair
+				`\tSeparate personal forgiveness from operational trust. They can reconcile as people without pretending the old crew relationship is restored.`
+					goto separate
+				`\tRefuse to turn somebody else's apology into a rule for pirate relationships.`
+					goto decline
+			label apology
+			`You tell Kade that a real apology cannot carry an invoice. He can name what he did, accept that Ressa decides what happens next, and stop measuring the apology by what access it wins him. Kade grimaces, then nods. Ressa says, "That is the first version of sorry I have heard from him that did not end with a proposal."`
+			action
+				"B2 Pirate Reconciliation Compact: introduced" = 1
+				"B2 Pirate Reconciliation Compact: route apology stands" = 1
+				"B2 Pirate Reconciliation Compact: ressa trusts player" = 1
+				event "B2 Pirate Reconciliation Compact: Review Ready" 7 11
+				decline
+			label repair
+			`You tell Kade that changed behavior can matter without becoming payment. If he says he has changed, he can show it in situations where Ressa owes him nothing afterward. Ressa agrees to watch what he does, not to promise what she will feel. Kade says that sounds harder than buying back a debt. "Good," she replies.`
+			action
+				"B2 Pirate Reconciliation Compact: introduced" = 1
+				"B2 Pirate Reconciliation Compact: route repair by action" = 1
+				"B2 Pirate Reconciliation Compact: kade trusts player" = 1
+				event "B2 Pirate Reconciliation Compact: Review Ready" 7 11
+				decline
+			label separate
+			`You tell them they are trying to answer two questions with one word. Ressa may forgive Kade as a person while still deciding that she does not trust him in a retreat, boarding, or emergency command chain. Kade looks relieved and disappointed at once. Ressa says, "That is exactly the distinction I have been trying to make."`
+			action
+				"B2 Pirate Reconciliation Compact: introduced" = 1
+				"B2 Pirate Reconciliation Compact: route forgiveness separate" = 1
+				"B2 Pirate Reconciliation Compact: ressa trusts player" = 1
+				"B2 Pirate Reconciliation Compact: kade trusts player" = 1
+				event "B2 Pirate Reconciliation Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that no pirate crew ever improved by turning every ugly friendship into a committee proceeding. Ressa laughs despite herself. Kade says, "Fair." They return to the argument without asking you to decide who owes whom a future.`
+			action
+				"B2 Pirate Reconciliation Compact: declined" = 1
+				decline
+
+
+mission "B2 Pirate Reconciliation Compact: Review"
+	minor
+	name `The Berth That Was Not Promised`
+	description `Ressa and Kade test whether repaired personal trust implies renewed operational trust when a real job appears.`
+	source
+		government "Pirate"
+	"offer precedence" 8
+	to offer
+		has "B2 Pirate Reconciliation Compact: introduced"
+		has "B2 Pirate Reconciliation Compact: review ready"
+		not "B2 Pirate Reconciliation Compact: reviewed"
+	on offer
+		conversation
+			branch apology
+				has "B2 Pirate Reconciliation Compact: route apology stands"
+			branch repair
+				has "B2 Pirate Reconciliation Compact: route repair by action"
+			`Ressa and Kade are arguing over a short escort job that pays well and needs two experienced pilots. A mutual friend assumed that because the two are speaking again, they would sign on together. Ressa says the assumption is exactly the problem. Kade says he did not make it, but admits that part of him hoped the repaired friendship meant the old partnership might return.`
+				goto settle
+			label apology
+			`Kade has stopped pressing Ressa for a verdict on the apology. That made talking easier. Now somebody else has converted that visible ease into a crew assignment neither of them approved. Ressa says, "Apparently being able to share a drink is now evidence that I want him on my wing."`
+				goto settle
+			label repair
+			`Kade has spent the last week doing exactly what he said: helping other crews in ugly situations without asking Ressa to grade him. She noticed. A mutual friend noticed too, and immediately offered them a joint escort berth. Ressa says improved behavior is relevant evidence, but it is not the same thing as her consent to fly together again.`
+			label settle
+			choice
+				`\tTreat reconciliation as personal history, while any renewed crew trust must be chosen fresh for a specific job.`
+					goto fresh
+				`\tLet trust return by degrees: record what they are willing to do together now without pretending it restores the entire old partnership.`
+					goto gradual
+			label fresh
+			`You tell them that friendship can recover without carrying an automatic operational consequence. If they ever take a job together, it should be because both choose that job under its present risks, not because an observer thinks forgiveness restored an old contract. Ressa says she might fly with Kade someday. Kade says hearing "might" without trying to turn it into "will" is probably part of the work.`
+			action
+				"B2 Pirate Reconciliation Compact: reviewed" = 1
+				"B2 Pirate Reconciliation Compact: settlement fresh trust" = 1
+				"B2 Pirate Reconciliation Compact: ressa trusts player" = 1
+				"B2 Pirate Reconciliation Compact: kade trusts player" = 1
+				decline
+			label gradual
+			`You suggest they name only what is true now. Perhaps they will share a low-risk watch, or fly separate positions in the same convoy, or decline the job entirely. Each successful step can become history without claiming the next step in advance. Ressa likes that. Kade says, "So I stop asking whether everything is fixed and start asking what we actually trust each other with today."`
+			action
+				"B2 Pirate Reconciliation Compact: reviewed" = 1
+				"B2 Pirate Reconciliation Compact: settlement gradual trust" = 1
+				"B2 Pirate Reconciliation Compact: ressa trusts player" = 1
+				"B2 Pirate Reconciliation Compact: kade trusts player" = 1
+				decline
+
+
+mission "B2 Pirate Reconciliation Compact: Ressa Remembers"
+	minor
+	name `Ressa Remembers`
+	description `Ressa remembers what changed once forgiveness stopped being treated as a contract for renewed trust.`
+	source
+		government "Pirate"
+	"offer precedence" 8
+	to offer
+		not "B2 Pirate Reconciliation Compact: aftermath seen"
+		or
+			has "B2 Pirate Reconciliation Compact: settlement fresh trust"
+			has "B2 Pirate Reconciliation Compact: settlement gradual trust"
+	on offer
+		conversation
+			branch gradual
+				has "B2 Pirate Reconciliation Compact: settlement gradual trust"
+			`Ressa finds you first. "Kade and I are friends again," she says. "Not the old friends. New ones who know exactly where the scar came from." She says they turned down the escort job together, then later shared a quiet watch on another run. "Nobody had to pretend one proved the other. That helped more than I expected."`
+				goto finish
+			label gradual
+			`Ressa finds you while Kade is across the room arguing with a mechanic. "We have flown together twice," she says. "Small jobs. Clear roles. I still would not follow him blindly in a retreat, and he knows that. The strange part is that admitting the limit made the trust we do have feel real instead of ceremonial."`
+			label finish
+			action
+				"B2 Pirate Reconciliation Compact: aftermath seen" = 1
+				decline
