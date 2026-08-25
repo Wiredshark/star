@@ -2,14 +2,15 @@
 
 ## Status
 
-PARTIAL pending exact-head repository-native validation.
+READY for A3 review/integration. Remains draft and unmerged; B2 does not self-integrate.
 
 ## Authority
 
 - Authoritative base: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-free-worlds-caregiving-leave-compact-20260825`
 - Production commit: `f64d716aa9fa0a9dba33ca86ca97809aa21e617a`
-- Focused validator commit: `0df30aae9a076b152d9f8e46c29e4399afdf58e3`
+- Initial focused validator commit: `0df30aae9a076b152d9f8e46c29e4399afdf58e3`
+- Validator line-wrap hardening / exact fully validated candidate: `208b4f46c22385e0b10a5199d96dc402b5efac51`
 
 ## Character / dynamic-content behavior
 
@@ -42,14 +43,31 @@ The three substantive routes schedule `B2 Free Worlds Caregiving Leave Compact: 
 
 Current availability, historical leave, private family details, emergency standby commitments, reliability judgments, and current duty authority are separate facts. A true old leave record does not remain current authority after its dates expire. Agreeing to one emergency window does not create unlimited future call-up authority. Family-care details are not required in routine staffing records. This is local voluntary Free Worlds practice rather than centralized employment law.
 
-## Validation contract
+## Validation
 
 Focused validator: `tools/story/validate_b2_free_worlds_caregiving_leave_compact.py`.
 
-It checks exact mission/event structure, route-local writes, refusal suppression, exact 7-11 day scheduling, A1 read-only ownership, recovered-strain Review gating, settlement-local writes, one-shot aftermath, B2-only persistence, zero objective-less `accept` terminals, exactly seven `decline` terminals, no gameplay-objective directives, and core continuity assertions.
+The first exact-head simulation/story run exposed one validator-only line-wrap-sensitive canon assertion; changed-content style passed and production semantics were already correct. Commit `208b4f46c22385e0b10a5199d96dc402b5efac51` replaced that brittle literal with formatting-independent semantic fragments.
 
-Repository-native simulation/story and production build/save-load workflows must both be terminal green on the exact candidate before READY.
+Exact candidate `208b4f46c22385e0b10a5199d96dc402b5efac51` is fully green:
+
+- Fork simulation and story validation #590 / run `32821958099`: SUCCESS.
+  - changed-content style: SUCCESS;
+  - focused Python compilation: SUCCESS;
+  - all focused story validators, including this compact: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS.
+- Fork save-load integration smoke #575 / run `32821958104`: SUCCESS.
+  - build/runtime dependencies: SUCCESS;
+  - production configure: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
+
+The validator proves exact mission/event structure, route-local writes, refusal suppression, exact 7-11 day scheduling, A1 read-only ownership, recovered-strain Review gating, settlement-local writes, one-shot aftermath, B2-only persistence, zero objective-less `accept` terminals, exactly seven `decline` terminals, no gameplay-objective directives, and core continuity assertions.
+
+## Concurrency / process safety
+
+Current B2 PR/branch activity was inspected before selecting scope; no active caregiving-leave slice was found. The active global dialogue-lifecycle audit was left untouched. Four pre-existing service-owned host processes were observed and preserved; no unrelated process or workspace was reset, killed, or modified.
 
 ## A3 / B3 integration notes
 
-Do not self-integrate. A3 should re-read current `main`, active B2/A2/B1 work, ancestry, mergeability, and exact workflow state before integration. Preserve A1 ownership of Free Worlds defense strain and the distinction among caregiving history, private family information, current availability, voluntary emergency commitments, reliability, and current duty authority.
+Re-read current `main`, active B2/A2/B1 work, ancestry, mergeability, and exact workflow state before integration. Preserve A1 ownership of Free Worlds defense strain and the distinction among caregiving history, private family information, current availability, voluntary emergency commitments, reliability, and current duty authority. Do not generalize this local voluntary arrangement into centralized Free Worlds employment law.
