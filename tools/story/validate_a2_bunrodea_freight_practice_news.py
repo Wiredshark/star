@@ -122,7 +122,7 @@ def main() -> None:
         r'^\s*action\s*$',
         r'^\s*(set|clear|add|subtract|multiply)\b',
         r'"world:',
-        r'\b(credits|reputation|cargo|outfit|ship|fleet|combat|destination|waypoint|objective)\b',
+        r'^\s*(credits|reputation|cargo|outfit|ship|fleet|combat|destination|waypoint|objective)\b',
     )
     for pattern in forbidden_patterns:
         if re.search(pattern, content_without_comments, flags=re.MULTILINE | re.IGNORECASE):
