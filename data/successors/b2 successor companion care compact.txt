@@ -1,0 +1,159 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Successor Companion Care Compact.
+#
+# Successor culture conversations already show small companion animals moving freely
+# through ordinary social spaces. This local character arc follows Ryii Vael and
+# Sona Mii, two Successors who have both cared for the same pool-lizard, Palu. A
+# copied care note has begun turning routine help into assumed permanent authority.
+# The outcome remains one household's arrangement, not centralized Successor law.
+
+
+event "B2 Successor Companion Care Compact: Review Ready"
+	"B2 Successor Companion Care Compact: review ready" = 1
+
+
+mission "B2 Successor Companion Care Compact: Offer"
+	minor
+	name `Who Speaks for Palu`
+	description `Ryii Vael and Sona Mii disagree over whether routine care for their shared companion animal should become permanent ownership or medical authority.`
+	source
+		attributes "successor"
+		not attributes "uninhabited" "crime"
+	"offer precedence" 8
+	to offer
+		has "known to the successors"
+		has "Successors: First Contact 2: done"
+		not "B2 Successor Companion Care Compact: introduced"
+		not "B2 Successor Companion Care Compact: declined"
+	on offer
+		conversation
+			`Near one of the shallow social pools, Ryii Vael and Sona Mii are arguing beside a small salamander-like animal that keeps circling their arms. They call it Palu. Sona has fed Palu most mornings for the last year because Ryii's work often starts before the pool lights rise. Ryii arranged the animal's habitat and paid for several treatments after an old injury.`
+			`A copied care note now lists Sona simply as Palu's "responsible keeper." A clinic treated that phrase as authority to approve a non-emergency procedure while Ryii was off-world. Sona did not ask for that authority. Ryii is angry that the clinic assumed it. Neither wants Palu's care to become less reliable just because the paperwork is wrong.`
+			choice
+				`\tUse task-specific care authority: feeding, transport, routine appointments, and major medical decisions remain separately assignable.`
+					goto tasks
+				`\tUse current-consent authority: either caretaker may help, but a major non-emergency decision requires the currently designated decision-maker or fresh agreement.`
+					goto consent
+				`\tUse paired records: keep care history separate from current custody and decision authority.`
+					goto paired
+				`\tRefuse to turn one household's companion-care dispute into a general rule.`
+					goto decline
+			label tasks
+			`You separate the work that actually happens. A person can be trusted to feed Palu, carry it to an appointment, or refill its habitat without gaining every other power by implication. Ryii and Sona begin listing the tasks they already share and the few decisions they want to reserve for explicit agreement.`
+			action
+				"B2 Successor Companion Care Compact: introduced" = 1
+				"B2 Successor Companion Care Compact: route task specific" = 1
+				"B2 Successor Companion Care Compact: ryii trusts player" = 1
+				event "B2 Successor Companion Care Compact: Review Ready" 7 11
+			decline
+			label consent
+			`You suggest that routine help remain easy while major non-emergency decisions require a current, explicit grant. Emergency care can still proceed when delay would put Palu at risk, but the emergency does not silently become a permanent transfer of authority afterward. Sona agrees immediately. Ryii says that is the distinction the copied note erased.`
+			action
+				"B2 Successor Companion Care Compact: introduced" = 1
+				"B2 Successor Companion Care Compact: route current consent" = 1
+				"B2 Successor Companion Care Compact: sona trusts player" = 1
+				event "B2 Successor Companion Care Compact: Review Ready" 7 11
+			decline
+			label paired
+			`You recommend two linked records. One preserves who actually fed, transported, treated, or housed Palu over time. The other records current custody, decision authority, emergency contacts, and any limits or expiry. History stays visible without becoming a standing order. Ryii and Sona both seem relieved that neither person's past care has to be erased to clarify who may decide today.`
+			action
+				"B2 Successor Companion Care Compact: introduced" = 1
+				"B2 Successor Companion Care Compact: route paired records" = 1
+				"B2 Successor Companion Care Compact: ryii trusts player" = 1
+				"B2 Successor Companion Care Compact: sona trusts player" = 1
+				event "B2 Successor Companion Care Compact: Review Ready" 7 11
+			decline
+			label decline
+			`You tell them that one clinic's bad inference does not justify inventing a broad rule for every Successor household. Ryii asks the clinic to correct Palu's current note. Sona agrees to keep helping exactly as before while the larger question remains local and unresolved.`
+			action
+				"B2 Successor Companion Care Compact: declined" = 1
+			decline
+
+
+mission "B2 Successor Companion Care Compact: Review"
+	minor
+	name `The Caretaker Who Moved`
+	description `Return after Ryii and Sona have tested their arrangement and decide how care history should survive without becoming permanent authority.`
+	source
+		attributes "successor"
+		not attributes "uninhabited" "crime"
+	"offer precedence" 8
+	to offer
+		has "B2 Successor Companion Care Compact: introduced"
+		has "B2 Successor Companion Care Compact: review ready"
+		not "B2 Successor Companion Care Compact: reviewed"
+	on offer
+		conversation
+			branch tasks
+				has "B2 Successor Companion Care Compact: route task specific"
+			branch consent
+				has "B2 Successor Companion Care Compact: route current consent"
+			`Ryii and Sona find you beside another public pool. Palu is sleeping in a warmed basket between them. The arrangement worked, but a new copy of the old clinic note now says Sona is Palu's permanent keeper even though Sona is preparing to move to another world. A second note says Ryii is the sole owner because Ryii paid the last treatment bill.`
+			`Both records contain true fragments. Neither describes the current relationship. Sona says, "If I move, I still cared for Palu. I simply stop being the person who can answer every question tomorrow." Ryii adds that paying one bill should not rewrite who actually provided years of care.`
+				goto settle
+			label tasks
+			`The task list made daily care clearer, but one copied summary kept only Sona's feeding duties and turned them into permanent custody. Ryii says a history of useful work should remain credit for the work, not become ownership by accumulation.`
+				goto settle
+			label consent
+			`The fresh-consent rule prevented another clinic mistake, but a downstream directory preserved an old designation after its review date. Sona says authority that once existed can remain historically true without remaining active.`
+			label settle
+			choice
+				`\tUse a portable companion-care packet: care history, current custodian, task permissions, medical decision authority, emergency scope, review date, and closure travel together.`
+					goto packet
+				`\tUse expiry plus renewal: historical care remains visible, while current authority expires or changes unless deliberately renewed for the present arrangement.`
+					goto renewal
+			label packet
+			`You recommend that care history and current authority travel together without collapsing into one field. The packet records who actually cared for Palu, who currently houses it, which routine tasks are delegated, who may approve non-emergency treatment, what emergencies permit, when the arrangement should be reviewed, and whether a former authority has closed. Sona's years of care remain true after the move. Ryii's current responsibility remains current without erasing them.`
+			action
+				"B2 Successor Companion Care Compact: reviewed" = 1
+				"B2 Successor Companion Care Compact: settlement portable care packet" = 1
+				"B2 Successor Companion Care Compact: ryii trusts player" = 1
+				"B2 Successor Companion Care Compact: sona trusts player" = 1
+			decline
+			label renewal
+			`You recommend that current authority have an explicit review point. Old care remains historical evidence of relationship and experience, but custody and decision authority must be renewed or reassigned when the household changes. Emergency authority ends with the emergency unless the living caretakers deliberately create a new arrangement afterward.`
+			action
+				"B2 Successor Companion Care Compact: reviewed" = 1
+				"B2 Successor Companion Care Compact: settlement expiry and renewal" = 1
+				"B2 Successor Companion Care Compact: ryii trusts player" = 1
+				"B2 Successor Companion Care Compact: sona trusts player" = 1
+			decline
+
+
+mission "B2 Successor Companion Care Compact: Sona Remembers"
+	minor
+	name `Sona Remembers`
+	description `Sona remembers whether years of caring for Palu stayed part of the animal's history without becoming permanent authority after the household changed.`
+	source
+		attributes "successor"
+		not attributes "uninhabited" "crime"
+	"offer precedence" 8
+	to offer
+		not "B2 Successor Companion Care Compact: aftermath seen"
+		or
+			has "B2 Successor Companion Care Compact: settlement portable care packet"
+			has "B2 Successor Companion Care Compact: settlement expiry and renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Successor Companion Care Compact: settlement expiry and renewal"
+			`Sona shows you a current care packet before leaving for the spaceport. The history still records a year of morning feedings, transport, and clinic visits. The current section names Ryii as Palu's custodian and lists Sona only for one remaining transfer task. "Leaving did not make the care imaginary," Sona says. "It only changed what I may decide next." Palu wriggles between their arms as if impatient with the distinction.`
+				goto finish
+			label renewal
+			`Sona says the old clinic designation expired on schedule. Ryii asked once whether Sona wanted to remain an emergency contact after the move; Sona agreed for a limited period and nothing more was inferred from it. "The record remembers me," Sona says, "without pretending that memory is ownership."`
+			label finish
+			action
+				"B2 Successor Companion Care Compact: aftermath seen" = 1
+			decline
