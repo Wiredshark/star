@@ -1,13 +1,14 @@
 # B2 Pirate Reconciliation Compact — handoff
 
-Verdict: PARTIAL pending exact-head repository-native validation.
+Verdict: PARTIAL pending exact repaired-candidate repository-native validation.
 
 ## Authority
 - repository: `Wiredshark/star`
 - authoritative base: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - branch: `agent/b2-pirate-reconciliation-compact-20260825`
 - production commit: `ea36933d98360f4e1f8c42b5034de17d3451021f`
-- focused validator commit: `5b67387b28ece445b56f97ed3a890efac1635557`
+- initial focused validator: `5b67387b28ece445b56f97ed3a890efac1635557`
+- validator hardening: `691acfc1f644ce387a748b0ec631513c38f17090`
 
 ## Character / dynamic-content behavior
 Adds former pirate crewmates Ressa Vale and Kade Orin in a three-mission relationship arc. A failed boarding left Ressa stranded after Kade obeyed a retreat order. Kade has apologized; Ressa may forgive him without restoring the old operational relationship.
@@ -40,6 +41,16 @@ The focused validator proves:
 - `pirate jobs` remains read-only;
 - no centralized Pirate law/office/code is introduced.
 
+## Validation history
+Initial exact handoff head `796773587cc0a07a9880cd80df39072303bd459a`:
+- changed-content style: SUCCESS;
+- focused Python compilation: SUCCESS;
+- repository-wide focused validators: all existing checks passed except the new Pirate reconciliation validator;
+- exact failure: `FAIL: apology must terminate exactly once`;
+- root cause: validator-only indentation-sensitive terminal assertion, not production content.
+
+Commit `691acfc1f644ce387a748b0ec631513c38f17090` makes route/settlement/aftermath terminal checks formatting-independent and narrows the authority-disclaimer assertion so the explicit negative phrase `not Pirate law` cannot itself trigger a false positive. Production content is unchanged by this repair.
+
 ## Canon / continuity assumptions
 This is one personal relationship, not a Pirate institution. Apology, forgiveness, friendship, operational trust, changed behavior, job-specific consent, and future crew authority are distinct facts. Changed behavior can matter without buying forgiveness. Forgiveness can be genuine without restoring operational trust. A repaired friendship does not automatically recreate a prior crew partnership.
 
@@ -47,7 +58,7 @@ This is one personal relationship, not a Pirate institution. Apology, forgivenes
 The separate global B2 dialogue-lifecycle audit was observed and left untouched. Four pre-existing service-owned host processes were observed and preserved. No destructive Git operation or self-integration is authorized from B2.
 
 ## Validation required for READY
-- Fork simulation and story validation on the exact production/validator/handoff candidate;
+- Fork simulation and story validation on the exact repaired production/validator/handoff candidate;
 - focused story validator discovery/execution;
 - A1 simulation/state-ownership contracts;
 - changed-content style;
