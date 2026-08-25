@@ -1,0 +1,145 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Syndicate Overtime Baseline Compact.
+# A local dockyard dispute about emergency overtime, ordinary performance baselines,
+# compensation, and whether one exceptional surge becomes permanent duty.
+
+
+event "B2 Syndicate Overtime Baseline Compact: Review Ready"
+	"B2 Syndicate Overtime Baseline Compact: review ready" = 1
+
+
+mission "B2 Syndicate Overtime Baseline Compact: Offer"
+	minor
+	name `The Shift That Became the Standard`
+	description `Kellan Voss and Rhea Noll disagree over whether emergency overtime should become Rhea's ordinary productivity baseline.`
+	source
+		government "Syndicate"
+		not attributes "station" "uninhabited" "crime"
+	"offer precedence" 8
+	to offer
+		"world: syndicate labor strain" >= 3
+		has "world: syndicate labor rotation active"
+		not "B2 Syndicate Overtime Baseline Compact: introduced"
+		not "B2 Syndicate Overtime Baseline Compact: declined"
+	on offer
+		conversation
+			`Kellan Voss, a dockyard shift supervisor, is arguing quietly with pressure-hull welder Rhea Noll beside a crew board. During the last repair surge Rhea volunteered for several long emergency shifts so a damaged freighter could clear the berth. The ship left safely, and Kellan entered the extra work as exceptional surge coverage.`
+			`A later performance summary dropped the word exceptional. Another yard copied the higher output as Rhea's normal weekly baseline, then marked an ordinary rested rotation as underperformance. Rhea does not regret helping. She does object to one voluntary emergency becoming a standing obligation.`
+			choice
+				`\tKeep ordinary performance separate from emergency overtime. The surge remains credited without resetting the baseline.`
+					goto baseline
+				`\tPermit emergency overtime only as a current, explicit commitment with a defined window, rest requirement, and compensation record.`
+					goto consent
+				`\tKeep paired records: ordinary workload in one record, emergency contribution and recovery obligations in another.`
+					goto paired
+				`\tRefuse to turn one crew's surge into a general rule.`
+					goto decline
+			label baseline
+			`You tell Kellan that exceptional output can remain part of Rhea's work history without becoming the denominator for every later shift. Kellan agrees to restore the ordinary baseline and preserve the surge as a dated contribution instead of a permanent target.`
+			action
+				"B2 Syndicate Overtime Baseline Compact: introduced" = 1
+				"B2 Syndicate Overtime Baseline Compact: route baseline separate" = 1
+				"B2 Syndicate Overtime Baseline Compact: rhea trusts player" = 1
+				event "B2 Syndicate Overtime Baseline Compact: Review Ready" 7 11
+			decline
+			label consent
+			`You recommend treating overtime as a fresh commitment rather than inherited availability. A surge window records what Rhea agreed to, when it ends, what rest follows, and how the extra work is compensated. Kellan says that gives dispatchers useful certainty without pretending consent lasts forever.`
+			action
+				"B2 Syndicate Overtime Baseline Compact: introduced" = 1
+				"B2 Syndicate Overtime Baseline Compact: route current commitment" = 1
+				"B2 Syndicate Overtime Baseline Compact: kellan trusts player" = 1
+				event "B2 Syndicate Overtime Baseline Compact: Review Ready" 7 11
+			decline
+			label paired
+			`You recommend two linked records. The ordinary record tracks normal workload and qualification. The surge record preserves voluntary emergency hours, compensation, rest debt, and the exact incident that justified them. Rhea says that keeps the help visible without making exhaustion the new definition of competence.`
+			action
+				"B2 Syndicate Overtime Baseline Compact: introduced" = 1
+				"B2 Syndicate Overtime Baseline Compact: route paired records" = 1
+				"B2 Syndicate Overtime Baseline Compact: rhea trusts player" = 1
+				"B2 Syndicate Overtime Baseline Compact: kellan trusts player" = 1
+				event "B2 Syndicate Overtime Baseline Compact: Review Ready" 7 11
+			decline
+			label decline
+			`You tell them one bad copy does not justify a dockyard-wide doctrine. Kellan corrects Rhea's current record locally. Rhea returns to the rotated shift without asking you to settle the larger question.`
+			action
+				"B2 Syndicate Overtime Baseline Compact: declined" = 1
+			decline
+
+
+mission "B2 Syndicate Overtime Baseline Compact: Review"
+	minor
+	name `When the Surge Is Over`
+	description `Review whether the dockyard stopped treating emergency output as permanent ordinary capacity.`
+	source
+		government "Syndicate"
+		not attributes "station" "uninhabited" "crime"
+	"offer precedence" 8
+	to offer
+		has "B2 Syndicate Overtime Baseline Compact: introduced"
+		has "B2 Syndicate Overtime Baseline Compact: review ready"
+		not "B2 Syndicate Overtime Baseline Compact: reviewed"
+		"world: syndicate labor strain" <= 1
+		not "world: syndicate labor rotation active"
+	on offer
+		conversation
+			`Kellan and Rhea show you two newer summaries. The dockyard is no longer under acute labor strain, but one copied report still calls Rhea's emergency pace her proven capacity. Another correctly restored her ordinary baseline yet forgot that the surge created compensatory rest that was actually taken.`
+			`Rhea says both errors matter. Erasing the surge would erase real work. Treating the surge as permanent capacity would erase the conditions that made it exceptional.`
+			choice
+				`\tUse a portable workload packet: ordinary baseline, emergency window, volunteered hours, compensation, rest obligation, review date, and closure travel together.`
+					goto packet
+				`\tUse expiry and reset: emergency commitments expire, while their historical contribution remains visible without continuing as current capacity.`
+					goto expiry
+			label packet
+			`You keep the ordinary and exceptional facts linked without merging them. Future schedulers can see what Rhea normally carries, what she voluntarily added during the surge, what recovery followed, and whether the exceptional commitment has closed.`
+			action
+				"B2 Syndicate Overtime Baseline Compact: reviewed" = 1
+				"B2 Syndicate Overtime Baseline Compact: settlement workload packet" = 1
+				"B2 Syndicate Overtime Baseline Compact: rhea trusts player" = 1
+				"B2 Syndicate Overtime Baseline Compact: kellan trusts player" = 1
+			decline
+			label expiry
+			`You recommend that surge commitments end when their declared window ends. The work remains historical credit, but a future emergency requires a fresh request and fresh consent. Kellan removes the inherited surge baseline. Rhea asks that the completed overtime remain in her record as work done, not work perpetually owed.`
+			action
+				"B2 Syndicate Overtime Baseline Compact: reviewed" = 1
+				"B2 Syndicate Overtime Baseline Compact: settlement expiry and reset" = 1
+				"B2 Syndicate Overtime Baseline Compact: rhea trusts player" = 1
+			decline
+
+
+mission "B2 Syndicate Overtime Baseline Compact: Rhea Remembers"
+	minor
+	name `Rhea Remembers`
+	description `Rhea remembers whether exceptional help remained credit without becoming permanent duty.`
+	source
+		government "Syndicate"
+		not attributes "station" "uninhabited" "crime"
+	"offer precedence" 8
+	to offer
+		not "B2 Syndicate Overtime Baseline Compact: aftermath seen"
+		or
+			has "B2 Syndicate Overtime Baseline Compact: settlement workload packet"
+			has "B2 Syndicate Overtime Baseline Compact: settlement expiry and reset"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Syndicate Overtime Baseline Compact: settlement expiry and reset"
+			`Rhea shows you a current shift board. Her ordinary workload is ordinary again, while the old surge remains visible as a dated emergency contribution with its recovery complete. "They can remember that I helped," she says, "without deciding I owe them the emergency forever."`
+				goto finish
+			label expiry
+			`Rhea says the inherited surge target finally expired from every copied schedule she has seen. The old overtime remains in her work history, but the next supervisor who needs extra hours will have to ask again. "That is enough," she says.`
+			label finish
+			action
+				"B2 Syndicate Overtime Baseline Compact: aftermath seen" = 1
+			decline
