@@ -53,8 +53,22 @@ require(len(re.findall(r"\n\s+decline\s*(?:\n|$)", TEXT)) == 7, "expected seven 
 for directive in ("destination ", "stopover ", "waypoint ", "npc ", "cargo ", "passenger ", "deadline ", "timer "):
     require(re.search(rf"^\s*{re.escape(directive)}", TEXT, re.MULTILINE) is None, f"unexpected objective directive {directive.strip()}")
 
+# Global persistence cardinality. These assertions make accidental duplicate writes
+# visible even if a future edit still satisfies individual branch-local checks.
+require(TEXT.count(f'"{PREFIX} introduced" = 1') == 3, "introduced must be written by exactly three substantive routes")
+require(TEXT.count(f'"{PREFIX} declined" = 1') == 1, "refusal must be written exactly once")
+require(TEXT.count(f'"{PREFIX} reviewed" = 1') == 2, "review closure must be written by exactly two settlements")
+require(TEXT.count(f'"{PREFIX} aftermath seen" = 1') == 1, "aftermath seen must be written exactly once")
+require(TEXT.count(f'event "{PREFIX} Review Ready" 7 11') == 3, "exactly three substantive routes must schedule Review")
+for route in ROUTES:
+    require(TEXT.count(f'"{route}" = 1') == 1, f"route must be written exactly once: {route}")
+for settlement in SETTLEMENTS:
+    require(TEXT.count(f'"{settlement}" = 1') == 1, f"settlement must be written exactly once: {settlement}")
+
 # Route-local persistence and refusal suppression.
 offer = mission_block(MISSIONS[0])
+for label in ("dated", "reference", "paired", "decline"):
+    require(offer.count(f"goto {label}") == 1, f"offer must route to {label} exactly once")
 for label, route in (("dated", ROUTES[0]), ("reference", ROUTES[1]), ("paired", ROUTES[2])):
     block = label_block(offer, label)
     require(block.count(f'"{PREFIX} introduced" = 1') == 1, f"{label} must introduce once")
@@ -65,7 +79,7 @@ for label, route in (("dated", ROUTES[0]), ("reference", ROUTES[1]), ("paired", 
     require(block.count(f'event "{PREFIX} Review Ready" 7 11') == 1, f"{label} must schedule review once")
     require(len(re.findall(r"\n\s+decline\s*(?:\n|$)", block)) == 1, f"{label} must terminate once")
 refusal = label_block(offer, "decline")
-require(f'"{PREFIX} declined" = 1' in refusal, "refusal must persist")
+require(refusal.count(f'"{PREFIX} declined" = 1') == 1, "refusal must persist exactly once")
 require(f'"{PREFIX} introduced" = 1' not in refusal, "refusal must not introduce")
 require("Review Ready" not in refusal, "refusal must not schedule review")
 for route in ROUTES:
@@ -76,6 +90,8 @@ review = mission_block(MISSIONS[1])
 for gate in (f'{PREFIX} introduced', f'{PREFIX} review ready'):
     require(f'has "{gate}"' in review, f"review missing gate {gate}")
 require(f'not "{PREFIX} reviewed"' in review, "review must be one-shot")
+for label in ("packet", "renewal"):
+    require(review.count(f"goto {label}") == 1, f"review must route to {label} exactly once")
 for label, settlement in (("packet", SETTLEMENTS[0]), ("renewal", SETTLEMENTS[1])):
     block = label_block(review, label)
     require(block.count(f'"{PREFIX} reviewed" = 1') == 1, f"{label} must close review once")
@@ -84,10 +100,12 @@ for label, settlement in (("packet", SETTLEMENTS[0]), ("renewal", SETTLEMENTS[1]
         if other != settlement:
             require(f'"{other}" = 1' not in block, f"{label} writes another settlement")
     require(len(re.findall(r"\n\s+decline\s*(?:\n|$)", block)) == 1, f"{label} must terminate once")
+
 after = mission_block(MISSIONS[2])
 require(f'not "{PREFIX} aftermath seen"' in after, "aftermath must be one-shot")
+require(after.count("\n\t\tor\n") == 1, "aftermath must use exactly one two-settlement OR gate")
 for settlement in SETTLEMENTS:
-    require(f'has "{settlement}"' in after, f"aftermath missing {settlement}")
+    require(after.count(f'has "{settlement}"') == 1, f"aftermath eligibility must consume {settlement} exactly once")
 require(after.count(f'"{PREFIX} aftermath seen" = 1') == 1, "aftermath must write seen once")
 require(len(re.findall(r"\n\s+decline\s*(?:\n|$)", after)) == 1, "aftermath must terminate once")
 
