@@ -33,6 +33,14 @@ def label_block(block: str, label: str) -> str:
     return match.group(0)
 
 
+def has_branch_gate(block: str, label: str, state: str) -> bool:
+    pattern = (
+        rf'^\s*branch {re.escape(label)}\s*$\n'
+        rf'^\s*has "{re.escape(PREFIX + state)}"\s*$'
+    )
+    return re.search(pattern, block, re.M) is not None
+
+
 def main() -> None:
     if not PATH.is_file():
         fail(f"missing {PATH}")
@@ -122,10 +130,9 @@ def main() -> None:
         "campaign": "route campaign consent",
     }
     for label, state in review_route_branches.items():
-        block = label_block(review, label)
-        if f'has "{PREFIX} {state}"' not in block:
+        if not has_branch_gate(review, label, state):
             fail(f"Review {label} branch missing its route gate")
-    if 'branch paired' in review:
+    if re.search(r'^\s*branch paired\s*$', review, re.M):
         fail("paired route should remain the deliberate Review fallthrough")
     if "paired records survived the next event" not in review.lower():
         fail("paired Review fallthrough is missing its distinct consequence")
@@ -154,8 +161,7 @@ def main() -> None:
             fail(f"aftermath missing settlement gate {state}")
     if len(re.findall(r'^\s*or\s*$', after, re.M)) != 1:
         fail("aftermath must use one two-settlement OR gate")
-    renewal_after = label_block(after, "renewal")
-    if f'has "{PREFIX} settlement fresh context"' not in renewal_after:
+    if not has_branch_gate(after, "renewal", "settlement fresh context"):
         fail("aftermath renewal branch missing fresh-context settlement gate")
     if after.count(f'"{PREFIX} aftermath seen" = 1') != 1:
         fail("aftermath write count invalid")
