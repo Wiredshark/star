@@ -72,6 +72,27 @@ def test_offer_routes_and_refusal():
         assert f'"{PREFIX}{route}" = 1' not in decline
 
 
+def test_review_route_gating():
+    review = mission_block(MISSIONS[1])
+    conversation = review.split("\ton offer\n\t\tconversation\n", 1)[1]
+    pre_labels = conversation.split("\n\t\t\tlabel bounded\n", 1)[0]
+
+    assert pre_labels.count("\t\t\tbranch bounded\n") == 1
+    assert pre_labels.count(f'\t\t\t\thas "{PREFIX}{ROUTES[1]}"\n') == 1
+    assert pre_labels.count("\t\t\tbranch paired\n") == 1
+    assert pre_labels.count(f'\t\t\t\thas "{PREFIX}{ROUTES[2]}"\n') == 1
+    assert f'has "{PREFIX}{ROUTES[0]}"' not in pre_labels
+
+    bounded = label_block(review, "bounded")
+    paired = label_block(review, "paired")
+    settle = label_block(review, "settle")
+    assert bounded.count("goto settle") == 1
+    assert "goto settle" not in paired
+    assert "choice" in settle
+    assert "goto packet" in settle
+    assert "goto renewal" in settle
+
+
 def test_review_and_aftermath():
     review = mission_block(MISSIONS[1])
     assert f'has "{PREFIX}introduced"' in review
@@ -85,10 +106,20 @@ def test_review_and_aftermath():
             if other != settlement:
                 assert f'"{PREFIX}{other}" = 1' not in block
         assert len(re.findall(r'^\s*decline\s*$', block, re.M)) == 1
+
     aftermath = mission_block(MISSIONS[2])
-    assert f'not "{PREFIX}aftermath seen"' in aftermath
-    for settlement in SETTLEMENTS:
-        assert f'has "{PREFIX}{settlement}"' in aftermath
+    offer_gate = aftermath.split("\tto offer\n", 1)[1].split("\ton offer\n", 1)[0]
+    assert offer_gate.count(f'not "{PREFIX}aftermath seen"') == 1
+    settlement_gates = re.findall(rf'^\s*has "{re.escape(PREFIX)}(settlement [^"]+)"\s*$', offer_gate, re.M)
+    assert settlement_gates == list(SETTLEMENTS), f"unexpected aftermath settlement gate: {settlement_gates}"
+    assert offer_gate.count("\n\t\tor\n") == 1
+
+    conversation = aftermath.split("\ton offer\n\t\tconversation\n", 1)[1]
+    pre_renewal = conversation.split("\n\t\t\tlabel renewal\n", 1)[0]
+    assert pre_renewal.count("\t\t\tbranch renewal\n") == 1
+    assert pre_renewal.count(f'\t\t\t\thas "{PREFIX}{SETTLEMENTS[1]}"\n') == 1
+    assert f'has "{PREFIX}{SETTLEMENTS[0]}"' not in pre_renewal
+
     assert aftermath.count(f'"{PREFIX}aftermath seen" = 1') == 1
     assert len(re.findall(r'^\s*decline\s*$', aftermath, re.M)) == 1
 
@@ -139,6 +170,7 @@ def test_no_material_mutation():
 def main():
     test_graph_and_scope()
     test_offer_routes_and_refusal()
+    test_review_route_gating()
     test_review_and_aftermath()
     test_lifecycle_ownership_and_gotos()
     test_identity_continuity_boundaries()
@@ -146,6 +178,7 @@ def main():
     print("PASS: B2 Hai Name Record Continuity Compact structure validated")
     print("PASS: missions=3 routes=3+refusal settlements=2")
     print("PASS: delayed_review=7-11 days; refusal suppresses review")
+    print("PASS: review route gates and aftermath settlement gates are exact")
     print("PASS: state_only_terminals=7 decline / 0 accept")
     print("PASS: writes=B2 namespace only")
     print("PASS: current-name/history/access-purpose boundaries explicit")
