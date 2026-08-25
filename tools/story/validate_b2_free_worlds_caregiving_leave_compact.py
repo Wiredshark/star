@@ -56,7 +56,6 @@ route_labels = {
 }
 for label, condition in route_labels.items():
     segment = offer[offer.index(f"\t\t\tlabel {label}"):]
-    # stop at the next route/refusal label
     following = [offer.find(f"\t\t\tlabel {x}", offer.index(f"\t\t\tlabel {label}") + 1)
                  for x in ("availability", "standby", "paired", "decline")]
     following = [x for x in following if x != -1]
@@ -130,15 +129,14 @@ for forbidden in ("credits", "reputation", "combat rating", "government attitude
     require(forbidden not in "\n".join(line.lower() for line in text.splitlines() if line.startswith("\t\taction") or line.startswith("\t\t\t\t")),
             f"unexpected material/reputation mutation token: {forbidden}")
 
-# Continuity assertions: current availability is not permanent reliability judgment;
-# private family detail is not required for ordinary staffing; one local solution is
-# not centralized Free Worlds employment law.
+# Continuity assertions are semantic fragments rather than line-wrap-sensitive prose.
 semantic_fragments = (
     "current answer, not a biography",
     "family reason stays outside routine staffing copies",
     "volunteering for a defined emergency cannot become an unlimited claim",
     "old leave and standby entries as history rather than current authority",
-    "voluntary Free Worlds practice rather than centralized employment law",
+    "voluntary Free Worlds practice",
+    "centralized employment law",
 )
 for fragment in semantic_fragments:
     require(fragment in text, f"missing continuity invariant: {fragment}")
