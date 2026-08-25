@@ -1,0 +1,137 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Republic Former Affiliation Compact.
+#
+# A local employment dispute separates historical crew membership from current
+# authority, endorsement, loyalty, and responsibility. This is one Republic case,
+# not a universal employment or affiliation law.
+
+
+event "B2 Republic Former Affiliation Compact: Review Ready"
+	"B2 Republic Former Affiliation Compact: review ready" = 1
+
+
+mission "B2 Republic Former Affiliation Compact: Offer"
+	minor
+	name `The Name Still on the Old Roster`
+	description `A former crewmate asks you to help stop an accurate old roster from being treated as present affiliation.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		not "B2 Republic Former Affiliation Compact: introduced"
+		not "B2 Republic Former Affiliation Compact: declined"
+	on offer
+		conversation
+			`Mira Sol catches you outside a hiring office with Devon Pryce, an engineer whose name still appears on years of archived convoy rosters. Devon left that crew amicably long ago. Several copied personnel summaries now list the old crew under "affiliation" without any date, and a new employer has begun treating it as present sponsorship.`
+			`Devon taps the old entry. "It is true that I served with them. I am not asking anyone to erase that. I am asking them to stop turning history into a current relationship I never claimed." Mira adds that the same copied record has been used both to praise Devon through an old captain's reputation and to hold Devon responsible for decisions made after departure.`
+			choice
+				`\tKeep historical membership, but require current affiliation to have its own source, date, and present acknowledgement.`
+					goto dated
+				`\tAllow bounded references from former crews only for work they personally observed, without converting the reference into present sponsorship.`
+					goto reference
+				`\tKeep paired records: historical service and current affiliation are separate, linked only when a living party deliberately links them.`
+					goto paired
+				`\tRefuse to turn one hiring dispute into a general Republic rule.`
+					goto decline
+			label dated
+			`You preserve the old roster as history but give current affiliation a separate field with a date and direct source. Devon says that lets the record remain true without pretending departure never happened.`
+			action
+				"B2 Republic Former Affiliation Compact: introduced" = 1
+				"B2 Republic Former Affiliation Compact: route dated affiliation" = 1
+				"B2 Republic Former Affiliation Compact: Devon trusts player" = 1
+				event "B2 Republic Former Affiliation Compact: Review Ready" 7 11
+				decline
+			label reference
+			`You let former captains speak to work they actually witnessed, but the reference must say what period and duties it covers. Mira writes "reference" and "current sponsor" on different lines. Devon says that is the distinction the copied summaries kept losing.`
+			action
+				"B2 Republic Former Affiliation Compact: introduced" = 1
+				"B2 Republic Former Affiliation Compact: route bounded reference" = 1
+				"B2 Republic Former Affiliation Compact: Mira trusts player" = 1
+				"B2 Republic Former Affiliation Compact: Devon trusts player" = 1
+				event "B2 Republic Former Affiliation Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You split the record into historical service and present affiliation. A later employer may see both, but one cannot silently populate the other. Devon says the old crew can remain part of the story without remaining in control of the present.`
+			action
+				"B2 Republic Former Affiliation Compact: introduced" = 1
+				"B2 Republic Former Affiliation Compact: route paired history and present" = 1
+				"B2 Republic Former Affiliation Compact: Mira trusts player" = 1
+				"B2 Republic Former Affiliation Compact: Devon trusts player" = 1
+				event "B2 Republic Former Affiliation Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell Mira that employment records vary too much for one case to define a Republic-wide practice. Devon still asks the hiring office to correct the present-affiliation field, but neither of them asks you to turn the correction into law.`
+			action
+				"B2 Republic Former Affiliation Compact: declined" = 1
+				decline
+
+
+mission "B2 Republic Former Affiliation Compact: Review"
+	minor
+	name `When History Becomes Sponsorship`
+	description `Copied records are preserving old service while losing the date and limits that distinguish it from present affiliation.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		has "B2 Republic Former Affiliation Compact: introduced"
+		has "B2 Republic Former Affiliation Compact: review ready"
+		not "B2 Republic Former Affiliation Compact: reviewed"
+	on offer
+		conversation
+			`Mira has found the same problem in several personnel summaries. An accurate historical roster entry was copied without dates, while a bounded work reference was copied without its scope. In both cases, downstream readers began treating past association as current authority.`
+			choice
+				`\tUse a portable affiliation packet: organization or crew, role, start and end dates, evidence source, reference scope, present status, and explicit closure travel together.`
+					goto packet
+				`\tUse expiry plus fresh acknowledgement: historical service remains visible, but current affiliation must be renewed by current evidence rather than inherited from an old roster.`
+					goto renewal
+			label packet
+			`You recommend a portable record that carries history and present status without collapsing them. An old captain can remain an attributable source for old work. A current sponsor must be current.`
+			action
+				"B2 Republic Former Affiliation Compact: reviewed" = 1
+				"B2 Republic Former Affiliation Compact: settlement portable affiliation packet" = 1
+				"B2 Republic Former Affiliation Compact: Devon trusts player" = 1
+				decline
+			label renewal
+			`You recommend that affiliation expire into history unless a living current relationship renews it. The old roster remains searchable evidence, but it cannot create a present endorsement, responsibility, or loyalty claim by itself.`
+			action
+				"B2 Republic Former Affiliation Compact: reviewed" = 1
+				"B2 Republic Former Affiliation Compact: settlement expiry and acknowledgement" = 1
+				"B2 Republic Former Affiliation Compact: Mira trusts player" = 1
+				"B2 Republic Former Affiliation Compact: Devon trusts player" = 1
+				decline
+
+
+mission "B2 Republic Former Affiliation Compact: Devon Remembers"
+	minor
+	name `Devon Remembers`
+	description `Devon sees whether an old crew can remain part of the record without remaining a present affiliation.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		not "B2 Republic Former Affiliation Compact: aftermath seen"
+		or
+			has "B2 Republic Former Affiliation Compact: settlement portable affiliation packet"
+			has "B2 Republic Former Affiliation Compact: settlement expiry and acknowledgement"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Republic Former Affiliation Compact: settlement expiry and acknowledgement"
+			`Devon shows you a hiring record. The old convoy crew is listed under historical service with the years attached. Current affiliation is blank until Devon chooses to name one. "Same history," Devon says. "Different present."`
+				goto finish
+			label renewal
+			`Devon shows you a former captain's reference. It covers specific repairs during specific voyages and says nothing about present sponsorship. Beside it, the old crew roster remains archived with an end date. Mira says the record finally knows the difference between knowing someone then and speaking for them now.`
+			label finish
+			action
+				"B2 Republic Former Affiliation Compact: aftermath seen" = 1
+				decline
