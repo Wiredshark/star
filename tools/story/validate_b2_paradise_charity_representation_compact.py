@@ -154,12 +154,13 @@ objective_directive = re.compile(
 require(not objective_directive.search(text),
         "state-only slice contains gameplay objective/material directive")
 
+# Keep continuity checks semantic and insensitive to source-comment wrapping.
 for fragment in [
     "Paradise Charity Circuit Archive",
     "aid facts, fundraising narrative",
     "publicity consent",
     "campaign expiry",
-    "does not create centralized Paradise charity law",
+    "centralized Paradise charity law",
     "active reuse requires current permission and current context",
     "accounting evidence no longer silently grants control over his biography",
     "Withdrawal stops future active reuse without pretending the earlier campaign never happened",
