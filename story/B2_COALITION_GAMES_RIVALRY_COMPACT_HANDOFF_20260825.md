@@ -5,6 +5,7 @@
 - Branch: `agent/b2-coalition-games-rivalry-compact-20260825`.
 - Production commit: `ec8049e2c03d3e35a62d58b09ebe59845e17886b`.
 - Focused validator commit: `abb7f89b2c482494e1f429a8bcc999cf33d0c465`.
+- Exact production/validator candidate before evidence-only handoff update: `242981251420f4fabdbceca3c5b6da3f79e25c84`.
 - Scope: Saryd runner Seli Vara + Arach climber Toren Kesh; friendship / Coalition Games competition / public rivalry / promotional pressure.
 - Canon hook: Coalition ambient content already establishes the Coalition Games and professional athletes. This slice does not define universal Games rules or centralized athlete law.
 - RPG-state dependency: all three missions read `known to the heliarchs`; no upstream state is written.
@@ -14,5 +15,9 @@
 - Lifecycle: all seven dialogue/state-only terminal paths use `decline`; refusal cannot arm Review.
 - Continuity: competition result, direct quotation, private friendship, publicity framing, athlete approval, expiry, correction, and current evidence remain distinct facts.
 - Concurrency: current B2 portfolio and active global dialogue-lifecycle audit were inspected before authoring; no Coalition Games rivalry slice was found and unrelated work was left untouched.
-- Validation: repository-native exact-head workflows must both be terminal green before READY. Until then this handoff remains PARTIAL.
+- Isolation at exact candidate: 3 commits ahead / 0 behind authoritative main; exactly 3 added files; 355 additions / 0 deletions.
+- Process safety: four pre-existing service-owned host processes were observed and preserved; no unrelated process was terminated or modified.
+- Exact candidate validation: `Fork simulation and story validation` #613 / run `32865987893` SUCCESS. Both jobs were terminal green: changed-content style SUCCESS; focused Python compilation SUCCESS; all focused story validators SUCCESS; A1 simulation/state-ownership contracts SUCCESS.
+- Exact candidate production gate: `Fork save-load integration smoke` #598 / run `32865987890` remains QUEUED with no `ubuntu-24.04` runner assigned. No production build/save-load PASS is claimed.
+- Verdict remains PARTIAL until the exact production candidate's save-load workflow is terminal green.
 - A3: do not self-integrate; re-read current main, open B1/A2/B2 work, ancestry, mergeability, and exact workflow state before integration.
