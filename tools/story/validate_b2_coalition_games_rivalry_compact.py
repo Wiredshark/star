@@ -75,6 +75,11 @@ def main() -> None:
     if foreign:
         fail(f"writes outside B2 namespace: {foreign}")
 
+    if len(re.findall(rf'^event "{re.escape(PREFIX)} Review Ready"$', text, re.M)) != 1:
+        fail("Review Ready event must be declared exactly once")
+    if text.count(f'event "{PREFIX} Review Ready" 7 11') != 3:
+        fail("exactly the three substantive routes must schedule Review")
+
     offer = mission_block(text, f"{PREFIX} Offer")
     routes = {
         "separate": "route competition separate",
@@ -102,6 +107,8 @@ def main() -> None:
         fail("refusal must not arm Review")
     if any(f'"{PREFIX} {state}" = 1' in refusal for state in routes.values()):
         fail("refusal writes substantive route state")
+    if len(re.findall(r'^\s*decline\s*$', refusal, re.M)) != 1:
+        fail("refusal must terminate exactly once")
 
     review = mission_block(text, f"{PREFIX} Review")
     for gate in ("introduced", "review ready"):
@@ -109,6 +116,19 @@ def main() -> None:
             fail(f"Review missing {gate} gate")
     if f'not "{PREFIX} reviewed"' not in review:
         fail("Review must be one-shot")
+
+    review_route_branches = {
+        "separate": "route competition separate",
+        "campaign": "route campaign consent",
+    }
+    for label, state in review_route_branches.items():
+        block = label_block(review, label)
+        if f'has "{PREFIX} {state}"' not in block:
+            fail(f"Review {label} branch missing its route gate")
+    if 'branch paired' in review:
+        fail("paired route should remain the deliberate Review fallthrough")
+    if "paired records survived the next event" not in review.lower():
+        fail("paired Review fallthrough is missing its distinct consequence")
 
     settlements = {
         "packet": "settlement portable context",
@@ -132,6 +152,11 @@ def main() -> None:
     for state in settlements.values():
         if f'has "{PREFIX} {state}"' not in after:
             fail(f"aftermath missing settlement gate {state}")
+    if len(re.findall(r'^\s*or\s*$', after, re.M)) != 1:
+        fail("aftermath must use one two-settlement OR gate")
+    renewal_after = label_block(after, "renewal")
+    if f'has "{PREFIX} settlement fresh context"' not in renewal_after:
+        fail("aftermath renewal branch missing fresh-context settlement gate")
     if after.count(f'"{PREFIX} aftermath seen" = 1') != 1:
         fail("aftermath write count invalid")
     if len(re.findall(r'^\s*decline\s*$', after, re.M)) != 1:
@@ -171,6 +196,7 @@ def main() -> None:
 
     print("PASS: B2 Coalition Games Rivalry Compact validated")
     print("PASS: missions=3, routes=3+refusal, settlements=2, aftermath=one-shot")
+    print("PASS: route-local lifecycle and Review/aftermath branch gates verified")
     print("PASS: lifecycle=7 declines, 0 accepts")
     print("PASS: ownership=B2 namespace only; Heliarch recognition read-only")
 
