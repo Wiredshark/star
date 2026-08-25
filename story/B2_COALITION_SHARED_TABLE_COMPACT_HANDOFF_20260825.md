@@ -1,6 +1,6 @@
 # B2 Coalition Shared Table Compact — handoff
 
-Status: PARTIAL pending terminal exact-head repository-native validation.
+Status: READY for A3 review/integration.
 
 ## Authority
 
@@ -9,7 +9,7 @@ Status: PARTIAL pending terminal exact-head repository-native validation.
 - Branch: `agent/b2-coalition-shared-table-compact-20260825`
 - Production commit: `387f21be7455c31fc69cb9494b5d471dd134d476`
 - Focused validator commit: `6d334b429a7b911e185982730b3177196634532c`
-- Initial handoff candidate: `5b4510562f0894eedf0adc84515d2db74caf2459`
+- Exact fully validated production/validator candidate: `5b4510562f0894eedf0adc84515d2db74caf2459`
 
 ## Character / dynamic-content behavior
 
@@ -32,22 +32,23 @@ Focused validator: `tools/story/validate_b2_coalition_shared_table_compact.py`.
 
 It enforces the exact three-mission graph, recurring characters, Saryd scope, Coalition access gate, route-local writes and scheduling, refusal suppression, Review gates, settlement-local closure, one-shot aftermath, B2-only persistence, seven `decline` terminals, no objective-bearing directives, and the family-source/shared-adaptation/current-version canon boundary.
 
-## Exact-head validation state
+## Exact validation evidence
 
 On exact candidate `5b4510562f0894eedf0adc84515d2db74caf2459`:
 
-- `Fork simulation and story validation` #623 / run `32884111234`: IN PROGRESS at last observation.
+- `Fork simulation and story validation` #623 / run `32884111234`: SUCCESS after rerunning the previously cancelled changed-content-style job.
   - focused Python compilation: SUCCESS
   - all focused story validators: SUCCESS
   - A1 simulation/state-ownership contracts: SUCCESS
-  - changed-content style job: still in progress at repository-history checkout
-- `Fork save-load integration smoke` #608 / run `32884111331`: IN PROGRESS at last observation.
+  - changed-content style: SUCCESS
+- `Fork save-load integration smoke` #608 / run `32884111331`: SUCCESS after rerunning the previously cancelled stock save-load job.
   - checkout: SUCCESS
-  - dependency installation: in progress at last observation
-  - production configure/build: pending
-  - stock save-load smoke: pending
+  - dependency installation: SUCCESS
+  - production configure: SUCCESS
+  - production build: SUCCESS
+  - stock save-load smoke: SUCCESS
 
-No READY claim is made until both exact-head workflows are terminal green.
+The earlier cancellations were non-failing interruptions and are not counted as acceptance evidence; the rerun jobs above are terminal green on the exact production/validator candidate.
 
 ## Continuity / canon assumptions
 
