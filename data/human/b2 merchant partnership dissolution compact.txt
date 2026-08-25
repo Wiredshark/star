@@ -1,0 +1,139 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Merchant Partnership Dissolution Compact.
+# A character arc about two long-time Merchant business partners separating their
+# shared history from present authority, liabilities, references, and consent.
+
+
+event "B2 Merchant Partnership Dissolution Compact: Review Ready"
+	"B2 Merchant Partnership Dissolution Compact: review ready" = 1
+
+
+mission "B2 Merchant Partnership Dissolution Compact: Offer"
+	minor
+	name `The Name on Both Doors`
+	description `Two Merchant partners are ending a long-running repair brokerage and disagree over what their shared name still authorizes.`
+	source
+		government "Merchant"
+	"offer precedence" 8
+	to offer
+		has "B2 Merchant Recovery Margin Compact: aftermath seen"
+		not "B2 Merchant Partnership Dissolution Compact: introduced"
+		not "B2 Merchant Partnership Dissolution Compact: declined"
+	on offer
+		conversation
+			`Sera Holt and Damin Vey built a small repair brokerage together after years of arranging emergency parts, tug time, and yard access. They are still friends, but they no longer want to run the same business. The problem is that old invoices, yard contacts, and recommendation notes still carry both names.`
+			`Sera wants a clean split before either of them can accidentally bind the other to a new job. Damin does not want twenty years of shared work rewritten as though they were never partners. Both agree that history should survive. They disagree over what authority survives with it.`
+			choice
+				`\tKeep the historical partnership intact as history, but require fresh authority for every new commitment after the separation date.`
+					goto authority
+				`\tAllow bounded former-partner references for work actually observed, while separating recommendation from present sponsorship or liability.`
+					goto reference
+				`\tKeep paired records: one for the historical partnership and shared obligations, another for current ownership, authority, and unresolved liabilities.`
+					goto paired
+				`\tRefuse to turn one partnership's breakup into a general Merchant rule.`
+					goto decline
+			label authority
+			`You tell them that a historical partnership can remain fully true without granting either person standing authority over the other's future work. They choose a separation date and begin marking new commitments with the person who actually accepted them.`
+			action
+				"B2 Merchant Partnership Dissolution Compact: introduced" = 1
+				"B2 Merchant Partnership Dissolution Compact: route fresh authority" = 1
+				"B2 Merchant Partnership Dissolution Compact: Sera trusts player" = 1
+				event "B2 Merchant Partnership Dissolution Compact: Review Ready" 7 11
+			decline
+			label reference
+			`You preserve the right to say what each partner personally saw the other do well. A former partner may give a dated reference, but that reference does not make them a current sponsor, guarantor, co-owner, or decision-maker.`
+			action
+				"B2 Merchant Partnership Dissolution Compact: introduced" = 1
+				"B2 Merchant Partnership Dissolution Compact: route bounded reference" = 1
+				"B2 Merchant Partnership Dissolution Compact: Damin trusts player" = 1
+				event "B2 Merchant Partnership Dissolution Compact: Review Ready" 7 11
+			decline
+			label paired
+			`You recommend two linked records. The first preserves the partnership's shared history, completed jobs, old obligations, and any liability that still belongs to both. The second records who currently owns what and who can authorize new work. Neither record silently overwrites the other.`
+			action
+				"B2 Merchant Partnership Dissolution Compact: introduced" = 1
+				"B2 Merchant Partnership Dissolution Compact: route paired records" = 1
+				"B2 Merchant Partnership Dissolution Compact: Sera trusts player" = 1
+				"B2 Merchant Partnership Dissolution Compact: Damin trusts player" = 1
+				event "B2 Merchant Partnership Dissolution Compact: Review Ready" 7 11
+			decline
+			label decline
+			`You decline to make a durable rule from one private partnership. Sera and Damin agree to settle the split directly and avoid presenting your answer as a wider Merchant standard.`
+			action
+				"B2 Merchant Partnership Dissolution Compact: declined" = 1
+			decline
+
+
+mission "B2 Merchant Partnership Dissolution Compact: Review"
+	minor
+	name `The Job That Came After`
+	description `Review whether copied Merchant records still distinguish the old partnership from current authority and current liability.`
+	source
+		government "Merchant"
+	"offer precedence" 8
+	to offer
+		has "B2 Merchant Partnership Dissolution Compact: introduced"
+		has "B2 Merchant Partnership Dissolution Compact: review ready"
+		not "B2 Merchant Partnership Dissolution Compact: reviewed"
+	on offer
+		conversation
+			`Sera and Damin have found the first downstream failure. A yard copied an old vendor profile into a new repair request. The profile correctly says they were partners for years, but the new request lists both as responsible contacts even though only Sera accepted the job.`
+			`A second copy went the other way: it removed Damin's name entirely, making old shared work look like Sera's alone. They want a record that can preserve the past without granting present authority or erasing legitimate history.`
+			choice
+				`\tUse a portable partnership-status packet: historical period, completed joint work, unresolved shared liabilities, current owners, current authority, references, separation date, and closure travel together.`
+					goto packet
+				`\tUse expiry and fresh acknowledgement: old partnership records remain history, while present authority, sponsorship, and liability require a current explicit basis.`
+					goto renewal
+			label packet
+			`You keep the old partnership visible and date its end. Shared obligations that truly remain unresolved stay attached to both names. New commitments identify only the person who accepted them. A former partner's reference remains attributable without becoming current sponsorship.`
+			action
+				"B2 Merchant Partnership Dissolution Compact: reviewed" = 1
+				"B2 Merchant Partnership Dissolution Compact: settlement portable partnership status" = 1
+				"B2 Merchant Partnership Dissolution Compact: Sera trusts player" = 1
+				"B2 Merchant Partnership Dissolution Compact: Damin trusts player" = 1
+			decline
+			label renewal
+			`You recommend that copied partnership records expire as authority after the separation date. Anyone who wants to treat either former partner as a sponsor, guarantor, co-owner, or responsible party must get a fresh acknowledgement. The old partnership remains fully searchable history.`
+			action
+				"B2 Merchant Partnership Dissolution Compact: reviewed" = 1
+				"B2 Merchant Partnership Dissolution Compact: settlement fresh acknowledgement" = 1
+				"B2 Merchant Partnership Dissolution Compact: Sera trusts player" = 1
+			decline
+
+
+mission "B2 Merchant Partnership Dissolution Compact: Damin Remembers"
+	minor
+	name `Damin Remembers`
+	description `A former Merchant partner remembers whether shared history stayed distinct from present authority and liability.`
+	source
+		government "Merchant"
+	"offer precedence" 8
+	to offer
+		not "B2 Merchant Partnership Dissolution Compact: aftermath seen"
+		or
+			has "B2 Merchant Partnership Dissolution Compact: settlement portable partnership status"
+			has "B2 Merchant Partnership Dissolution Compact: settlement fresh acknowledgement"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Merchant Partnership Dissolution Compact: settlement fresh acknowledgement"
+			`Damin shows you a new vendor profile. It lists the years he and Sera worked together, then separately names their current businesses. "We did not have to erase the partnership to end it," he says. "And ending it did not make either of us responsible for the other's next promise."`
+				goto finish
+			label renewal
+			`Damin says a yard recently asked him to confirm whether he was backing one of Sera's new contracts. He answered no, then added a dated note about the work he had personally seen her do. "Reference is still mine to give. Liability is not something a copy can volunteer for me."`
+			label finish
+			action
+				"B2 Merchant Partnership Dissolution Compact: aftermath seen" = 1
+			decline
