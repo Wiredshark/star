@@ -1,0 +1,159 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Hai Mourning Song Choice Compact.
+# Primary domain: grief / family memory / music / memorial choice.
+#
+# This is one Hai family's dispute. It does not define universal Hai mourning law.
+# A surviving recording can be meaningful evidence of a person's wishes without
+# becoming automatic authority over every later memorial decision.
+
+
+event "B2 Hai Mourning Song Choice Compact: Review Ready"
+	"B2 Hai Mourning Song Choice Compact: review ready" = 1
+
+
+mission "B2 Hai Mourning Song Choice Compact: Offer"
+	minor
+	name `The Song She Might Have Meant`
+	description `Tira Senn and Olan Senn disagree over whether an old rehearsal recording should decide the music at Yari Senn's memorial.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "language: Hai"
+		not "B2 Hai Mourning Song Choice Compact: introduced"
+		not "B2 Hai Mourning Song Choice Compact: declined"
+	on offer
+		conversation
+			`Tira Senn is sitting outside a small music room with a recording paused between two notes. Her mother, Yari, died several months ago. In the recording Yari laughs after a rehearsal and says that if anyone ever holds a memorial for her, they should play the ridiculous old dance song the ensemble has just finished mangling.`
+			`Olan Senn, Yari's brother, remembers the same moment as a joke. Tira remembers her mother repeating the request on other days, though never in a formal message. Their family memorial is approaching, and relatives have begun treating the surviving recording as if it were a final instruction.`
+			`Neither wants the recording erased. Neither wants grief to manufacture certainty that the source itself does not contain.`
+			choice
+				`\tTreat the recording as evidence of Yari's preference, not an automatic command; preserve its date, setting, and uncertainty.`
+					goto evidence
+				`\tLet the living family choose the ceremony together while attributing Yari's recorded preference instead of speaking for her.`
+					goto family
+				`\tKeep separate layers: recorded wishes, family memories, current ceremony choices, and unresolved disagreements.`
+					goto layered
+				`\tRefuse to turn one family's grief into a general rule for Hai memorials.`
+					goto decline
+			label evidence
+			`You suggest preserving exactly what the recording proves: Yari said the words, in a rehearsal room, while laughing, on a known date. Repetition in family memory can add context, but not convert ambiguity into certainty. Tira says she can live with calling it a preference instead of a command.`
+			action
+				"B2 Hai Mourning Song Choice Compact: introduced" = 1
+				"B2 Hai Mourning Song Choice Compact: route preference evidence" = 1
+				"B2 Hai Mourning Song Choice Compact: tira trusts player" = 1
+				event "B2 Hai Mourning Song Choice Compact: Review Ready" 7 11
+				decline
+			label family
+			`You tell them that the memorial belongs to the living family too. They can choose a ceremony that helps them mourn without pretending every choice was dictated by Yari. Her recorded preference can be quoted as hers, and the final program can be identified as the family's decision. Olan looks relieved; Tira asks him to help choose the arrangement.`
+			action
+				"B2 Hai Mourning Song Choice Compact: introduced" = 1
+				"B2 Hai Mourning Song Choice Compact: route living family choice" = 1
+				"B2 Hai Mourning Song Choice Compact: olan trusts player" = 1
+				event "B2 Hai Mourning Song Choice Compact: Review Ready" 7 11
+				decline
+			label layered
+			`You suggest refusing to compress the disagreement. Keep the rehearsal recording, later family memories, the current memorial plan, and any disagreement as separate layers. A future relative can know what Yari said, what Tira remembers, what Olan remembers, and what the family finally chose without forcing them into one voice.`
+			action
+				"B2 Hai Mourning Song Choice Compact: introduced" = 1
+				"B2 Hai Mourning Song Choice Compact: route layered remembrance" = 1
+				"B2 Hai Mourning Song Choice Compact: tira trusts player" = 1
+				"B2 Hai Mourning Song Choice Compact: olan trusts player" = 1
+				event "B2 Hai Mourning Song Choice Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a family can grieve without a visiting captain turning its private argument into a cultural rule. Tira accepts the refusal. Olan says that deciding together may be the point anyway.`
+			action
+				"B2 Hai Mourning Song Choice Compact: declined" = 1
+				decline
+
+
+mission "B2 Hai Mourning Song Choice Compact: Review"
+	minor
+	name `After the Last Note`
+	description `Return after Tira and Olan test whether a memorial can preserve Yari's recorded wish without turning ambiguity into authority.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "language: Hai"
+		has "B2 Hai Mourning Song Choice Compact: introduced"
+		has "B2 Hai Mourning Song Choice Compact: review ready"
+		not "B2 Hai Mourning Song Choice Compact: reviewed"
+	on offer
+		conversation
+			branch evidence
+				has "B2 Hai Mourning Song Choice Compact: route preference evidence"
+			branch family
+				has "B2 Hai Mourning Song Choice Compact: route living family choice"
+			`The memorial went well, but a cousin has copied the program into a family archive with the note, "Yari's chosen memorial song." Tira says the sentence is almost true and therefore harder to correct. Olan says the archive has quietly turned the family's decision into Yari's final instruction.`
+				goto settle
+			label evidence
+			`The program quoted Yari's rehearsal remark with its date and context. A later family summary dropped the context and kept only the phrase "her requested song." Tira says the music still felt right; the problem is the certainty added afterward.`
+				goto settle
+			label family
+			`The family chose the song together and said so in the program. A relative later shortened the note to "what Yari wanted." Olan says shortening a sentence should not be allowed to rewrite who made the decision.`
+			label settle
+			choice
+				`\tUse an annotated memorial record: source recording, context, attributed memories, family choice, uncertainty, and later corrections travel together.`
+					goto annotated
+				`\tUse living-family choice: preserve historical wishes, but every later memorial or reuse requires a fresh decision by the people actually participating.`
+					goto renewal
+			label annotated
+			`You recommend a memorial record that can hold more than one kind of truth. Yari's recording remains intact with its date and setting. Tira's and Olan's memories remain attributed. The family's final ceremony choice is recorded as theirs, not retroactively assigned to Yari. Later corrections can clarify a copy without erasing the original event.`
+			action
+				"B2 Hai Mourning Song Choice Compact: reviewed" = 1
+				"B2 Hai Mourning Song Choice Compact: settlement annotated memorial" = 1
+				"B2 Hai Mourning Song Choice Compact: tira trusts player" = 1
+				"B2 Hai Mourning Song Choice Compact: olan trusts player" = 1
+				decline
+			label renewal
+			`You suggest preserving Yari's recorded preference as history while refusing to let it govern every future ceremony. If the family holds another remembrance, the people participating choose again and may cite Yari's old words without claiming she issued a standing order. Tira says that feels less like disobedience and more like remembering honestly.`
+			action
+				"B2 Hai Mourning Song Choice Compact: reviewed" = 1
+				"B2 Hai Mourning Song Choice Compact: settlement living renewal" = 1
+				"B2 Hai Mourning Song Choice Compact: tira trusts player" = 1
+				decline
+
+
+mission "B2 Hai Mourning Song Choice Compact: Tira Remembers"
+	minor
+	name `Tira Remembers`
+	description `Tira remembers whether Yari's old recording stayed a memory or hardened into an instruction nobody could verify.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "language: Hai"
+		not "B2 Hai Mourning Song Choice Compact: aftermath seen"
+		or
+			has "B2 Hai Mourning Song Choice Compact: settlement annotated memorial"
+			has "B2 Hai Mourning Song Choice Compact: settlement living renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Hai Mourning Song Choice Compact: settlement living renewal"
+			`Tira tells you the family archive now keeps the rehearsal recording beside the memorial program and the later correction. Nobody had to delete the joking tone to take Yari seriously, and nobody had to pretend the family choice came directly from her.`
+				goto finish
+			label renewal
+			`Tira says another small remembrance is being planned. The old dance song is on the list again, but as an invitation rather than an order. Olan suggested a different arrangement this time, and nobody treated disagreement as disrespect.`
+			label finish
+			action
+				"B2 Hai Mourning Song Choice Compact: aftermath seen" = 1
+				decline
