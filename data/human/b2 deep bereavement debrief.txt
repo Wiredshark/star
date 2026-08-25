@@ -1,0 +1,147 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Deep Bereavement Debrief Compact.
+#
+# Mara Venn's earlier Deep Security review work returns in a more personal case:
+# legitimate operational learning after a fatal escort incident must not silently
+# convert a family's private last message into training material or evidence of motive.
+# This is a local Deep review practice, not a universal Deep Security law.
+
+
+event "B2 Deep Bereavement Debrief Compact: Review Ready"
+	"B2 Deep Bereavement Debrief Compact: review ready" = 1
+
+
+mission "B2 Deep Bereavement Debrief Compact: Offer"
+	minor
+	name `What the Debrief Does Not Own`
+	description `Mara Venn asks you to help separate a fatal escort's operational lessons from a family's private last message.`
+	source
+		attributes "deep"
+	"offer precedence" 8
+	to offer
+		not "B2 Deep Bereavement Debrief Compact: introduced"
+		not "B2 Deep Bereavement Debrief Compact: declined"
+		or
+			has "A2 Deep Debrief: venn future field contact"
+			has "A2 Deep Debrief: venn future security contact"
+			has "A2 Deep Debrief: venn future review contact"
+			has "A2 Deep Debrief: refusal respected"
+	on offer
+		conversation
+			`Mara Venn is waiting beside a quiet Deep Security records terminal with Lio Vos, whose brother Iren died flying escort on a damaged convoy. Venn has already separated the navigation telemetry, contact reports, and command timeline. One item remains disputed: Iren sent Lio a private last message after the first attack, and a copied training draft now quotes it as though it explains why Iren stayed with the convoy.`
+			`Lio keeps one hand on the terminal's blank screen. "I am not asking them to erase what happened. I am asking why loving his crew became evidence they can circulate forever." Venn answers more softly than before. "The training office wants a human explanation for the decision. That does not mean the debrief owns every human thing around it."`
+			choice
+				`\tKeep the operational finding complete, but exclude private family material unless it is separately authorized for that purpose.`
+					goto facts
+				`\tAllow a family-approved excerpt only when the permitted use, audience, duration, and correction contact travel with it.`
+					goto consent
+				`\tKeep paired records: a technical incident debrief and a private family record may share an incident reference without copying each other's contents.`
+					goto paired
+				`\tRefuse to turn one family's loss into a general Deep Security rule.`
+					goto decline
+			label facts
+			`You tell Venn that the telemetry and command record can support the safety finding on their own. The last message may remain part of the family's history without becoming evidence of motive. Lio exhales. "Then they can learn from what he did without pretending they know why he felt everything he felt."`
+			action
+				"B2 Deep Bereavement Debrief Compact: introduced" = 1
+				"B2 Deep Bereavement Debrief Compact: route operational facts" = 1
+				"B2 Deep Bereavement Debrief Compact: Lio trusts player" = 1
+				event "B2 Deep Bereavement Debrief Compact: Review Ready" 7 11
+				decline
+			label consent
+			`You suggest that Lio can approve a specific excerpt without donating the entire message or its future use. Venn adds purpose, audience, expiry, and correction fields beside the quotation. "Permission needs a shape," she says, "or every copy turns it into permission forever."`
+			action
+				"B2 Deep Bereavement Debrief Compact: introduced" = 1
+				"B2 Deep Bereavement Debrief Compact: route purpose bound consent" = 1
+				"B2 Deep Bereavement Debrief Compact: Venn trusts player" = 1
+				"B2 Deep Bereavement Debrief Compact: Lio trusts player" = 1
+				event "B2 Deep Bereavement Debrief Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You keep the technical debrief and the family record separate. Both may carry the same incident identifier, but neither can silently populate the other. Venn nods. "A link can say two records concern the same loss without saying they serve the same purpose."`
+			action
+				"B2 Deep Bereavement Debrief Compact: introduced" = 1
+				"B2 Deep Bereavement Debrief Compact: route paired records" = 1
+				"B2 Deep Bereavement Debrief Compact: Venn trusts player" = 1
+				"B2 Deep Bereavement Debrief Compact: Lio trusts player" = 1
+				event "B2 Deep Bereavement Debrief Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell Venn and Lio that grief, training, privacy, and command review are too context-dependent for one case to define a universal Deep practice. Venn records the refusal rather than treating your silence as approval. Lio keeps the message private.`
+			action
+				"B2 Deep Bereavement Debrief Compact: declined" = 1
+				decline
+
+
+mission "B2 Deep Bereavement Debrief Compact: Review"
+	minor
+	name `When the Training Copy Travels`
+	description `A copied safety lesson preserved the conclusion but lost the boundary around a family's private material.`
+	source
+		attributes "deep"
+	"offer precedence" 8
+	to offer
+		has "B2 Deep Bereavement Debrief Compact: introduced"
+		has "B2 Deep Bereavement Debrief Compact: review ready"
+		not "B2 Deep Bereavement Debrief Compact: reviewed"
+	on offer
+		conversation
+			`Venn shows you three versions of the same training note. The technical conclusion is consistent in all three: Iren's escort choice preserved time for the crippled freighter to clear the engagement. But one copy quotes the private message without its approved audience, another paraphrases grief as a command motive, and a third drops the message entirely without recording that it had once been disputed material.`
+			`Lio reads them in silence. "I do not need his message to disappear from history," she says. "I need history to remember who was allowed to use it, for what, and what nobody actually knows about his reasons."`
+			choice
+				`\tUse a portable debrief-boundary packet: technical finding, private-material status, approved use, consent source, expiry, corrections, and unresolved interpretation travel together.`
+					goto packet
+				`\tUse dual-purpose archives: operational lessons and private family material remain separate records, and any new training use requires a fresh attributable source or fresh permission.`
+					goto dual
+			label packet
+			`You keep the safety lesson portable without stripping away its limits. A downstream instructor can see what the incident proved, what private material exists, whether any use was approved, and where interpretation remains uncertain. Venn says that is enough context to stop a copied debrief from becoming a biography.`
+			action
+				"B2 Deep Bereavement Debrief Compact: reviewed" = 1
+				"B2 Deep Bereavement Debrief Compact: settlement portable boundary packet" = 1
+				"B2 Deep Bereavement Debrief Compact: Lio trusts player" = 1
+				decline
+			label dual
+			`You separate the operational archive from the family archive. The debrief keeps telemetry, observed actions, and findings. The family record keeps the message and its own access history. New training material may cite either only through a fresh source or fresh permission rather than inherited access.`
+			action
+				"B2 Deep Bereavement Debrief Compact: reviewed" = 1
+				"B2 Deep Bereavement Debrief Compact: settlement dual purpose archive" = 1
+				"B2 Deep Bereavement Debrief Compact: Venn trusts player" = 1
+				"B2 Deep Bereavement Debrief Compact: Lio trusts player" = 1
+				decline
+
+
+mission "B2 Deep Bereavement Debrief Compact: Lio Remembers"
+	minor
+	name `Lio Remembers`
+	description `Lio sees whether Deep Security can keep learning from Iren's death without claiming ownership of the family's grief.`
+	source
+		attributes "deep"
+	"offer precedence" 8
+	to offer
+		not "B2 Deep Bereavement Debrief Compact: aftermath seen"
+		or
+			has "B2 Deep Bereavement Debrief Compact: settlement portable boundary packet"
+			has "B2 Deep Bereavement Debrief Compact: settlement dual purpose archive"
+	on offer
+		conversation
+			branch dual
+				has "B2 Deep Bereavement Debrief Compact: settlement dual purpose archive"
+			`Lio shows you the latest safety course. Iren's maneuver is reconstructed from telemetry and witness timing. His private message is not quoted. A note says family material exists in a separate archive and is not necessary to support the operational finding. "They remembered the difference," Lio says.`
+				goto finish
+			label dual
+			`Lio shows you the new debrief packet. It records the maneuver, the technical conclusion, and the existence of disputed private material without converting that material into motive. Any approved excerpt carries its purpose and expiry beside it. Venn has added one sentence to the template: uncertainty about motive is not a defect in an otherwise complete safety finding.`
+			label finish
+			action
+				"B2 Deep Bereavement Debrief Compact: aftermath seen" = 1
+				decline
