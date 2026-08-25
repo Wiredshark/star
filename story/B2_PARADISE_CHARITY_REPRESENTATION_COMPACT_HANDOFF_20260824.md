@@ -1,6 +1,6 @@
 # B2 Paradise Charity Representation Compact — Handoff
 
-Verdict: PARTIAL pending exact-head repository-native validation.
+Verdict: PARTIAL pending exact-head save-load completion.
 
 Authoritative base: `a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 
@@ -8,7 +8,9 @@ Branch: `agent/b2-paradise-charity-representation-20260824`
 
 Production commit: `084ccdfd215586a2e77bdbfe646d3f6d46261992`
 
-Focused-validator commit / exact production+validator candidate before this handoff: `23726bad8fcdf39aece4806aa9c963b48318002f`
+Initial focused-validator commit: `23726bad8fcdf39aece4806aa9c963b48318002f`
+
+Validator hardening / exact current production+validator candidate: `fcecc102e3950d0245cc3399f344b4cf27a61972`
 
 ## Behavior
 
@@ -39,11 +41,18 @@ This is one local Paradise charity dispute and does not establish centralized Pa
 - `tools/story/validate_b2_paradise_charity_representation_compact.py`
 - `story/B2_PARADISE_CHARITY_REPRESENTATION_COMPACT_HANDOFF_20260824.md`
 
-## Validation required before READY
+## Validation evidence
 
-On the exact PR head, require terminal green:
+Initial handoff head `7f07d3f8aba3cbdef5c8536465e5d38a225a4132`:
 
-- Fork simulation and story validation, including changed-content style, focused story validators, and A1 simulation/state-ownership contracts.
-- Fork save-load integration smoke, including production configuration/build and stock save-load smoke.
+- Fork save-load integration smoke #551 / run `32796266491`: SUCCESS.
+- Fork simulation and story validation #566 / run `32796266302`: FAILED in the focused story-validator step while changed-content style passed.
 
-Do not self-integrate. A3 retains integration authority and must re-read current `main`, ancestry, mergeability, and concurrent B1/A2/B2 work before integration.
+The failure was validator-only: a continuity assertion required a phrase to survive source-comment line wrapping. Production semantics were unchanged. Commit `fcecc102e3950d0245cc3399f344b4cf27a61972` hardens that check to a semantic fragment while retaining all route-local, settlement-local, lifecycle, ownership, and continuity assertions.
+
+Exact current candidate `fcecc102e3950d0245cc3399f344b4cf27a61972`:
+
+- Fork simulation and story validation #567 / run `32798115269`: SUCCESS.
+- Fork save-load integration smoke #552 / run `32798115261`: IN PROGRESS at handoff update time.
+
+Do not promote to READY until exact candidate `fcecc102e3950d0245cc3399f344b4cf27a61972` has terminal-green save-load integration evidence. Do not self-integrate. A3 retains integration authority and must re-read current `main`, ancestry, mergeability, and concurrent B1/A2/B2 work before integration.
