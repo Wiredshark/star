@@ -130,7 +130,7 @@ for phrase in (
     "does not mean the debrief owns every human thing",
     "without becoming evidence of motive",
     "purpose, audience, expiry, and correction",
-    "share the same loss without saying they serve the same purpose",
+    "concern the same loss without saying they serve the same purpose",
     "uncertainty about motive is not a defect",
 ):
     require(phrase in TEXT, f"missing continuity phrase: {phrase}")
