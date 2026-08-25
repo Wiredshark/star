@@ -34,9 +34,10 @@ def label_block(block: str, label: str) -> str:
 
 
 def has_branch_gate(block: str, label: str, state: str) -> bool:
+    full_state = f"{PREFIX} {state}"
     pattern = (
         rf'^\s*branch {re.escape(label)}\s*$\n'
-        rf'^\s*has "{re.escape(PREFIX + state)}"\s*$'
+        rf'^\s*has "{re.escape(full_state)}"\s*$'
     )
     return re.search(pattern, block, re.M) is not None
 
