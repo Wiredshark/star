@@ -1,11 +1,12 @@
 # B2 Wanderer Return Home Choice Compact — handoff
 
-Verdict: PARTIAL pending exact-head repository-native validation.
+Verdict: READY for A3 review/integration.
 
 ## Authority
 - Repository: `Wiredshark/star`
 - Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-wanderer-return-home-choice-20260825`
+- Exact fully validated production/validator/handoff candidate: `ea64e41ebc3faaf6464383ab280769bd698ad0c9`
 - Integration authority: A3 only; B2 must not self-integrate.
 
 ## Scope
@@ -34,11 +35,23 @@ The old household, property continuity, evacuation-era intention, family memory,
 ## Validation contract
 `tools/story/validate_b2_wanderer_return_home_choice_compact.py` proves the exact three-mission graph, integrated prior-B2 dependency, route-local persistence, exactly three 7–11 day schedules, refusal suppression, Review lifecycle gates, settlement-local closure, one-shot aftermath, B2-only writes, seven `decline` terminals, absence of gameplay-objective directives, and the history/current-choice continuity boundary.
 
-## Validation evidence
-Repository-native exact-head workflow results must be recorded here before READY promotion.
+## Exact validation evidence
+On exact candidate `ea64e41ebc3faaf6464383ab280769bd698ad0c9`:
+- Fork simulation and story validation #596 / run `32837512420`: SUCCESS.
+  - changed-content style: SUCCESS;
+  - focused Python validation compilation: SUCCESS;
+  - all focused story validators: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS.
+- Fork save-load integration smoke #581 / run `32837512442`: SUCCESS.
+  - dependency installation: SUCCESS;
+  - production configuration: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
+
+The READY promotion after this exact candidate changes only this durable handoff document; production and validator behavior are unchanged from the fully validated candidate.
 
 ## Isolation / safety
-Branch was created directly from the authoritative main SHA after reviewing current open B2 PRs and recent commits. Existing lifecycle-audit and unrelated B2 branches were not modified. No destructive Git operation or self-integration is permitted.
+Exact candidate comparison against authoritative main: 1 commit ahead / 0 behind, exactly three added files, 293 additions, 0 deletions. Branch was created directly from authoritative main after reviewing current open B2 PRs and recent commits. The active `agent/b2-global-dialogue-lifecycle-audit-20260823` branch and unrelated B2 work were left untouched. Four pre-existing service-owned host processes were observed and preserved. No destructive Git operation or self-integration was performed.
 
 ## A3 / B3 notes
 Before integration, re-read current `main`, open B2/A2/B1 work, ancestry, mergeability, and exact workflow status. Preserve the existing evacuation-recovery aftermath as read-only. Keep family history, property continuity, residence choice, contact preference, and current adult consent distinct.
