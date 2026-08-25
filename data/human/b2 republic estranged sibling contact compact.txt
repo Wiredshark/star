@@ -1,0 +1,154 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Republic Estranged Sibling Contact Compact.
+# A civic-strain intake desk reconnects two adult siblings after years apart. The
+# conflict is whether a truthful family link silently grants contact access or
+# reconciliation authority. This is one family's resolution, not Republic law.
+
+
+event "B2 Republic Estranged Sibling Contact Compact: Review Ready"
+	"B2 Republic Estranged Sibling Contact Compact: review ready" = 1
+
+
+mission "B2 Republic Estranged Sibling Contact Compact: Offer"
+	minor
+	name `A Name on the Intake Form`
+	description `Two estranged adult siblings ask whether a verified family link should also reveal current contact information or imply willingness to reconcile.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "world: republic civic strain" >= 2
+		not "B2 Republic Estranged Sibling Contact Compact: introduced"
+		not "B2 Republic Estranged Sibling Contact Compact: declined"
+	on offer
+		conversation
+			`Mara Pell is helping at an overloaded civic intake desk when a family-link search finds her brother, Joren Pell. They have not spoken in eight years. The match is real; the system also exposes Joren's current berth and contact channel.`
+			`Mara says, "I wanted to know he was alive. I did not ask for his address." Joren, reached through the desk, answers, "And I did not ask a database to decide that being siblings means I am ready to talk."`
+			choice
+				`\tKeep the verified family link, but require each adult's current consent before sharing direct contact information.`
+					goto consent
+				`\tAllow a neutral relay: either sibling may send a message without learning the other's current location or channel unless the recipient chooses to reply.`
+					goto relay
+				`\tKeep paired records: family relationship/history separate from current contact permission and reconciliation status.`
+					goto paired
+				`\tRefuse to turn one family's estrangement into a general rule.`
+					goto decline
+			label consent
+			`You preserve the family match as history while treating current contact access as a separate permission. Mara can know the match was verified without receiving Joren's present location.`
+			action
+				"B2 Republic Estranged Sibling Contact Compact: introduced" = 1
+				"B2 Republic Estranged Sibling Contact Compact: route current consent" = 1
+				"B2 Republic Estranged Sibling Contact Compact: Mara trusts player" = 1
+				event "B2 Republic Estranged Sibling Contact Compact: Review Ready" 7 11
+				decline
+			label relay
+			`You recommend a one-way relay. A message can cross the gap without turning the intake office into an involuntary address book.`
+			action
+				"B2 Republic Estranged Sibling Contact Compact: introduced" = 1
+				"B2 Republic Estranged Sibling Contact Compact: route neutral relay" = 1
+				"B2 Republic Estranged Sibling Contact Compact: Joren trusts player" = 1
+				event "B2 Republic Estranged Sibling Contact Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You separate what is historically true from what is currently permitted: sibling relationship, known-safe status, contact channel, permission to disclose it, and willingness to reconcile become linked but distinct facts.`
+			action
+				"B2 Republic Estranged Sibling Contact Compact: introduced" = 1
+				"B2 Republic Estranged Sibling Contact Compact: route paired records" = 1
+				"B2 Republic Estranged Sibling Contact Compact: Mara trusts player" = 1
+				"B2 Republic Estranged Sibling Contact Compact: Joren trusts player" = 1
+				event "B2 Republic Estranged Sibling Contact Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them the desk can correct this case without making you the author of a wider family-contact rule.`
+			action
+				"B2 Republic Estranged Sibling Contact Compact: declined" = 1
+				decline
+
+
+mission "B2 Republic Estranged Sibling Contact Compact: Review"
+	minor
+	name `Contact Is Not Reconciliation`
+	description `A copied family-link record now treats a neutral contact relay as proof that the siblings reconciled.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "B2 Republic Estranged Sibling Contact Compact: introduced"
+		has "B2 Republic Estranged Sibling Contact Compact: review ready"
+		has "world: republic civic strain" <= 1
+		not "B2 Republic Estranged Sibling Contact Compact: reviewed"
+	on offer
+		conversation
+			branch relay
+				has "B2 Republic Estranged Sibling Contact Compact: route neutral relay"
+			branch paired
+				has "B2 Republic Estranged Sibling Contact Compact: route paired records"
+			`The crisis queue has eased, but a copied family record now says Mara and Joren are "reconnected." One message was delivered. Neither sibling agreed that the relationship itself was repaired.`
+				goto settle
+			label relay
+			`The relay worked exactly once. A downstream clerk saw successful delivery and replaced "contact possible" with "family reconciled." Joren objects before the label spreads further.`
+				goto settle
+			label paired
+			`The paired records survived until one export flattened relationship history and current contact state into a single household profile.`
+			label settle
+			choice
+				`\tUse a portable family-contact packet: relationship history, current disclosure permission, relay state, direct-contact consent, reconciliation status, corrections, and closure travel together.`
+					goto packet
+				`\tUse fresh-contact renewal: a successful message or prior permission expires as authority for future disclosure unless each adult renews it.`
+					goto renewal
+			label packet
+			`You make the distinctions travel with every copy. A reader can know the siblings are related without claiming they share an address, an open channel, or a repaired relationship.`
+			action
+				"B2 Republic Estranged Sibling Contact Compact: reviewed" = 1
+				"B2 Republic Estranged Sibling Contact Compact: settlement portable contact packet" = 1
+				"B2 Republic Estranged Sibling Contact Compact: Mara trusts player" = 1
+				"B2 Republic Estranged Sibling Contact Compact: Joren trusts player" = 1
+				decline
+			label renewal
+			`You make contact permission perishable. Family history remains true, but every new disclosure or direct channel requires a current decision from the living adults involved.`
+			action
+				"B2 Republic Estranged Sibling Contact Compact: reviewed" = 1
+				"B2 Republic Estranged Sibling Contact Compact: settlement fresh contact renewal" = 1
+				"B2 Republic Estranged Sibling Contact Compact: Joren trusts player" = 1
+				decline
+
+
+mission "B2 Republic Estranged Sibling Contact Compact: Mara Remembers"
+	minor
+	name `Mara Remembers`
+	description `Mara remembers whether family history stopped being treated as permanent contact permission or proof of reconciliation.`
+	source
+		government "Republic"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		not "B2 Republic Estranged Sibling Contact Compact: aftermath seen"
+		or
+			has "B2 Republic Estranged Sibling Contact Compact: settlement portable contact packet"
+			has "B2 Republic Estranged Sibling Contact Compact: settlement fresh contact renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Republic Estranged Sibling Contact Compact: settlement fresh contact renewal"
+			`Mara tells you that she and Joren have exchanged two messages since the review. "We are talking a little," she says. "That is true. Nobody else gets to promote 'a little' into a whole relationship for us."`
+				goto finish
+			label renewal
+			`Mara says Joren recently allowed a new message through the relay, then let that permission expire. "The record finally understands that being my brother is permanent history. Access to him is not."`
+			label finish
+			action
+				"B2 Republic Estranged Sibling Contact Compact: aftermath seen" = 1
+				decline
