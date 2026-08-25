@@ -140,9 +140,12 @@ require('not "B2 Paradise Charity Representation Compact: aftermath seen"' in af
         "aftermath must gate on not-yet-seen state")
 require(aftermath.count("\n\t\tor\n") == 1,
         "aftermath must contain exactly one OR gate for the two settlements")
-for settlement in settlement_names:
-    require(aftermath.count(f'has "{PREFIX} {settlement}"') == 1,
-            f"aftermath must consume settlement exactly once: {settlement}")
+# Both settlements must unlock the aftermath. Renewal is also referenced once
+# more for route-specific dialogue, while packet is the default dialogue path.
+require(aftermath.count(f'has "{PREFIX} settlement portable representation packet"') == 1,
+        "aftermath must gate on packet settlement exactly once")
+require(aftermath.count(f'has "{PREFIX} settlement fresh context renewal"') == 2,
+        "aftermath must gate on renewal and branch renewal dialogue exactly once each")
 finish_block = label_block(aftermath, "finish")
 require(finish_block.count(f'"{PREFIX} aftermath seen" = 1') == 1,
         "aftermath finish must write aftermath seen exactly once")
