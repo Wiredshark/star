@@ -1,6 +1,6 @@
 # B2 Republic Household Placement Consent — Handoff
 
-Verdict: PARTIAL — implementation and focused validation are committed; repository-native exact-head workflows are not yet terminal.
+Verdict: READY for A3 review/integration.
 
 Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 
@@ -9,6 +9,8 @@ Branch: `agent/b2-republic-household-placement-consent-20260824`
 Production commit: `b0f75083405bd6f4a4c6b7d87ce4d06d1edb19f2`
 
 Focused validator commit: `746e64ddcf21ec98d34ad12cfffc54c6c6e005ff`
+
+Exact fully validated production/validator/handoff candidate: `9d02459f9c93288c361e20353bfeb7d7b67af7a9`
 
 ## Character / dynamic-content behavior
 
@@ -38,15 +40,27 @@ Three substantive routes schedule a 7–11 day Review. Review resolves into eith
 
 Emergency coordination, household contact, durable adult consent, present representative authority, task scope, expiry, revocation, and historical placement evidence remain separate facts. A person may have legitimately helped another adult during displacement without acquiring permanent authority over that adult's residence or contracts. This local correction does not establish universal Republic household law.
 
+## Exact validation evidence
+
+On exact candidate `9d02459f9c93288c361e20353bfeb7d7b67af7a9`:
+
+- `Fork simulation and story validation` run `32805306041` / #574: SUCCESS.
+- Focused simulation/story contracts: SUCCESS.
+- All focused story validators: SUCCESS.
+- A1 simulation contract tests: SUCCESS.
+- Changed fork content style: SUCCESS.
+- `Fork save-load integration smoke` run `32805306105` / #559: SUCCESS.
+- Production configuration: SUCCESS.
+- Production build: SUCCESS.
+- Stock save-load smoke: SUCCESS.
+
+Exact base-to-candidate comparison: 3 commits ahead / 0 behind, exactly three added files, 370 additions, zero deletions.
+
 ## Files
 
 - `data/human/b2 republic household placement consent.txt`
 - `tools/story/validate_b2_republic_household_placement_consent.py`
 - `story/B2_REPUBLIC_HOUSEHOLD_PLACEMENT_CONSENT_HANDOFF_20260824.md`
-
-## Validation required before READY
-
-Run repository-native `Fork simulation and story validation` and `Fork save-load integration smoke` on the exact candidate SHA. READY requires both terminal green, including focused validators, A1/state-ownership contracts, changed-content style, production configure/build, and stock save-load smoke.
 
 ## A3 / B3 integration notes
 
