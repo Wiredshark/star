@@ -1,0 +1,158 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+
+# B2 Coalition Games Rivalry Compact.
+# Primary domain: friendship / sport / public rivalry / promotional pressure.
+#
+# Coalition ambient canon already establishes the Coalition Games and professional
+# athletes. This local arc does not invent universal Games rules or centralized
+# athlete law. It asks how two competitors preserve a real friendship when public
+# coverage repeatedly turns competition into a permanent personal feud.
+
+
+event "B2 Coalition Games Rivalry Compact: Review Ready"
+	"B2 Coalition Games Rivalry Compact: review ready" = 1
+
+
+mission "B2 Coalition Games Rivalry Compact: Offer"
+	minor
+	name `Rivals for the Camera`
+	description `Coalition Games athletes Seli Vara and Toren Kesh disagree over how much of a promotional rivalry should follow them away from competition.`
+	source
+		government "Coalition"
+	"offer precedence" 8
+	to offer
+		has "known to the heliarchs"
+		not "B2 Coalition Games Rivalry Compact: introduced"
+		not "B2 Coalition Games Rivalry Compact: declined"
+	on offer
+		conversation
+			`Seli Vara, a Saryd distance runner, is sharing a table with Toren Kesh, an Arach climber who competes in a mixed-discipline exhibition at the Coalition Games. They are laughing over an old broadcast until Toren turns the screen toward you.`
+			`The broadcast cuts together three years of close finishes, one frustrated post-event remark from Seli, and a sponsor interview where Toren jokes that he plans to "make Vara chase me forever." The segment calls them bitter rivals. In private, they train together whenever their travel schedules overlap.`
+			`Seli says the rivalry makes broadcasts exciting and sells tickets. Toren says the problem is not the joke; it is the way copied profiles now treat the joke as a permanent description of their relationship.`
+			choice
+				`\tKeep competitive results and personal relationship separate. A close contest can stay public without becoming a claim about private hostility.`
+					goto separate
+				`\tAllow a promotional rivalry only when both athletes approve the current campaign, its claims, and its end date.`
+					goto campaign
+				`\tKeep paired records: event results and quotations in one lineage, publicity framing and current consent in another.`
+					goto paired
+				`\tRefuse to turn two athletes' friendship into a general rule for the Coalition Games.`
+					goto decline
+			label separate
+			`You tell them that the scoreboard already contains enough conflict for spectators. Results, penalties, and direct quotations can remain public facts while friendship or hostility requires its own attributable evidence. Seli says that leaves room to compete seriously without performing resentment after the finish.`
+			action
+				"B2 Coalition Games Rivalry Compact: introduced" = 1
+				"B2 Coalition Games Rivalry Compact: route competition separate" = 1
+				"B2 Coalition Games Rivalry Compact: seli trusts player" = 1
+				event "B2 Coalition Games Rivalry Compact: Review Ready" 7 11
+				decline
+			label campaign
+			`You say a staged rivalry can be entertainment if it remains a current agreement instead of an inherited identity. Each campaign should name the approved claims, the participating athletes, and when the permission ends. Toren says he can sell a rematch without signing away every conversation he has afterward.`
+			action
+				"B2 Coalition Games Rivalry Compact: introduced" = 1
+				"B2 Coalition Games Rivalry Compact: route campaign consent" = 1
+				"B2 Coalition Games Rivalry Compact: toren trusts player" = 1
+				event "B2 Coalition Games Rivalry Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You suggest two linked records. The competition record preserves results, rulings, and attributable remarks. The publicity record preserves the current promotional framing, its authors, the athletes' approval, and its expiry. A copied race result cannot silently carry the publicity story with it. Both athletes agree to try the split.`
+			action
+				"B2 Coalition Games Rivalry Compact: introduced" = 1
+				"B2 Coalition Games Rivalry Compact: route paired records" = 1
+				"B2 Coalition Games Rivalry Compact: seli trusts player" = 1
+				"B2 Coalition Games Rivalry Compact: toren trusts player" = 1
+				event "B2 Coalition Games Rivalry Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that spectators, sponsors, athletes, and local organizers can negotiate their own boundaries without a visiting captain declaring Games-wide policy. Seli laughs and says refusing to referee them may be the most sporting answer you could give.`
+			action
+				"B2 Coalition Games Rivalry Compact: declined" = 1
+				decline
+
+
+mission "B2 Coalition Games Rivalry Compact: Review"
+	minor
+	name `The Rematch That Wasn't a Feud`
+	description `Seli Vara and Toren Kesh return after a new promotion tests whether competitive history can stay separate from a permanent personal-rivalry narrative.`
+	source
+		government "Coalition"
+	"offer precedence" 8
+	to offer
+		has "known to the heliarchs"
+		has "B2 Coalition Games Rivalry Compact: introduced"
+		has "B2 Coalition Games Rivalry Compact: review ready"
+		not "B2 Coalition Games Rivalry Compact: reviewed"
+	on offer
+		conversation
+			branch separate
+				has "B2 Coalition Games Rivalry Compact: route competition separate"
+			branch campaign
+				has "B2 Coalition Games Rivalry Compact: route campaign consent"
+			`The paired records survived the next event, but a syndication service copied the competition file without the publicity file and then filled the missing story from an older broadcast. The result was technically accurate race history attached to a stale claim that Seli and Toren still refuse to train together.`
+				goto settle
+			label separate
+			`The latest broadcast kept the race results separate from personal claims. A commentator then reused Seli's years-old frustrated quotation as evidence that she still dislikes Toren. The quote was authentic; the present-tense conclusion was not.`
+				goto settle
+			label campaign
+			`Seli and Toren approved a playful rematch campaign with an explicit end date. After the campaign expired, one sponsor kept circulating the rivalry copy because nobody had attached the expiry to the syndicated version. Toren says an ended joke has become a current biography again.`
+			label settle
+			choice
+				`\tUse a portable competition-context packet: event, result, source quote, date, promotional framing, athlete approval, expiry, and correction travel together when rivalry claims are reused.`
+					goto packet
+				`\tUse fresh-context renewal: old rivalry material remains archived, but any present-tense personal claim requires current attributable evidence or renewed athlete approval.`
+					goto renewal
+			label packet
+			`You recommend a compact packet whenever a rivalry claim is syndicated. The race result stays factual. The quotation keeps its date and setting. Promotional framing identifies who approved it and when it expires. Corrections travel with the packet instead of relying on every broadcaster to rediscover context. Seli says spectators can still enjoy the rivalry without being sold a false friendship story.`
+			action
+				"B2 Coalition Games Rivalry Compact: reviewed" = 1
+				"B2 Coalition Games Rivalry Compact: settlement portable context" = 1
+				"B2 Coalition Games Rivalry Compact: seli trusts player" = 1
+				"B2 Coalition Games Rivalry Compact: toren trusts player" = 1
+				decline
+			label renewal
+			`You recommend treating every old rivalry campaign as historical material once it expires. A broadcaster may replay it as history, but a new claim about the athletes' present relationship needs fresh evidence or a new agreement. Toren says that keeps the sport dramatic without making his friendship a permanent sponsor asset.`
+			action
+				"B2 Coalition Games Rivalry Compact: reviewed" = 1
+				"B2 Coalition Games Rivalry Compact: settlement fresh context" = 1
+				"B2 Coalition Games Rivalry Compact: seli trusts player" = 1
+				"B2 Coalition Games Rivalry Compact: toren trusts player" = 1
+				decline
+
+
+mission "B2 Coalition Games Rivalry Compact: Seli Remembers"
+	minor
+	name `Seli Remembers`
+	description `Seli remembers whether the Games kept a competitive rivalry entertaining without rewriting a real friendship.`
+	source
+		government "Coalition"
+	"offer precedence" 8
+	to offer
+		has "known to the heliarchs"
+		not "B2 Coalition Games Rivalry Compact: aftermath seen"
+		or
+			has "B2 Coalition Games Rivalry Compact: settlement portable context"
+			has "B2 Coalition Games Rivalry Compact: settlement fresh context"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Coalition Games Rivalry Compact: settlement fresh context"
+			`Seli shows you a replay package from their latest event. The race is close, the commentary is loud, and the old rivalry montage appears with a date and a note that the campaign has ended. A later clip shows Seli and Toren arguing cheerfully over where to eat after training.`
+				goto finish
+			label renewal
+			`Seli says a broadcaster asked whether the old feud was "back." She answered that the old campaign was over and gave them a new quote about the actual race. Toren supplied a different quote and then challenged her to dinner. The broadcast used both without pretending dinner settled the result.`
+			label finish
+			action
+				"B2 Coalition Games Rivalry Compact: aftermath seen" = 1
+				decline
