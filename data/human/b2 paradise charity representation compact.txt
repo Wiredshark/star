@@ -1,0 +1,161 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Paradise Charity Representation Compact.
+#
+# The Paradise Charity Circuit Archive establishes that charitable campaigns can
+# do real work while also becoming part of elite social life, with recipients
+# sometimes having little control over what is collected or how they are portrayed.
+# This local character conflict separates aid facts, fundraising narrative,
+# publicity consent, correction rights, campaign expiry, and present need. It does
+# not create centralized Paradise charity law or imply that accepting aid transfers
+# permanent authority over a person's image or story.
+
+
+event "B2 Paradise Charity Representation Compact: Review Ready"
+	"B2 Paradise Charity Representation Compact: review ready" = 1
+
+
+mission "B2 Paradise Charity Representation Compact: Offer"
+	minor
+	name `The Photograph That Stayed`
+	description `A Paradise charity organizer and a former aid recipient disagree over whether an old fundraising story may remain in active circulation after its original appeal ended.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Paradise Charity Representation Compact: introduced"
+		not "B2 Paradise Charity Representation Compact: declined"
+	on offer
+		conversation
+			`A polished charity display near the concourse has stopped two people in their tracks. Nara Dey, who coordinates fundraising campaigns for several Paradise clubs, is pointing to an old photograph of a school damaged by a storm. Beside her stands Ivo Sen, now a teacher at that same school and once one of the students pictured in the appeal.`
+			`The original campaign paid for repairs, books, and temporary housing. Ivo does not dispute that. What angers him is that the same photograph is still being copied into new appeals years later, paired with language suggesting that his community remains helpless and dependent. Nara says the image was lawfully provided for the original campaign and has become part of the charity's history.`
+			choice
+				`\tTreat publicity consent as purpose-bound: the old appeal can remain archived, but active reuse requires current permission and current context.`
+					goto purpose
+				`\tKeep the old campaign usable, but give portrayed people a durable right to attach corrections, updates, and limits to downstream copies.`
+					goto correction
+				`\tKeep paired records: aid results and financial accountability remain public evidence, while fundraising narrative and personal images retain separate consent and expiry state.`
+					goto paired
+				`\tRefuse to turn one successful campaign and one bad copy into a universal rule for Paradise charity.`
+					goto decline
+			label purpose
+			`You separate the historical record from present promotional authority. The original campaign, donation totals, and verified results can remain in the archive. Using Ivo's image to ask for money today is a new act with a new purpose, and therefore needs current permission and current context. Ivo agrees immediately. Nara says the distinction would force organizers to stop treating a successful old appeal as an endlessly renewable license.`
+			action
+				"B2 Paradise Charity Representation Compact: introduced" = 1
+				"B2 Paradise Charity Representation Compact: route purpose bound consent" = 1
+				"B2 Paradise Charity Representation Compact: Ivo trusts player" = 1
+				event "B2 Paradise Charity Representation Compact: Review Ready" 7 11
+				decline
+			label correction
+			`You argue that an old appeal can remain part of a charity's public history without freezing the people inside it. Ivo should be able to attach a current statement to copies that still circulate: the school reopened, the emergency ended, and later needs are not evidence that the old crisis never passed. Nara accepts the correction right, provided the original record itself is not rewritten.`
+			action
+				"B2 Paradise Charity Representation Compact: introduced" = 1
+				"B2 Paradise Charity Representation Compact: route correction right" = 1
+				"B2 Paradise Charity Representation Compact: Nara trusts player" = 1
+				"B2 Paradise Charity Representation Compact: Ivo trusts player" = 1
+				event "B2 Paradise Charity Representation Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You split the records. One layer preserves what was delivered, who funded it, what was repaired, and which claims were verified. Another layer governs the fundraising story itself: whose image is used, what words are approved, what purpose was authorized, when that authorization expires, and how later corrections travel. Nara likes that auditors keep their evidence. Ivo likes that accounting evidence no longer silently grants control over his biography.`
+			action
+				"B2 Paradise Charity Representation Compact: introduced" = 1
+				"B2 Paradise Charity Representation Compact: route paired evidence and publicity" = 1
+				"B2 Paradise Charity Representation Compact: Nara trusts player" = 1
+				"B2 Paradise Charity Representation Compact: Ivo trusts player" = 1
+				event "B2 Paradise Charity Representation Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that neither a charity organizer nor an outsider should convert this dispute into a permanent Paradise rule. The campaign remains historically successful, and Ivo remains free to object to how he is portrayed. They return to the display without asking you to settle the matter for everyone else.`
+			action
+				"B2 Paradise Charity Representation Compact: declined" = 1
+				decline
+
+
+mission "B2 Paradise Charity Representation Compact: Review"
+	minor
+	name `When the Appeal Outlives the Emergency`
+	description `Copied charity material is preserving old images while losing consent scope, dates, corrections, and the distinction between historical aid and present need.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Paradise Charity Representation Compact: introduced"
+		has "B2 Paradise Charity Representation Compact: review ready"
+		not "B2 Paradise Charity Representation Compact: reviewed"
+	on offer
+		conversation
+			branch correction
+				has "B2 Paradise Charity Representation Compact: route correction right"
+			branch paired
+				has "B2 Paradise Charity Representation Compact: route paired evidence and publicity"
+			`Nara and Ivo have collected copies of the same old appeal from several organizations. One version retains the photograph but not its date. Another keeps the donor totals but drops the fact that the school reopened. A third has copied Ivo's original quotation into a completely different fundraising drive, making it look like a current statement.`
+				goto settle
+			label correction
+			`Ivo's correction traveled with the first few copies, then vanished when one organizer shortened the story to fit a display card. The original facts remain accurate. The active impression is not: readers are again seeing a resolved emergency as though it were happening now.`
+				goto settle
+			label paired
+			`The paired records survived until a fundraising service exported only the fields marked "campaign material." The accounting layer still proves what aid was delivered, but the personal-image consent, purpose, expiry, and correction fields disappeared from the active copy.`
+			label settle
+			choice
+				`\tUse a portable representation packet: source, portrayed person, approved claims or images, authorized purpose, consent date, expiry, correction contact, and withdrawal status travel together.`
+					goto packet
+				`\tUse fresh-context renewal: historical campaigns remain searchable, but active reuse of personal stories or images requires current context and current permission rather than inherited consent.`
+					goto renewal
+			label packet
+			`You recommend a compact representation packet that travels with every active appeal. It does not erase the old campaign or let a subject rewrite verified aid records. It keeps the authority to use a person's story visible beside the use itself, including purpose, date, expiry, corrections, and withdrawal state. Nara says that makes campaign reuse slower. Ivo replies that using a person should be slower than copying a number.`
+			action
+				"B2 Paradise Charity Representation Compact: reviewed" = 1
+				"B2 Paradise Charity Representation Compact: settlement portable representation packet" = 1
+				"B2 Paradise Charity Representation Compact: Nara trusts player" = 1
+				"B2 Paradise Charity Representation Compact: Ivo trusts player" = 1
+				decline
+			label renewal
+			`You recommend that old campaigns remain historical records, not standing publicity licenses. Donation totals, dates, and verified outcomes remain available for audit and history. Personal images, quotations, and implied present need must be renewed from current context and current permission before they become active appeals again. Withdrawal stops future active reuse without pretending the earlier campaign never happened.`
+			action
+				"B2 Paradise Charity Representation Compact: reviewed" = 1
+				"B2 Paradise Charity Representation Compact: settlement fresh context renewal" = 1
+				"B2 Paradise Charity Representation Compact: Ivo trusts player" = 1
+				decline
+
+
+mission "B2 Paradise Charity Representation Compact: Ivo Remembers"
+	minor
+	name `Ivo Remembers`
+	description `Ivo sees whether a successful old charity campaign can remain part of history without remaining active authority over the people it portrayed.`
+	source
+		government "Republic"
+		attributes "paradise"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Paradise Charity Representation Compact: aftermath seen"
+		or
+			has "B2 Paradise Charity Representation Compact: settlement portable representation packet"
+			has "B2 Paradise Charity Representation Compact: settlement fresh context renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Paradise Charity Representation Compact: settlement fresh context renewal"
+			`Ivo shows you a new appeal from the same charity circuit. The old storm campaign appears in a small historical panel with its date and verified results. The current appeal uses different images and a current statement from the people it concerns. Nara's name is on the campaign notes beside a line explaining that archived material is not standing consent for new publicity.`
+				goto finish
+			label renewal
+			`Ivo points to a display carrying the old photograph. This time a compact record beside it says when the image was approved, for which campaign, when that approval ended, and where his later correction can be found. The school is still part of Paradise charity history. It is no longer being presented as though the storm never ended.`
+			label finish
+			action
+				"B2 Paradise Charity Representation Compact: aftermath seen" = 1
+				decline
