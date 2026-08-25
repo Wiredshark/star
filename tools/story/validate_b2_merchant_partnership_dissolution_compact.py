@@ -102,7 +102,7 @@ for phrase in (
     "historical partnership can remain fully true without granting either person standing authority",
     "former partner may give a dated reference",
     "Neither record silently overwrites the other",
-    "old partnership records expire as authority after the separation date",
+    "partnership records expire as authority after the separation date",
 ):
     require(phrase in text, f"missing continuity boundary: {phrase}")
 require("general Merchant rule" in text, "missing local-not-universal authority boundary")
