@@ -1,0 +1,140 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Wanderer Return Home Choice Compact.
+# A post-evacuation family conflict about old residence, current home preference,
+# family memory, property continuity, and adult consent. This consumes the
+# integrated evacuation-recovery aftermath read-only and creates no Wanderer office.
+
+
+event "B2 Wanderer Return Home Choice Compact: Review Ready"
+	"B2 Wanderer Return Home Choice Compact: review ready" = 1
+
+
+mission "B2 Wanderer Return Home Choice Compact: Offer"
+	minor
+	name `The Home That Waited`
+	description `A Wanderer parent and adult child disagree over whether surviving an evacuation created an obligation to return to the household's old home.`
+	source
+		government "Wanderer"
+	"offer precedence" 8
+	to offer
+		has "B2 Wanderer Evacuation Recovery Compact: aftermath seen"
+		not "B2 Wanderer Return Home Choice Compact: introduced"
+		not "B2 Wanderer Return Home Choice Compact: declined"
+	on offer
+		conversation
+			`A Wanderer parent and adult child are studying two records from the evacuation. One is an old household register for a settlement that survived the war. The other is the harbor record where the child spent the evacuation, found work, and built a new circle of friends.`
+			`The parent says the old house is repaired and the family promised one another they would return if they could. The child says that promise was made while fleeing and never asked what home would mean after years somewhere else. Neither wants the old household erased. Neither wants a survival record to become a command.`
+			choice
+				`\tTreat the old residence as family history and a possible destination, while current residence requires the adult child's present consent.`
+					goto consent
+				`\tPreserve a right to return without turning it into a duty to return; family property and present home preference remain separate.`
+					goto option
+				`\tKeep paired records: household/property continuity in one, current residence and contact preference in another.`
+					goto paired
+				`\tRefuse to turn one family's post-evacuation decision into a general Wanderer rule.`
+					goto decline
+			label consent
+			`You tell them that an old address can remain true history without becoming present authority over another adult. The parent keeps the repaired home listed as part of the family record. The child records a current residence choice separately, with a review point rather than a permanent declaration.`
+			action
+				"B2 Wanderer Return Home Choice Compact: introduced" = 1
+				"B2 Wanderer Return Home Choice Compact: route present consent" = 1
+				"B2 Wanderer Return Home Choice Compact: child trusts player" = 1
+				event "B2 Wanderer Return Home Choice Compact: Review Ready" 7 11
+			decline
+			label option
+			`You separate the family's repaired house from an obligation to occupy it. The parent can preserve inheritance and a practical route back. The child can choose whether that route is used now, later, or not at all. Both agree that keeping an option alive is different from assigning a duty.`
+			action
+				"B2 Wanderer Return Home Choice Compact: introduced" = 1
+				"B2 Wanderer Return Home Choice Compact: route right without duty" = 1
+				"B2 Wanderer Return Home Choice Compact: parent trusts player" = 1
+				event "B2 Wanderer Return Home Choice Compact: Review Ready" 7 11
+			decline
+			label paired
+			`You recommend two linked records. One preserves the household's old residence, property obligations, and family history. The other records where each living adult currently chooses to live and how they want to be contacted. A later copy can connect them without pretending they are the same fact.`
+			action
+				"B2 Wanderer Return Home Choice Compact: introduced" = 1
+				"B2 Wanderer Return Home Choice Compact: route paired records" = 1
+				"B2 Wanderer Return Home Choice Compact: parent trusts player" = 1
+				"B2 Wanderer Return Home Choice Compact: child trusts player" = 1
+				event "B2 Wanderer Return Home Choice Compact: Review Ready" 7 11
+			decline
+			label decline
+			`You decline to make a durable rule from one household's argument. The parent keeps the old home in the family record. The child keeps the harbor address current. They agree to settle the personal question without giving your answer institutional weight.`
+			action
+				"B2 Wanderer Return Home Choice Compact: declined" = 1
+			decline
+
+
+mission "B2 Wanderer Return Home Choice Compact: Review"
+	minor
+	name `When Return Stops Being Temporary`
+	description `Review whether post-evacuation records still distinguish an old family home from a living adult's current home choice.`
+	source
+		government "Wanderer"
+	"offer precedence" 8
+	to offer
+		has "B2 Wanderer Return Home Choice Compact: introduced"
+		has "B2 Wanderer Return Home Choice Compact: review ready"
+		not "B2 Wanderer Return Home Choice Compact: reviewed"
+	on offer
+		conversation
+			`The family has found a new problem in copied settlement records. One office marked the child as "returned" because the old household still exists. Another marked the old household "abandoned" because the child kept living at the harbor. Both summaries turned a family connection into a single yes-or-no residence claim.`
+			`The parent says the repaired home should not vanish from family history. The child says continuing to live elsewhere should not be treated as temporary disobedience waiting to be corrected.`
+			choice
+				`\tUse a portable home-choice packet: old residence, property claim, current residence, current preference, contact scope, review date, and closure travel together.`
+					goto packet
+				`\tUse fresh-choice renewal: historical homes remain history, while current residence and return plans require a living person's current acknowledgement.`
+					goto renewal
+			label packet
+			`You keep the family history and present choice linked without merging them. Future records can show that the old house remains part of the household's history and property while also showing where the child currently lives and whether any return is actually planned.`
+			action
+				"B2 Wanderer Return Home Choice Compact: reviewed" = 1
+				"B2 Wanderer Return Home Choice Compact: settlement portable home choice" = 1
+				"B2 Wanderer Return Home Choice Compact: parent trusts player" = 1
+				"B2 Wanderer Return Home Choice Compact: child trusts player" = 1
+			decline
+			label renewal
+			`You recommend that old addresses and evacuation intentions remain attributable history, not standing commands. A current residence or return plan is renewed only by the living person whose home choice it describes. The parent accepts that memory can remain durable without becoming authority.`
+			action
+				"B2 Wanderer Return Home Choice Compact: reviewed" = 1
+				"B2 Wanderer Return Home Choice Compact: settlement fresh choice renewal" = 1
+				"B2 Wanderer Return Home Choice Compact: child trusts player" = 1
+			decline
+
+
+mission "B2 Wanderer Return Home Choice Compact: Child Remembers"
+	minor
+	name `The Child Remembers`
+	description `A Wanderer returnee remembers whether family history remained distinct from present residence and adult choice.`
+	source
+		government "Wanderer"
+	"offer precedence" 8
+	to offer
+		not "B2 Wanderer Return Home Choice Compact: aftermath seen"
+		or
+			has "B2 Wanderer Return Home Choice Compact: settlement portable home choice"
+			has "B2 Wanderer Return Home Choice Compact: settlement fresh choice renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Wanderer Return Home Choice Compact: settlement fresh choice renewal"
+			`The child shows you a current household copy. The old family home is still listed, but beside it is a separate current residence entry and a note that no return date has been chosen. "Nothing was erased," the child says. "Nothing was decided for me either."`
+				goto finish
+			label renewal
+			`The child says the family still visits the old settlement and still tells stories about the house. The current residence record is renewed separately. "Home can be part of where I came from without being an order about where I must live next."`
+			label finish
+			action
+				"B2 Wanderer Return Home Choice Compact: aftermath seen" = 1
+			decline
