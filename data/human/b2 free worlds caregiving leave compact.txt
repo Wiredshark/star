@@ -1,0 +1,156 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Free Worlds Caregiving Leave Compact.
+#
+# This slice consumes authoritative A1 `world: free worlds defense strain` read-only.
+# It follows independent transport captain Mira Senn and engineer Jalen Ro. Jalen's
+# temporary caregiving leave for an aging parent has been copied into mobilization
+# rosters as though it were a permanent statement of availability, reliability, or
+# family authority. The local solution remains voluntary Free Worlds practice rather
+# than centralized employment law.
+
+
+event "B2 Free Worlds Caregiving Leave Compact: Review Ready"
+	"B2 Free Worlds Caregiving Leave Compact: review ready" = 1
+
+
+mission "B2 Free Worlds Caregiving Leave Compact: Offer"
+	minor
+	name `The Shift He Did Not Promise`
+	description `Mira Senn and Jalen Ro disagree over whether a temporary caregiving leave record can become standing evidence that a crew member is unavailable or unreliable.`
+	source
+		government "Free Worlds"
+	"offer precedence" 8
+	to offer
+		"world: free worlds defense strain" >= 3
+		not "B2 Free Worlds Caregiving Leave Compact: introduced"
+		not "B2 Free Worlds Caregiving Leave Compact: declined"
+	on offer
+		conversation
+			`Mira Senn has an engine roster open on one terminal and a family-care note open on another. Jalen Ro, one of her regular engineers, asked for six days away from the ship to help his father after a fall. The leave ended on time. During the current defense strain, however, three volunteer coordinators copied that old note into emergency rosters and marked Jalen simply as "unavailable." One later copy added "unreliable for surge duty," even though nobody asked him whether he could take the new shift.`
+			`Mira says she needs honest availability during a mobilization. Jalen agrees. What he objects to is a family circumstance becoming a permanent personnel judgment. He also points out that the original note included his father's medical details only because the first dispatcher asked why he needed leave.`
+			choice
+				`\tUse bounded availability: record the dates Jalen is or is not available, but do not copy the family reason into ordinary staffing records.`
+					goto availability
+				`\tUse voluntary standby: Jalen may name specific emergency shifts he can cover while keeping caregiving details private and preserving his right to decline later requests.`
+					goto standby
+				`\tUse paired records: keep employment/skill history separate from a private leave record whose purpose, audience, and expiry are explicit.`
+					goto paired
+				`\tRefuse to turn one crew member's family situation into a standing Free Worlds rule.`
+					goto decline
+			label availability
+			`You tell Mira that the roster needs a current answer, not a biography. Jalen can be marked available, unavailable, or pending for defined dates. The family reason stays outside routine staffing copies unless Jalen chooses to disclose it again. Mira says that still gives her the information needed to crew the ship. Jalen says it gives him a way to return without having to prove that his family no longer needs him.`
+			action
+				"B2 Free Worlds Caregiving Leave Compact: introduced" = 1
+				"B2 Free Worlds Caregiving Leave Compact: route bounded availability" = 1
+				"B2 Free Worlds Caregiving Leave Compact: mira trusts player" = 1
+				event "B2 Free Worlds Caregiving Leave Compact: Review Ready" 7 11
+			decline
+			label standby
+			`You suggest a voluntary standby list. Jalen may name particular emergency windows he can cover without surrendering the right to decline a later request. The list records the commitment itself, not his father's condition. Mira likes having a dependable answer for specific shifts. Jalen likes that agreeing to one emergency does not silently cancel every future family obligation.`
+			action
+				"B2 Free Worlds Caregiving Leave Compact: introduced" = 1
+				"B2 Free Worlds Caregiving Leave Compact: route voluntary standby" = 1
+				"B2 Free Worlds Caregiving Leave Compact: jalen trusts player" = 1
+				event "B2 Free Worlds Caregiving Leave Compact: Review Ready" 7 11
+			decline
+			label paired
+			`You separate the records. One contains qualifications, assignments, and current availability. The other records approved leave with its dates, purpose, audience, and expiry, but is not copied into ordinary duty summaries. The two can be cross-referenced by an authorized coordinator when necessary without making family care part of Jalen's permanent work identity.`
+			action
+				"B2 Free Worlds Caregiving Leave Compact: introduced" = 1
+				"B2 Free Worlds Caregiving Leave Compact: route paired records" = 1
+				"B2 Free Worlds Caregiving Leave Compact: mira trusts player" = 1
+				"B2 Free Worlds Caregiving Leave Compact: jalen trusts player" = 1
+				event "B2 Free Worlds Caregiving Leave Compact: Review Ready" 7 11
+			decline
+			label decline
+			`You tell them that a strained week is a poor time to turn one family's private arrangement into a general employment rule. Mira removes the copied medical detail from her own roster but leaves the larger policy argument unresolved. Jalen thanks her for at least correcting the record in front of you.`
+			action
+				"B2 Free Worlds Caregiving Leave Compact: declined" = 1
+			decline
+
+
+mission "B2 Free Worlds Caregiving Leave Compact: Review"
+	minor
+	name `When Emergency Availability Becomes a Reputation`
+	description `Return after the immediate strain eases and decide how old caregiving-leave and emergency-availability records should stop governing current crew decisions.`
+	source
+		government "Free Worlds"
+	"offer precedence" 8
+	to offer
+		has "B2 Free Worlds Caregiving Leave Compact: introduced"
+		has "B2 Free Worlds Caregiving Leave Compact: review ready"
+		"world: free worlds defense strain" <= 1
+		not "B2 Free Worlds Caregiving Leave Compact: reviewed"
+	on offer
+		conversation
+			branch availability
+				has "B2 Free Worlds Caregiving Leave Compact: route bounded availability"
+			branch standby
+				has "B2 Free Worlds Caregiving Leave Compact: route voluntary standby"
+			`The defense strain has eased. Mira and Jalen show you a copied volunteer roster that still lists Jalen as a "conditional engineer." The underlying leave ended weeks ago. No current dispatcher has asked his availability, yet the old caution keeps reproducing itself because later systems preserve the label while dropping the dates that limited it.`
+				goto settle
+			label availability
+			`The date-bounded roster worked during the surge, but one downstream office exported only the word "unavailable" and lost the end date. Jalen returned to regular shifts; the copy did not. Mira says the failure is no longer about whether leave was justified. It is about whether yesterday's true status can become today's false one.`
+				goto settle
+			label standby
+			`Jalen covered two emergency windows exactly as promised, but a coordinator later treated the standby list as evidence that he should be callable at any hour. Mira says volunteering for a defined emergency cannot become an unlimited claim on someone's future time.`
+			label settle
+			choice
+				`\tUse a portable availability packet: current availability, defined commitments, leave dates, privacy scope, responsible contact, expiry, and explicit closure travel together.`
+					goto packet
+				`\tUse expiry plus fresh request: old leave and standby records remain historical, but current duty authority requires a new availability check or a still-live explicit commitment.`
+					goto expiry
+			label packet
+			`You recommend making the limit travel with the status. A roster can say that Jalen is unavailable or on standby only alongside the dates, scope, current responsible contact, and closure or expiry. The reason for private leave is omitted unless Jalen authorizes it for a specific purpose. Mira says a dispatcher can still plan. Jalen says the record can finally stop pretending that care for family is a permanent defect in his work.`
+			action
+				"B2 Free Worlds Caregiving Leave Compact: reviewed" = 1
+				"B2 Free Worlds Caregiving Leave Compact: settlement portable availability packet" = 1
+				"B2 Free Worlds Caregiving Leave Compact: mira trusts player" = 1
+				"B2 Free Worlds Caregiving Leave Compact: jalen trusts player" = 1
+			decline
+			label expiry
+			`You recommend treating old leave and standby entries as history rather than current authority. A new shift requires a fresh availability check unless an explicit commitment is still within its stated window. Family details do not need to be redisclosed simply because a dispatcher wants an answer. Mira likes the clean roster. Jalen says the rule distinguishes being needed from being owned.`
+			action
+				"B2 Free Worlds Caregiving Leave Compact: reviewed" = 1
+				"B2 Free Worlds Caregiving Leave Compact: settlement expiry plus fresh request" = 1
+				"B2 Free Worlds Caregiving Leave Compact: mira trusts player" = 1
+				"B2 Free Worlds Caregiving Leave Compact: jalen trusts player" = 1
+			decline
+
+
+mission "B2 Free Worlds Caregiving Leave Compact: Jalen Remembers"
+	minor
+	name `Jalen Remembers`
+	description `Jalen Ro remembers whether an old caregiving leave remained a private historical fact or became a permanent judgment about his availability.`
+	source
+		government "Free Worlds"
+	"offer precedence" 8
+	to offer
+		not "B2 Free Worlds Caregiving Leave Compact: aftermath seen"
+		or
+			has "B2 Free Worlds Caregiving Leave Compact: settlement portable availability packet"
+			has "B2 Free Worlds Caregiving Leave Compact: settlement expiry plus fresh request"
+	on offer
+		conversation
+			branch expiry
+				has "B2 Free Worlds Caregiving Leave Compact: settlement expiry plus fresh request"
+			`Jalen catches you near a repair gantry and shows you a current crew roster. It lists his certification, this week's availability, and one defined standby window. The old family leave is still in his private history with its original dates, but none of his father's medical details appear on the staffing screen. "The past is still true," Jalen says. "It just stopped pretending to be a standing order about my future."`
+				goto finish
+			label expiry
+			`Jalen says a dispatcher called him yesterday instead of copying an old status. He declined one shift and accepted another. Neither answer required him to explain his father's health. Mira later wrote that the ship had a complete staffing picture anyway. Jalen smiles. "Being asked each time turns out to be better data than being remembered forever."`
+			label finish
+			action
+				"B2 Free Worlds Caregiving Leave Compact: aftermath seen" = 1
+			decline
