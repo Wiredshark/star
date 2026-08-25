@@ -1,0 +1,91 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 ambient consequence consumer for the Republic review-mentorship arc.
+#
+# This file reads the resolved B2 training settlement, the upstream A2 consent
+# boundary, and the current A1 Republic customs-scrutiny signal. It writes no
+# state. Public News is authorized only when the player previously allowed
+# bounded precedent use; private precedent remains private.
+
+
+news "A2 Republic review practice safeguards routine"
+	location
+		government "Republic"
+	to show
+		has "B2 Republic Review Mentorship: aftermath seen"
+		has "B2 Republic Review Mentorship: settlement safeguards record"
+		has "A2 Republic Customs Review: precedent use bounded"
+		not "A2 Republic Customs Review: precedent kept private"
+		"world: republic customs scrutiny" < 3
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Republic review offices have started attaching a short safeguards record to elevated customs cases: evidence, inference, authority, consent, and the reason for escalation. Inspectors say the form is deliberately dull; the point is to make hidden assumptions visible before they become procedure."`
+			`"Customs supervisors are circulating a five-part review record across Republic ports. It does not tell an examiner what conclusion to reach. It makes them state what they know, what they infer, what authority they are using, and where a captain's consent stops."`
+
+
+news "A2 Republic review practice safeguards elevated"
+	location
+		government "Republic"
+	to show
+		has "B2 Republic Review Mentorship: aftermath seen"
+		has "B2 Republic Review Mentorship: settlement safeguards record"
+		has "A2 Republic Customs Review: precedent use bounded"
+		not "A2 Republic Customs Review: precedent kept private"
+		"world: republic customs scrutiny" >= 3
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"With Republic customs scrutiny running high again, inspectors are leaning on the new safeguards record before widening secondary reviews. Port advocates say the useful part is not fewer inspections; it is that every escalation now leaves a reason somebody else can challenge."`
+			`"Secondary inspections are up, but so is the paperwork that forces examiners to separate evidence from inference. The Republic's new safeguards record is getting its first real stress test under an elevated customs posture."`
+
+
+news "A2 Republic review practice circles routine"
+	location
+		government "Republic"
+	to show
+		has "B2 Republic Review Mentorship: aftermath seen"
+		has "B2 Republic Review Mentorship: settlement supervised review circle"
+		has "A2 Republic Customs Review: precedent use bounded"
+		not "A2 Republic Customs Review: precedent kept private"
+		"world: republic customs scrutiny" < 3
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Some Republic customs offices now hold supervised review circles for difficult cases. Examiners bring current files, state the evidence and inference boundary aloud, and let another observer ask what actually justifies the next step. Old cases supply questions, not answers."`
+			`"A new Republic training practice has inspectors arguing through live customs cases before unusual reviews expand. Supervisors say the disagreement is intentional: a route pattern is no longer allowed to become suspicious merely because everybody has heard the phrase before."`
+
+
+news "A2 Republic review practice circles elevated"
+	location
+		government "Republic"
+	to show
+		has "B2 Republic Review Mentorship: aftermath seen"
+		has "B2 Republic Review Mentorship: settlement supervised review circle"
+		has "A2 Republic Customs Review: precedent use bounded"
+		not "A2 Republic Customs Review: precedent kept private"
+		"world: republic customs scrutiny" >= 3
+	name
+		phrase
+			"merchant names"
+	message
+		word
+			`"Elevated customs scrutiny has turned the Republic's supervised review circles from a training exercise into a working safeguard. Examiners are challenging each other's escalation logic while traffic is still moving, instead of waiting for a complaint after the review is over."`
+			`"Republic customs offices are using live review circles during the latest scrutiny spike. Captains may still face secondary inspection, but supervisors are requiring another examiner to test the factual basis before a suspicious pattern quietly becomes a standing rule."`
