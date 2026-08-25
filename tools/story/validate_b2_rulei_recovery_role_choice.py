@@ -29,7 +29,7 @@ missions = [
 ]
 for mission in missions:
     need(text.count(f'mission "{mission}"') == 1, f"expected exactly one {mission} mission")
-need(text.count('event "B2 Rulei Recovery Role Choice: Review Ready"') == 1,
+need(len(re.findall(r'^event "B2 Rulei Recovery Role Choice: Review Ready"$', text, flags=re.MULTILINE)) == 1,
      "expected exactly one Review Ready event declaration")
 need('has "B2 Rulei Exposure Accountability: aftermath seen"' in text,
      "Offer must consume integrated Rulei Exposure Accountability aftermath read-only")
