@@ -1,0 +1,161 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Hai Chosen Family Recognition Compact.
+#
+# The Hai Guest Settlement Register establishes generations of human residents in
+# Hai space and institutions that adapted to multilingual, cross-cultural families.
+# This slice turns that background into a personal relationship dispute: a chosen
+# family bond can be socially real without automatically carrying inheritance,
+# guardianship, financial, medical, or household decision authority.
+# This is one household's arrangement, not universal Hai family law.
+
+
+event "B2 Hai Chosen Family Recognition Compact: Review Ready"
+	"B2 Hai Chosen Family Recognition Compact: review ready" = 1
+
+
+mission "B2 Hai Chosen Family Recognition Compact: Offer"
+	minor
+	name `Family Is a Word With Context`
+	description `A human resident and her Hai chosen sibling disagree over a civic record that turned a real family bond into authority neither of them granted.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "First Contact: Hai: offered"
+		or
+			has "Hai Guest Settlement Register: offered"
+		not "B2 Hai Chosen Family Recognition Compact: introduced"
+		not "B2 Hai Chosen Family Recognition Compact: declined"
+	on offer
+		conversation
+			`Mara Hale has lived in Hai space for most of her adult life. Beside her is Teren, a Hai who has shared holidays, illnesses, arguments, and ordinary dinners with Mara for nearly three decades. They call each other siblings. Neither treats the word as metaphor.`
+			`The trouble is a copied community-center record. Mara listed Teren as family for a neighborhood gathering and as an emergency contact for one specific trip. A downstream clerk compressed both notes into "next of kin" and then asked Teren to approve a housing change Mara had already chosen for herself.`
+			`Mara folds her arms. "Teren is my family. That does not make every legal power in human paperwork appear by magic." Teren answers, "I do not want the record to solve the problem by pretending we are only friends. That would also be false."`
+			choice
+				`\tRecord chosen-family status as a real relationship, but attach no decision authority unless a separate explicit grant exists.`
+					goto relationship
+				`\tMake authority purpose-specific: emergency contact, household access, medical communication, inheritance, and finances each require their own current scope.`
+					goto scope
+				`\tUse paired records: one for the social family relationship and one for any formal authority, with neither silently populating the other.`
+					goto paired
+				`\tRefuse to turn one household's language into a general family rule.`
+					goto decline
+			label relationship
+			`You tell them that the record can say exactly what is true: Mara and Teren consider each other family. That statement does not itself authorize Teren to sign a lease, spend Mara's money, make medical choices, or inherit property. Teren nods. "Then the relationship is not erased just because the powers are separate."`
+			action
+				"B2 Hai Chosen Family Recognition Compact: introduced" = 1
+				"B2 Hai Chosen Family Recognition Compact: route relationship separate from authority" = 1
+				"B2 Hai Chosen Family Recognition Compact: Mara trusts player" = 1
+				event "B2 Hai Chosen Family Recognition Compact: Review Ready" 7 11
+				decline
+			label scope
+			`You separate the different powers that old forms often hide inside one kinship label. Mara may name Teren for one emergency, give household access for a month, authorize medical information without medical decision power, or do none of those things. Each grant has its own purpose, duration, and revocation.`
+			action
+				"B2 Hai Chosen Family Recognition Compact: introduced" = 1
+				"B2 Hai Chosen Family Recognition Compact: route purpose specific authority" = 1
+				"B2 Hai Chosen Family Recognition Compact: Teren trusts player" = 1
+				event "B2 Hai Chosen Family Recognition Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You recommend two linked records. One preserves the social fact that Mara and Teren call each other family. The other contains only explicit formal powers, their source, scope, duration, and closure. A reader may follow the link, but cannot infer one record from the other.`
+			action
+				"B2 Hai Chosen Family Recognition Compact: introduced" = 1
+				"B2 Hai Chosen Family Recognition Compact: route paired relationship records" = 1
+				"B2 Hai Chosen Family Recognition Compact: Mara trusts player" = 1
+				"B2 Hai Chosen Family Recognition Compact: Teren trusts player" = 1
+				event "B2 Hai Chosen Family Recognition Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that their relationship belongs to them, and that one visiting captain should not define what the word family must mean in every Hai or human institution. Mara agrees. Teren says the bad record can be corrected without turning the correction into doctrine.`
+			action
+				"B2 Hai Chosen Family Recognition Compact: declined" = 1
+				decline
+
+
+mission "B2 Hai Chosen Family Recognition Compact: Review"
+	minor
+	name `When Kinship Gets Copied`
+	description `A copied record preserved the word family while dropping the context that separated relationship from formal authority.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "B2 Hai Chosen Family Recognition Compact: introduced"
+		has "B2 Hai Chosen Family Recognition Compact: review ready"
+		not "B2 Hai Chosen Family Recognition Compact: reviewed"
+	on offer
+		conversation
+			branch scope
+				has "B2 Hai Chosen Family Recognition Compact: route purpose specific authority"
+			branch paired
+				has "B2 Hai Chosen Family Recognition Compact: route paired relationship records"
+			`Mara finds you with three copies of the same corrected household record. One correctly says Teren is chosen family. A second has added "household representative" without naming any task. A third removed the family relationship entirely because the clerk could not find a matching inheritance form.`
+			`Teren looks more amused than angry. "One copy gave me powers I do not have. Another solved that by making our family disappear. Both mistakes came from assuming relationship and authority must be the same thing."`
+			goto settle
+			label scope
+			`The purpose-specific approach worked locally, but a downstream form retained an expired emergency-contact grant while dropping its expiry date. Another office saw the old grant and treated it as current authority over an unrelated housing decision.`
+			goto settle
+			label paired
+			`The paired records survived locally. One downstream copy kept the social relationship but lost the formal-authority link; another kept the authority record but dropped the social context and made Teren look like an appointed official rather than Mara's chosen sibling.`
+			label settle
+			choice
+				`\tUse a portable relationship-and-authority packet: relationship label, self-description, explicit authority grants, scope, duration, revocation, and closure travel together without being collapsed.`
+					goto packet
+				`\tUse fresh-context renewal: the social relationship may persist, but formal powers expire or remain task-bound unless the living person deliberately renews them.`
+					goto renewal
+			label packet
+			`You recommend a compact record that preserves both truths without merging them. It can say Mara and Teren are family, list any powers Mara actually granted, state what those powers do not cover, and record when each power ends. A clerk no longer needs to erase the relationship to avoid inventing authority.`
+			action
+				"B2 Hai Chosen Family Recognition Compact: reviewed" = 1
+				"B2 Hai Chosen Family Recognition Compact: settlement portable relationship packet" = 1
+				"B2 Hai Chosen Family Recognition Compact: Mara trusts player" = 1
+				"B2 Hai Chosen Family Recognition Compact: Teren trusts player" = 1
+				decline
+			label renewal
+			`You recommend treating chosen-family status and delegated power on different clocks. Mara and Teren may continue calling each other family for as long as that remains true to them. Any formal authority remains purpose-bound, expires when its conditions end, and requires fresh consent before it expands.`
+			action
+				"B2 Hai Chosen Family Recognition Compact: reviewed" = 1
+				"B2 Hai Chosen Family Recognition Compact: settlement fresh context renewal" = 1
+				"B2 Hai Chosen Family Recognition Compact: Mara trusts player" = 1
+				decline
+
+
+mission "B2 Hai Chosen Family Recognition Compact: Teren Remembers"
+	minor
+	name `Teren Remembers`
+	description `Teren remembers whether the record learned to preserve chosen family without inventing powers or erasing the relationship.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		not "B2 Hai Chosen Family Recognition Compact: aftermath seen"
+		or
+			has "B2 Hai Chosen Family Recognition Compact: settlement portable relationship packet"
+			has "B2 Hai Chosen Family Recognition Compact: settlement fresh context renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Hai Chosen Family Recognition Compact: settlement fresh context renewal"
+			`Teren shows you a new community form. The family field says "chosen sibling" because that is what Mara and Teren asked it to say. A separate authority section is blank. "For once, blank means nothing was granted instead of nobody knows what family means," Teren says.`
+			goto finish
+			label renewal
+			`Teren meets you outside Mara's building with a parcel of food balanced under one arm. "The emergency contact expired last week. I am still her sibling today. Apparently the database survived learning that those can be different facts."`
+			label finish
+			action
+				"B2 Hai Chosen Family Recognition Compact: aftermath seen" = 1
+				decline
