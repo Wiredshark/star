@@ -1,0 +1,157 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Hai Name Record Continuity Compact.
+#
+# A long-term human resident in Hai space has changed the name used in daily life.
+# Old records remain historically true, but downstream copies keep treating the old
+# name as current, public, and equally appropriate in every context. The dispute is
+# about continuity without forced disclosure, not universal Hai naming law.
+
+
+event "B2 Hai Name Record Continuity Compact: Review Ready"
+	"B2 Hai Name Record Continuity Compact: review ready" = 1
+
+
+mission "B2 Hai Name Record Continuity Compact: Offer"
+	minor
+	name `The Name That Still Follows`
+	description `A human resident and a Hai friend ask how records can preserve continuity without turning an old name into permanent public identity.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "First Contact: Hai: offered"
+		not "B2 Hai Name Record Continuity Compact: introduced"
+		not "B2 Hai Name Record Continuity Compact: declined"
+	on offer
+		conversation
+			`Ari Vale waits with a Hai friend named Teren Sii and three copies of the same residency record. Ari has used that name for years. One copy is current. The other two keep displaying an older human name in headings, public notices, and address labels.`
+			`Ari taps the oldest copy. "That name belongs to my history. It is not false. But every clerk who sees it decides that history is permission to use it now."`
+			`Teren Sii turns the newest page over. "We need continuity. We do not need every copied record to announce every earlier version of a person."`
+			choice
+				`\tUse the current self-identified name for ordinary display, while preserving earlier names only as linked historical aliases where continuity genuinely requires them.`
+					goto current
+				`\tMake access purpose-bound: an earlier name may be revealed only where a concrete matching need exists, not merely because a database contains it.`
+					goto bounded
+				`\tKeep paired records: a current identity/display record and a restricted continuity history, with neither silently overwriting the other.`
+					goto paired
+				`\tRefuse to turn one resident's correction into a general naming rule.`
+					goto decline
+			label current
+			`You recommend that ordinary systems display Ari Vale because that is the current name Ari uses. Earlier names can remain linked for historical continuity without being copied into every public field.`
+			action
+				"B2 Hai Name Record Continuity Compact: introduced" = 1
+				"B2 Hai Name Record Continuity Compact: route current display" = 1
+				"B2 Hai Name Record Continuity Compact: Ari trusts player" = 1
+				event "B2 Hai Name Record Continuity Compact: Review Ready" 7 11
+				decline
+			label bounded
+			`You separate possession from permission. A historical name may exist in an archive, but a clerk must have a real matching purpose before exposing it to another office, contractor, landlord, or public notice.`
+			action
+				"B2 Hai Name Record Continuity Compact: introduced" = 1
+				"B2 Hai Name Record Continuity Compact: route purpose bounded" = 1
+				"B2 Hai Name Record Continuity Compact: Teren trusts player" = 1
+				event "B2 Hai Name Record Continuity Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You keep two linked records. One says how Ari should be addressed now. The other preserves historical aliases, dates, and source lineage for continuity checks. A reader may follow the restricted link when needed, but cannot republish it by default.`
+			action
+				"B2 Hai Name Record Continuity Compact: introduced" = 1
+				"B2 Hai Name Record Continuity Compact: route paired records" = 1
+				"B2 Hai Name Record Continuity Compact: Ari trusts player" = 1
+				"B2 Hai Name Record Continuity Compact: Teren trusts player" = 1
+				event "B2 Hai Name Record Continuity Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that Ari can correct these records without making you the author of a wider social rule. Teren agrees to help route the specific corrections instead.`
+			action
+				"B2 Hai Name Record Continuity Compact: declined" = 1
+				decline
+
+
+mission "B2 Hai Name Record Continuity Compact: Review"
+	minor
+	name `Continuity Is Not Publication`
+	description `A downstream copy preserved historical identity linkage but turned restricted continuity data into ordinary public display.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "B2 Hai Name Record Continuity Compact: introduced"
+		has "B2 Hai Name Record Continuity Compact: review ready"
+		not "B2 Hai Name Record Continuity Compact: reviewed"
+	on offer
+		conversation
+			branch bounded
+				has "B2 Hai Name Record Continuity Compact: route purpose bounded"
+			branch paired
+				has "B2 Hai Name Record Continuity Compact: route paired records"
+			`Ari has found the next failure. A contractor imported a historical alias into a shipping notice because the field was available, not because the old name was needed to match anything.`
+			`Ari says, "The record did not become inaccurate. It became careless about audience." Teren Sii adds, "And every careless copy creates another source that looks independent even though all of them came from the same old record."`
+				goto settle
+			label bounded
+			`The purpose rule worked locally, but a downstream office copied the old name before checking why it had access. The restriction survived only as a note no one read.`
+				goto settle
+			label paired
+			`The paired records survived, but one export flattened both layers into a single profile and made the restricted history look like ordinary current display data.`
+			label settle
+			choice
+				`\tUse a portable identity-continuity packet: current display name, historical aliases, dates, source lineage, access purpose, disclosure state, corrections, and closure travel together.`
+					goto packet
+				`\tUse fresh-purpose access: historical aliases remain preserved, but disclosure requires a current matching need each time rather than inherited permission from an old copy.`
+					goto renewal
+			label packet
+			`You make context travel with the linkage. A downstream reader can tell what Ari is called now, what older record must still match, why that older name exists, and whether the current task actually permits disclosure.`
+			action
+				"B2 Hai Name Record Continuity Compact: reviewed" = 1
+				"B2 Hai Name Record Continuity Compact: settlement portable continuity packet" = 1
+				"B2 Hai Name Record Continuity Compact: Ari trusts player" = 1
+				"B2 Hai Name Record Continuity Compact: Teren trusts player" = 1
+				decline
+			label renewal
+			`You require a fresh purpose for each disclosure. Historical aliases can remain in restricted continuity history indefinitely, but the authority to reveal them does not travel indefinitely with copied paperwork.`
+			action
+				"B2 Hai Name Record Continuity Compact: reviewed" = 1
+				"B2 Hai Name Record Continuity Compact: settlement fresh purpose" = 1
+				"B2 Hai Name Record Continuity Compact: Ari trusts player" = 1
+				decline
+
+
+mission "B2 Hai Name Record Continuity Compact: Ari Remembers"
+	minor
+	name `Ari Remembers`
+	description `Ari remembers whether historical continuity stopped being treated as permanent permission to publish an earlier name.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		not "B2 Hai Name Record Continuity Compact: aftermath seen"
+		or
+			has "B2 Hai Name Record Continuity Compact: settlement portable continuity packet"
+			has "B2 Hai Name Record Continuity Compact: settlement fresh purpose"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Hai Name Record Continuity Compact: settlement fresh purpose"
+			`Ari shows you a new residency notice. It says Ari Vale. A small restricted-history marker confirms continuity without printing anything else. "For once," Ari says, "the system remembered enough without introducing me to strangers through my past."`
+				goto finish
+			label renewal
+			`Teren Sii has just completed a legitimate old-record match. The earlier name was visible for that task and disappeared from ordinary display afterward. Ari says, "History stayed true. Access finally stopped pretending to be permanent."`
+			label finish
+			action
+				"B2 Hai Name Record Continuity Compact: aftermath seen" = 1
+				decline
