@@ -1,6 +1,6 @@
 # A2 Avgi Allocation Practice News current-main restage handoff — 2026-08-25
 
-Verdict: **PARTIAL** pending exact-head repository-native validation.
+Verdict: **READY for A3 review/integration.**
 
 ## Authority and isolation
 
@@ -10,6 +10,7 @@ Verdict: **PARTIAL** pending exact-head repository-native validation.
 - Historical PARTIAL predecessor: PR #75 / `agent/a2-avgi-allocation-practice-news-20260819-0603`; leave it untouched and do not integrate it alongside this restage.
 - Production commit: `43e940f5fd4861980ca8a90deea11be19a264fb6`.
 - Strengthened validator commit: `b2b755c272dc4219954147c60d3d83dd51a7735a`.
+- Exact validated production/validator head: `ac76a8c8fbbf1be5453845a4b15ce2d8a83bd7f3`.
 
 ## Player-facing narrative loop
 
@@ -46,8 +47,15 @@ The strengthened validator requires:
 - no declined/refusal public gate or message;
 - no mission/conversation/event/action blocks, persistent assignments, world state, or gameplay/material mutation directives.
 
-Repository-native workflow results are not yet recorded here. A3 must not integrate until both `Fork simulation and story validation` and `Fork save-load integration smoke` are terminal green on the exact production/validator candidate.
+## Exact validation evidence
+
+On exact production/validator head `ac76a8c8fbbf1be5453845a4b15ce2d8a83bd7f3`:
+
+- `Fork simulation and story validation` run `32881848039` / #622: **SUCCESS**.
+- `Fork save-load integration smoke` run `32881847973` / #607: **SUCCESS**.
+
+Both repository-native gates are terminal green on the same exact candidate. Production and validator behavior are therefore READY for A3 review.
 
 ## A3 integration instructions
 
-Re-read current `main`, branch ancestry, active A1/A2/B1/B2 work, mergeability, exact workflow state, and this handoff immediately before integration. Preserve the four exact settlement-sensitive News outcomes, refusal privacy, read-only ownership, and Consonance-only scope. Do not integrate historical PR #75 together with this branch.
+Re-read current `main`, branch ancestry, active A1/A2/B1/B2 work, mergeability, exact workflow state, and this handoff immediately before integration. Preserve the four exact settlement-sensitive News outcomes, refusal privacy, read-only ownership, and Consonance-only scope. Do not integrate historical PR #75 together with this branch. A3 retains integration authority; no self-integration was performed.
