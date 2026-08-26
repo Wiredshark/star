@@ -1,6 +1,6 @@
 # B2 Rook Confidential Teaching Compact — Handoff
 
-Verdict: **PARTIAL pending exact-head repository-native validation.**
+Verdict: **READY for A3 review/integration.**
 
 ## Authority / isolation
 
@@ -9,6 +9,7 @@ Verdict: **PARTIAL pending exact-head repository-native validation.**
 - Branch: `agent/b2-rook-confidential-teaching-compact-20260826`
 - Production commit: `5595504ca4de7a158c700783789296b33edf0fa3`
 - Focused validator commit: `cdabaf4e0f52ab90e0f0262cf630fd1c3a6fb5c1`
+- Exact fully validated production/validator/handoff candidate: `d93a90526591b19077a199bb4cdc5a9b7685f650`
 - A3 retains integration authority. Do not self-integrate.
 
 ## Character / dynamic-content slice
@@ -57,16 +58,30 @@ The three substantive routes schedule a delayed Review after 7–11 days. Review
 - local `goto`/`label` integrity;
 - confidentiality, re-identification, audience/purpose/expiry/withdrawal continuity boundaries.
 
+## Exact validation evidence
+
+On exact candidate `d93a90526591b19077a199bb4cdc5a9b7685f650`:
+
+- `Fork simulation and story validation` #650 / run `32930572995`: **SUCCESS**.
+  - focused Python compilation: SUCCESS;
+  - all focused story validators: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS;
+  - changed-content style: SUCCESS.
+- `Fork save-load integration smoke` #635 / run `32930572977`: **SUCCESS**.
+  - dependency installation: SUCCESS;
+  - production configuration: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
+
+GitHub reports draft PR #329 mergeable. The exact candidate is three commits ahead of the selected authoritative base and changes exactly three files: production data, focused validator, and this durable handoff. No production or validator change is made by the final READY promotion commit.
+
 ## Canon / continuity assumptions
 
 A closed settlement can remain historically true while its confidential material remains non-portable. Redaction alone is not guaranteed anonymity when route, equipment, timing, or quotations can re-identify a participant. Consent to settle is not automatically consent to become training material; permission to use an excerpt is audience/purpose/time bounded. This is one Republic mediation-training practice, not universal Republic law.
 
-## Remaining acceptance gates
+## A3 / B3 integration notes
 
-Before READY:
-
-- repository-native `Fork simulation and story validation` must be terminal green on the exact candidate;
-- changed-content style and all focused story validators must pass;
-- A1 state-ownership/simulation contracts must pass;
-- repository-native production configure/build and stock save-load integration smoke must be terminal green;
-- final diff/ancestry/mergeability must be checked against current authoritative main.
+- Re-read current `main`, ancestry, active B1/A2/B2 work, PR mergeability, and exact workflow state immediately before integration.
+- Preserve A2 Rook Mediation ownership and all existing A2 condition names as read-only.
+- Preserve refusal suppression of Review, abstract-route Review fallthrough, both settlement-to-aftermath paths, and all seven state-only `decline` terminals.
+- No save migration is required: the READY promotion changes only this handoff; production persistence names and values are already validated.
