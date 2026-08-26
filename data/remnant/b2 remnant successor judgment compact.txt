@@ -1,0 +1,147 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Remnant Successor Judgment Compact.
+#
+# Sequel to the integrated Remnant Continuity Compact. It consumes that arc's
+# one-shot aftermath read-only and asks how mentor decisions should transfer to a
+# successor without becoming permanent doctrine. All new persistence is B2-local.
+
+
+event "B2 Remnant Successor Judgment Compact: Review Ready"
+	date +7 +11
+	"B2 Remnant Successor Judgment Compact: review ready" = 1
+
+
+mission "B2 Remnant Successor Judgment Compact: Offer"
+	minor
+	name `The Judgment Behind the Checklist`
+	description `Corin Taal and junior reserve engineer Aven Sile disagree over whether inherited emergency-transfer examples are guidance, precedent, or standing orders.`
+	source
+		government "Remnant"
+	to offer
+		has "B2 Remnant Continuity Compact: aftermath seen"
+		not "B2 Remnant Successor Judgment Compact: introduced"
+		not "B2 Remnant Successor Judgment Compact: declined"
+	on offer
+		conversation
+			`Corin Taal is reviewing reserve-transfer exercises with Aven Sile, a younger Remnant engineer preparing to take independent watch responsibility. Aven has copied several of Taal's old decisions into a training sheet: which incomplete records were acceptable, which patrol windows justified delay, and which hazards required a second technical custodian.`
+			`The examples are accurate. The problem is the margin note somebody added later: "Follow Taal's prior decision when conditions are similar." Taal shakes his head. "Similar is doing too much work. I made those calls with specific hardware, routes, people, and unknowns." Aven answers, "If every successor must rediscover the judgment from nothing, then training has failed."`
+			choice
+				`\tTeach the reasoning chain: preserve the example, but require the current engineer to restate present hazards, evidence, alternatives, and responsibility.`
+					goto reasoning
+				`\tUse bounded precedent: an old decision may be cited only with the conditions that made it valid and an explicit current comparison.`
+					goto bounded
+				`\tKeep paired records: one immutable mentor-example record and one current-decision record owned by the successor.`
+					goto paired
+				`\tRefuse to turn one mentorship dispute into Remnant doctrine.`
+					goto decline
+			label reasoning
+			`You keep Taal's examples intact but move the lesson from outcome to reasoning. Aven must name the current hazard, what is known, what remains uncertain, what alternatives exist, and who owns the present decision. Taal says a successor should inherit questions and methods, not borrowed certainty.`
+			action
+				"B2 Remnant Successor Judgment Compact: introduced" = 1
+				"B2 Remnant Successor Judgment Compact: route reasoning chain" = 1
+				"B2 Remnant Successor Judgment Compact: aven trusts player" = 1
+			event "B2 Remnant Successor Judgment Compact: Review Ready"
+			decline
+			label bounded
+			`You allow old decisions to function as precedent only when their boundaries travel with them: hardware state, route pressure, unresolved risks, available custodians, and the reason Taal accepted or rejected delay. Aven can compare a new case to the old one, but the comparison must be explicit rather than assumed.`
+			action
+				"B2 Remnant Successor Judgment Compact: introduced" = 1
+				"B2 Remnant Successor Judgment Compact: route bounded precedent" = 1
+				"B2 Remnant Successor Judgment Compact: taal trusts player" = 1
+			event "B2 Remnant Successor Judgment Compact: Review Ready"
+			decline
+			label paired
+			`You split the record. Taal's historical example remains immutable, including the uncertainty he faced. Aven's current decision is a separate record with present evidence, alternatives, chosen action, and named responsibility. The two may be linked, but the current record cannot inherit authority merely by pointing backward.`
+			action
+				"B2 Remnant Successor Judgment Compact: introduced" = 1
+				"B2 Remnant Successor Judgment Compact: route paired decisions" = 1
+				"B2 Remnant Successor Judgment Compact: aven trusts player" = 1
+				"B2 Remnant Successor Judgment Compact: taal trusts player" = 1
+			event "B2 Remnant Successor Judgment Compact: Review Ready"
+			decline
+			label decline
+			`You tell them that one training-sheet dispute is too narrow a foundation for a new general rule. Taal accepts that. Aven removes the standing-order margin note and records only that no broader practice was adopted from this case.`
+			action
+				"B2 Remnant Successor Judgment Compact: declined" = 1
+			decline
+
+
+mission "B2 Remnant Successor Judgment Compact: Review"
+	minor
+	name `When the Mentor Is Not on Watch`
+	description `Aven Sile must make an independent reserve decision after the inherited examples fail to match the current risk cleanly.`
+	source
+		government "Remnant"
+	to offer
+		has "B2 Remnant Successor Judgment Compact: introduced"
+		has "B2 Remnant Successor Judgment Compact: review ready"
+		not "B2 Remnant Successor Judgment Compact: reviewed"
+	on offer
+		conversation
+			`Aven finds you before Taal does. A reserve assembly is ready to move, but the current case resembles two of Taal's old examples in opposite ways: the route window is tight enough to favor launch, while a newly discovered interface fault is serious enough to favor delay. Taal is deliberately not making the call for him.`
+			if "B2 Remnant Successor Judgment Compact: route bounded precedent"
+				goto bounded
+			if "B2 Remnant Successor Judgment Compact: route paired decisions"
+				goto paired
+			`Your reasoning-chain approach exposed exactly what the copied checklist hid: two old outcomes can both be relevant without either deciding the present case.`
+			goto settle
+			label bounded
+			`Aven has attached both precedents with their original conditions. The comparison is useful, but neither old case matches the current combination of route pressure and interface uncertainty closely enough to decide it for him.`
+			goto settle
+			label paired
+			`The paired records make the split visible. Taal's two historical decisions sit beside Aven's current evidence without being merged into it. The remaining question is how to make Aven's judgment durable without pretending Taal approved it.`
+			label settle
+			choice
+				`\tUse an independent-decision packet: current evidence, alternatives, chosen action, responsible successor, cited mentor examples, and unresolved questions travel together.`
+					goto independent
+				`\tUse explicit mentor attribution: historical advice may be cited, but current approval exists only if the mentor actually reviewed this case; otherwise responsibility stays with the successor.`
+					goto attribution
+			label independent
+			`You have Aven write the decision in his own name. He records the present hazards, alternatives, chosen action, unresolved questions, and the old examples he consulted. Taal's prior work remains visible as evidence and training history, but it does not become a signature on Aven's judgment. Taal says that is what succession is supposed to look like.`
+			action
+				"B2 Remnant Successor Judgment Compact: settlement independent decision" = 1
+				"B2 Remnant Successor Judgment Compact: reviewed" = 1
+			decline
+			label attribution
+			`You separate influence from approval. Aven may record that Taal taught a method or made a relevant earlier decision, but the current file can claim Taal reviewed or approved this transfer only if he actually did so. Otherwise Aven owns the present call, including its uncertainty and later correction.`
+			action
+				"B2 Remnant Successor Judgment Compact: settlement explicit attribution" = 1
+				"B2 Remnant Successor Judgment Compact: reviewed" = 1
+			decline
+
+
+mission "B2 Remnant Successor Judgment Compact: Aven Remembers"
+	minor
+	name `Aven Remembers`
+	description `Aven Sile reflects on becoming a Remnant decision-maker without borrowing a mentor's authority.`
+	source
+		government "Remnant"
+	to offer
+		has "B2 Remnant Successor Judgment Compact: reviewed"
+		or
+			has "B2 Remnant Successor Judgment Compact: settlement independent decision"
+			has "B2 Remnant Successor Judgment Compact: settlement explicit attribution"
+		not "B2 Remnant Successor Judgment Compact: aftermath seen"
+	on offer
+		conversation
+			`Aven is alone at the reserve desk this time. Taal is on another watch rotation. "That used to feel like missing information," Aven says. "Now it feels like the point of the training."`
+			if "B2 Remnant Successor Judgment Compact: settlement independent decision"
+				`He shows you a current packet with three old examples attached as references. "Their history is useful because I can see why they differ from this case. None of them pretends to have made my decision for me."`
+			if "B2 Remnant Successor Judgment Compact: settlement explicit attribution"
+				`He shows you a file where Taal's actual advice is quoted narrowly and the rest of the reasoning is attributed to Aven. "I can inherit a method without inheriting somebody else's signature."`
+			`Aven says the archive now preserves both continuity and succession: what experienced people learned, what current people saw, and who actually carried responsibility at the time.`
+			action
+				"B2 Remnant Successor Judgment Compact: aftermath seen" = 1
+			decline
