@@ -1,6 +1,6 @@
 # B2 Skadenga Living Vow Compact — Handoff
 
-Verdict: **PARTIAL** pending repository-native validation.
+Verdict: **READY for A3 review/integration**.
 
 ## Authority and isolation
 - Repository: `Wiredshark/star`
@@ -8,6 +8,7 @@ Verdict: **PARTIAL** pending repository-native validation.
 - Branch: `agent/b2-skadenga-living-guidance-compact-20260826`
 - Production commit: `5251a2d42701295d29f970e62f889db7a2ea6bd9`
 - Focused-validator commit: `e9c9d64ac8dbf64f74800632de4f6906fa652dbb`
+- Exact fully validated production/validator/handoff candidate: `42f8328d3c29680c97250cf674f74a560a6e7548`
 - No self-integration.
 
 ## Character/content behavior
@@ -35,25 +36,31 @@ No writes to vanilla Skadenga state, `world:*`, A1/A2/B1 state, credits, reputat
 
 All seven dialogue/state-only terminal paths use `decline`; zero `accept` terminals. No objective-bearing mission directives are present.
 
+## Exact acceptance evidence
+On exact candidate `42f8328d3c29680c97250cf674f74a560a6e7548`:
+- Fork simulation and story validation #655 / run `32938543784`: **SUCCESS**
+  - focused Python compilation: SUCCESS
+  - all focused story validators: SUCCESS
+  - A1 simulation/state-ownership contracts: SUCCESS
+  - changed-content style: SUCCESS
+- Fork save-load integration smoke #640 / run `32938543706`: **SUCCESS**
+  - dependency installation: SUCCESS
+  - production configuration: SUCCESS
+  - production build: SUCCESS
+  - stock save-load smoke: SUCCESS
+
 ## Canon/persistence assumptions
 - Hjlod remains the canonical Skadenga character from the migration arc.
 - Runa is a new individual Skadenga, not a formal office or universal representative.
 - The slice does not decide Skadenga theology. It treats one person's vow, remembered interpretations, and current practical duty as distinct facts.
 - Refusing a present work assignment must not be treated as evidence that Runa rejected her faith.
 - Preserving the original vow must not make it a permanent labor assignment.
-- No save migration is expected because this is additive, namespaced state.
+- No save migration is required because this is additive, namespaced state.
 
 ## Files
 - `data/human/b2 skadenga living vow compact.txt`
 - `tools/story/validate_b2_skadenga_living_vow_compact.py`
 - `story/B2_SKADENGA_LIVING_VOW_COMPACT_HANDOFF_20260826.md`
 
-## Required acceptance before READY
-- repository-native Fork simulation/story validation, including focused validators and changed-content style;
-- A1 state-ownership/simulation contracts;
-- production Endless Sky configure/build;
-- stock save-load integration smoke;
-- exact final diff/status/ancestry recheck.
-
 ## A3/B3 integration notes
-Preserve the distinction among exact historical words, attributed interpretation, spiritual meaning, current consent, current duty, renewal, and closure. A living vow may remain meaningful without becoming a permanent staffing order or universal Skadenga law.
+Re-read current main and open B1/A2/B2 work immediately before integration. Preserve the distinction among exact historical words, attributed interpretation, spiritual meaning, current consent, current duty, renewal, and closure. A living vow may remain meaningful without becoming a permanent staffing order or universal Skadenga law.
