@@ -1,0 +1,149 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Bunrodea Cross-Rank Friendship Compact.
+#
+# Consumes the B1 Bunrodea social-history background read-only. The old hierarchy
+# remains historical fact, but a historical household classification does not
+# automatically create present personal authority over a living adult.
+
+
+event "B2 Bunrodea Cross-Rank Friendship Compact: Review Ready"
+	date +7 +11
+	"B2 Bunrodea Cross-Rank Friendship Compact: review ready" = 1
+
+
+mission "B2 Bunrodea Cross-Rank Friendship Compact: Offer"
+	minor
+	name `The Friend in the Household Book`
+	description `Rii Kes and Tava Rei disagree over whether an old Bunrodea household record describes a friendship, a former social status, or current authority.`
+	source
+		government "Bunrodea"
+	to offer
+		has "Bunrodea History: Megasa Freight Register: offered"
+		not "B2 Bunrodea Cross-Rank Friendship Compact: introduced"
+		not "B2 Bunrodea Cross-Rank Friendship Compact: declined"
+	on offer
+		conversation
+			`Rii Kes, a Megasa maintenance supervisor, is waiting beside Tava Rei, an Erabu archivist from one of the old estate families. They greet each other with the ease of people who have known one another much longer than their current jobs.`
+			`Tava has brought a copied household register from their youth. It lists Rii beside Tava's family under an old retainer category. The entry is historically real: Rii's parents worked for the estate, and as a teenager Rii lived in estate housing while learning technical work. But the copy has now appeared in a petition file as though Tava still has standing authority to answer questions for Rii.`
+			`Rii taps the translated entry. "We were friends then. We are friends now. The book can tell the truth about the old household without turning me into her dependent forever." Tava looks more embarrassed than defensive. "And deleting it would pretend the old hierarchy never shaped us."`
+			choice
+				`\tPreserve the friendship and history, but require present consent before either person may speak for the other.`
+					goto present
+				`\tKeep old status labels only for the specific historical duties they actually described; current authority must be separately documented.`
+					goto bounded
+				`\tKeep paired records: one for historical household/status context and one for current relationship, duties, and authority.`
+					goto paired
+				`\tRefuse to turn one cross-rank friendship into a general rule.`
+					goto decline
+			label present
+			`You tell them the old entry can remain true without becoming a present delegation. Friendship is not erased by the former household structure, and the former household structure does not grant Tava a current right to speak for Rii. Rii smiles. Tava says that is the distinction she wanted the archive to learn.`
+			action
+				"B2 Bunrodea Cross-Rank Friendship Compact: introduced" = 1
+				"B2 Bunrodea Cross-Rank Friendship Compact: route present consent" = 1
+				"B2 Bunrodea Cross-Rank Friendship Compact: rii trusts player" = 1
+			event "B2 Bunrodea Cross-Rank Friendship Compact: Review Ready"
+			decline
+			label bounded
+			`You keep the historical category, but bind its meaning to the work and household arrangements it actually described. A later clerk may cite that history, but cannot silently turn it into present authority, sponsorship, or dependence. Tava approves of the precision. Rii says he can live with a record that knows when its sentence ends.`
+			action
+				"B2 Bunrodea Cross-Rank Friendship Compact: introduced" = 1
+				"B2 Bunrodea Cross-Rank Friendship Compact: route bounded history" = 1
+				"B2 Bunrodea Cross-Rank Friendship Compact: tava trusts player" = 1
+			event "B2 Bunrodea Cross-Rank Friendship Compact: Review Ready"
+			decline
+			label paired
+			`You separate two questions that the copied register collapsed. One record preserves the old household, status, and work history. The other records only present facts: that Rii and Tava are friends, what duties either currently holds, and whether either has explicit authority to act for the other. They both agree to the split.`
+			action
+				"B2 Bunrodea Cross-Rank Friendship Compact: introduced" = 1
+				"B2 Bunrodea Cross-Rank Friendship Compact: route paired records" = 1
+				"B2 Bunrodea Cross-Rank Friendship Compact: rii trusts player" = 1
+				"B2 Bunrodea Cross-Rank Friendship Compact: tava trusts player" = 1
+			event "B2 Bunrodea Cross-Rank Friendship Compact: Review Ready"
+			decline
+			label decline
+			`You tell them that one difficult friendship is poor material for a realm-wide rule. Rii accepts that. Tava records only that no general procedure was adopted from this dispute.`
+			action
+				"B2 Bunrodea Cross-Rank Friendship Compact: declined" = 1
+			decline
+
+
+mission "B2 Bunrodea Cross-Rank Friendship Compact: Review"
+	minor
+	name `When Courtesy Becomes Authority`
+	description `A later petition copy tests whether Bunrodea records can preserve old social history without reviving it as current authority.`
+	source
+		government "Bunrodea"
+	to offer
+		has "B2 Bunrodea Cross-Rank Friendship Compact: introduced"
+		has "B2 Bunrodea Cross-Rank Friendship Compact: review ready"
+		not "B2 Bunrodea Cross-Rank Friendship Compact: reviewed"
+	on offer
+		conversation
+			`Rii and Tava have found the problem again. A petition clerk copied the old household entry into a current file, then summarized Tava as Rii's "estate representative." Nobody forged anything. The source was real; the conclusion was not.`
+			`Tava is angry now. "A courtesy from me becomes command because the old rank points in that direction." Rii answers, "And if I object, the copy makes it look as though I am denying my own history."`
+			if "B2 Bunrodea Cross-Rank Friendship Compact: route bounded history"
+				goto bounded
+			if "B2 Bunrodea Cross-Rank Friendship Compact: route paired records"
+				goto paired
+			`Your earlier present-consent rule held up personally, but the copied file shows that a current clerk still needs a compact way to distinguish historical relationship from active authority.`
+			goto settle
+			label bounded
+			`The historical label remained dated, but the petition summary dropped the date and the old duty scope. Tava says the archive needs a downstream warning whenever old status language is reused outside its original period.`
+			goto settle
+			label paired
+			`The paired records prevented the archive from losing the difference, but the petition system imported only the historical half. Rii says that portability matters as much as good local filing.`
+			label settle
+			choice
+				`\tUse a portable relationship-and-authority packet: historical status, current relationship, current duties, explicit authority, source date, and closure travel together.`
+					goto packet
+				`\tUse fresh-authority renewal: historical status remains searchable, but present authority exists only through a current explicit delegation for a named purpose.`
+					goto renewal
+			label packet
+			`You make the distinction travel with the record. A clerk may see that Rii once belonged to an Erabu household structure and that he and Tava remain friends, but any current duty or representative authority must be separately stated. Tava says the archive can preserve hierarchy without reenacting it.`
+			action
+				"B2 Bunrodea Cross-Rank Friendship Compact: settlement portable packet" = 1
+				"B2 Bunrodea Cross-Rank Friendship Compact: reviewed" = 1
+			decline
+			label renewal
+			`You make current authority expire unless a living person deliberately grants it for a current purpose. Old household and friendship records remain intact as history, but neither rank nor affection can silently become representation. Rii calls that the first version of the rule that feels equally honest about the past and the present.`
+			action
+				"B2 Bunrodea Cross-Rank Friendship Compact: settlement fresh authority" = 1
+				"B2 Bunrodea Cross-Rank Friendship Compact: reviewed" = 1
+			decline
+
+
+mission "B2 Bunrodea Cross-Rank Friendship Compact: Rii Remembers"
+	minor
+	name `A Friend, Not a Retainer`
+	description `Rii Kes reflects on what changed after the old household record stopped carrying automatic present authority.`
+	source
+		government "Bunrodea"
+	to offer
+		has "B2 Bunrodea Cross-Rank Friendship Compact: reviewed"
+		or
+			has "B2 Bunrodea Cross-Rank Friendship Compact: settlement portable packet"
+			has "B2 Bunrodea Cross-Rank Friendship Compact: settlement fresh authority"
+		not "B2 Bunrodea Cross-Rank Friendship Compact: aftermath seen"
+	on offer
+		conversation
+			`Rii recognizes you before Tava does. "The best part is that nothing important was deleted," he says. "The estate existed. My family worked there. Tava and I grew up around each other. We are still friends."`
+			if "B2 Bunrodea Cross-Rank Friendship Compact: settlement portable packet"
+				`He adds, "Now the copied record carries the ending too. It can say what the old status was without pretending it is my present chain of command."`
+			if "B2 Bunrodea Cross-Rank Friendship Compact: settlement fresh authority"
+				`He adds, "Now anyone who claims Tava speaks for me has to show a current delegation, not just point at a dead household category."`
+			`Tava says the arrangement is useful precisely because it is not a declaration that the old hierarchy never mattered. It is a way to keep history from impersonating present consent.`
+			action
+				"B2 Bunrodea Cross-Rank Friendship Compact: aftermath seen" = 1
+			decline
