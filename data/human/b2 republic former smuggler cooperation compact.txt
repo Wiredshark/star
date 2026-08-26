@@ -1,0 +1,154 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Republic Former Smuggler Cooperation Compact.
+#
+# Crime/investigation character slice consuming three existing authorities read-only:
+# completed pirate work (`pirate jobs`), A1 Republic border pressure, and A1 Republic
+# customs scrutiny. A closed cooperation history remains historical evidence; it does
+# not automatically become standing informant duty, permanent suspicion, or current
+# investigative authority.
+
+
+event "B2 Republic Former Smuggler Cooperation Compact: Review Ready"
+	"B2 Republic Former Smuggler Cooperation Compact: review ready" = 1
+
+
+mission "B2 Republic Former Smuggler Cooperation Compact: Offer"
+	minor
+	name `The File That Never Closed`
+	description `Customs investigator Rhea Markel and former smuggler Davin Sorn disagree over whether a closed cooperation record can become standing informant duty during renewed border pressure.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		"pirate jobs" >= 3
+		"world: republic customs scrutiny" >= 3
+		"world: republic border pressure" >= 3
+		not "B2 Republic Former Smuggler Cooperation Compact: introduced"
+		not "B2 Republic Former Smuggler Cooperation Compact: declined"
+	on offer
+		conversation
+			`A Republic customs investigator is arguing quietly with a dock electrician beside a secondary-inspection desk. The investigator notices you first. "Captain <last>? Rhea Markel. You have enough pirate-corridor work in your own history to understand how a useful old record can become a dangerous shortcut."`
+			`The electrician folds his arms. "Davin Sorn. I used to move contraband. Years ago I gave one investigation what I knew, under a written agreement for that case. The case closed. I changed work. Now every time border pressure rises, somebody copies the old file and marks me as an active source again."`
+			`Markel says, "The old cooperation is real history. So is the smuggling history. Neither tells me whether Davin owes this office information today, or whether a new investigation has evidence against him. We need a rule for this file before another desk invents one."`
+			choice
+				`\tTreat the old cooperation as complete: preserve it as history, but do not turn it into standing informant duty or permanent active suspicion.`
+					goto closed
+				`\tAllow fresh case-specific cooperation only through a new request with current scope, current terms, and an explicit end point.`
+					goto fresh
+				`\tKeep paired records: historical offense/cooperation on one side, current evidence and current cooperation status on the other.`
+					goto paired
+				`\tRefuse to turn one former smuggler's history into a general investigative rule.`
+					goto refuse
+			label closed
+			`You tell Markel that a closed cooperation record should stay closed unless something new reopens it. Davin's old smuggling and his old assistance remain true, but neither fact alone makes him an active informant or an active suspect today. Markel says, "History can remain visible without remaining live authority." Davin's shoulders loosen slightly.`
+			action
+				"B2 Republic Former Smuggler Cooperation Compact: introduced" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: route completed history" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: davin trusts player" = 1
+				event "B2 Republic Former Smuggler Cooperation Compact: Review Ready" 7 11
+				decline
+			label fresh
+			`You argue that cooperation can be useful without becoming hereditary to a file. A new case may ask Davin for help, but the request must identify the case, what information is being sought, what promises actually apply, and when the arrangement ends. Markel approves. Davin says, "Ask me now, for something real. Do not pretend I answered years ago."`
+			action
+				"B2 Republic Former Smuggler Cooperation Compact: introduced" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: route fresh agreement" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: markel trusts player" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: davin trusts player" = 1
+				event "B2 Republic Former Smuggler Cooperation Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You separate the history from the present decision. One record preserves what Davin did, what case he helped, and how that case closed. A second record contains only current investigative evidence, current requests, current consent or legal basis, and current status. Markel says, "Then copying the past cannot silently manufacture a present tense." Davin asks that corrections travel with both records.`
+			action
+				"B2 Republic Former Smuggler Cooperation Compact: introduced" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: route paired status" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: markel trusts player" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: davin trusts player" = 1
+				event "B2 Republic Former Smuggler Cooperation Compact: Review Ready" 7 11
+				decline
+			label refuse
+			`You tell them that one difficult file is not enough reason to define a general Republic practice. Markel records no recommendation under your name. Davin says that leaving the question local is better than turning his history into a precedent he never agreed to create.`
+			action
+				"B2 Republic Former Smuggler Cooperation Compact: declined" = 1
+				decline
+
+
+mission "B2 Republic Former Smuggler Cooperation Compact: Review"
+	minor
+	name `Useful Once Is Not Available Forever`
+	description `Markel and Davin return after a copied customs record again confuses historical cooperation with current investigative status.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		has "B2 Republic Former Smuggler Cooperation Compact: introduced"
+		has "B2 Republic Former Smuggler Cooperation Compact: review ready"
+		not "B2 Republic Former Smuggler Cooperation Compact: reviewed"
+	on offer
+		conversation
+			branch fresh
+				has "B2 Republic Former Smuggler Cooperation Compact: route fresh agreement"
+			branch paired
+				has "B2 Republic Former Smuggler Cooperation Compact: route paired status"
+			`Markel has two copies of Davin's file. One says his old cooperation is closed. The other copied the phrase "reliable source" into a current watch list without a new case number, request, or piece of evidence. Davin says, "Nobody lied. They just copied the useful words and dropped the ending."`
+				goto settle
+			label fresh
+			`A new investigator did ask Davin for help, but the request arrived with no defined case scope and cited the old cooperation agreement as if its terms still applied. Davin refused. Markel says, "That refusal is now being described as a change in reliability, even though there was never a new agreement to break."`
+				goto settle
+			label paired
+			`The paired records exposed the problem immediately. The historical side still shows Davin's old smuggling and old cooperation. The current side contains no fresh evidence and no active agreement. A downstream watch list imported the historical labels anyway. Markel says, "The records were correct. The reader collapsed them."`
+			label settle
+			choice
+				`\tAdopt fresh-cause review: old offense and old cooperation remain searchable history, but active suspicion or active source status requires a current case-specific basis.`
+					goto cause
+				`\tAdopt a bounded cooperation packet: any current source relationship carries the case, requested scope, applicable promises, responsible investigator, review point, and explicit closure.`
+					goto bounded
+			label cause
+			`You recommend a fresh-cause rule for this office. Historical crime may explain why an investigator looks at a file, and historical cooperation may explain why someone asks a question, but neither becomes current suspicion or current duty by repetition alone. Markel adds a field requiring the present case basis. Davin says, "Now an old truth can stay true without staying active."`
+			action
+				"B2 Republic Former Smuggler Cooperation Compact: reviewed" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: settlement fresh cause" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: davin trusts player" = 1
+				decline
+			label bounded
+			`You recommend making every active cooperation arrangement portable only with its boundaries. The packet states which case requested help, what was requested, which promises actually apply, who owns the current request, when it must be reviewed, and how closure is recorded. Markel says that a copied packet can no longer preserve "source" while losing "for this case." Davin agrees to be asked again when there is actually something to ask.`
+			action
+				"B2 Republic Former Smuggler Cooperation Compact: reviewed" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: settlement bounded cooperation" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: markel trusts player" = 1
+				"B2 Republic Former Smuggler Cooperation Compact: davin trusts player" = 1
+				decline
+
+
+mission "B2 Republic Former Smuggler Cooperation Compact: Davin Remembers"
+	minor
+	name `Davin Remembers`
+	description `Davin Sorn remembers the difference between a true criminal history, a completed cooperation, and a current investigative relationship.`
+	source "Earth"
+	"offer precedence" 8
+	to offer
+		not "B2 Republic Former Smuggler Cooperation Compact: aftermath seen"
+		or
+			has "B2 Republic Former Smuggler Cooperation Compact: settlement fresh cause"
+			has "B2 Republic Former Smuggler Cooperation Compact: settlement bounded cooperation"
+	on offer
+		conversation
+			branch bounded
+				has "B2 Republic Former Smuggler Cooperation Compact: settlement bounded cooperation"
+			`Davin spots you near the freight elevators and holds up a customs notice. "Someone pulled my old file during another review. The clerk could see the smuggling history, the old cooperation, and the closed status. They still asked questions. They just did not pretend the history answered them." Markel, across the concourse, gives you a brief nod.`
+				goto finish
+			label bounded
+			`Davin shows you a one-page cooperation packet for a completely new case. "This time they asked. It says what they want, which case it belongs to, who is responsible, and when it ends. I said yes because the question was actually in front of me, not because somebody found an old label."`
+			label finish
+			action
+				"B2 Republic Former Smuggler Cooperation Compact: aftermath seen" = 1
+				decline
