@@ -34,7 +34,7 @@ mission "B2 Deep Family Trade Choice Compact: Offer"
 		not "B2 Deep Family Trade Choice Compact: declined"
 	on offer
 		conversation
-			`Sela Rook is a shipyard electrician with thirty years in the same family workshop. Her adult son Tomas learned beside her from childhood, can diagnose half the yard's old power systems by sound, and has just accepted a trainee berth with an independent survey crew.`
+			`Sela Rook is a shipyard electrician with thirty years in the same family workshop. Her adult son Tomas Rook learned beside her from childhood, can diagnose half the yard's old power systems by sound, and has just accepted a trainee berth with an independent survey crew.`
 			`Neither of them is angry about the work itself. The argument is about what the training meant. Sela says the family invested years teaching him because they expected him to carry the shop forward. Tomas says he was a child when most of that expectation formed, and skill is not the same thing as consent.`
 			`They heard that you once let a Pilot Guild assessor ask what kind of captain you had become. Tomas gives you a tired smile. "So maybe you understand the difference between a history and a choice."`
 			choice
