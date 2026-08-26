@@ -1,13 +1,14 @@
 # B2 Deep Family Trade Choice Compact handoff
 
-Verdict: PARTIAL pending exact-head repository-native validation.
+Verdict: READY for A3 review/integration.
 
 - Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-deep-family-trade-choice-20260825`
 - Production: `data/human/b2 deep family trade choice compact.txt`
 - Focused validator: `tools/story/validate_b2_deep_family_trade_choice_compact.py`
-- Production commit: `7e243fb2631a924f5a940bf4c0513cbfcfed2458`
+- Initial production commit: `7e243fb2631a924f5a940bf4c0513cbfcfed2458`
 - Validator commit: `a5da75f95362f81075c5eb08b41c853b11c3625b`
+- Character-name production repair / exact fully validated candidate: `a77e0886d1ad817f3762ab2f0f41beab99ae3b32`
 
 ## Character / dynamic-content behavior
 
@@ -34,13 +35,27 @@ The three substantive routes schedule a 7–11 day Review. Review addresses a co
 
 The focused validator checks the exact three-mission graph, Deep scope, A2 read-only dependency, route-local writes and one 7–11 day Review schedule per substantive route, refusal suppression, settlement-local closure, one-shot aftermath, B2-only persistence, no objective/material directives, seven declines / zero accepts, and the family-training/current-career/succession-consent continuity boundary.
 
+The first exact-head story run failed only because production introduced `Tomas` as Sela Rook's son without spelling out `Tomas Rook` contiguously while the validator intentionally required both recurring characters' full names. Changed-content style passed and repository-wide contracts were otherwise green. Commit `a77e0886d1ad817f3762ab2f0f41beab99ae3b32` makes the production identity explicit as `Tomas Rook` without changing route/state behavior.
+
+## Exact validation evidence
+
+On exact candidate `a77e0886d1ad817f3762ab2f0f41beab99ae3b32`:
+- `Fork simulation and story validation` #644 / run `32919235810`: **SUCCESS**.
+  - focused Python compilation: SUCCESS;
+  - all focused story validators: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS;
+  - changed-content style: SUCCESS.
+- `Fork save-load integration smoke` #629 / run `32919235839`: **SUCCESS**.
+  - dependency installation: SUCCESS;
+  - production configuration: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
+
 ## Persistence / canon assumptions
 
 Training history, family expectation, demonstrated skill, actual ownership/debt/contract obligations, present career choice, succession consent, and current authority remain separate facts. Teaching a child does not itself create a debt or career assignment; leaving the workshop does not erase genuine training history. This is one household conflict, not Deep labor or inheritance law.
 
-## Validation
-
-Repository-native workflows must be terminal green on an exact production/validator candidate before READY may be claimed.
+No save-state migration is required: the production repair changed only the explicit spelling of Tomas Rook's name, not any persistent condition name or value.
 
 ## A3/B3 integration notes
 
