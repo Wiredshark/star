@@ -1,6 +1,6 @@
 # B2 Hai Stewardship Handoff Compact handoff
 
-Verdict: PARTIAL pending exact-head repository-native validation.
+Verdict: READY for A3 review/integration.
 
 - Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-hai-stewardship-handoff-20260825`
@@ -8,6 +8,7 @@ Verdict: PARTIAL pending exact-head repository-native validation.
 - Focused validator: `tools/story/validate_b2_hai_stewardship_handoff_compact.py`
 - Production commit: `f5faa061d28c1765afd3172eb43bc98a5232aefa`
 - Validator commit: `cde0c3e4c17e1b9996f8ed1c6d818df620e74e6c`
+- Exact fully validated production/validator/handoff candidate: `a11ea7455726e148ef890c690c07172de3978874`
 
 ## Character / dynamic-content behavior
 
@@ -36,13 +37,25 @@ The focused validator checks the exact three-mission graph, Hai/B1 gates, recurr
 
 ## Exact validation evidence
 
-Pending repository-native validation on the exact branch head after PR creation. READY is not claimed until simulation/story/style and production build/save-load workflows are terminal green on an exact production/validator candidate.
+On exact candidate `a11ea7455726e148ef890c690c07172de3978874`:
+- `Fork simulation and story validation` #646 / run `32922788248`: **SUCCESS**.
+  - focused Python compilation: SUCCESS;
+  - all focused story validators: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS;
+  - changed-content style: SUCCESS.
+- `Fork save-load integration smoke` #631 / run `32922788345`: **SUCCESS**.
+  - dependency installation: SUCCESS;
+  - production configuration: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
+
+The READY promotion changes only this durable handoff document. Production and validator behavior remain identical to the fully validated candidate above.
 
 ## Persistence / canon assumptions
 
 Tavi's historical observations, mentor advice, current hardware configuration, Jalen's present inspection evidence, adopted guidance, current responsible authority, deviations, review date, and closure remain separate facts. Preserving old handoff notes does not turn them into permanent standing orders; transferring responsibility does not require erasing the retired steward's experience. This is one local mentorship/handoff conflict, not universal Hai maintenance law.
 
-No save-state migration is expected because this slice introduces only new B2-namespaced persistence.
+No save-state migration is required because this slice introduces only new B2-namespaced persistence and the READY promotion does not alter production state names or values.
 
 ## A3/B3 integration notes
 
