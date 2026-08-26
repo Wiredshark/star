@@ -1,0 +1,156 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Deep Unequal Means Friendship Compact.
+# Two longtime Deep friends are discovering that unequal incomes can change how
+# outsiders describe ordinary generosity. This is one friendship, not Deep law.
+
+
+event "B2 Deep Unequal Means Friendship Compact: Review Ready"
+	"B2 Deep Unequal Means Friendship Compact: review ready" = 1
+
+
+mission "B2 Deep Unequal Means Friendship Compact: Offer"
+	minor
+	name `A Gift Is Not a Rank`
+	description `Two Deep friends ask how to keep a growing income gap from turning friendship into patronage or debt.`
+	source
+		government "Deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		credits >= 50000
+		not "B2 Deep Unequal Means Friendship Compact: introduced"
+		not "B2 Deep Unequal Means Friendship Compact: declined"
+	on offer
+		conversation
+			`Ilya Sorn and Mera Pell are arguing quietly over a small wrapped box beside a cafe counter. They have known each other since school. Ilya now earns several times what Mera does after moving into specialist shipyard work, and the difference has begun to make every ordinary favor feel public.`
+			`Mera says the problem is not the gift itself. "People keep calling me his project. If he buys dinner, they call it support. If I help him move equipment, nobody calls that repayment. I do not want our friendship translated into a balance sheet."`
+			choice
+				`\tIf something is a gift, say so plainly. Generosity can matter without creating a debt.`
+					goto gift
+				`\tIf either of you actually expects repayment, call it a loan or promise before the exchange happens.`
+					goto explicit
+				`\tKeep friendship and material obligations separate: remember favors, but record only obligations both of you actually agreed to.`
+					goto paired
+				`\tI am not going to referee your friendship.`
+					goto decline
+			label gift
+			`You tell them that unequal means do not automatically create a hierarchy. Ilya can give something because he wants to, and Mera can accept or refuse it without the gift becoming a claim on her time, loyalty, or future choices.`
+			action
+				"B2 Deep Unequal Means Friendship Compact: introduced" = 1
+				"B2 Deep Unequal Means Friendship Compact: route gift without debt" = 1
+				"B2 Deep Unequal Means Friendship Compact: Mera trusts player" = 1
+				event "B2 Deep Unequal Means Friendship Compact: Review Ready" 7 11
+				decline
+			label explicit
+			`You suggest that the dangerous part is ambiguity. A loan, shared purchase, or promised repayment should be named while both people can still say no; everything else remains ordinary friendship unless they deliberately change it.`
+			action
+				"B2 Deep Unequal Means Friendship Compact: introduced" = 1
+				"B2 Deep Unequal Means Friendship Compact: route explicit obligation" = 1
+				"B2 Deep Unequal Means Friendship Compact: Ilya trusts player" = 1
+				event "B2 Deep Unequal Means Friendship Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You suggest two kinds of memory. One is the ordinary, messy history of friendship: meals, rides, favors, gifts, bad jokes. The other contains only explicit loans, shared purchases, or promises that both people agreed should remain obligations.`
+			action
+				"B2 Deep Unequal Means Friendship Compact: introduced" = 1
+				"B2 Deep Unequal Means Friendship Compact: route paired friendship obligation" = 1
+				"B2 Deep Unequal Means Friendship Compact: Mera trusts player" = 1
+				"B2 Deep Unequal Means Friendship Compact: Ilya trusts player" = 1
+				event "B2 Deep Unequal Means Friendship Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a friendship old enough to survive this argument does not need an outsider writing rules for it. Mera laughs first. Ilya follows a moment later.`
+			action
+				"B2 Deep Unequal Means Friendship Compact: declined" = 1
+				decline
+
+
+mission "B2 Deep Unequal Means Friendship Compact: Review"
+	minor
+	name `The Favor Changed Currency`
+	description `Ilya and Mera discover that time and effort can feel just as unequal as money when a friendship is already under scrutiny.`
+	source
+		government "Deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Deep Unequal Means Friendship Compact: introduced"
+		has "B2 Deep Unequal Means Friendship Compact: review ready"
+		not "B2 Deep Unequal Means Friendship Compact: reviewed"
+	on offer
+		conversation
+			branch wealthy
+				credits >= 1000000
+			branch explicit
+				has "B2 Deep Unequal Means Friendship Compact: route explicit obligation"
+			branch paired
+				has "B2 Deep Unequal Means Friendship Compact: route paired friendship obligation"
+			`Mera finds you after spending most of a day helping Ilya prepare a workshop inspection. Nobody exchanged money. Even so, one coworker joked that Mera had finally begun "paying him back" for months of meals and gifts. The joke landed badly.`
+				goto settle
+			label wealthy
+			`Your own wealth is now obvious enough that Ilya raises it before you can. "People assume anyone with money is buying influence even when they are just being generous," he says. Mera shakes her head. "And they assume anyone without it must repay in loyalty or labor." Their latest argument began after Mera spent a day helping him for free.`
+				goto settle
+			label explicit
+			`Ilya says your earlier rule helped with actual loans: they now name repayment terms before either person agrees. The harder problem is everything else. Mera spent a day helping him prepare a workshop inspection, and a coworker immediately called it repayment for past gifts.`
+				goto settle
+			label paired
+			`Mera says the paired distinction helped until someone copied a summary that listed old gifts beside explicit obligations. The categories stayed separate in their own notes and collapsed again in somebody else's retelling.`
+			label settle
+			choice
+				`\tUse broad reciprocity: friends may contribute different things at different times without treating every imbalance as debt.`
+					goto reciprocity
+				`\tUse explicit promises: gratitude and favors remain meaningful, but only mutually stated obligations survive as something owed.`
+					goto promises
+			label reciprocity
+			`You tell them that reciprocity can be real without being arithmetic. A relationship can be unequal in money, time, patience, skill, or opportunity and still remain voluntary if neither person converts the imbalance into authority.`
+			action
+				"B2 Deep Unequal Means Friendship Compact: reviewed" = 1
+				"B2 Deep Unequal Means Friendship Compact: settlement broad reciprocity" = 1
+				"B2 Deep Unequal Means Friendship Compact: Mera trusts player" = 1
+				decline
+			label promises
+			`You draw the boundary around explicit obligations instead. A promise can be remembered and fulfilled. A gift can be appreciated. A favor can matter. None of those categories silently turns into another just because outsiders want a cleaner story.`
+			action
+				"B2 Deep Unequal Means Friendship Compact: reviewed" = 1
+				"B2 Deep Unequal Means Friendship Compact: settlement explicit promises" = 1
+				"B2 Deep Unequal Means Friendship Compact: Ilya trusts player" = 1
+				decline
+
+
+mission "B2 Deep Unequal Means Friendship Compact: Mera Remembers"
+	minor
+	name `Mera Remembers`
+	description `Mera remembers whether unequal means became a debt ledger or simply another fact inside an old friendship.`
+	source
+		government "Deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Deep Unequal Means Friendship Compact: aftermath seen"
+		or
+			has "B2 Deep Unequal Means Friendship Compact: settlement broad reciprocity"
+			has "B2 Deep Unequal Means Friendship Compact: settlement explicit promises"
+	on offer
+		conversation
+			branch promises
+				has "B2 Deep Unequal Means Friendship Compact: settlement explicit promises"
+			`Mera tells you Ilya recently paid for a weekend trip they had both wanted to take. She brought the food and handled the booking. "We did not make it equal," she says. "We just made it ours."`
+				goto finish
+			label promises
+			`Mera says Ilya recently lent her money for a certification fee. They wrote down the repayment because that one really was a loan. The next evening he bought dinner. "That part was just dinner," she says.`
+			label finish
+			action
+				"B2 Deep Unequal Means Friendship Compact: aftermath seen" = 1
+				decline
