@@ -1,0 +1,153 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Incipias Family Flight Consent Compact.
+# A parent and adult pilot in a young private-spaceflight culture ask whether an
+# emergency family contact can silently become standing authority over flight choices.
+# This is one family dispute, not universal Incipias law or a new Conlatio office.
+
+
+event "B2 Incipias Family Flight Consent Compact: Review Ready"
+	"B2 Incipias Family Flight Consent Compact: review ready" = 1
+
+
+mission "B2 Incipias Family Flight Consent Compact: Offer"
+	minor
+	name `The Contact Who Became a Veto`
+	description `An Incipias parent and adult pilot disagree over whether an emergency contact record can become standing authority over ordinary flight decisions.`
+	source
+		government "Conlatio"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "B2 Incipias License Compact: aftermath seen"
+		not "B2 Incipias Family Flight Consent Compact: introduced"
+		not "B2 Incipias Family Flight Consent Compact: declined"
+	on offer
+		conversation
+			`Near a departure board, two Incipias are arguing over a small private ship's crew record. Seli Naran is the ship's adult pilot. Her parent, Tavi Naran, was listed as an emergency family contact when Seli first began flying. That was useful while private spaceflight was still new to their family. The copied field now appears in a scheduler as though Tavi must approve long-range departures.`
+			`Seli points to a current license and a clean flight record. Tavi points to several early emergencies when a family contact genuinely mattered. Neither wants that history erased. Their disagreement is whether care during an emergency became authority over ordinary adult choices simply because a database kept copying the same contact field.`
+			choice
+				`\tKeep emergency contact separate from ordinary flight consent. Tavi can remain the person to notify without becoming the person who approves departures.`
+					goto separate
+				`\tAllow delegated family authority only for a named purpose, trigger, duration, and revocation rule chosen by Seli.`
+					goto bounded
+				`\tKeep two linked records: family/emergency contact history and a separate current-authority record for any power Seli actually delegates.`
+					goto paired
+				`\tDo not turn one family argument into a general rule for a society still inventing its private-flight customs.`
+					goto decline
+			label separate
+			`You tell them that being the first person called after an accident is not the same role as approving whether another adult may fly. Tavi's early support remains true history. Seli's present license and present choice remain current authority.`
+			action
+				"B2 Incipias Family Flight Consent Compact: introduced" = 1
+				"B2 Incipias Family Flight Consent Compact: route contact separate" = 1
+				"B2 Incipias Family Flight Consent Compact: Seli trusts player" = 1
+				event "B2 Incipias Family Flight Consent Compact: Review Ready" 7 11
+				decline
+			label bounded
+			`You suggest that family authority, if Seli wants any, should be explicit and narrow: what decision it covers, what event activates it, when it expires, and how Seli can revoke it. Tavi accepts that a chosen contingency role would mean more than a copied label.`
+			action
+				"B2 Incipias Family Flight Consent Compact: introduced" = 1
+				"B2 Incipias Family Flight Consent Compact: route bounded delegation" = 1
+				"B2 Incipias Family Flight Consent Compact: Tavi trusts player" = 1
+				event "B2 Incipias Family Flight Consent Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You recommend preserving the family history without letting it carry powers it never contained. One record can show who was contacted during old emergencies and why. A second can show any current authority Seli deliberately delegates, with scope, trigger, expiry, and revocation.`
+			action
+				"B2 Incipias Family Flight Consent Compact: introduced" = 1
+				"B2 Incipias Family Flight Consent Compact: route paired records" = 1
+				"B2 Incipias Family Flight Consent Compact: Seli trusts player" = 1
+				"B2 Incipias Family Flight Consent Compact: Tavi trusts player" = 1
+				event "B2 Incipias Family Flight Consent Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that a family relationship this specific should not become a general rule because a passing captain was asked to settle it. Seli closes the scheduler. Tavi keeps the old emergency record. They agree only that the copied veto still needs to be challenged by the people actually using the system.`
+			action
+				"B2 Incipias Family Flight Consent Compact: declined" = 1
+				decline
+
+
+mission "B2 Incipias Family Flight Consent Compact: Review"
+	minor
+	name `The Old Contact Followed the New Ship`
+	description `A new scheduler imports Tavi's historical contact record and again treats it as current approval authority.`
+	source
+		government "Conlatio"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "B2 Incipias Family Flight Consent Compact: introduced"
+		has "B2 Incipias Family Flight Consent Compact: review ready"
+		not "B2 Incipias Family Flight Consent Compact: reviewed"
+	on offer
+		conversation
+			branch bounded
+				has "B2 Incipias Family Flight Consent Compact: route bounded delegation"
+			branch paired
+				has "B2 Incipias Family Flight Consent Compact: route paired records"
+			`Seli finds you beside a newer ship. Its scheduler imported the old family-contact field and marked Tavi as an approval contact for a route Seli has already accepted. Nothing in the original emergency record ever granted that power. The system preserved a true relationship while inventing a present authority.`
+				goto settle
+			label bounded
+			`Seli did deliberately give Tavi one narrow emergency authority after your last conversation. The new scheduler copied Tavi's name but dropped the trigger, expiry, and revocation fields. A bounded contingency has become an apparently permanent veto.`
+				goto settle
+			label paired
+			`Their own records still separate family contact history from current delegated authority. The new scheduler flattened both views into one field and treated the oldest relationship as the strongest current permission.`
+			label settle
+			choice
+				`\tUse a portable family-flight packet: relationship, notification role, delegated authority, trigger, scope, expiry, revocation, and current pilot choice travel together.`
+					goto packet
+				`\tUse fresh-purpose renewal: historical family contacts remain history, but any authority must be deliberately renewed for the present purpose.`
+					goto renewal
+			label packet
+			`You recommend making the distinctions travel together. A future scheduler can still know whom Seli wants contacted without guessing who may decide for her. Any delegated power is visible as a separate, bounded fact rather than an implication drawn from kinship.`
+			action
+				"B2 Incipias Family Flight Consent Compact: reviewed" = 1
+				"B2 Incipias Family Flight Consent Compact: settlement portable family flight packet" = 1
+				"B2 Incipias Family Flight Consent Compact: Seli trusts player" = 1
+				decline
+			label renewal
+			`You recommend letting old contact records remain historical while current authority expires unless Seli renews it for a named purpose. Tavi can still be family, still be the person called in an emergency, and still hold a contingency role when Seli explicitly chooses one. None of those facts has to impersonate the others.`
+			action
+				"B2 Incipias Family Flight Consent Compact: reviewed" = 1
+				"B2 Incipias Family Flight Consent Compact: settlement fresh purpose renewal" = 1
+				"B2 Incipias Family Flight Consent Compact: Seli trusts player" = 1
+				"B2 Incipias Family Flight Consent Compact: Tavi trusts player" = 1
+				decline
+
+
+mission "B2 Incipias Family Flight Consent Compact: Seli Remembers"
+	minor
+	name `Seli Remembers`
+	description `Seli remembers whether family contact and present flight authority were allowed to remain separate.`
+	source
+		government "Conlatio"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		not "B2 Incipias Family Flight Consent Compact: aftermath seen"
+		or
+			has "B2 Incipias Family Flight Consent Compact: settlement portable family flight packet"
+			has "B2 Incipias Family Flight Consent Compact: settlement fresh purpose renewal"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Incipias Family Flight Consent Compact: settlement fresh purpose renewal"
+			`Seli shows you a new crew record. Tavi is still listed as family and as the person to notify after a serious incident. A separate current-authority field is empty because Seli has delegated nothing for this trip. "Nothing about us had to become less true," Seli says. "The record just stopped treating the relationship itself as permission."`
+				goto finish
+			label renewal
+			`Seli shows you the same relationship across two dates. The old emergency-contact record remains intact. A later delegated contingency has an expiry marker and is now closed. Tavi still receives Seli's departure messages by choice, not because a scheduler has mistaken family history for command authority.`
+			label finish
+			action
+				"B2 Incipias Family Flight Consent Compact: aftermath seen" = 1
+				decline
