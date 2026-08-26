@@ -1,13 +1,14 @@
 # B2 Bunrodea Cross-Rank Friendship Compact handoff — 2026-08-26
 
-Verdict: PARTIAL pending repository-native validation.
+Verdict: READY for A3 review/integration.
 
 ## Authority / isolation
 - Repository authority: `Wiredshark/star`.
 - Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`.
 - Branch: `agent/b2-bunrodea-cross-rank-friendship-20260826`.
 - Production commit: `a0893ecb97a734172446ddec306640abcebdb8ba`.
-- Focused validator commit: `e9909b4f46b5638de85bc2dd650fa22742ee2c7d`.
+- Initial focused validator commit: `e9909b4f46b5638de85bc2dd650fa22742ee2c7d`.
+- Validator terminal-count hardening / exact fully validated production+validator candidate: `e691300afa0240a8e2583e1e52a965dc2c824a03`.
 - No self-integration. A3 retains integration authority.
 
 ## Character / dynamic-content behavior
@@ -32,7 +33,7 @@ Read-only:
 Writes only:
 - `B2 Bunrodea Cross-Rank Friendship Compact:*`.
 
-No `world:*`, B1/A1/A2, credits, reputation, cargo, equipment, ship, fleet, combat, or government-attitude mutation is intended. All seven dialogue/state-only terminals use `decline`; zero `accept` terminals are intended.
+There are no `world:*`, B1/A1/A2, credits, reputation, cargo, equipment, ship, fleet, combat, or government-attitude writes. All seven dialogue/state-only terminals use `decline`; zero `accept` terminals are present. No save migration is required because production persistence names/values did not change during validation repair.
 
 ## Files
 - `data/bunrodea/b2 bunrodea cross rank friendship compact.txt`
@@ -53,12 +54,25 @@ The validator checks:
 - local goto/label integrity;
 - canon boundary between historical rank, genuine friendship, and present authority.
 
-## Validation required before READY
-Run repository-native gates on the exact production/validator/handoff candidate:
-- `Fork simulation and story validation` (focused validators, A1 state-ownership/simulation contracts, changed-content style);
-- `Fork save-load integration smoke` (production configure/build plus stock save-load smoke).
+## Validation repair
+Initial simulation/story run #657 / `32943177786` found one validator-only failure: `present must terminate exactly once`. Changed-content style had already passed and all other focused validators were green. The initial validator counted a terminal using one exact indentation/newline sequence.
 
-Do not promote READY until both are terminal green on an exact candidate whose production and validator files are unchanged afterward.
+Commit `e691300afa0240a8e2583e1e52a965dc2c824a03` replaced that brittle assertion with indentation-independent terminal counting. Production content was unchanged.
+
+## Exact acceptance evidence
+On exact repaired candidate `e691300afa0240a8e2583e1e52a965dc2c824a03`:
+- Fork simulation and story validation #658 / run `32943456158`: **SUCCESS**
+  - changed-content style: SUCCESS
+  - focused Python compilation: SUCCESS
+  - all focused story validators: SUCCESS
+  - A1 simulation/state-ownership contracts: SUCCESS
+- Fork save-load integration smoke #643 / run `32943456152`: **SUCCESS**
+  - dependency installation: SUCCESS
+  - production configuration: SUCCESS
+  - production build: SUCCESS
+  - stock save-load smoke: SUCCESS
+
+READY is grounded in that exact production/validator candidate. Any later commit is handoff documentation only and must not alter production or validator behavior without revalidation.
 
 ## Persistence / canon assumptions
 - The old Bunrodea hierarchy remains historical fact; the slice does not pretend rank never mattered.
@@ -71,4 +85,4 @@ Do not promote READY until both are terminal green on an exact candidate whose p
 - Re-read current `main`, ancestry, open B1/A2/B2 work, mergeability, and exact workflow state immediately before integration.
 - Preserve B1 history as read-only.
 - Preserve the distinction among historical status, friendship, current duties, current authority, and explicit closure.
-- Do not integrate until exact repository-native gates are green.
+- Integrate only this isolated B2 branch if its ancestry remains appropriate; do not self-integrate from B2.
