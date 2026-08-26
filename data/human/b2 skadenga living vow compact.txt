@@ -1,0 +1,158 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Skadenga Living Vow Compact.
+#
+# Character/faith slice following the canonical Skadenga migration arrangements.
+# A remembered personal vow can remain spiritually meaningful without silently
+# becoming permanent labor assignment, universal doctrine, or inherited authority.
+
+
+event "B2 Skadenga Living Vow Compact: Review Ready"
+	"B2 Skadenga Living Vow Compact: review ready" = 1
+
+
+mission "B2 Skadenga Living Vow Compact: Offer"
+	minor
+	name `The Vow After the Journey`
+	description `Hjlod and a younger Skadenga named Runa disagree over whether an old migration-era vow should still determine Runa's present duties.`
+	source
+		attributes deep
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "Home for Skadenga 4: done"
+		not "B2 Skadenga Living Vow Compact: introduced"
+		not "B2 Skadenga Living Vow Compact: declined"
+	on offer
+		conversation
+			`Hjlod catches your attention beside a crowded port concourse. With her is a younger Skadenga woman carrying a weathered notebook and a mechanic's tool roll. "<first>, this is Runa. Ve disagree, and because you helped carry our people through change, she asked that you hear us both."`
+			`Runa opens the notebook. "Before the migration arrangements, I made a vow during a family rite: that I would guide the Skadenga wherever Skade sent us. I meant it. I still mean it. But an old copy of the words is now being used as if I promised to spend my whole life assigned as a pathfinder."`
+			`Hjlod does not deny it. "Vow is sacred because person speaks it. But ve also need guides. Some elders look at old words and see duty already settled. Runa says that changes prayer into roster."`
+			`Runa says, "I want to train as a mechanic and still serve my people. I am not asking anyone to erase what I said. I am asking them not to invent words I did not say."`
+			choice
+				`\tPreserve the vow as attributed spiritual history, but require present consent before it becomes a current work assignment.`
+					goto consent
+				`\tLet Runa renew or reinterpret the vow in her own words now, while preserving the earlier wording and context.`
+					goto renew
+				`\tKeep paired records: sacred memory and interpretation on one side, current duty and availability on the other.`
+					goto paired
+				`\tRefuse to turn one Skadenga vow into a general rule for faith or work.`
+					goto refuse
+			label consent
+			`You tell Hjlod that the old words can remain important without becoming a permanent staffing order. A present assignment should still require Runa's present agreement. Hjlod nods slowly. "Then vow remains hers, not office's." Runa smiles at that phrasing.`
+			action
+				"B2 Skadenga Living Vow Compact: introduced" = 1
+				"B2 Skadenga Living Vow Compact: route present consent" = 1
+				"B2 Skadenga Living Vow Compact: runa trusts player" = 1
+				event "B2 Skadenga Living Vow Compact: Review Ready" 7 11
+				decline
+			label renew
+			`You suggest that a living vow can have a living speaker. Runa may say what the promise means to her now, without pretending that the new wording was always present. Hjlod says, "Old words stay true as old words. New words become true when Runa speaks them." Runa asks that both versions remain attributable.`
+			action
+				"B2 Skadenga Living Vow Compact: introduced" = 1
+				"B2 Skadenga Living Vow Compact: route living renewal" = 1
+				"B2 Skadenga Living Vow Compact: hjlod trusts player" = 1
+				"B2 Skadenga Living Vow Compact: runa trusts player" = 1
+				event "B2 Skadenga Living Vow Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You separate the kinds of truth involved. One record can preserve the rite, the exact words, who remembers them, and later interpretations. Another can say what work Runa currently accepts, what training she is pursuing, and when that decision should be reviewed. Hjlod says, "Then neither record has to pretend it is the other."`
+			action
+				"B2 Skadenga Living Vow Compact: introduced" = 1
+				"B2 Skadenga Living Vow Compact: route paired records" = 1
+				"B2 Skadenga Living Vow Compact: hjlod trusts player" = 1
+				"B2 Skadenga Living Vow Compact: runa trusts player" = 1
+				event "B2 Skadenga Living Vow Compact: Review Ready" 7 11
+				decline
+			label refuse
+			`You tell them that you helped with one migration decision, not with defining Skadenga theology or everybody's obligations. Hjlod accepts the boundary. Runa says that leaving this argument with the people who actually live it is better than turning your answer into precedent.`
+			action
+				"B2 Skadenga Living Vow Compact: declined" = 1
+				decline
+
+
+mission "B2 Skadenga Living Vow Compact: Review"
+	minor
+	name `When the Copy Becomes the Calling`
+	description `Hjlod and Runa return after copied migration records again blur remembered spiritual commitment with current work authority.`
+	source
+		attributes deep
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "Home for Skadenga 4: done"
+		has "B2 Skadenga Living Vow Compact: introduced"
+		has "B2 Skadenga Living Vow Compact: review ready"
+		not "B2 Skadenga Living Vow Compact: reviewed"
+	on offer
+		conversation
+			branch renew
+				has "B2 Skadenga Living Vow Compact: route living renewal"
+			branch paired
+				has "B2 Skadenga Living Vow Compact: route paired records"
+			`Runa shows you a copied resettlement roster. Her old vow is quoted accurately, but the next column now says "pathfinder obligation" as though the quotation itself settled her current work. Hjlod says, "No one forged the old words. They only gave old words a new command."`
+				goto settle
+			label renew
+			`Runa did renew the vow in her own words: she promised to guide her people by repairing the machines and routes that keep scattered communities connected. A copied summary kept only the word "guide" and silently restored the old pathfinder assignment. "They preserved the word and discarded the speaker," she says.`
+				goto settle
+			label paired
+			`The paired records remain individually correct. The sacred record shows the old vow; the current-duty record shows mechanic training and only occasional pathfinding work. A downstream clerk merged the two because both contained Runa's name. Hjlod says, "The mistake was not forgetting history. It was making history issue today's order."`
+			label settle
+			choice
+				`\tAdopt a vow-context record: preserve exact words, speaker, occasion, remembered interpretations, current renewal state, and explicit current-duty authority separately.`
+					goto context
+				`\tAdopt living recommitment: old vows remain historical and sacred, while any continuing practical obligation must be deliberately renewed by the living speaker.`
+					goto living
+			label context
+			`You recommend preserving the old vow with enough context that no copied sentence can silently become a current work order. Hjlod adds that remembered interpretations must remain attributed rather than being written as part of Runa's original words. Runa says, "Then I can inherit meaning without inheriting somebody else's sentence about my life."`
+			action
+				"B2 Skadenga Living Vow Compact: reviewed" = 1
+				"B2 Skadenga Living Vow Compact: settlement vow context" = 1
+				"B2 Skadenga Living Vow Compact: runa trusts player" = 1
+				decline
+			label living
+			`You recommend that practical obligations claimed from an old vow expire unless the living speaker renews them. The historical vow remains visible and meaningful; renewal does not erase it, and refusal to renew a work assignment does not become evidence that Runa rejected her faith. Hjlod says, "A living promise still needs a living voice."`
+			action
+				"B2 Skadenga Living Vow Compact: reviewed" = 1
+				"B2 Skadenga Living Vow Compact: settlement living recommitment" = 1
+				"B2 Skadenga Living Vow Compact: hjlod trusts player" = 1
+				"B2 Skadenga Living Vow Compact: runa trusts player" = 1
+				decline
+
+
+mission "B2 Skadenga Living Vow Compact: Runa Remembers"
+	minor
+	name `Runa Remembers`
+	description `Runa remembers whether her old vow remained a living part of her faith without becoming a permanent assignment written by somebody else.`
+	source
+		attributes deep
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Skadenga Living Vow Compact: aftermath seen"
+		or
+			has "B2 Skadenga Living Vow Compact: settlement vow context"
+			has "B2 Skadenga Living Vow Compact: settlement living recommitment"
+	on offer
+		conversation
+			branch living
+				has "B2 Skadenga Living Vow Compact: settlement living recommitment"
+			`Runa finds you with grease on one sleeve and the old notebook tucked carefully into her tool bag. "I spent three days repairing a survey crawler for a Skadenga guide team. Nobody called that a contradiction anymore. The vow is still in the book. My current work is in another record. Both are mine." Hjlod, nearby, looks satisfied.`
+				goto finish
+			label living
+			`Runa says, "I renewed the vow again before leaving on this repair rotation. Not because a roster told me to. I said what I meant this time, for this season of my life. Hjlod still keeps the old words too. I like that neither version has to defeat the other."`
+			label finish
+			action
+				"B2 Skadenga Living Vow Compact: aftermath seen" = 1
+				decline
