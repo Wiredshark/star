@@ -1,14 +1,16 @@
 # B2 Deep Unequal Means Friendship Compact handoff
 
-Verdict: PARTIAL pending terminal exact-head repository-native validation.
+Verdict: READY for A3 review/integration.
 
 - Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-deep-unequal-means-friendship-20260825`
 - Production: `data/human/b2 deep unequal means friendship compact.txt`
 - Focused validator: `tools/story/validate_b2_deep_unequal_means_friendship_compact.py`
 - Production commit: `23eb81999a0aa78356260b1e880b5e3a9bdc522f`
-- Validator commit: `d9865888ac81e3f23fb07e6b7ef4b138352ec568`
-- Initial production/validator/handoff candidate: `7c0dcc806c98591519e1ae96c870b8ba94fb6f23`
+- Initial validator commit: `d9865888ac81e3f23fb07e6b7ef4b138352ec568`
+- Initial handoff candidate: `7c0dcc806c98591519e1ae96c870b8ba94fb6f23`
+- Validation-state handoff update: `e707d7edc7541a47f0c95056d1420d5f8a78d06c`
+- Validator credit-read repair / exact fully validated candidate: `b94acc09b895a7bc0b7a9f1f2ddda69b95cfd5ba`
 
 ## Character / dynamic content
 
@@ -24,16 +26,26 @@ Three substantive routes schedule a Review after 7-11 days. Review reacts to pla
 - All seven dialogue/state-only terminal paths use `decline`; zero `accept`.
 - Refusal cannot introduce the arc or schedule Review.
 
-## Validation state
+## Validator repair
 
-On exact initial candidate `7c0dcc806c98591519e1ae96c870b8ba94fb6f23`:
+Initial exact candidate `7c0dcc806c98591519e1ae96c870b8ba94fb6f23` passed changed-content style but failed the focused story-validator step because the new validator treated intentional read-only `credits >= ...` conditions as credit mutations. Production content was not changed. Commit `b94acc09b895a7bc0b7a9f1f2ddda69b95cfd5ba` narrows the mutation check to actual `payment` directives or direct `credits = ...` assignments while continuing to require both dynamic wealth gates.
 
-- `Fork simulation and story validation` run `32915132472` / #638: **IN PROGRESS**.
-  - changed-content style job: running.
-  - focused simulation/story contracts job: running.
-- `Fork save-load integration smoke` run `32915132450` / #623: **IN PROGRESS**.
+## Exact validation evidence
 
-No nonterminal job is counted as acceptance evidence. READY requires terminal success for focused validators, A1 contracts, changed-content style, production configure/build, and stock save-load smoke on one exact candidate.
+On exact production/validator candidate `b94acc09b895a7bc0b7a9f1f2ddda69b95cfd5ba`:
+
+- `Fork simulation and story validation` run `32915213595` / #640: **SUCCESS**.
+  - changed-content style: SUCCESS.
+  - focused Python compilation: SUCCESS.
+  - all focused story validators: SUCCESS.
+  - A1 simulation/state-ownership contracts: SUCCESS.
+- `Fork save-load integration smoke` run `32915213714` / #625: **SUCCESS**.
+  - dependency installation: SUCCESS.
+  - production configure: SUCCESS.
+  - production build: SUCCESS.
+  - stock save-load smoke: SUCCESS.
+
+Only the terminal-green repaired candidate is acceptance evidence. The earlier failed validator run is retained as diagnostic history, not as a pass.
 
 ## Canon boundary
 
