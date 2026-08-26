@@ -1,0 +1,152 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Deep Family Trade Choice Compact.
+# A parent and adult child ask whether years of family training create an obligation
+# to inherit the family trade. This is one household conflict, not Deep labor law.
+
+
+event "B2 Deep Family Trade Choice Compact: Review Ready"
+	"B2 Deep Family Trade Choice Compact: review ready" = 1
+
+
+mission "B2 Deep Family Trade Choice Compact: Offer"
+	minor
+	name `The Shop Was Never a Contract`
+	description `A Deep shipyard family asks whether years of training create a duty to inherit the family workshop.`
+	source
+		government "Deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "A2 Career Review: later reader seen"
+		not "B2 Deep Family Trade Choice Compact: introduced"
+		not "B2 Deep Family Trade Choice Compact: declined"
+	on offer
+		conversation
+			`Sela Rook is a shipyard electrician with thirty years in the same family workshop. Her adult son Tomas Rook learned beside her from childhood, can diagnose half the yard's old power systems by sound, and has just accepted a trainee berth with an independent survey crew.`
+			`Neither of them is angry about the work itself. The argument is about what the training meant. Sela says the family invested years teaching him because they expected him to carry the shop forward. Tomas says he was a child when most of that expectation formed, and skill is not the same thing as consent.`
+			`They heard that you once let a Pilot Guild assessor ask what kind of captain you had become. Tomas gives you a tired smile. "So maybe you understand the difference between a history and a choice."`
+			choice
+				`\tTreat the training as a family gift unless an actual repayment or succession promise was explicitly made.`
+					goto gift
+				`\tSeparate real shared obligations from career choice: debts, jointly owned tools, or unfinished contracts can be closed without assigning Tomas a profession.`
+					goto obligations
+				`\tKeep two records: the family training history, and Tomas's current career decision and any current agreements.`
+					goto paired
+				`\tI am not going to decide what one family owes itself.`
+					goto decline
+			label gift
+			`You tell Sela that teaching a child can matter deeply without becoming a debt instrument. If nobody made a clear adult agreement that Tomas would inherit the shop, the years of training remain family history rather than proof of a present obligation.`
+			action
+				"B2 Deep Family Trade Choice Compact: introduced" = 1
+				"B2 Deep Family Trade Choice Compact: route training gift" = 1
+				"B2 Deep Family Trade Choice Compact: Tomas trusts player" = 1
+				event "B2 Deep Family Trade Choice Compact: Review Ready" 7 11
+				decline
+			label obligations
+			`You separate the parts that can be named. If Tomas owns part of the workshop, borrowed money, or accepted a contract that still needs closure, those are real obligations. None of them automatically proves that his future work belongs to the family business.`
+			action
+				"B2 Deep Family Trade Choice Compact: introduced" = 1
+				"B2 Deep Family Trade Choice Compact: route explicit obligations" = 1
+				"B2 Deep Family Trade Choice Compact: Sela trusts player" = 1
+				event "B2 Deep Family Trade Choice Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You suggest that the family should preserve both truths. Tomas learned the trade here, from Sela and the rest of the workshop. He is also an adult making a current career choice. A later record should not collapse the first fact into authority over the second.`
+			action
+				"B2 Deep Family Trade Choice Compact: introduced" = 1
+				"B2 Deep Family Trade Choice Compact: route paired history choice" = 1
+				"B2 Deep Family Trade Choice Compact: Tomas trusts player" = 1
+				"B2 Deep Family Trade Choice Compact: Sela trusts player" = 1
+				event "B2 Deep Family Trade Choice Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that family expectations are too personal for an outsider to turn into a rule. Sela looks disappointed but not offended. Tomas nods once.`
+			action
+				"B2 Deep Family Trade Choice Compact: declined" = 1
+				decline
+
+
+mission "B2 Deep Family Trade Choice Compact: Review"
+	minor
+	name `The Recommendation Became a Succession Plan`
+	description `A truthful recommendation starts being copied as though Tomas had agreed to inherit the family workshop.`
+	source
+		government "Deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		has "B2 Deep Family Trade Choice Compact: introduced"
+		has "B2 Deep Family Trade Choice Compact: review ready"
+		not "B2 Deep Family Trade Choice Compact: reviewed"
+	on offer
+		conversation
+			branch obligations
+				has "B2 Deep Family Trade Choice Compact: route explicit obligations"
+			branch paired
+				has "B2 Deep Family Trade Choice Compact: route paired history choice"
+			`Sela finds you with a copy of a survey contractor's personnel note. She wrote Tomas a strong recommendation describing the systems he learned in the family shop. The copied version now calls him "successor to the Rook workshop" and treats his new berth as temporary experience before he returns home.`
+				goto settle
+			label obligations
+			`Sela says the concrete obligations are almost settled: Tomas transferred his share of two jointly purchased diagnostic rigs and finished the one customer job he had personally accepted. A contractor still copied Sela's recommendation into a profile that calls him the workshop's future owner.`
+				goto settle
+			label paired
+			`Their own notes still keep training history and current career choice separate. The problem appeared downstream, where a contractor merged both into a single biography and called Tomas the family workshop's designated successor.`
+			label settle
+			choice
+				`\tUse a portable training-and-choice record: source of training, current role, actual ownership, explicit obligations, and succession status travel together.`
+					goto packet
+				`\tUse fresh succession consent: family history stays permanent, but present succession authority exists only through a current explicit agreement.`
+					goto renewal
+			label packet
+			`You recommend that any future recommendation carry enough context to prevent training history from becoming a succession claim. Sela can truthfully say what she taught Tomas without speaking for his current career choice.`
+			action
+				"B2 Deep Family Trade Choice Compact: reviewed" = 1
+				"B2 Deep Family Trade Choice Compact: settlement portable training choice" = 1
+				"B2 Deep Family Trade Choice Compact: Tomas trusts player" = 1
+				decline
+			label renewal
+			`You draw the boundary around current consent. The family can preserve every year Tomas spent in the workshop. A claim that he will inherit, manage, or return to it must come from a fresh agreement made while that decision is actually his to make.`
+			action
+				"B2 Deep Family Trade Choice Compact: reviewed" = 1
+				"B2 Deep Family Trade Choice Compact: settlement fresh succession consent" = 1
+				"B2 Deep Family Trade Choice Compact: Sela trusts player" = 1
+				decline
+
+
+mission "B2 Deep Family Trade Choice Compact: Tomas Remembers"
+	minor
+	name `Tomas Remembers`
+	description `Tomas remembers whether the family trade became a history he could carry or a future someone else had already assigned him.`
+	source
+		government "Deep"
+		not attributes "station"
+	"offer precedence" 8
+	to offer
+		not "B2 Deep Family Trade Choice Compact: aftermath seen"
+		or
+			has "B2 Deep Family Trade Choice Compact: settlement portable training choice"
+			has "B2 Deep Family Trade Choice Compact: settlement fresh succession consent"
+	on offer
+		conversation
+			branch renewal
+				has "B2 Deep Family Trade Choice Compact: settlement fresh succession consent"
+			`Tomas tells you he has finished his first survey season. He still calls Sela whenever a power system behaves strangely. "I did not leave the family by leaving the shop," he says. "I just stopped pretending that knowing how to do her work meant I had already promised to spend my life doing it."`
+				goto finish
+			label renewal
+			`Tomas says Sela recently asked whether he might want to buy into the workshop years from now. "She asked," he says, smiling. "That was the difference. I could actually answer instead of discovering that somebody else had already written yes."`
+			label finish
+			action
+				"B2 Deep Family Trade Choice Compact: aftermath seen" = 1
+				decline
