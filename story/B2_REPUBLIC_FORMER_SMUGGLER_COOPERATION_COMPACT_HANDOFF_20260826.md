@@ -16,8 +16,9 @@ CROSS_SYSTEM_CONNECTION: A1 Republic customs scrutiny + Republic border pressure
 - Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/b2-republic-former-smuggler-cooperation-20260826`
 - Production commit: `5f704e6f6013153e3aff6136a7404544f7c047cb`
-- Focused validator commit: `a51cb7510aa5b7416842e35c480d43d7a6488aaa`
-- Verdict at initial handoff: PARTIAL pending repository-native simulation/story/style and production build/save-load workflows.
+- Initial focused validator commit: `a51cb7510aa5b7416842e35c480d43d7a6488aaa`
+- Validator wording hardening / exact fully validated production+validator candidate: `34358a1ee9c4f0836164169619d34b1832b3a4de`
+- Verdict: **READY for A3 review/integration**.
 - No integration performed; A3 retains integration authority.
 
 ## Character/content behavior
@@ -80,7 +81,26 @@ Focused validator proves:
 - all local gotos resolve;
 - continuity distinction among historical offense, closed cooperation, current evidence, current request/consent, active suspicion, active source status, and explicit closure.
 
-Repository-native workflow evidence must be appended/promoted to READY only after terminal green runs on the exact production/validator candidate.
+## Exact validation evidence
+
+The first simulation/story run on initial candidate `a5217545a925ffa197d172b77447c6b8fecb5ff1` failed only in the new focused validator. Changed-content style and repository-wide contracts were already green. The validator incorrectly banned the phrase `general Republic practice` even where production discussed avoiding or localizing such a practice. Production behavior was not changed.
+
+Validator wording was hardened in `34358a1ee9c4f0836164169619d34b1832b3a4de` so the local-scope check rejects an actual positive `universal Republic law` claim instead of rejecting negative/local discussion.
+
+On exact candidate `34358a1ee9c4f0836164169619d34b1832b3a4de`:
+
+- `Fork simulation and story validation` #653 / run `32934639133`: **SUCCESS**
+  - focused Python compilation: SUCCESS
+  - all focused story validators: SUCCESS
+  - A1 simulation/state-ownership contracts: SUCCESS
+  - changed-content style: SUCCESS
+- `Fork save-load integration smoke` #638 / run `32934639155`: **SUCCESS**
+  - dependency installation: SUCCESS
+  - production configuration: SUCCESS
+  - production build: SUCCESS
+  - stock save-load smoke: SUCCESS
+
+These are the acceptance runs for production/validator behavior.
 
 ## Persistence/canon assumptions
 
@@ -89,7 +109,7 @@ Repository-native workflow evidence must be appended/promoted to READY only afte
 - Davin's former smuggling/cooperation is local character history, not a new universal Republic amnesty/informant system.
 - Historical wrongdoing is not erased; historical cooperation does not become permanent duty.
 - Current investigation authority requires current case-specific basis rather than copied labels alone.
-- No save migration is expected because this slice only adds new namespaced conditions.
+- No save migration is required because this slice only adds new namespaced conditions and the post-production repair changed validator wording only.
 
 ## A3/B3 integration notes
 
