@@ -40,6 +40,11 @@ def label_block(block: str, label: str, next_labels: tuple[str, ...]) -> str:
     return block[start:end]
 
 
+def terminal_count(block: str, terminal: str) -> int:
+    """Count a dialogue terminal independent of exact indentation or block slicing."""
+    return len(re.findall(rf"(?m)^\s*{re.escape(terminal)}\s*$", block))
+
+
 def main() -> None:
     path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT
     text = path.read_text(encoding="utf-8")
@@ -57,7 +62,6 @@ def main() -> None:
     review = mission_block(text, "B2 Bunrodea Cross-Rank Friendship Compact: Review")
     aftermath = mission_block(text, "B2 Bunrodea Cross-Rank Friendship Compact: Rii Remembers")
 
-    # Offer lifecycle: exactly three substantive routes arm Review; refusal cannot.
     routes = {
         "present": "route present consent",
         "bounded": "route bounded history",
@@ -74,7 +78,7 @@ def main() -> None:
             require(f'"{PREFIX} {other}" = 1' not in block,
                     f"{label} must not write {other}")
         require(block.count(EVENT) == 1, f"{label} must schedule Review exactly once")
-        require(block.count("\n\t\t\tdecline\n") == 1, f"{label} must terminate exactly once")
+        require(terminal_count(block, "decline") == 1, f"{label} must terminate exactly once")
 
     refusal = label_block(offer, "decline", ())
     require(f'"{PREFIX} declined" = 1' in refusal, "refusal must persist declined state")
@@ -82,8 +86,8 @@ def main() -> None:
     require(EVENT not in refusal, "refusal must not schedule Review")
     for state in routes.values():
         require(f'"{PREFIX} {state}" = 1' not in refusal, "refusal must not write a substantive route")
+    require(terminal_count(refusal, "decline") == 1, "refusal must terminate exactly once")
 
-    # Review gating and route wiring.
     for gate in ("introduced", "review ready"):
         require(f'has "{PREFIX} {gate}"' in review, f"Review missing {gate} gate")
     require(f'not "{PREFIX} reviewed"' in review, "Review must be one-shot")
@@ -105,9 +109,8 @@ def main() -> None:
     for block, label in ((packet, "packet"), (renewal, "renewal")):
         require(block.count(f'"{PREFIX} reviewed" = 1') == 1,
                 f"{label} must close Review exactly once")
-        require(block.count("\n\t\t\tdecline\n") == 1, f"{label} must terminate exactly once")
+        require(terminal_count(block, "decline") == 1, f"{label} must terminate exactly once")
 
-    # Aftermath must accept either settlement, be one-shot, and persist exactly once.
     require(f'has "{PREFIX} reviewed"' in aftermath, "aftermath missing reviewed gate")
     for settlement in ("settlement portable packet", "settlement fresh authority"):
         require(f'has "{PREFIX} {settlement}"' in aftermath,
@@ -115,31 +118,27 @@ def main() -> None:
     require(f'not "{PREFIX} aftermath seen"' in aftermath, "aftermath must be one-shot")
     require(aftermath.count(f'"{PREFIX} aftermath seen" = 1') == 1,
             "aftermath must persist exactly once")
-    require(aftermath.count("\n\t\t\tdecline\n") == 1, "aftermath must terminate exactly once")
+    require(terminal_count(aftermath, "decline") == 1, "aftermath must terminate exactly once")
 
-    # Dialogue-only lifecycle and mutation surface.
-    require(re.search(r"(?m)^\s*accept\s*$", text) is None, "state-only slice must contain zero accept terminals")
-    require(len(re.findall(r"(?m)^\s*decline\s*$", text)) == 7,
+    require(terminal_count(text, "accept") == 0, "state-only slice must contain zero accept terminals")
+    require(terminal_count(text, "decline") == 7,
             "state-only slice must contain exactly seven decline terminals")
     objective_directive = re.compile(r"(?m)^\t+(destination|stopover|waypoint|npc|cargo|passengers?|deadline|timer)\b")
     require(objective_directive.search(text) is None, "state-only slice must not create gameplay objectives")
     require(re.search(r"(?m)^\s*(payment|reputation|combat rating)\b", text) is None,
             "slice must not mutate material/reputation/combat state")
 
-    # Every assignment must be B2-owned.
     assignments = re.findall(r'^\s*"([^"]+)"\s*=\s*[-0-9]+\s*$', text, flags=re.M)
     require(assignments, "expected persistent B2 assignments")
     foreign = [name for name in assignments if not name.startswith(PREFIX)]
     require(not foreign, f"non-B2 assignment(s): {foreign}")
 
-    # Local goto/label integrity.
     for block, name in ((offer, "Offer"), (review, "Review"), (aftermath, "Aftermath")):
         labels = set(re.findall(r"(?m)^\s*label\s+([A-Za-z0-9_-]+)\s*$", block))
         gotos = re.findall(r"(?m)^\s*goto\s+([A-Za-z0-9_-]+)\s*$", block)
         missing = sorted(set(gotos) - labels)
         require(not missing, f"{name} goto target(s) missing labels: {missing}")
 
-    # Canon boundary: history is preserved, but present authority must be explicit.
     lower = text.lower()
     for phrase in ("historically real", "present consent", "current authority", "old hierarchy"):
         require(phrase in lower, f"missing continuity concept: {phrase}")
