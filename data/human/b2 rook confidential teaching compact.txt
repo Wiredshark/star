@@ -1,0 +1,163 @@
+# Copyright (c) 2026 by Wiredshark
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Rook Confidential Teaching Compact.
+#
+# Sequel to A2 Rook Mediation. The resolved convoy-loss case remains historical
+# evidence, but teaching from it raises a new question: how much confidential
+# settlement context may be carried into training material. B2 reads A2 state and
+# writes only B2-prefixed conditions.
+
+
+event "B2 Rook Confidential Teaching Compact: Review Ready"
+	"B2 Rook Confidential Teaching Compact: review ready" = 1
+
+
+mission "B2 Rook Confidential Teaching Compact: Offer"
+	minor
+	name `The Lesson Behind the Closed Door`
+	description `Imani Rook and junior mediator Nora Bell disagree over how a resolved case can teach future mediators without exposing confidential settlement material.`
+	source "New Boston"
+	"offer precedence" 8
+	to offer
+		has "A2 Rook Mediation: later reader seen"
+		not "B2 Rook Confidential Teaching Compact: introduced"
+		not "B2 Rook Confidential Teaching Compact: declined"
+	on offer
+		conversation
+			branch command
+				has "A2 Rook Mediation: outcome command"
+			branch logistics
+				has "A2 Rook Mediation: outcome logistics"
+			`Imani Rook is standing beside a younger mediator with two versions of the old convoy-loss file open on a slate. "Captain <last>, this is Nora Bell. The case is closed, but it has become useful training material. That usefulness is creating a new problem."`
+			`Bell points to a redacted page. "The public finding is easy to teach. The hard part is that some of the reasoning only makes sense if a trainee knows what the parties said privately during settlement. If I remove every confidential detail, the case looks simpler than it was. If I keep too much, a training file becomes a second disclosure."`
+				goto choose
+			label command
+			`Rook shows Bell the incident map from the convoy case. "Your command reconstruction helped us identify which sequence to test, but several statements that explained the final compromise were given only for settlement. Nora wants to teach the difference without teaching the private statements themselves."`
+			`Bell says, "I can preserve the reasoning path. I do not want a trainee to believe that 'useful' means 'free to repeat.'"`
+				goto choose
+			label logistics
+			`Rook has the two conflicting convoy manifests open beside a new training worksheet. "The broken handoff became a useful example. The settlement also included private explanations for why each side signed what it did. Nora is asking how much of that context can survive into training."`
+			`Bell says, "A complete case record and a useful teaching record are not necessarily the same document."`
+			label choose
+			choice
+				`\tTeach the reasoning with an anonymized abstraction; confidential settlement facts stay in the closed case file.`
+					goto abstract
+				`\tAllow identifiable excerpts only when the people who supplied them give explicit, purpose-bound consent.`
+					goto consent
+				`\tKeep paired records: a sealed case file and a separately authored teaching note that cites only what it may disclose.`
+					goto paired
+				`\tRefuse to let the old case become training material at all.`
+					goto refuse
+			label abstract
+			`You tell Bell to preserve the questions, sequence, and evidentiary mistakes without importing confidential facts. Rook nods. "Teach why the mediator asked the next question, not what somebody whispered after the door closed." Bell begins rewriting the case as a set of decision points rather than a miniature biography of the parties.`
+			action
+				"B2 Rook Confidential Teaching Compact: introduced" = 1
+				"B2 Rook Confidential Teaching Compact: route abstract" = 1
+				"B2 Rook Confidential Teaching Compact: bell trusts player" = 1
+				event "B2 Rook Confidential Teaching Compact: Review Ready" 7 11
+				decline
+			label consent
+			`You recommend a narrow rule: if a private statement is genuinely necessary to the lesson, the person who supplied it must approve the specific excerpt, audience, and purpose. Bell says, "Consent to settle is not consent to become curriculum." Rook adds the phrase to the top of the worksheet.`
+			action
+				"B2 Rook Confidential Teaching Compact: introduced" = 1
+				"B2 Rook Confidential Teaching Compact: route consent" = 1
+				"B2 Rook Confidential Teaching Compact: rook trusts player" = 1
+				"B2 Rook Confidential Teaching Compact: bell trusts player" = 1
+				event "B2 Rook Confidential Teaching Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You suggest two records with two purposes. The sealed case remains complete. The teaching note is written separately, cites only material that may travel, and records where an omitted confidential fact changed the reasoning without exposing the fact itself. Rook says, "A gap can be documented without being filled for every reader." Bell calls that the first workable answer she has heard.`
+			action
+				"B2 Rook Confidential Teaching Compact: introduced" = 1
+				"B2 Rook Confidential Teaching Compact: route paired" = 1
+				"B2 Rook Confidential Teaching Compact: rook trusts player" = 1
+				"B2 Rook Confidential Teaching Compact: bell trusts player" = 1
+				event "B2 Rook Confidential Teaching Compact: Review Ready" 7 11
+				decline
+			label refuse
+			`You tell Rook that the safest use of a closed case may be to leave it closed. Bell shuts the training copy. Rook says, "Then we teach the principle from new work instead of mining old confidence for convenient examples."`
+			action
+				"B2 Rook Confidential Teaching Compact: declined" = 1
+				decline
+
+
+mission "B2 Rook Confidential Teaching Compact: Review"
+	minor
+	name `Redacted Is Not Anonymous`
+	description `Rook and Bell return after testing the teaching rule against a training case that could still identify a participant from context.`
+	source "New Boston"
+	"offer precedence" 8
+	to offer
+		has "B2 Rook Confidential Teaching Compact: introduced"
+		has "B2 Rook Confidential Teaching Compact: review ready"
+		not "B2 Rook Confidential Teaching Compact: reviewed"
+	on offer
+		conversation
+			branch consent
+				has "B2 Rook Confidential Teaching Compact: route consent"
+			branch paired
+				has "B2 Rook Confidential Teaching Compact: route paired"
+			`Bell has removed every name from the teaching note, but Rook circles three remaining details: a rare engine failure, an unusual departure window, and the exact sequence of two port calls. "Nobody wrote the captain's name," Bell says, "and every trainee still knew who the case was about." The abstraction protected names, not identity.`
+				goto settle
+			label consent
+			`Bell shows you an approved excerpt from one party to the convoy settlement. The speaker consented to its use, but the excerpt was copied into a second training packet whose audience had never been part of that consent. "The words did not change," Rook says. "The permission did."`
+				goto settle
+			label paired
+			`The paired records worked until a trainer copied the teaching note and added enough operational detail from memory to make one settlement participant obvious. Bell says, "The sealed file stayed sealed. The teaching layer still became identifying through accumulation." Rook asks whether the training system needs a stronger check before material travels.`
+			label settle
+			choice
+				`\tAdopt a re-identification review: training material must be checked for whether combined details can identify a person even after names are removed.`
+					goto audit
+				`\tAdopt consent-bound teaching excerpts: every identifiable or attributable detail carries its permitted audience, purpose, and expiry.`
+					goto bounded
+			label audit
+			`You recommend a re-identification review before a case becomes portable training material. The review asks whether dates, routes, equipment, roles, quotations, or combinations of otherwise ordinary facts can point back to a person. Rook says, "Anonymity has to survive context, not just deletion." Bell adds a second check for whether the lesson still works after risky details are generalized.`
+			action
+				"B2 Rook Confidential Teaching Compact: reviewed" = 1
+				"B2 Rook Confidential Teaching Compact: settlement reidentification review" = 1
+				"B2 Rook Confidential Teaching Compact: rook trusts player" = 1
+				"B2 Rook Confidential Teaching Compact: bell trusts player" = 1
+				decline
+			label bounded
+			`You recommend treating teaching permission as data that must travel with the excerpt. Identifiable details carry the approved audience, purpose, expiry, and withdrawal state; a new training use requires a new permission or a more abstract rewrite. Bell says that finally distinguishes "allowed to exist" from "allowed to circulate." Rook says the distinction should have been obvious years ago.`
+			action
+				"B2 Rook Confidential Teaching Compact: reviewed" = 1
+				"B2 Rook Confidential Teaching Compact: settlement consent-bound excerpts" = 1
+				"B2 Rook Confidential Teaching Compact: bell trusts player" = 1
+				decline
+
+
+mission "B2 Rook Confidential Teaching Compact: Bell Remembers"
+	minor
+	name `Bell Remembers`
+	description `Nora Bell remembers the difference between preserving a lesson and reusing a confidence.`
+	source "New Boston"
+	"offer precedence" 8
+	to offer
+		not "B2 Rook Confidential Teaching Compact: aftermath seen"
+		or
+			has "B2 Rook Confidential Teaching Compact: settlement reidentification review"
+			has "B2 Rook Confidential Teaching Compact: settlement consent-bound excerpts"
+	on offer
+		conversation
+			branch bounded
+				has "B2 Rook Confidential Teaching Compact: settlement consent-bound excerpts"
+			`Bell recognizes you outside a mediation room. "The re-identification review catches more than names. One training case lost a date, a ship class, and a quoted phrase because together they pointed to a person. The lesson survived. That was the test." Rook, passing behind her, says that closed-door confidence is finally being treated as a boundary rather than spare educational material.`
+				goto finish
+			label bounded
+			`Bell shows you a teaching excerpt with an audience and expiry printed beside it. "It can be used for this session and this purpose. If somebody wants it for a handbook, they ask again or rewrite it more abstractly." She smiles. "We stopped treating permission as something that happened once in the past."`
+			label finish
+			action
+				"B2 Rook Confidential Teaching Compact: aftermath seen" = 1
+				decline
