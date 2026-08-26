@@ -1,6 +1,6 @@
 # B2 Remnant Successor Judgment Compact handoff — 2026-08-26
 
-Verdict: PARTIAL pending repository-native PR validation.
+Verdict: READY for A3 review/integration.
 
 ## Authority / isolation
 - Repository authority: `Wiredshark/star`.
@@ -8,6 +8,7 @@ Verdict: PARTIAL pending repository-native PR validation.
 - Branch: `agent/b2-remnant-successor-judgment-20260826`.
 - Production commit: `fe26dec3e2d9fe0991fac13f15c3d121ae6aa33f`.
 - Focused validator commit: `c84edbb4cd182ec6c8673d85e5e88f2a488ae857`.
+- Exact fully validated production/validator/handoff candidate: `58b7565e1fe27a2c1d0a9196e160430ad237c75a`.
 - No self-integration. A3 retains integration authority.
 
 ## Character / dynamic-content slice
@@ -49,23 +50,30 @@ No writes to:
 All seven state-only dialogue terminals use `decline`; there are zero `accept` terminals. Refusal neither introduces the arc nor schedules Review.
 
 ## Persistence / canon assumptions
-No save migration is intended: the slice is additive and introduces only new namespaced conditions.
+No save migration is required: the slice is additive and introduces only new namespaced conditions.
 
 Durable continuity invariant: historical mentor example, conditions that made it valid, teaching method, present evidence, current alternatives, actual mentor advice, current approval, successor judgment, and present responsibility are separate facts. A successor may inherit knowledge without inheriting a mentor's signature or surrendering current responsibility.
 
 This is a local Remnant mentorship practice, not universal Remnant command doctrine.
 
-## Validation planned / required
-Focused validator:
+## Exact validation evidence
+Exact candidate: `58b7565e1fe27a2c1d0a9196e160430ad237c75a`.
+
+- Fork simulation and story validation #660 / run `32948149809`: **SUCCESS**.
+  - changed-content style: SUCCESS;
+  - focused Python validation compilation: SUCCESS;
+  - all focused story validators, including `validate_b2_remnant_successor_judgment_compact.py`: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS.
+- Fork save-load integration smoke #645 / run `32948149757`: **SUCCESS**.
+  - dependencies: SUCCESS;
+  - production configuration: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
+
+Focused validator contract:
 `python3 tools/story/validate_b2_remnant_successor_judgment_compact.py "data/remnant/b2 remnant successor judgment compact.txt"`
 
-Repository-native acceptance before READY:
-- focused validator Python compilation and execution;
-- repository story validators/A1 state-ownership contracts;
-- changed-content style;
-- production configure/build;
-- stock save-load integration smoke;
-- final compare/status and exact-head workflow evidence.
+Candidate comparison against authoritative main at validation time: 3 commits ahead / 0 behind, exactly three added files, 327 additions / 0 deletions.
 
 ## A3/B3 integration notes
 Preserve the prior Remnant Continuity Compact as read-only. Do not rewrite the old transfer settlements or Taal's prior outcome. The new arc depends only on the integrated aftermath and adds independent successor-judgment persistence. Before integration, re-read current main, open B1/A2/B2 work, ancestry, mergeability, and exact workflow state.
