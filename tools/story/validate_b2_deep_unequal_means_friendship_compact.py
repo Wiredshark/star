@@ -69,10 +69,11 @@ for gate in (
 if review.count('"B2 Deep Unequal Means Friendship Compact: reviewed" = 1') != 2:
     fail("both Review settlements must close Review exactly once")
 
-# Player wealth is read-only RPG context, never written.
+# Player wealth is read-only RPG context, never written. Read conditions like
+# `credits >= ...` are intentional and must not be mistaken for mutations.
 if 'credits >= 50000' not in text or 'credits >= 1000000' not in text:
     fail("missing dynamic player-wealth gates")
-if re.search(r'^\s*(payment|credits)\s', text, re.M):
+if re.search(r'^\s*payment\b', text, re.M) or re.search(r'^\s*credits\s*=\s*', text, re.M):
     fail("slice must not mutate credits/payment")
 
 # All state-only terminals close cleanly.
