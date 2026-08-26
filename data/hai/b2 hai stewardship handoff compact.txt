@@ -1,0 +1,155 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# B2 Hai Stewardship Handoff Compact.
+# A retiring Hai infrastructure steward and a human successor ask when inherited
+# maintenance knowledge remains evidence and when it becomes current authority.
+# This is one local mentorship and handoff conflict, not universal Hai law.
+
+
+event "B2 Hai Stewardship Handoff Compact: Review Ready"
+	"B2 Hai Stewardship Handoff Compact: review ready" = 1
+
+
+mission "B2 Hai Stewardship Handoff Compact: Offer"
+	minor
+	name `The Notes Outlived the Shift`
+	description `A retiring Hai steward and a human maintenance engineer disagree over whether old handoff notes should remain standing instructions.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "First Contact: Hai: offered"
+		has "Hai Stewardship Archive: offered"
+		not "B2 Hai Stewardship Handoff Compact: introduced"
+		not "B2 Hai Stewardship Handoff Compact: declined"
+	on offer
+		conversation
+			`Tavi Heren has maintained the same district water pumps, transit drives, and public machinery for longer than some human settlements have existed. Today the Hai steward is retiring from the route. Beside Tavi stands Jalen Orr, a human maintenance engineer raised in Hai space, holding a copied bundle of handoff notes that several departments already treat as the district's maintenance rulebook.`
+			`Jalen points to one replacement interval written decades ago after a specific bearing failure. The bearing design has since changed, the new sensors report differently, and the copied note no longer includes Tavi's original explanation. "I learned half of this work from Tavi," Jalen says. "That does not mean every old judgment should keep speaking with Tavi's authority after Tavi stops being responsible for the machine."`
+			`Tavi does not object to revision. The concern is the opposite: a new steward who throws away inherited context can repeat failures that were already paid for once. The argument is about how mentorship survives a handoff without becoming permanent command.`
+			choice
+				`\tMake current inspection authoritative: Tavi's notes remain evidence and history, but Jalen owns the present maintenance decision.`
+					goto current
+				`\tKeep mentor annotations, but require source, date, rationale, and explicit adoption before an old recommendation becomes a current instruction.`
+					goto adoption
+				`\tKeep two linked records: immutable stewardship history and a separately versioned current maintenance plan owned by the present responsible worker.`
+					goto paired
+				`\tA working relationship this old should not become a rule because a passing captain was asked to referee it.`
+					goto decline
+			label current
+			`You tell them that the value of Tavi's experience does not depend on pretending the old notes are still orders. Keep the failures, observations, and reasons. Let the person currently inspecting the machine decide what those facts mean now.`
+			action
+				"B2 Hai Stewardship Handoff Compact: introduced" = 1
+				"B2 Hai Stewardship Handoff Compact: route current inspection" = 1
+				"B2 Hai Stewardship Handoff Compact: Jalen trusts player" = 1
+				event "B2 Hai Stewardship Handoff Compact: Review Ready" 7 11
+				decline
+			label adoption
+			`You suggest preserving every useful annotation with enough context to know who wrote it, when, and why. An old recommendation becomes a current instruction only when the present steward deliberately adopts it for the present machine.`
+			action
+				"B2 Hai Stewardship Handoff Compact: introduced" = 1
+				"B2 Hai Stewardship Handoff Compact: route explicit adoption" = 1
+				"B2 Hai Stewardship Handoff Compact: Tavi trusts player" = 1
+				event "B2 Hai Stewardship Handoff Compact: Review Ready" 7 11
+				decline
+			label paired
+			`You recommend two linked records. Stewardship history preserves failures, repairs, substitutions, unusual symptoms, and the reasoning behind old practices. The current maintenance plan records the present configuration, inspection evidence, responsible worker, adopted recommendations, deviations, and next review.`
+			action
+				"B2 Hai Stewardship Handoff Compact: introduced" = 1
+				"B2 Hai Stewardship Handoff Compact: route paired records" = 1
+				"B2 Hai Stewardship Handoff Compact: Tavi trusts player" = 1
+				"B2 Hai Stewardship Handoff Compact: Jalen trusts player" = 1
+				event "B2 Hai Stewardship Handoff Compact: Review Ready" 7 11
+				decline
+			label decline
+			`You tell them that retirement, mentorship, and responsibility are too specific to turn into a general rule from one conversation. Tavi accepts that quietly. Jalen folds the copied notes and says the handoff still has to be solved by the people who will actually maintain the district.`
+			action
+				"B2 Hai Stewardship Handoff Compact: declined" = 1
+				decline
+
+
+mission "B2 Hai Stewardship Handoff Compact: Review"
+	minor
+	name `The Old Interval Returned`
+	description `A copied contractor schedule restores one of Tavi's old maintenance intervals as though it were still a standing order.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		has "B2 Hai Stewardship Handoff Compact: introduced"
+		has "B2 Hai Stewardship Handoff Compact: review ready"
+		not "B2 Hai Stewardship Handoff Compact: reviewed"
+	on offer
+		conversation
+			branch adoption
+				has "B2 Hai Stewardship Handoff Compact: route explicit adoption"
+			branch paired
+				has "B2 Hai Stewardship Handoff Compact: route paired records"
+			`Jalen shows you a contractor schedule generated from an old archive export. It has restored Tavi's decades-old bearing replacement interval and marked Jalen's newer inspection plan as a deviation. The source note is historically accurate; the copied schedule has simply lost the reason, the old hardware context, and the fact that Tavi no longer holds current responsibility.`
+				goto settle
+			label adoption
+			`The annotation record worked locally: Tavi's old recommendation is still visible with its date and rationale, and Jalen never adopted it for the new bearing design. A contractor nevertheless copied the recommendation alone and treated its survival in the archive as proof that it remained current.`
+				goto settle
+			label paired
+			`Their own records still separate stewardship history from the current maintenance plan. The failure occurred downstream, where a contractor flattened both into one schedule and gave the older entry priority because it had existed longer.`
+			label settle
+			choice
+				`\tUse a portable stewardship packet: asset history, old rationale, present configuration, current inspection evidence, responsible worker, adopted guidance, deviations, and review date travel together.`
+					goto packet
+				`\tUse versioned custody: old handoff notes remain immutable history, while only a separately versioned current plan can authorize present maintenance work.`
+					goto versions
+			label packet
+			`You recommend making context travel with the maintenance instruction instead of relying on every downstream reader to reconstruct it. Tavi's experience remains visible, but so do the changed hardware, Jalen's inspection evidence, and the identity of the person currently responsible for deciding what work is due.`
+			action
+				"B2 Hai Stewardship Handoff Compact: reviewed" = 1
+				"B2 Hai Stewardship Handoff Compact: settlement portable stewardship packet" = 1
+				"B2 Hai Stewardship Handoff Compact: Jalen trusts player" = 1
+				decline
+			label versions
+			`You recommend preserving the handoff archive exactly as history while giving the current plan its own explicit version and custodian. A later worker can still ask why Tavi once made a recommendation, but the archive cannot silently become a standing order after responsibility has passed to someone else.`
+			action
+				"B2 Hai Stewardship Handoff Compact: reviewed" = 1
+				"B2 Hai Stewardship Handoff Compact: settlement versioned custody" = 1
+				"B2 Hai Stewardship Handoff Compact: Tavi trusts player" = 1
+				"B2 Hai Stewardship Handoff Compact: Jalen trusts player" = 1
+				decline
+
+
+mission "B2 Hai Stewardship Handoff Compact: Jalen Remembers"
+	minor
+	name `Jalen Remembers`
+	description `Jalen remembers whether inherited stewardship became useful context or permanent command.`
+	source
+		government "Hai"
+		not attributes "uninhabited"
+	"offer precedence" 8
+	to offer
+		not "B2 Hai Stewardship Handoff Compact: aftermath seen"
+		or
+			has "B2 Hai Stewardship Handoff Compact: settlement portable stewardship packet"
+			has "B2 Hai Stewardship Handoff Compact: settlement versioned custody"
+	on offer
+		conversation
+			branch versions
+				has "B2 Hai Stewardship Handoff Compact: settlement versioned custody"
+			`Jalen catches you near a public maintenance display and opens the record for one of Tavi's old pumps. The packet shows the old failure, Tavi's reasoning, the later hardware change, Jalen's current inspection, and the next review date. "I still call Tavi when a machine does something strange," he says. "The difference is that the archive remembers who knew what without pretending the retired steward is still signing my work."`
+				goto finish
+			label versions
+			`Jalen shows you the same pump in two linked views. Tavi's handoff notes are untouched, including the recommendations that no longer fit the present hardware. Beside them is the current plan with Jalen's name, current evidence, adopted guidance, and deviations. "Nothing had to be erased for responsibility to move," he says.`
+			label finish
+			action
+				"B2 Hai Stewardship Handoff Compact: aftermath seen" = 1
+				decline
