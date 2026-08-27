@@ -111,6 +111,7 @@ mission "A2 Free Worlds Relief Coordination: After Action"
 				"world: free worlds relief demand" > 0
 			branch refused
 				has "A2 Free Worlds Relief Coordination: refused"
+			`Vale checks the closed review and frowns. "This follow-up has no recorded allocation route. I am closing it without attributing a policy to you."`
 				goto finish
 			label refused
 			`Vale recognizes you near the arrivals board. "No allocation question this time. I remember that you declined." She taps the closed review. "Nobody turned your refusal into an endorsement after you left."`
