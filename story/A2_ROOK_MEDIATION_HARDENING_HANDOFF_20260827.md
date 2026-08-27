@@ -1,6 +1,6 @@
 # A2 Rook Mediation current-main hardening handoff
 
-Verdict: PARTIAL pending exact-head repository-native validation.
+Verdict: PARTIAL pending refreshed exact-head repository-native validation.
 
 Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 
@@ -8,7 +8,9 @@ Branch: `agent/a2-rook-mediation-hardening-20260827-0407`
 
 Production hardening: `c2ee53aec1930675948cccc7bc66b084f50b89ee`
 
-Strengthened validator: `15e1886f647f8feda5ec48767f729f53425d5c9d`
+Initial strengthened validator: `15e1886f647f8feda5ec48767f729f53425d5c9d`
+
+Lifecycle terminal-count repair: `1bae643389bfaf0c5f67b4bd5a628c3041b7fee1`
 
 ## Scope
 
@@ -30,26 +32,17 @@ Loop: First Meeting chooses balanced evidence reconciliation, command-experience
 
 ## Validator hardening
 
-The focused validator now proves:
+The focused validator now proves exact four-mission order/New Boston scope, canonical GPL/trailing newline, all four `offer precedence 9` declarations, seven state-only decline terminals and zero objective-less accepts, the visible-disabled combat response, hidden Deep-history response, exact positive/refusal scheduling, explicit balanced/command/logistics gates in Case Review and Later Reader, convergence, one-shot closure, A2-only persistent writes, read-only built-in/history inputs, no gameplay-objective directives, and local goto integrity.
 
-- exact four-mission order and New Boston scope;
-- canonical GPL header and trailing newline;
-- all four `offer precedence 9` declarations;
-- nine state-only decline terminals and zero objective-less accepts;
-- visible-disabled combat response and hidden Deep-history response;
-- exact three positive First Meeting routes plus refusal;
-- exactly three positive review schedules and one refusal-reader schedule;
-- explicit balanced/command/logistics gates in Case Review and Later Reader;
-- explicit convergence of all route paths;
-- future-contact and refusal-reader one-shot closure;
-- all persistent writes remain `A2 Rook Mediation:*`;
-- built-in/history inputs remain read-only;
-- no gameplay objective/material directives;
-- all local goto targets resolve.
+The first exact-head story workflow on `6dab58ed30cc51049d577a613588bd17f7168277` failed only in the new focused validator because it expected nine `decline` commands. Production actually has seven logical terminal commands: four First Meeting choices, one Case Review convergence terminal, one Later Reader convergence terminal, and one Refusal Reader convergence terminal. Changed-content style passed. Commit `1bae643389bfaf0c5f67b4bd5a628c3041b7fee1` corrects only that validator count and its summary output; production content is unchanged.
 
 ## Persistence / compatibility
 
-No save migration is required. Existing condition names and values are preserved. The hardening only makes previously implicit balanced-route control flow explicit and adds validation/style coverage.
+No save migration is required. Existing condition names and values are preserved. The hardening only makes previously implicit route control flow explicit and adds validation/style coverage.
+
+## Validation boundary
+
+Refreshed repository-native workflows must be terminal green on the exact repaired head before READY promotion. Do not count the failed pre-repair story run as acceptance evidence.
 
 ## A3 boundary
 
