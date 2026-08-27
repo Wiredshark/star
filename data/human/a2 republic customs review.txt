@@ -1,8 +1,22 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # A2 crime/law consumer for the A1 Republic customs-scrutiny signal.
 #
 # A1 remains the sole owner of `world: republic customs scrutiny` and Republic
 # border pressure. This file reads those authorities and writes only
-# `A2 Republic Customs Review:*` persistent narrative state.
+# `A2 Republic Customs Review:*` persistent narrative state. Existing condition
+# names and meanings are preserved for save compatibility.
 
 mission "A2 Republic Customs Review: Secondary Review"
 	minor
@@ -87,6 +101,9 @@ mission "A2 Republic Customs Review: Disposition"
 				has "A2 Republic Customs Review: route written basis"
 			branch context
 				has "A2 Republic Customs Review: route underworld context"
+			branch counsel
+				has "A2 Republic Customs Review: route formal process"
+			label counsel
 			`Ward finds you near the inspection desk with Noll beside him. "The heightened review posture has subsided. Because you asked for formal process, the file contains exactly that: no interview statement, no adverse inference from declining one, and no open administrative allegation waiting for the next port to rediscover."`
 			action
 				"A2 Republic Customs Review: outcome refusal preserved" = 1
@@ -105,6 +122,7 @@ mission "A2 Republic Customs Review: Disposition"
 			`Ward brings up two versions of the route analysis. The older one treated frequent pirate-space stops as one undifferentiated risk marker. The new one distinguishes ordinary contractor routing from genuinely exceptional deviations. "Your experience did not make the review disappear," he says. "It made the model less lazy about what the pattern meant."`
 			action
 				"A2 Republic Customs Review: outcome contextualized routing" = 1
+				goto finish
 			label finish
 			`Noll closes her copy of the file. "The review posture changed on its own timetable. Our job was to make sure the record still says what happened while it was elevated, what was only inferred, and what never happened at all."`
 			action
@@ -133,6 +151,9 @@ mission "A2 Republic Customs Review: Noll Remembers"
 				has "A2 Republic Customs Review: outcome written uncertainty"
 			branch context
 				has "A2 Republic Customs Review: outcome contextualized routing"
+			branch refusal
+				has "A2 Republic Customs Review: outcome refusal preserved"
+			label refusal
 			`Noll recognizes you at another Republic port. "I remember the review where you insisted that declining an informal interview not be rewritten as evidence. I have used that file twice when younger observers asked what a clean refusal record should look like."`
 				goto choice
 			label audit
@@ -143,6 +164,7 @@ mission "A2 Republic Customs Review: Noll Remembers"
 				goto choice
 			label context
 			`Noll shows you a revised route-pattern guide. "Ward kept the distinction you forced into the analysis: ordinary contractor behavior is context, not proof. The guide still permits scrutiny. It just has to say what is actually unusual before calling the pattern suspicious."`
+				goto choice
 			label choice
 			choice
 				`\tTell Noll she may cite the procedure, but not present you as endorsing every later use of it.`
@@ -158,6 +180,7 @@ mission "A2 Republic Customs Review: Noll Remembers"
 			`Noll removes the case identifier from her training notes. "Understood. A useful record does not have to become a public story about the person inside it."`
 			action
 				"A2 Republic Customs Review: precedent kept private" = 1
+				goto finish
 			label finish
 			action
 				"A2 Republic Customs Review: later reader pending" = 0
