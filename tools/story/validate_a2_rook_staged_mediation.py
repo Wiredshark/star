@@ -70,7 +70,7 @@ def main() -> int:
     require("Imani Rook" in TEXT, "missing named character Imani Rook")
     require(TEXT.count('source "New Boston"') == 4, "all four missions must be scoped to New Boston")
     require(TEXT.count('"offer precedence" 9') == 4, "all four state-only missions require offer precedence 9")
-    require(TEXT.count("\n\t\t\t\tdecline\n") == 9, "expected nine state-only decline terminals")
+    require(TEXT.count("\n\t\t\t\tdecline\n") == 7, "expected seven state-only decline terminals")
     require("\n\t\t\t\taccept\n" not in TEXT, "state-only A2 missions must not accept")
     require("on complete" not in TEXT, "ambiguous on-complete lifecycle must not return")
 
@@ -140,7 +140,7 @@ def main() -> int:
 
     check_local_gotos(blocks)
     print("PASS: staged Imani Rook mediation structure validated")
-    print("PASS: missions=4; precedence=9; terminals=9 decline / 0 accept")
+    print("PASS: missions=4; precedence=9; terminals=7 decline / 0 accept")
     print("PASS: first_meeting_routes=3 + refusal")
     print("PASS: review_routes=balanced/command/logistics explicitly gated")
     print("PASS: later_reader_routes=balanced/command/logistics explicitly gated")
