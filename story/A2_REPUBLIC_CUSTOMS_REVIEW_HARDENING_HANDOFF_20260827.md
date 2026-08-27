@@ -1,6 +1,6 @@
 # A2 Republic Customs Review current-main hardening handoff
 
-Verdict: PARTIAL pending exact-head repository-native validation.
+Verdict: READY for A3 review/integration.
 
 ## Authority and isolation
 
@@ -8,6 +8,7 @@ Verdict: PARTIAL pending exact-head repository-native validation.
 - Branch: `agent/a2-republic-customs-review-hardening-20260827-1607`.
 - Production hardening: `6d4eeda7548cf7726121121812e7e6f824962997`.
 - Strengthened focused validator: `8fc6bc85e5d2295f1894beee41b8055a8224f45e`.
+- Exact fully validated production/validator/handoff candidate: `30ab99a4621b098ed2be7db45d3b7e2b194e9303`.
 - No self-integration. A3 retains integration authority.
 
 ## Player-facing loop
@@ -54,10 +55,17 @@ The focused validator now proves:
 - canonical GPL header and trailing newline;
 - local goto targets resolve.
 
-## Validation boundary
+## Exact validation
 
-Repository-native pull-request workflows have not yet been observed on the final branch tip. Do not claim simulation/story/style, production build, or save-load success until exact-head runs are terminal green.
+On exact candidate `30ab99a4621b098ed2be7db45d3b7e2b194e9303`:
+
+- `Fork simulation and story validation` run `33112110566` / #667: **SUCCESS**.
+- Focused simulation/story contracts: **SUCCESS**.
+- Changed-content style: **SUCCESS**.
+- `Fork save-load integration smoke` run `33112110605` / #652: **SUCCESS**.
+- Production configure/build: **SUCCESS**.
+- Stock save/load smoke: **SUCCESS**.
 
 ## A3 instructions
 
-Before integration, re-read current `main`, verify branch ancestry and mergeability, and require both repository-native acceptance workflows to be terminal green on the exact candidate head. Preserve all existing condition names because multiple downstream A2/B2 consumers use this customs-review state.
+Before integration, re-read current `main`, verify branch ancestry and mergeability, and confirm no newer producer changes supersede this hardening. Preserve all existing condition names because multiple downstream A2/B2 consumers use this customs-review state. Integrate only this current-main hardening, not any stale predecessor branch that edits the same producer.
