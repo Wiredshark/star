@@ -1,3 +1,16 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # A2 dynamic-narrative consumer for the A1 Free Worlds relief-demand loop.
 #
 # A1 remains sole owner of `world: free worlds relief demand`.
@@ -96,6 +109,11 @@ mission "A2 Free Worlds Relief Coordination: After Action"
 			branch distribution_residual
 				has "A2 Free Worlds Relief Coordination: priority distribution"
 				"world: free worlds relief demand" > 0
+			branch refused
+				has "A2 Free Worlds Relief Coordination: refused"
+			`Vale checks the closed review and frowns. "This follow-up has no recorded allocation route. I am closing it without attributing a policy to you."`
+				goto finish
+			label refused
 			`Vale recognizes you near the arrivals board. "No allocation question this time. I remember that you declined." She taps the closed review. "Nobody turned your refusal into an endorsement after you left."`
 			action
 				"A2 Free Worlds Relief Coordination: refusal respected" = 1
@@ -129,6 +147,7 @@ mission "A2 Free Worlds Relief Coordination: After Action"
 			`Vale highlights two secondary ports still handling arrivals. "Demand is below surge level, but not zero. The distributed routing kept any one hub from failing outright, and now we have a better picture of where the network is genuinely thin."`
 			action
 				"A2 Free Worlds Relief Coordination: Vale remembers distribution residual" = 1
+				goto finish
 			label finish
 			action
 				"A2 Free Worlds Relief Coordination: followup pending" = 0
