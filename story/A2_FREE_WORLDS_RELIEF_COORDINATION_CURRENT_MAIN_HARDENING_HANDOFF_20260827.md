@@ -1,12 +1,13 @@
 # A2 Free Worlds Relief Coordination — current-main hardening handoff
 
-Verdict: PARTIAL pending exact-head repository-native validation.
+Verdict: READY for A3 review/integration. Keep this branch draft and unmerged; A3 retains integration authority.
 
 ## Authority / isolation
 - Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/a2-free-worlds-relief-coordination-hardening-20260827-1905`
 - Production hardening commits: `e3ab9bd47b75224d0d5cb59823346286c3c83f32`, `09bc2be9a3a5e6b57123c2c363e600a1237069c5`
 - Strengthened validator: `257ba405d194a583675033a4df6a927622c06ee2`
+- Exact fully validated production/validator/handoff candidate: `8a6c626e4c5a18f1b14fd03c5d7966a06dc4b42c`
 - No self-integration. A3 retains integration authority.
 
 ## Scope
@@ -44,8 +45,18 @@ Focused validation now checks:
 - A2 namespace isolation;
 - absence of gameplay/material directives.
 
-## Validation boundary
-Repository-native workflows have not yet been observed on the final handoff head. Do not claim simulation/story/style or production build/save-load success until exact-head runs are terminal green.
+## Exact validation evidence
+On exact candidate `8a6c626e4c5a18f1b14fd03c5d7966a06dc4b42c`:
+- `Fork simulation and story validation` run `33125245083` / #671: SUCCESS.
+  - focused Python compilation: SUCCESS;
+  - all focused story validators: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS;
+  - changed-content style: SUCCESS.
+- `Fork save-load integration smoke` run `33125245064` / #656: SUCCESS.
+  - dependency installation: SUCCESS;
+  - production configure: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
 
 ## A3 instruction
-Re-read authoritative `main`, active A1/A2/A3/B1/B2 work, ancestry, mergeability, and exact workflow state before integration. Preserve save-compatible A2 condition names, A1 ownership of relief demand, explicit refusal handling, six clear/residual positive outcomes, `offer precedence 9`, and the state-only `decline` lifecycle.
+Re-read authoritative `main`, active A1/A2/A3/B1/B2 work, ancestry, mergeability, and exact workflow state before integration. Preserve save-compatible A2 condition names, A1 ownership of relief demand, explicit refusal handling, six clear/residual positive outcomes, `offer precedence 9`, and the state-only `decline` lifecycle. The current branch tip may be one handoff-only commit beyond the exact validated candidate above; production and validator behavior must remain identical to `8a6c626...`.
