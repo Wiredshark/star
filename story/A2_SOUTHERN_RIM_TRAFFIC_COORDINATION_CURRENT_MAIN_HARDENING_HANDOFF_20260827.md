@@ -1,6 +1,6 @@
 # A2 Southern Rim Traffic Coordination current-main hardening handoff
 
-**Verdict: PARTIAL pending exact-head repository-native validation.**
+**Verdict: READY for A3 review/integration.**
 
 Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 
@@ -8,7 +8,11 @@ Branch: `agent/a2-southern-rim-traffic-coordination-hardening-20260827-0303`
 
 Production hardening: `ea876947bcf1da40bd831d583c0f3d7867950053`
 
-Strengthened validator: `536cc4452f6d25d712dc138006e401e9e1e97980`
+Initial strengthened validator: `9767518b92b53e0a877da4cd125138d61bee89eb`
+
+Assignment-parser self-review repair: `536cc4452f6d25d712dc138006e401e9e1e97980`
+
+Exact fully validated production/validator/handoff candidate: `f469dd6b01156b0c33afba9e0c8d4d23ee5a3d38`
 
 ## Scope
 
@@ -39,7 +43,7 @@ Initial routes remain emergency corridors, staggered clearances, distributed rou
 
 ## Validator hardening
 
-The focused validator now proves:
+The focused validator proves:
 
 - canonical GPL header and trailing newline;
 - exactly two A2 missions and `offer precedence 9` on both;
@@ -52,18 +56,26 @@ The focused validator now proves:
 - every persistent assignment is namespaced to this A2 slice;
 - no gameplay/material objective directives are introduced.
 
-The assignment parser was also corrected during self-review so read-only `>=` / `<=` comparisons cannot be misclassified as writes; only actual assignment operators are recognized.
+The assignment parser was corrected during self-review so read-only `>=` / `<=` comparisons cannot be misclassified as writes; only actual assignment operators are recognized.
 
 ## Persistence / save compatibility
 
 No state migration is required. Existing condition names, route meanings, thresholds, and one-shot follow-up state are unchanged. The hardening only makes lifecycle/routing intent explicit and adds stricter regression validation.
 
-## Validation
+## Exact validation
 
-Repository-native exact-head workflows must be terminal green before promotion to READY:
+On exact candidate `f469dd6b01156b0c33afba9e0c8d4d23ee5a3d38`:
 
-- `Fork simulation and story validation`: pending.
-- `Fork save-load integration smoke`: pending.
+- `Fork simulation and story validation` run `33048552450` / #662: **SUCCESS**.
+  - focused Python validation compilation: SUCCESS;
+  - all focused story validators: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS;
+  - changed-content style: SUCCESS.
+- `Fork save-load integration smoke` run `33048552485` / #647: **SUCCESS**.
+  - dependency installation: SUCCESS;
+  - production configuration: SUCCESS;
+  - production build: SUCCESS;
+  - stock save-load smoke: SUCCESS.
 
 No manual actual-game result is claimed from unrelated private hosts.
 
