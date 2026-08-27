@@ -1,5 +1,19 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # A2 dynamic-narrative consumer for A1 Southern Rim traffic pressure.
 # A1 remains sole owner of the two `world:` signals read here.
+# Existing A2 condition names and meanings are preserved for save compatibility.
 
 mission "A2 Southern Rim Traffic Coordination: Briefing"
 	minor
@@ -104,6 +118,9 @@ mission "A2 Southern Rim Traffic Coordination: After Action"
 			branch distributed_rescue_low
 				has "A2 Southern Rim Traffic Coordination: policy distributed routing"
 				"world: merchant rescue load" < 3
+			branch refused
+				has "A2 Southern Rim Traffic Coordination: refused"
+			label refused
 			`Solano recognizes you before you can pass the traffic desk. "No policy question. I remember that you declined." She taps the archived briefing. "Your refusal stayed a refusal; nobody used your name to justify the routing order."`
 			action
 				"A2 Southern Rim Traffic Coordination: refusal respected" = 1
@@ -137,6 +154,7 @@ mission "A2 Southern Rim Traffic Coordination: After Action"
 			`Solano highlights a web of secondary routes with most alerts cleared. "The queue is down and rescue load is manageable. The distributed plan cost fuel, but it left us with more usable approaches than we had before the surge."`
 			action
 				"A2 Southern Rim Traffic Coordination: Solano remembers distributed low rescue" = 1
+				goto finish
 			label finish
 			action
 				"A2 Southern Rim Traffic Coordination: followup pending" = 0
