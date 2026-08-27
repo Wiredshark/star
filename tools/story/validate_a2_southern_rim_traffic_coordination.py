@@ -39,7 +39,7 @@ OBJECTIVE_DIRECTIVES = (
 
 
 def assignment_name(line: str) -> str | None:
-    match = re.match(r'^\s*"([^"]+)"\s*(?:\+=|-=|=|<?=|>?=)\s*-?\d+\s*$', line)
+    match = re.match(r'^\s*"([^"]+)"\s*(?:\+=|-=|=|<\?=|>\?=)\s*-?\d+\s*$', line)
     return match.group(1) if match else None
 
 
