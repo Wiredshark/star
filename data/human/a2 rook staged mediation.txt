@@ -1,8 +1,19 @@
-# A2 staged Imani Rook mediation slice.
+# Copyright (c) 2026 by the Endless Sky contributors
 #
-# This replaces the older candidate's ambiguous accept/on-complete lifecycle with
-# independent one-shot offered conversations backed by ordinary persistent
-# conditions. Existing player history remains authoritative and read-only.
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
+# A2 staged Imani Rook mediation slice.
+# Existing player history remains authoritative and read-only. Existing A2
+# condition names and meanings are preserved for save compatibility.
 
 mission "A2 Rook Mediation: First Meeting"
 	minor
@@ -70,10 +81,13 @@ mission "A2 Rook Mediation: Case Review"
 		not "A2 Rook Mediation: review seen"
 	on offer
 		conversation
+			branch balanced
+				has "A2 Rook Mediation: route balanced"
 			branch command
 				has "A2 Rook Mediation: route command"
 			branch logistics
 				has "A2 Rook Mediation: route logistics"
+			label balanced
 			`Rook has reduced the original argument to a single reconciled timeline. "Hearing both sides first exposed two timestamps that neither party had challenged because each assumed the other used the same clock reference. Once we preserved the uncertainty instead of rewarding the louder story, the rest became ordinary evidence."`
 			action
 				"A2 Rook Mediation: outcome balanced" = 1
@@ -87,6 +101,7 @@ mission "A2 Rook Mediation: Case Review"
 			`Rook lays two manifests side by side. "The handoff records exposed the failure. The carrier and yard were working from different escort obligations, both signed at different stages of the same contract. Your prior convoy service pointed us to the broken handoff rather than giving either side a shortcut to the verdict."`
 			action
 				"A2 Rook Mediation: outcome logistics" = 1
+				goto finish
 			label finish
 			`She closes the case file. "The settlement preserves the disputed evidence and the corrected timeline. More importantly, neither side gets to rewrite what we did into a claim that experience made somebody automatically right."`
 			action
@@ -107,10 +122,13 @@ mission "A2 Rook Mediation: Later Reader"
 		not "A2 Rook Mediation: later reader seen"
 	on offer
 		conversation
+			branch balanced
+				has "A2 Rook Mediation: outcome balanced"
 			branch command
 				has "A2 Rook Mediation: outcome command"
 			branch logistics
 				has "A2 Rook Mediation: outcome logistics"
+			label balanced
 			`Rook recognizes you beside the concourse records desk. "I have another disputed file, but I remembered your rule from the convoy case: preserve the uncertainty before asking who benefits from resolving it. The junior mediators are using that phrasing now."`
 				goto choice
 			label command
@@ -118,6 +136,7 @@ mission "A2 Rook Mediation: Later Reader"
 				goto choice
 			label logistics
 			`Rook is already holding two manifests when she sees you. "I remembered that you looked for the broken handoff before choosing a side. We changed the intake form so every disputed transfer now records who believed they owned the next obligation."`
+				goto choice
 			label choice
 			choice
 				`\tTell Rook she may ask again when a complete record exists.`
@@ -133,6 +152,7 @@ mission "A2 Rook Mediation: Later Reader"
 			`Rook closes the new file. "Also understood. Remembering how you helped is not the same as assuming you owe me another answer."`
 			action
 				"A2 Rook Mediation: future contact declined" = 1
+				goto finish
 			label finish
 			action
 				"A2 Rook Mediation: later reader pending" = 0
@@ -166,6 +186,7 @@ mission "A2 Rook Mediation: Refusal Reader"
 			`Rook deletes your name from a small list of outside contacts. "Done. A boundary is only useful if it changes what happens next."`
 			action
 				"A2 Rook Mediation: no future mediation" = 1
+				goto finish
 			label finish
 			action
 				"A2 Rook Mediation: refusal reader pending" = 0
