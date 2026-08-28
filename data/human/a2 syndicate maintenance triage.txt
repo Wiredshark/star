@@ -1,4 +1,19 @@
+# Copyright (c) 2026 by the Endless Sky contributors
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <https://www.gnu.org/licenses/>.
+
 # A2 dynamic-narrative consumer for the A1 Syndicate maintenance-backlog loop.
+# A1 remains sole owner of maintenance surge and backlog; existing A2 state names
+# and route meanings are preserved for save compatibility.
 
 mission "A2 Syndicate Maintenance Triage: Surge Briefing"
 	minor
@@ -74,6 +89,8 @@ mission "A2 Syndicate Maintenance Triage: After Action"
 		not "A2 Syndicate Maintenance Triage: followup seen"
 	on offer
 		conversation
+			branch refused
+				has "A2 Syndicate Maintenance Triage: refused"
 			branch safety_high
 				has "A2 Syndicate Maintenance Triage: priority safety"
 				"world: syndicate maintenance backlog" >= 3
@@ -92,6 +109,7 @@ mission "A2 Syndicate Maintenance Triage: After Action"
 			branch resilience_low
 				has "A2 Syndicate Maintenance Triage: priority resilience"
 				"world: syndicate maintenance backlog" < 3
+			label refused
 			`Marr recognizes you near the dispatch boards and lifts both hands before you can object. "No allocation question this time. I remembered that you declined." She shows you the closed review. "The refusal stayed a refusal. Nobody cited you as support after you left."`
 			action
 				"A2 Syndicate Maintenance Triage: refusal respected" = 1
@@ -125,6 +143,7 @@ mission "A2 Syndicate Maintenance Triage: After Action"
 			`Marr shows you the oldest inspection date on the board. It is recent enough to be boring. "That was the point of the deferred-maintenance strategy. The surge ended with fewer hidden obligations than it started with. We paid schedule pain up front and actually retired some debt."`
 			action
 				"A2 Syndicate Maintenance Triage: Marr remembers resilience stabilized" = 1
+				goto finish
 			label finish
 			action
 				"A2 Syndicate Maintenance Triage: followup pending" = 0
