@@ -1,12 +1,13 @@
 # A2 Syndicate Maintenance Triage current-main hardening
 
-Verdict: **PARTIAL pending exact-head repository-native validation.**
+Verdict: **READY for A3 review/integration.**
 
 ## Authority / isolation
 - Authoritative base: `main@a17a89fb4779200a0634a6dade1811c4dc9cc2be`
 - Branch: `agent/a2-syndicate-maintenance-triage-hardening-20260827-2005`
 - Production hardening: `6d0231f6cecb156b6f459e185e1b5ba183bae3eb`
-- Strengthened validator: `0de041965f17661cf267932facba92bb978eb42e`
+- Initial strengthened validator: `0de041965f17661cf267932facba92bb978eb42e`
+- Exact-line validator repair / exact fully validated production+validator candidate: `11e72642d84bcd9b01403f2e18f52ea8cd025d1c`
 - This branch hardens the already-integrated producer; it does not create a second maintenance-triage RPG arc.
 
 ## Player-facing loop
@@ -31,7 +32,7 @@ Tessa Marr remains the recurring named character. Positive route meanings, thres
 - No credits, reputation, cargo, equipment, ship, fleet, combat, destination, waypoint, passenger, NPC, deadline, or objective mutation is introduced.
 - Refusal remains refusal and is explicitly respected after the surge.
 
-## Validator hardening
+## Validator hardening / repair
 The focused validator now proves:
 - exact two-mission structure and both `offer precedence 9` declarations;
 - authoritative surge/backlog reads and high/low threshold coverage;
@@ -44,13 +45,23 @@ The focused validator now proves:
 - all local `goto` targets resolve to declared labels;
 - canonical GPL header and trailing newline.
 
+The first exact-head simulation/story run `33128762485` / #673 failed only in the new validator. Changed-content style was already green. Prefix substring counting treated labels such as `refuse`/`refused` and `safety`/`safety_high` as duplicate occurrences. Production content was not changed. Commit `11e72642d84bcd9b01403f2e18f52ea8cd025d1c` replaces those brittle checks with exact stripped-line counts.
+
+## Exact acceptance evidence
+On exact repaired production/validator candidate `11e72642d84bcd9b01403f2e18f52ea8cd025d1c`:
+- `Fork simulation and story validation` run `33128876657` / #674: **SUCCESS**.
+  - changed-content style: SUCCESS;
+  - focused Python compilation: SUCCESS;
+  - all focused story validators: SUCCESS;
+  - A1 simulation/state-ownership contracts: SUCCESS.
+- `Fork save-load integration smoke` run `33128876635` / #659: **SUCCESS**.
+  - dependency installation: SUCCESS;
+  - production configure: SUCCESS;
+  - production build: SUCCESS;
+  - stock save/load smoke: SUCCESS.
+
 ## Concurrency / host boundary
 Live `Wiredshark/star` main and open A2 PRs were inspected before authoring. The unresolved Republic Border Testimony runtime-acceptance branch remains separate and was not modified. No competing current-main Syndicate Maintenance Triage producer-hardening PR was found. Four pre-existing service-owned host processes were observed and preserved; the exposed private host is not used as Endless Sky runtime evidence.
-
-## Validation
-Exact-head repository-native validation must be terminal green before promotion to READY:
-- `Fork simulation and story validation`: pending.
-- `Fork save-load integration smoke`: pending.
 
 ## A3 boundary
 A3 retains integration authority. Re-read current authoritative main, verify ancestry/mergeability and exact workflow state, and preserve A1 ownership, all existing A2 persistence names, six high/low positive outcomes, explicit refusal semantics, `offer precedence 9`, and state-only decline lifecycle. Do not self-integrate from A2.
