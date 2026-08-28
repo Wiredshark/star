@@ -6,6 +6,7 @@ import sys
 PATH = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data/human/a2 syndicate maintenance triage.txt")
 text = PATH.read_text(encoding="utf-8")
 lines = text.splitlines()
+stripped_lines = [line.strip() for line in lines]
 errors = []
 
 HEADER = """# Copyright (c) 2026 by the Endless Sky contributors
@@ -31,6 +32,12 @@ def need(token, count=None):
         errors.append(f"wrong count for {token!r}: expected {count}, got {actual}")
 
 
+def need_line(token, count=1):
+    actual = stripped_lines.count(token)
+    if actual != count:
+        errors.append(f"wrong exact-line count for {token!r}: expected {count}, got {actual}")
+
+
 def direct_assignment(line):
     stripped = line.strip()
     match = re.match(r'^"([^"]+)"\s*(\+=|-=|(?<![<>!])=(?!=))\s*', stripped)
@@ -46,14 +53,14 @@ need('mission "A2 Syndicate Maintenance Triage: Surge Briefing"', 1)
 need('mission "A2 Syndicate Maintenance Triage: After Action"', 1)
 if text.count('\nmission "') != 2:
     errors.append(f"expected exactly 2 missions, got {text.count(chr(10) + 'mission ')}")
-need('"offer precedence" 9', 2)
+need_line('"offer precedence" 9', 2)
 need('Tessa Marr')
 
 # Authoritative A1 inputs and thresholds remain read-only.
 need('has "world: syndicate maintenance surge"', 1)
 need('not "world: syndicate maintenance surge"', 1)
-need('"world: syndicate maintenance backlog" >= 3', 4)
-need('"world: syndicate maintenance backlog" < 3', 3)
+need_line('"world: syndicate maintenance backlog" >= 3', 4)
+need_line('"world: syndicate maintenance backlog" < 3', 3)
 
 # Save-compatible initial routes.
 for state in (
@@ -62,17 +69,17 @@ for state in (
     "priority resilience",
     "refused",
 ):
-    need(f'"A2 Syndicate Maintenance Triage: {state}" = 1', 1)
-need('"A2 Syndicate Maintenance Triage: briefing seen" = 1', 4)
-need('"A2 Syndicate Maintenance Triage: followup pending" = 1', 4)
-need('"A2 Syndicate Maintenance Triage: followup pending" = 0', 1)
-need('"A2 Syndicate Maintenance Triage: followup seen" = 1', 1)
+    need_line(f'"A2 Syndicate Maintenance Triage: {state}" = 1', 1)
+need_line('"A2 Syndicate Maintenance Triage: briefing seen" = 1', 4)
+need_line('"A2 Syndicate Maintenance Triage: followup pending" = 1', 4)
+need_line('"A2 Syndicate Maintenance Triage: followup pending" = 0', 1)
+need_line('"A2 Syndicate Maintenance Triage: followup seen" = 1', 1)
 
 # Explicit refusal handling and all six positive after-action outcomes.
-need('branch refused', 1)
-need('label refused', 1)
-need('has "A2 Syndicate Maintenance Triage: refused"', 1)
-need('"A2 Syndicate Maintenance Triage: refusal respected" = 1', 1)
+need_line('branch refused', 1)
+need_line('label refused', 1)
+need_line('has "A2 Syndicate Maintenance Triage: refused"', 1)
+need_line('"A2 Syndicate Maintenance Triage: refusal respected" = 1', 1)
 for state in (
     "Marr remembers safety under pressure",
     "Marr remembers safety stabilized",
@@ -81,19 +88,19 @@ for state in (
     "Marr remembers resilience under pressure",
     "Marr remembers resilience stabilized",
 ):
-    need(f'"A2 Syndicate Maintenance Triage: {state}" = 1', 1)
+    need_line(f'"A2 Syndicate Maintenance Triage: {state}" = 1', 1)
 
 for label in (
     "severe", "triage", "safety", "contracts", "resilience", "refuse",
     "refused", "safety_high", "safety_low", "contracts_high", "contracts_low",
     "resilience_high", "resilience_low", "finish",
 ):
-    need(f"label {label}", 1)
-need('goto finish', 7)
+    need_line(f"label {label}", 1)
+need_line('goto finish', 7)
 
 # State-only lifecycle: four Briefing terminals plus one converged After Action terminal.
-decline_count = sum(1 for line in lines if line.strip() == "decline")
-accept_count = sum(1 for line in lines if line.strip() == "accept")
+decline_count = stripped_lines.count("decline")
+accept_count = stripped_lines.count("accept")
 if decline_count != 5:
     errors.append(f"expected exactly 5 decline terminals, got {decline_count}")
 if accept_count:
