@@ -1,6 +1,6 @@
 # A2 Deep Security Debrief current-main hardening handoff
 
-Verdict: PARTIAL — isolated current-main hardening complete; repository-native exact-head validation pending.
+Verdict: READY for A3 review/integration. Keep this branch draft and unmerged; A3 retains integration authority.
 
 ## Authority / isolation
 
@@ -8,6 +8,7 @@ Verdict: PARTIAL — isolated current-main hardening complete; repository-native
 - Branch: `agent/a2-deep-security-debrief-hardening-20260827-2206`.
 - Production hardening: `7ad0f848a839637d447aa21dcc9c9c54158b46e0`.
 - Strengthened focused validator: `1cabd20db119de3054cfbbd934cb93caa12891f3`.
+- Exact fully validated production/validator/handoff candidate: `1eda384ce846c2d583425899ea1e9b7f89630ca9`.
 - No self-integration. Preserve unrelated branches/processes.
 
 ## Scope
@@ -61,13 +62,20 @@ The slice remains dialogue/state-only. It does not create gameplay objectives or
 
 ## Exact validation evidence
 
-Repository-native PR workflows have not yet run on the isolated branch at this handoff commit. No simulation/story, production-build, save-load, or runtime success is claimed yet.
+On exact candidate `1eda384ce846c2d583425899ea1e9b7f89630ca9`:
 
-Required before READY:
+- `Fork simulation and story validation` run `33135089864` / #676: **SUCCESS**.
+  - changed-content style: **SUCCESS**;
+  - focused Python compilation: **SUCCESS**;
+  - all focused story validators: **SUCCESS**;
+  - A1 simulation/state-ownership contracts: **SUCCESS**.
+- `Fork save-load integration smoke` run `33135089836` / #661: **SUCCESS**.
+  - build/runtime dependencies: **SUCCESS**;
+  - production configure: **SUCCESS**;
+  - production build: **SUCCESS**;
+  - stock save-load smoke: **SUCCESS**.
 
-1. `Fork simulation and story validation` terminal SUCCESS on the exact candidate.
-2. `Fork save-load integration smoke` terminal SUCCESS on the exact candidate.
-3. If either gate fails, recover the precise failing job/assertion and repair this branch without weakening ownership or lifecycle contracts.
+Both repository-native acceptance gates are terminal green on the exact production/validator candidate.
 
 ## A3 integration boundary
 
